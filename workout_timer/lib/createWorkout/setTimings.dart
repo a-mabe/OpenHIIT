@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
-import './setTimings.dart';
 
-class Exercises extends StatelessWidget {
-  const Exercises({super.key});
+class Timings extends StatelessWidget {
+  const Timings({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Exercises'),
+        title: const Text('Enter Time Intervals'),
       ),
       body: const Center(
-        child: SetExercises(),
+        child: SetTimings(),
       ),
     );
   }
 }
 
-class SetExercises extends StatefulWidget {
-  const SetExercises({super.key});
+class SetTimings extends StatefulWidget {
+  const SetTimings({super.key});
 
   @override
-  State<SetExercises> createState() => _SetExercisesState();
+  State<SetTimings> createState() => _SetTimingsState();
 }
 
 // Define a corresponding State class.
 // This class holds the data related to the Form.
-class _SetExercisesState extends State<SetExercises> {
+class _SetTimingsState extends State<SetTimings> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final _formKey = GlobalKey<FormState>();
-
-  void submitExercises() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Timings()),
-      );
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +57,6 @@ class _SetExercisesState extends State<SetExercises> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
-
-                  submitExercises();
                 }
               },
               child: const Text('Submit'),
