@@ -28,6 +28,7 @@ class ChooseNumber extends StatefulWidget {
 
 class _ChooseNumberState extends State<ChooseNumber> {
   int _currentIntValue = 10;
+  final _formKey = GlobalKey<FormState>();
 
   void submitNumExercises() {
     setState(() {
@@ -45,30 +46,126 @@ class _ChooseNumberState extends State<ChooseNumber> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const SizedBox(height: 16),
-        Text('Select number of exercises:',
-            style: Theme.of(context).textTheme.titleLarge),
-        NumberPicker(
-          value: _currentIntValue,
-          minValue: 0,
-          maxValue: 50,
-          step: 1,
-          haptics: true,
-          onChanged: (value) => setState(() => _currentIntValue = value),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              disabledForegroundColor: Colors.blue.withOpacity(0.38),
-              backgroundColor: Colors.blue),
-          onPressed: () {
-            submitNumExercises();
-          },
-          child: Text('Submit'),
-        )
-      ],
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
+            child: Text(
+              "Name this workout:",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 0.0),
+            child: TextFormField(
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
+            child: Text(
+              "How many exercises?",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: NumberPicker(
+              value: _currentIntValue,
+              minValue: 1,
+              maxValue: 50,
+              step: 1,
+              haptics: true,
+              onChanged: (value) => setState(() => _currentIntValue = value),
+            ),
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () => setState(() {
+                    final newValue = _currentIntValue - 1;
+                    _currentIntValue = newValue.clamp(1, 50);
+                  }),
+                ),
+                Text('Current int value: $_currentIntValue'),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => setState(() {
+                    final newValue = _currentIntValue + 1;
+                    _currentIntValue = newValue.clamp(1, 50);
+                  }),
+                ),
+              ],
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid, or false otherwise.
+                  if (_formKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+
+                    submitNumExercises();
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+
+    // Column(
+    //   children: <Widget>[
+    //     TextFormField(
+    //       // The validator receives the text that the user has entered.
+    //       validator: (value) {
+    //         if (value == null || value.isEmpty) {
+    //           return 'Please enter a name for the workout';
+    //         }
+    //         return null;
+    //       },
+    //     ),
+    //     const SizedBox(height: 16),
+    //     Text('Select number of exercises:',
+    //         style: Theme.of(context).textTheme.titleLarge),
+    //     NumberPicker(
+    //       value: _currentIntValue,
+    //       minValue: 1,
+    //       maxValue: 50,
+    //       step: 1,
+    //       haptics: true,
+    //       onChanged: (value) => setState(() => _currentIntValue = value),
+    //     ),
+    //     TextButton(
+    //       style: TextButton.styleFrom(
+    //           foregroundColor: Colors.white,
+    //           disabledForegroundColor: Colors.blue.withOpacity(0.38),
+    //           backgroundColor: Colors.blue),
+    //       onPressed: () {
+    //         submitNumExercises();
+    //       },
+    //       child: const Text('Submit'),
+    //     )
+    //   ],
+    // );
   }
 }
