@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
-import './createWorkout/createWorkout.dart';
+import 'package:sqflite/sqflite.dart';
+import 'createWorkout/create_workout.dart';
+import 'workoutType/workout_type.dart';
+import './database/databasemanager.dart';
+import 'dart:developer';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Database database = await DatabaseManager().initDB();
+
+  log(database.isOpen.toString());
+
+  log(database.path.toString());
+
+  List<Workout> workouts = await DatabaseManager().lists(database);
+
+  log(workouts.toString());
+
   runApp(const WorkoutTimer());
 }
 
@@ -49,6 +65,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
+
+  final List<Workout> workouts = [Workout.empty()];
+
   void createWorkoutPage() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -80,27 +101,24 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            )
-          ],
+        child: ListView.separated(
+          padding: const EdgeInsets.all(8),
+          itemCount: workouts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: 100,
+              color: Colors.amber[colorCodes[index]],
+              child: Column(children: [
+                Text(workouts[index].title),
+                Text(workouts[index].exercises),
+                Text(workouts[index].exerciseTime.toString()),
+                Text(workouts[index].restTime.toString()),
+                Text(workouts[index].halfTime.toString())
+              ]),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
         ),
       ),
       floatingActionButton: FloatingActionButton(

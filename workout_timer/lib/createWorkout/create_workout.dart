@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import './setExercises.dart';
+import '../workoutType/workout_type.dart';
+import './set_exercises.dart';
 
 class CreateWorkout extends StatelessWidget {
   const CreateWorkout({super.key});
@@ -29,6 +30,7 @@ class ChooseNumber extends StatefulWidget {
 class _ChooseNumberState extends State<ChooseNumber> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
+  final workout = Workout.empty();
 
   void submitNumExercises() {
     setState(() {
@@ -39,7 +41,12 @@ class _ChooseNumberState extends State<ChooseNumber> {
       // called again, and so nothing would appear to happen.
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const Exercises()),
+        MaterialPageRoute(
+          builder: (context) => const Exercises(),
+          settings: RouteSettings(
+            arguments: workout,
+          ),
+        ),
       );
     });
   }
@@ -68,6 +75,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
                 }
                 return null;
               },
+              onSaved: (val) => setState(() => workout.title = val!),
             ),
           ),
           const Padding(
@@ -115,12 +123,10 @@ class _ChooseNumberState extends State<ChooseNumber> {
               child: ElevatedButton(
                 onPressed: () {
                   // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
+                  final form = _formKey.currentState!;
+                  if (form.validate()) {
+                    form.save();
+                    workout.numExercises = _currentIntValue;
 
                     submitNumExercises();
                   }
