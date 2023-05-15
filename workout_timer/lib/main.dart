@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'createWorkout/create_workout.dart';
-import 'workoutType/workout_type.dart';
-import './database/databasemanager.dart';
+import 'create_workout/create_workout.dart';
+import 'workout_type/workout_type.dart';
+import 'database/database_manager.dart';
 import 'dart:developer';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Database database = await DatabaseManager().initDB();
-
-  log(database.isOpen.toString());
-
-  log(database.path.toString());
-
-  List<Workout> workouts = await DatabaseManager().lists(database);
-
-  log(workouts.toString());
 
   runApp(const WorkoutTimer());
 }
@@ -65,18 +55,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<List<Workout>> workouts =
+      DatabaseManager().lists(DatabaseManager().initDB());
+
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
-
-  final List<Workout> workouts = [Workout.empty()];
+  // final List<Workout> workouts = [Workout.empty()];
 
   void createWorkoutPage() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CreateWorkout()),
@@ -86,46 +73,161 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: ListView.separated(
-          padding: const EdgeInsets.all(8),
-          itemCount: workouts.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              height: 100,
-              color: Colors.amber[colorCodes[index]],
-              child: Column(children: [
-                Text(workouts[index].title),
-                Text(workouts[index].exercises),
-                Text(workouts[index].exerciseTime.toString()),
-                Text(workouts[index].restTime.toString()),
-                Text(workouts[index].halfTime.toString())
-              ]),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: createWorkoutPage,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      body: FutureBuilder<List<Workout>>(
+        future: workouts,
+        builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
+          List<Widget> children;
+          // If data was loaded successfully...
+          if (snapshot.hasData) {
+            children = <Widget>[
+              Center(
+                child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(8),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 100,
+                      color: Colors.amber[colorCodes[index]],
+                      child: Column(children: [
+                        Text(snapshot.data![index].title),
+                        Text(snapshot.data![index].exercises),
+                        Text(snapshot.data![index].exerciseTime.toString()),
+                        Text(snapshot.data![index].restTime.toString()),
+                        Text(snapshot.data![index].halfTime.toString())
+                      ]),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                ),
+                // floatingActionButton: FloatingActionButton(
+                //   onPressed: createWorkoutPage,
+                //   tooltip: 'Increment',
+                //   child: const Icon(Icons.add),
+                // ),
+                // // Center is a layout widget. It takes a single child and positions it
+                // // in the middle of the parent.
+                // child: ListView.separated(
+                //   padding: const EdgeInsets.all(8),
+                //   itemCount: 1,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return Container(
+                //       height: 100,
+                //       color: Colors.amber[colorCodes[index]],
+                //       child: Column(children: const [
+                //         Text("beep"),
+                //         // Text(snapshot.data![index].exercises),
+                //         // Text(snapshot.data![index].exerciseTime.toString()),
+                //         // Text(snapshot.data![index].restTime.toString()),
+                //         // Text(snapshot.data![index].halfTime.toString())
+                //       ]),
+                //     );
+                //   },
+                //   separatorBuilder: (BuildContext context, int index) =>
+                //       const Divider(),
+                // ),
+              ),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: createWorkoutPage,
+              //   tooltip: 'Increment',
+              //   child: const Icon(Icons.add),
+              // ),
+              // const Icon(
+              //   Icons.check_circle_outline,
+              //   color: Colors.green,
+              //   size: 60,
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 16),
+              //   child: Text('Result: ${snapshot.data}'),
+              // ),
+            ];
+          }
+          // If there was an error loading the data...
+          else if (snapshot.hasError) {
+            children = <Widget>[
+              const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${snapshot.error}'),
+              ),
+            ];
+          }
+          // If the data is still being fetched...
+          else {
+            children = const <Widget>[
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Awaiting result...'),
+              ),
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
+      ),
     );
+
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     // Here we take the value from the MyHomePage object that was created by
+    //     // the App.build method, and use it to set our appbar title.
+    //     title: Text(widget.title),
+    //   ),
+    //   body: Center(
+    //     // Center is a layout widget. It takes a single child and positions it
+    //     // in the middle of the parent.
+    //     child: ListView.separated(
+    //       padding: const EdgeInsets.all(8),
+    //       itemCount: workouts.length,
+    //       itemBuilder: (BuildContext context, int index) {
+    //         return Container(
+    //           height: 100,
+    //           color: Colors.amber[colorCodes[index]],
+    //           child: Column(children: [
+    //             Text(workouts[index].title),
+    //             Text(workouts[index].exercises),
+    //             Text(workouts[index].exerciseTime.toString()),
+    //             Text(workouts[index].restTime.toString()),
+    //             Text(workouts[index].halfTime.toString())
+    //           ]),
+    //         );
+    //       },
+    //       separatorBuilder: (BuildContext context, int index) =>
+    //           const Divider(),
+    //     ),
+    //   ),
+    //   floatingActionButton: FloatingActionButton(
+    //     onPressed: createWorkoutPage,
+    //     tooltip: 'Increment',
+    //     child: const Icon(Icons.add),
+    //   ), // This trailing comma makes auto-formatting nicer for build methods.
+    // );
   }
 }

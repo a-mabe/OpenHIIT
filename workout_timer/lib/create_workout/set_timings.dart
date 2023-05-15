@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import '../workoutType/workout_type.dart';
-import '../database/databasemanager.dart';
+import 'package:uuid/uuid.dart';
+import '../workout_type/workout_type.dart';
+import '../database/database_manager.dart';
 
 class Timings extends StatelessWidget {
   const Timings({super.key});
@@ -127,6 +130,9 @@ class _SetTimingsState extends State<SetTimings> {
                 workoutArgument.exerciseTime = exerciseTime;
                 workoutArgument.restTime = restTime;
                 workoutArgument.halfTime = halfTime;
+
+                // Set the workout ID
+                workoutArgument.id = const Uuid().v1();
 
                 Database database = await DatabaseManager().initDB();
 

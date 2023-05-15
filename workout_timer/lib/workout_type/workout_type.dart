@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:ffi';
 
 class Workout {
   ///
@@ -67,17 +66,17 @@ class Workout {
   //     required this.restTime,
   //     required this.halfTime});
 
-  Workout(this.title, this.numExercises, this.exercises, this.exerciseTime,
-      this.halfTime, this.restTime, this.id);
+  Workout(this.id, this.title, this.numExercises, this.exercises,
+      this.exerciseTime, this.halfTime, this.restTime);
 
   Workout.empty() {
+    id = "";
     title = "";
     numExercises = 0;
     exercises = "";
     exerciseTime = 0;
     restTime = 0;
     halfTime = 0;
-    id = "";
   }
 
   ///
@@ -92,6 +91,7 @@ class Workout {
   ///
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'numExercises': numExercises,
       'exercises': exercises,

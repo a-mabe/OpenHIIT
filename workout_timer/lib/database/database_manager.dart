@@ -13,7 +13,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../workoutType/workout_type.dart';
+import '../workout_type/workout_type.dart';
 
 class DatabaseManager {
   ///
@@ -126,7 +126,8 @@ class DatabaseManager {
     print("initDB executed");
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(await getDatabasesPath(), "core1.db");
-    await deleteDatabase(path);
+    // Clear database for testing
+    // await deleteDatabase(path);
     return await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
@@ -152,10 +153,12 @@ class DatabaseManager {
 
   /// Inserts the given list into the given database.
   ///
-  Future<void> insertList(Workout workouts, Database database) async {
+  Future<void> insertList(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
     final db = database;
+
+    log(workout.toString());
 
     /// Insert the TodoList into the correct table.
     ///
@@ -163,7 +166,7 @@ class DatabaseManager {
     ///
     await db.insert(
       workoutTableName,
-      workouts.toMap(),
+      workout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -248,7 +251,7 @@ class DatabaseManager {
   //   );
   // }
 
-  Future<List<Workout>> lists(Database database) async {
+  Future<List<Workout>> lists(Future<Database> database) async {
     /// Get a reference to the database.
     ///
     final db = await database;
@@ -261,14 +264,13 @@ class DatabaseManager {
     ///
     return List.generate(maps.length, (i) {
       return Workout(
-        maps[i]['title'],
-        maps[i]['numExercises'],
-        maps[i]['exercises'],
-        maps[i]['exerciseTime'],
-        maps[i]['restTime'],
-        maps[i]['halfTime'],
-        maps[i]['id'],
-      );
+          maps[i]['id'],
+          maps[i]['title'],
+          maps[i]['numExercises'],
+          maps[i]['exercises'],
+          maps[i]['exerciseTime'],
+          maps[i]['restTime'],
+          maps[i]['halfTime']);
     });
   }
 
