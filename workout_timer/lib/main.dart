@@ -73,161 +73,172 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: createWorkoutPage,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-      body: FutureBuilder<List<Workout>>(
-        future: workouts,
-        builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
-          List<Widget> children;
-          // If data was loaded successfully...
-          if (snapshot.hasData) {
-            children = <Widget>[
-              Center(
-                child: ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(8),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 100,
-                      color: Colors.amber[colorCodes[index]],
-                      child: Column(children: [
-                        Text(snapshot.data![index].title),
-                        Text(snapshot.data![index].exercises),
-                        Text(snapshot.data![index].exerciseTime.toString()),
-                        Text(snapshot.data![index].restTime.toString()),
-                        Text(snapshot.data![index].halfTime.toString())
-                      ]),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
-                ),
-                // floatingActionButton: FloatingActionButton(
-                //   onPressed: createWorkoutPage,
-                //   tooltip: 'Increment',
-                //   child: const Icon(Icons.add),
-                // ),
-                // // Center is a layout widget. It takes a single child and positions it
-                // // in the middle of the parent.
-                // child: ListView.separated(
-                //   padding: const EdgeInsets.all(8),
-                //   itemCount: 1,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return Container(
-                //       height: 100,
-                //       color: Colors.amber[colorCodes[index]],
-                //       child: Column(children: const [
-                //         Text("beep"),
-                //         // Text(snapshot.data![index].exercises),
-                //         // Text(snapshot.data![index].exerciseTime.toString()),
-                //         // Text(snapshot.data![index].restTime.toString()),
-                //         // Text(snapshot.data![index].halfTime.toString())
-                //       ]),
-                //     );
-                //   },
-                //   separatorBuilder: (BuildContext context, int index) =>
-                //       const Divider(),
-                // ),
-              ),
-              // floatingActionButton: FloatingActionButton(
-              //   onPressed: createWorkoutPage,
-              //   tooltip: 'Increment',
-              //   child: const Icon(Icons.add),
-              // ),
-              // const Icon(
-              //   Icons.check_circle_outline,
-              //   color: Colors.green,
-              //   size: 60,
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 16),
-              //   child: Text('Result: ${snapshot.data}'),
-              // ),
-            ];
-          }
-          // If there was an error loading the data...
-          else if (snapshot.hasError) {
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              ),
-            ];
-          }
-          // If the data is still being fetched...
-          else {
-            children = const <Widget>[
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              ),
-            ];
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
-            ),
-          );
-        },
-      ),
-    );
-
     // return Scaffold(
     //   appBar: AppBar(
     //     // Here we take the value from the MyHomePage object that was created by
     //     // the App.build method, and use it to set our appbar title.
     //     title: Text(widget.title),
     //   ),
-    //   body: Center(
-    //     // Center is a layout widget. It takes a single child and positions it
-    //     // in the middle of the parent.
-    //     child: ListView.separated(
-    //       padding: const EdgeInsets.all(8),
-    //       itemCount: workouts.length,
-    //       itemBuilder: (BuildContext context, int index) {
-    //         return Container(
-    //           height: 100,
-    //           color: Colors.amber[colorCodes[index]],
-    //           child: Column(children: [
-    //             Text(workouts[index].title),
-    //             Text(workouts[index].exercises),
-    //             Text(workouts[index].exerciseTime.toString()),
-    //             Text(workouts[index].restTime.toString()),
-    //             Text(workouts[index].halfTime.toString())
-    //           ]),
-    //         );
-    //       },
-    //       separatorBuilder: (BuildContext context, int index) =>
-    //           const Divider(),
-    //     ),
-    //   ),
     //   floatingActionButton: FloatingActionButton(
     //     onPressed: createWorkoutPage,
     //     tooltip: 'Increment',
     //     child: const Icon(Icons.add),
-    //   ), // This trailing comma makes auto-formatting nicer for build methods.
+    //   ),
+    //   body: FutureBuilder<List<Workout>>(
+    //     future: workouts,
+    //     builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
+    //       List<Widget> children;
+    //       // If data was loaded successfully...
+    //       if (snapshot.hasData) {
+    //         children = <Widget>[
+    //           ListView.separated(
+    //             scrollDirection: Axis.vertical,
+    //             shrinkWrap: true,
+    //             padding: const EdgeInsets.all(0),
+    //             itemCount: snapshot.data!.length,
+    //             itemBuilder: (BuildContext context, int index) {
+    //               return Container(
+    //                 height: 100,
+    //                 color: Colors.amber[colorCodes[index]],
+    //                 child: Column(children: [
+    //                   Text(snapshot.data![index].title),
+    //                   Text(snapshot.data![index].exercises),
+    //                   Text(snapshot.data![index].exerciseTime.toString()),
+    //                   Text(snapshot.data![index].restTime.toString()),
+    //                   Text(snapshot.data![index].halfTime.toString())
+    //                 ]),
+    //               );
+    //             },
+    //             separatorBuilder: (BuildContext context, int index) =>
+    //                 const Divider(),
+    //           ),
+    //           // floatingActionButton: FloatingActionButton(
+    //           //   onPressed: createWorkoutPage,
+    //           //   tooltip: 'Increment',
+    //           //   child: const Icon(Icons.add),
+    //           // ),
+    //           // const Icon(
+    //           //   Icons.check_circle_outline,
+    //           //   color: Colors.green,
+    //           //   size: 60,
+    //           // ),
+    //           // Padding(
+    //           //   padding: const EdgeInsets.only(top: 16),
+    //           //   child: Text('Result: ${snapshot.data}'),
+    //           // ),
+    //         ];
+    //       }
+    //       // If there was an error loading the data...
+    //       else if (snapshot.hasError) {
+    //         children = <Widget>[
+    //           const Icon(
+    //             Icons.error_outline,
+    //             color: Colors.red,
+    //             size: 60,
+    //           ),
+    //           Padding(
+    //             padding: const EdgeInsets.only(top: 16),
+    //             child: Text('Error: ${snapshot.error}'),
+    //           ),
+    //         ];
+    //       }
+    //       // If the data is still being fetched...
+    //       else {
+    //         children = const <Widget>[
+    //           SizedBox(
+    //             width: 60,
+    //             height: 60,
+    //             child: CircularProgressIndicator(),
+    //           ),
+    //           Padding(
+    //             padding: EdgeInsets.only(top: 16),
+    //             child: Text('Awaiting result...'),
+    //           ),
+    //         ];
+    //       }
+    //       return Center(
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: children,
+    //         ),
+    //       );
+    //     },
+    //   ),
     // );
+
+    return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: FutureBuilder<List<Workout>>(
+          future: workouts,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
+            List<Widget> children;
+            children = <Widget>[
+              ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                itemCount: 2,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    height: 100,
+                    color: Colors.amber[colorCodes[index]],
+                    child: const Column(children: [
+                      Text("weee"),
+                    ]),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              ),
+            ];
+            return ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(8),
+              itemCount: 2,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  height: 100,
+                  color: Colors.amber[colorCodes[index]],
+                  child: const Column(children: [
+                    Text("weee"),
+                  ]),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+            );
+          }
+
+          // body: Center(
+          //   // Center is a layout widget. It takes a single child and positions it
+          //   // in the middle of the parent.
+          //   child: ListView.separated(
+          //     padding: const EdgeInsets.all(8),
+          //     itemCount: 2,
+          //     itemBuilder: (BuildContext context, int index) {
+          //       return Container(
+          //         height: 100,
+          //         color: Colors.amber[colorCodes[index]],
+          //         child: const Column(children: [
+          //           Text("weee"),
+          //         ]),
+          //       );
+          //     },
+          //     separatorBuilder: (BuildContext context, int index) =>
+          //         const Divider(),
+          //   ),
+          // ),
+          // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createWorkoutPage,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
