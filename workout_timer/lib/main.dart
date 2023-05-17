@@ -97,17 +97,26 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8),
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: 100,
-                  color: Colors.amber[colorCodes[index]],
-                  child: Column(children: [
-                    Text(snapshot.data![index].title),
-                    Text(snapshot.data![index].exercises),
-                    Text(snapshot.data![index].exerciseTime.toString()),
-                    Text(snapshot.data![index].restTime.toString()),
-                    Text(snapshot.data![index].halfTime.toString())
-                  ]),
+                return ListTile(
+                  title: const Text('ListTile with Hero'),
+                  subtitle: const Text('Tap here to go back'),
+                  tileColor: Colors.blue[700],
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(index.toString())));
+                  },
                 );
+                // return Container(
+                //   height: 100,
+                //   color: Colors.amber[colorCodes[index]],
+                //   child: Column(children: [
+                //     Text(snapshot.data![index].title),
+                //     Text(snapshot.data![index].exercises),
+                //     Text(snapshot.data![index].exerciseTime.toString()),
+                //     Text(snapshot.data![index].restTime.toString()),
+                //     Text(snapshot.data![index].halfTime.toString())
+                //   ]),
+                // );
               },
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),
