@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'create_workout/create_workout.dart';
 import 'workout_type/workout_type.dart';
 import 'database/database_manager.dart';
+import 'start_workout/view_workout.dart';
 import 'dart:developer';
 
 void main() async {
@@ -98,12 +101,23 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: const Text('ListTile with Hero'),
-                  subtitle: const Text('Tap here to go back'),
+                  title: Text(snapshot.data![index].title),
+                  subtitle: Text(
+                      '${jsonDecode(snapshot.data![index].exercises).length} exercises, X minutes'),
                   tileColor: Colors.blue[700],
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(index.toString())));
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ViewWorkout(),
+                        settings: RouteSettings(
+                          arguments: snapshot.data![index],
+                        ),
+                      ),
+                    );
                   },
                 );
                 // return Container(
