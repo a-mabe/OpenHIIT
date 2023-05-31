@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../workout_type/workout_type.dart';
+import 'workout.dart';
 
 class ViewWorkout extends StatelessWidget {
   const ViewWorkout({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -28,6 +32,106 @@ class ViewWorkout extends StatelessWidget {
             },
           ),
         ],
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(80.0),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 80.0,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    color: Colors.red,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 80.0,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    color: Colors.blue,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/workout",
+                          arguments: workoutArgument);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => CountDownTimer(),
+                      //     settings: RouteSettings(
+                      //       arguments: workoutArgument,
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                    child: Ink(
+                        height: 80.0,
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        color: Colors.green,
+                        child: const Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                            ),
+                            Text("Start")
+                          ],
+                        ))),
+                  ),
+                ),
+                // Container(
+
+                //   decoration: const BoxDecoration(
+                //     color: Color(0xff7c94b6),
+                //   ),
+                // )
+                // Container(
+                //   color: Color.fromARGB(255, 23, 178, 189),
+                //   height: 4.0,
+                // ),
+              ],
+            )
+
+            // Container(
+            //   color: Color.fromARGB(255, 23, 178, 189),
+            //   height: 4.0,
+            // ),
+            ),
+        // PreferredSize(
+        //   preferredSize: const Size.fromHeight(80.0),
+        //   child: Row(
+        //     children: <Widget>[
+        //       Expanded(
+        //         flex: 1,
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width * 0.25,
+        //           color: Colors.greenAccent,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         flex: 1,
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width * 0.25,
+        //           color: Colors.yellow,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         flex: 1,
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width * 0.25,
+        //           color: Colors.purple,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
       body: const Center(
         child: ViewWorkoutExercises(),

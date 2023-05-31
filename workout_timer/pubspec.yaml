@@ -38,6 +38,8 @@ dependencies:
   numberpicker: ^2.1.2
   sqflite: ^2.2.8+2
   uuid: ^3.0.7
+  timer_count_down: ^2.2.2
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -50,11 +52,19 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+  count_down_sound:
+    git:
+      url: https://github.com/a-mabe/simple_count_down.git
+      ref: sound-effect # branch name
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+
+  assets:
+    - assets/audio/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
