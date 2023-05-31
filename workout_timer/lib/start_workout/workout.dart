@@ -1,10 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:timer_count_down/timer_controller.dart';
 // import 'package:timer_count_down/timer_count_down.dart';
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:count_down_sound/timer_controller.dart';
+// ignore: depend_on_referenced_packages
 import 'package:count_down_sound/timer_count_down.dart';
 import '../workout_type/workout_type.dart';
 
@@ -106,16 +105,10 @@ import '../workout_type/workout_type.dart';
 // }
 
 class CountDownTimer extends StatefulWidget {
-  final Workout workout;
-
-  /// Home page
-  const CountDownTimer({
-    Key? key,
-    required this.workout,
-  }) : super(key: key);
+  const CountDownTimer({super.key});
 
   @override
-  CountDownTimerState createState() => CountDownTimerState(workout);
+  CountDownTimerState createState() => CountDownTimerState();
 }
 
 class CountDownTimerState extends State<CountDownTimer>
@@ -123,10 +116,6 @@ class CountDownTimerState extends State<CountDownTimer>
   // late final Workout workout;
   final CountdownController _controller = CountdownController(autoStart: true);
   final player = AudioPlayer();
-
-  late final Workout workout;
-
-  CountDownTimerState(this.workout);
 
   // late AudioPlayer player;
   @override
@@ -141,19 +130,21 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
+
     return Scaffold(
       backgroundColor: Colors.white10,
       body: Countdown(
         controller: _controller,
-        seconds: workout.exerciseTime,
+        seconds: workoutArgument.exerciseTime,
         build: (_, double time) => Text(
           time.toString(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 100,
           ),
         ),
-        interval: Duration(milliseconds: 100),
+        interval: const Duration(milliseconds: 100),
         onFinished: () async {
           // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
           // await player.play(AssetSource('audio/beep-3.wav'));

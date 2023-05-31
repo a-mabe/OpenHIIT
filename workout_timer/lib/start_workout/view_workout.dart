@@ -56,17 +56,17 @@ class ViewWorkout extends StatelessWidget {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, "/workout",
-                          arguments: workoutArgument);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => CountDownTimer(),
-                      //     settings: RouteSettings(
-                      //       arguments: workoutArgument,
-                      //     ),
-                      //   ),
-                      // );
+                      // Navigator.pushNamed(context, "/workout",
+                      //     arguments: workoutArgument);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CountDownTimer(),
+                          settings: RouteSettings(
+                            arguments: workoutArgument,
+                          ),
+                        ),
+                      );
                     },
                     child: Ink(
                         height: 80.0,

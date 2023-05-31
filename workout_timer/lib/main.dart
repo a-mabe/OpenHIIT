@@ -6,7 +6,6 @@ import 'create_workout/create_workout.dart';
 import 'workout_type/workout_type.dart';
 import 'database/database_manager.dart';
 import 'start_workout/view_workout.dart';
-import 'router/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,6 @@ class WorkoutTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateRoute: RouterHelper.generateRoute,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
