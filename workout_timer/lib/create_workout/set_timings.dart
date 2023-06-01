@@ -104,8 +104,8 @@ class _SetTimingsState extends State<SetTimings> {
                 IconButton(
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
-                    final newValue = restTime - 1;
-                    restTime = newValue.clamp(1, 50);
+                    final newValue = halfTime - 1;
+                    halfTime = newValue.clamp(1, 50);
                   }),
                 ),
                 Text('Half time: $halfTime seconds'),
