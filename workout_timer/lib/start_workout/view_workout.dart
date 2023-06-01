@@ -61,7 +61,7 @@ class ViewWorkout extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CountDownTimer(),
+                          builder: (context) => const StartWorkout(),
                           settings: RouteSettings(
                             arguments: workoutArgument,
                           ),
