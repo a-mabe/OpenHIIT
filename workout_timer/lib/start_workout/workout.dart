@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:timer_count_down/timer_controller.dart';
 // import 'package:timer_count_down/timer_count_down.dart';
@@ -138,7 +140,8 @@ class CountDownTimerState extends State<CountDownTimer>
   final CountdownController _restController =
       CountdownController(autoStart: true);
 
-  String currentInterval = "workout";
+  String currentInterval = "start";
+  bool start = true;
   final player = AudioPlayer();
   int intervals = 0;
 
@@ -146,6 +149,8 @@ class CountDownTimerState extends State<CountDownTimer>
   Widget build(BuildContext context) {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
+
+    List<dynamic> exercises = jsonDecode(workoutArgument.exercises);
 
     return Scaffold(
         backgroundColor: Colors.white10,
@@ -156,63 +161,134 @@ class CountDownTimerState extends State<CountDownTimer>
               child: Stack(
                 children: [
                   Visibility(
-                    visible: currentInterval == "workout" ? true : false,
-                    child: Countdown(
-                      controller: _workoutController,
-                      seconds: workoutArgument.exerciseTime,
-                      build: (_, double time) => Text(
-                        time.toString(),
-                        style:
-                            const TextStyle(fontSize: 120, color: Colors.white),
-                      ),
-                      interval: const Duration(milliseconds: 100),
-                      onFinished: () async {
-                        // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
-                        // await player.play(AssetSource('audio/beep-3.wav'));
-                        await player.play(AssetSource('audio/beep-6.wav'));
-                        await Future.delayed(const Duration(milliseconds: 500));
-                        setState(() {
-                          print("$intervals");
-                          print("${workoutArgument.numExercises}");
-                          if (intervals < workoutArgument.numExercises) {
-                            print("workout complete");
-                            // await Future.delayed(const Duration(seconds: 2));
-                            // intervals--;
-                            currentInterval = "rest";
-                            _restController.restart();
-                          } else {}
-                        });
-                      },
+                    visible: currentInterval == "start" ? true : false,
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                20.0, 20.0, 20.0, 20.0),
+                            child: Text(
+                              "Get ready",
+                              style: const TextStyle(
+                                  fontSize: 120, color: Colors.white),
+                            )),
+                        Countdown(
+                          controller: _workoutController,
+                          seconds: 10,
+                          build: (_, double time) => Text(
+                            time.toString(),
+                            style: const TextStyle(
+                                fontSize: 120, color: Colors.white),
+                          ),
+                          interval: const Duration(milliseconds: 100),
+                          onFinished: () async {
+                            // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
+                            // await player.play(AssetSource('audio/beep-3.wav'));
+                            await player
+                                .play(AssetSource('audio/short-whistle.wav'));
+                            await Future.delayed(
+                                const Duration(milliseconds: 500));
+                            setState(() {
+                              start = false;
+                              currentInterval = "workout";
+                              _workoutController.restart();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: currentInterval == "workout" && start == false
+                        ? true
+                        : false,
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                20.0, 20.0, 20.0, 20.0),
+                            child: Text(
+                              intervals < exercises.length
+                                  ? exercises[intervals]
+                                  : "",
+                              style: const TextStyle(
+                                  fontSize: 120, color: Colors.white),
+                            )),
+                        Countdown(
+                          controller: _workoutController,
+                          seconds: workoutArgument.exerciseTime,
+                          build: (_, double time) => Text(
+                            time.toString(),
+                            style: const TextStyle(
+                                fontSize: 120, color: Colors.white),
+                          ),
+                          interval: const Duration(milliseconds: 100),
+                          onFinished: () async {
+                            // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
+                            // await player.play(AssetSource('audio/beep-3.wav'));
+                            await player.play(AssetSource('audio/beep-6.wav'));
+                            await Future.delayed(
+                                const Duration(milliseconds: 500));
+                            setState(() {
+                              print("$intervals");
+                              print("${workoutArgument.numExercises}");
+                              if (intervals < workoutArgument.numExercises) {
+                                print("workout complete");
+                                // await Future.delayed(const Duration(seconds: 2));
+                                // intervals--;
+                                currentInterval = "rest";
+                                _restController.restart();
+                              } else {}
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
                   Visibility(
                     visible: currentInterval == "rest" ? true : false,
-                    child: Countdown(
-                      controller: _restController,
-                      seconds: 3,
-                      build: (_, double time) => Text(
-                        time.toString(),
-                        style:
-                            const TextStyle(fontSize: 120, color: Colors.white),
-                      ),
-                      interval: const Duration(milliseconds: 100),
-                      onFinished: () async {
-                        // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
-                        // await player.play(AssetSource('audio/beep-3.wav'));
-                        await player.play(AssetSource('audio/beep-6.wav'));
-                        await Future.delayed(const Duration(milliseconds: 500));
-                        setState(() {
-                          print("$intervals");
-                          print("${workoutArgument.numExercises}");
-                          intervals = intervals + 1;
-                          if (intervals < workoutArgument.numExercises) {
-                            print("rest complete");
-                            // await Future.delayed(const Duration(seconds: 2));
-                            currentInterval = "workout";
-                            _workoutController.restart();
-                          } else {}
-                        });
-                      },
+                    child: Column(
+                      children: [
+                        const Padding(
+                            padding:
+                                EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                            child: Text(
+                              "REST",
+                              style:
+                                  TextStyle(fontSize: 120, color: Colors.white),
+                            )),
+                        Countdown(
+                          controller: _restController,
+                          seconds: 3,
+                          build: (_, double time) => Text(
+                            time.toString(),
+                            style: const TextStyle(
+                                fontSize: 120, color: Colors.white),
+                          ),
+                          interval: const Duration(milliseconds: 100),
+                          onFinished: () async {
+                            // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
+                            // await player.play(AssetSource('audio/beep-3.wav'));
+                            await player.play(AssetSource('audio/beep-6.wav'));
+                            await Future.delayed(
+                                const Duration(milliseconds: 500));
+                            setState(() {
+                              print("$intervals");
+                              print("${workoutArgument.numExercises}");
+                              intervals = intervals + 1;
+                              if (intervals < workoutArgument.numExercises) {
+                                print("rest complete");
+                                // await Future.delayed(const Duration(seconds: 2));
+                                currentInterval = "workout";
+                                _workoutController.restart();
+                              } else {}
+                            });
+                            if (intervals == workoutArgument.numExercises) {
+                              await player.play(AssetSource('audio/bell.mp3'));
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   )
                 ],
