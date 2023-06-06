@@ -40,6 +40,7 @@ dependencies:
   uuid: ^3.0.7
   timer_count_down: ^2.2.2
   audioplayers: ^4.1.0
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:

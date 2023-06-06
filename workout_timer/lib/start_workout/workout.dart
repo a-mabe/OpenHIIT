@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:timer_count_down/timer_controller.dart';
@@ -7,6 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 // import 'package:count_down_sound/timer_controller.dart';
 // ignore: depend_on_referenced_packages
 import 'package:count_down_sound/timer_count_down.dart';
+import 'package:confetti/confetti.dart';
 import '../workout_type/workout_type.dart';
 
 ///
@@ -111,14 +113,14 @@ class StartWorkout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        // title: const Text('Enter Time Intervals'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: const Center(
+    return const Scaffold(
+      // extendBodyBehindAppBar: true,
+      // appBar: AppBar(
+      //   // title: const Text('Enter Time Intervals'),
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      // ),
+      body: Center(
         child: CountDownTimer(),
       ),
     );
@@ -145,6 +147,46 @@ class CountDownTimerState extends State<CountDownTimer>
   final player = AudioPlayer();
   int intervals = 0;
 
+  late ConfettiController _controllerCenter;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    _controllerCenter.dispose();
+    super.dispose();
+  }
+
+  /// A custom Path to paint stars.
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
   @override
   Widget build(BuildContext context) {
     Workout workoutArgument =
@@ -164,13 +206,19 @@ class CountDownTimerState extends State<CountDownTimer>
                     visible: currentInterval == "start" ? true : false,
                     child: Column(
                       children: [
-                        Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                20.0, 20.0, 20.0, 20.0),
+                        // const Padding(
+                        //     padding:
+                        //         EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
+                        //     child: Row(
+                        //       children: [Icon(Icons.abc)],
+                        //     )),
+                        const Padding(
+                            padding:
+                                EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
                             child: Text(
                               "Get ready",
-                              style: const TextStyle(
-                                  fontSize: 120, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 70, color: Colors.white),
                             )),
                         Countdown(
                           controller: _workoutController,
@@ -178,7 +226,7 @@ class CountDownTimerState extends State<CountDownTimer>
                           build: (_, double time) => Text(
                             time.toString(),
                             style: const TextStyle(
-                                fontSize: 120, color: Colors.white),
+                                fontSize: 140, color: Colors.white),
                           ),
                           interval: const Duration(milliseconds: 100),
                           onFinished: () async {
@@ -187,7 +235,7 @@ class CountDownTimerState extends State<CountDownTimer>
                             await player
                                 .play(AssetSource('audio/short-whistle.wav'));
                             await Future.delayed(
-                                const Duration(milliseconds: 500));
+                                const Duration(milliseconds: 200));
                             setState(() {
                               start = false;
                               currentInterval = "workout";
@@ -206,13 +254,13 @@ class CountDownTimerState extends State<CountDownTimer>
                       children: [
                         Padding(
                             padding: const EdgeInsets.fromLTRB(
-                                20.0, 20.0, 20.0, 20.0),
+                                20.0, 100.0, 20.0, 20.0),
                             child: Text(
                               intervals < exercises.length
                                   ? exercises[intervals]
                                   : "",
                               style: const TextStyle(
-                                  fontSize: 120, color: Colors.white),
+                                  fontSize: 40, color: Colors.white),
                             )),
                         Countdown(
                           controller: _workoutController,
@@ -220,7 +268,7 @@ class CountDownTimerState extends State<CountDownTimer>
                           build: (_, double time) => Text(
                             time.toString(),
                             style: const TextStyle(
-                                fontSize: 120, color: Colors.white),
+                                fontSize: 140, color: Colors.white),
                           ),
                           interval: const Duration(milliseconds: 100),
                           onFinished: () async {
@@ -228,17 +276,17 @@ class CountDownTimerState extends State<CountDownTimer>
                             // await player.play(AssetSource('audio/beep-3.wav'));
                             await player.play(AssetSource('audio/beep-6.wav'));
                             await Future.delayed(
-                                const Duration(milliseconds: 500));
+                                const Duration(milliseconds: 200));
+                            intervals = intervals + 1;
                             setState(() {
                               print("$intervals");
-                              print("${workoutArgument.numExercises}");
                               if (intervals < workoutArgument.numExercises) {
-                                print("workout complete");
-                                // await Future.delayed(const Duration(seconds: 2));
-                                // intervals--;
                                 currentInterval = "rest";
                                 _restController.restart();
-                              } else {}
+                              } else {
+                                print("Done!");
+                                _controllerCenter.play();
+                              }
                             });
                           },
                         ),
@@ -251,11 +299,11 @@ class CountDownTimerState extends State<CountDownTimer>
                       children: [
                         const Padding(
                             padding:
-                                EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                                EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
                             child: Text(
                               "REST",
                               style:
-                                  TextStyle(fontSize: 120, color: Colors.white),
+                                  TextStyle(fontSize: 70, color: Colors.white),
                             )),
                         Countdown(
                           controller: _restController,
@@ -263,7 +311,7 @@ class CountDownTimerState extends State<CountDownTimer>
                           build: (_, double time) => Text(
                             time.toString(),
                             style: const TextStyle(
-                                fontSize: 120, color: Colors.white),
+                                fontSize: 140, color: Colors.white),
                           ),
                           interval: const Duration(milliseconds: 100),
                           onFinished: () async {
@@ -271,14 +319,10 @@ class CountDownTimerState extends State<CountDownTimer>
                             // await player.play(AssetSource('audio/beep-3.wav'));
                             await player.play(AssetSource('audio/beep-6.wav'));
                             await Future.delayed(
-                                const Duration(milliseconds: 500));
+                                const Duration(milliseconds: 200));
                             setState(() {
                               print("$intervals");
-                              print("${workoutArgument.numExercises}");
-                              intervals = intervals + 1;
                               if (intervals < workoutArgument.numExercises) {
-                                print("rest complete");
-                                // await Future.delayed(const Duration(seconds: 2));
                                 currentInterval = "workout";
                                 _workoutController.restart();
                               } else {}
@@ -290,7 +334,26 @@ class CountDownTimerState extends State<CountDownTimer>
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  Visibility(
+                    visible: true,
+                    child: ConfettiWidget(
+                      confettiController: _controllerCenter,
+                      blastDirectionality: BlastDirectionality
+                          .explosive, // don't specify a direction, blast randomly
+                      shouldLoop:
+                          true, // start again as soon as the animation is finished
+                      colors: const [
+                        Colors.green,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple
+                      ], // manually specify the colors to be used
+                      createParticlePath:
+                          drawStar, // define a custom shape/path.
+                    ),
+                  ),
                 ],
               ),
             ),
