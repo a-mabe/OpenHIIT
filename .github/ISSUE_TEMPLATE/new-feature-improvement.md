@@ -9,6 +9,6 @@ assignees: ''
 
 **Purpose:** As a user, I...
 
-**Description:** Some more details on the 
+**More details:** Some more details on the feature/improvement
 
 **Acceptance Criteria:**
