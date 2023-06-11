@@ -63,67 +63,158 @@ class _SetExercisesState extends State<SetExercises> {
 
     final formKey = GlobalKey<FormState>();
 
-    return Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ListView.builder(
-                  itemCount: workoutArgument.numExercises,
-                  itemBuilder: (context, index) {
-                    controllers.add(TextEditingController());
-                    // formKeys.add(GlobalKey<FormState>());
-                    validators.add(false);
+    for (var i = 0; i < workoutArgument.numExercises; i++) {
+      controllers.add(TextEditingController());
+      validators.add(false);
+    }
 
-                    return Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        controller: controllers[index],
-                        decoration: InputDecoration(
-                          labelText: 'Exercise #${index + 1}',
-                          errorText: validators[index]
-                              ? 'Value Can\'t Be Empty'
-                              : null,
-                        ),
-                        onSaved: (val) => setState(() => exercises.add(
-                            val!)), // workoutArgument.exercises.add(val!)),
-                      ),
-                    );
-                  }),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    final form = formKey.currentState!;
-                    if (form.validate()) {
-                      form.save();
+    List<Widget> createChildren() {
+      return List<Widget>.generate(workoutArgument.numExercises + 1,
+          (int index) {
+        if (index == workoutArgument.numExercises) {
+          // return the submit button
+          return ElevatedButton(
+            onPressed: () {
+              final form = formKey.currentState!;
+              if (form.validate()) {
+                form.save();
 
-                      workoutArgument.exercises = jsonEncode(exercises);
+                workoutArgument.exercises = jsonEncode(exercises);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(workoutArgument.exercises)),
-                      );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          "${workoutArgument.exercises} + ${workoutArgument.numExercises}")),
+                );
 
-                      workout = workoutArgument;
+                workout = workoutArgument;
 
-                      submitExercises();
-                    }
-                  },
-                  child: const Text('Submit'),
-                ),
+                submitExercises();
+              }
+            },
+            child: const Text('Submit'),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+              controller: controllers[index],
+              decoration: InputDecoration(
+                labelText: 'Exercise #${index + 1}',
+                errorText: validators[index] ? 'Value Can\'t Be Empty' : null,
               ),
+              onSaved: (val) => setState(() =>
+                  exercises.add(val!)), // workoutArgument.exercises.add(val!)),
             ),
-          ],
-        ));
+          );
+        }
+      });
+    }
+
+    return Form(
+      key: formKey,
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(children: createChildren()),
+          ),
+        ],
+      ),
+      // child: SingleChildScrollView(
+      //   padding: const EdgeInsets.all(0),
+      //   child: Column(
+      //     children: createChildren(),
+      //   ),
+      // ),
+      // ElevatedButton(
+      //   onPressed: () {
+      //     final form = formKey.currentState!;
+      //     if (form.validate()) {
+      //       form.save();
+
+      //       workoutArgument.exercises = jsonEncode(exercises);
+
+      //       ScaffoldMessenger.of(context).showSnackBar(
+      //         SnackBar(content: Text(workoutArgument.exercises)),
+      //       );
+
+      //       workout = workoutArgument;
+
+      //       submitExercises();
+      //     }
+      //   },
+      //   child: const Text('Submit'),
+      // ),
+    );
+
+    //   return Form(
+    //       key: formKey,
+    //       child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           Expanded(
+    //             child: ListView.builder(
+    //                 itemCount: workoutArgument.numExercises,
+    //                 itemBuilder: (context, index) {
+
+    //                   validators.add(false);
+
+    // return Padding(
+    //   padding:
+    //       const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
+    //   child: TextFormField(
+    //     validator: (value) {
+    //       if (value == null || value.isEmpty) {
+    //         return 'Please enter some text';
+    //       }
+    //       return null;
+    //     },
+    //     controller: controllers[index],
+    //     decoration: InputDecoration(
+    //       labelText: 'Exercise #${index + 1}',
+    //       errorText: validators[index]
+    //           ? 'Value Can\'t Be Empty'
+    //           : null,
+    //     ),
+    //     onSaved: (val) => setState(() => exercises.add(
+    //         val!)), // workoutArgument.exercises.add(val!)),
+    //   ),
+    // );
+    //                 }),
+    //           ),
+    //           Center(
+    //             child: Padding(
+    //               padding: const EdgeInsets.symmetric(vertical: 16.0),
+    // child: ElevatedButton(
+    //   onPressed: () {
+    //     final form = formKey.currentState!;
+    //     if (form.validate()) {
+    //       form.save();
+
+    //       workoutArgument.exercises = jsonEncode(exercises);
+
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(content: Text(workoutArgument.exercises)),
+    //       );
+
+    //       workout = workoutArgument;
+
+    //       submitExercises();
+    //     }
+    //   },
+    //   child: const Text('Submit'),
+    // ),
+    //             ),
+    //           ),
+    //         ],
+    //       ));
+    // }
   }
 }

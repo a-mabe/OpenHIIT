@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import '../database/database_manager.dart';
 import '../workout_type/workout_type.dart';
 import 'workout.dart';
 
 class ViewWorkout extends StatelessWidget {
-  const ViewWorkout({super.key});
+  ViewWorkout({super.key});
+
+  Future<Database> database = DatabaseManager().initDB();
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +22,18 @@ class ViewWorkout extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
+            onPressed: () async {
+              await DatabaseManager()
+                  .deleteList(workoutArgument.id, database)
+                  .then((value) {
+                Navigator.pop(context);
+              });
             },
           ),
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Show Snackbar',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
+              print(workoutArgument);
             },
           ),
         ],

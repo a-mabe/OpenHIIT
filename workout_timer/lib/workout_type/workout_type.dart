@@ -67,7 +67,7 @@ class Workout {
   //     required this.halfTime});
 
   Workout(this.id, this.title, this.numExercises, this.exercises,
-      this.exerciseTime, this.halfTime, this.restTime);
+      this.exerciseTime, this.restTime, this.halfTime);
 
   Workout.empty() {
     id = "";

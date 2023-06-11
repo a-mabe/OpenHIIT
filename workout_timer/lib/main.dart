@@ -21,6 +21,7 @@ class WorkoutTimer extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -57,24 +58,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<List<Workout>> workouts =
-      DatabaseManager().lists(DatabaseManager().initDB());
+  late Future<List<Workout>> workouts;
 
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
   // final List<Workout> workouts = [Workout.empty()];
 
-  void createWorkoutPage() {
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CreateWorkout()),
-      );
+  void createWorkoutPage() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateWorkout()),
+    ).then((value) {
+      setState(() {
+        workouts = DatabaseManager().lists(DatabaseManager().initDB());
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    workouts = DatabaseManager().lists(DatabaseManager().initDB());
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -111,12 +114,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ViewWorkout(),
+                        builder: (context) => ViewWorkout(),
                         settings: RouteSettings(
                           arguments: snapshot.data![index],
                         ),
                       ),
-                    );
+                    ).then((value) {
+                      setState(() {
+                        workouts =
+                            DatabaseManager().lists(DatabaseManager().initDB());
+                      });
+                    });
                   },
                 );
                 // return Container(

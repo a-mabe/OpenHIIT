@@ -146,6 +146,7 @@ class CountDownTimerState extends State<CountDownTimer>
   bool start = true;
   final player = AudioPlayer();
   int intervals = 0;
+  IconData pausePlayIcon = Icons.pause;
 
   late ConfettiController _controllerCenter;
 
@@ -167,7 +168,7 @@ class CountDownTimerState extends State<CountDownTimer>
     // Method to convert degree to radians
     double degToRad(double deg) => deg * (pi / 180.0);
 
-    const numberOfPoints = 5;
+    const numberOfPoints = 10;
     final halfWidth = size.width / 2;
     final externalRadius = halfWidth;
     final internalRadius = halfWidth / 2.5;
@@ -192,6 +193,8 @@ class CountDownTimerState extends State<CountDownTimer>
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
+    print(workoutArgument);
+
     List<dynamic> exercises = jsonDecode(workoutArgument.exercises);
 
     return Scaffold(
@@ -206,12 +209,36 @@ class CountDownTimerState extends State<CountDownTimer>
                     visible: currentInterval == "start" ? true : false,
                     child: Column(
                       children: [
-                        // const Padding(
-                        //     padding:
-                        //         EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
-                        //     child: Row(
-                        //       children: [Icon(Icons.abc)],
-                        //     )),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0.0),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                        size: 50.0, Icons.arrow_back),
+                                    color: Colors.white),
+                                Spacer(),
+                                IconButton(
+                                    onPressed: () {
+                                      if (pausePlayIcon == Icons.pause) {
+                                        _workoutController.pause();
+                                        setState(() {
+                                          pausePlayIcon = Icons.play_arrow;
+                                        });
+                                      } else {
+                                        _workoutController.start();
+                                        setState(() {
+                                          pausePlayIcon = Icons.pause;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(size: 50.0, pausePlayIcon),
+                                    color: Colors.white),
+                              ],
+                            )),
                         const Padding(
                             padding:
                                 EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
@@ -253,6 +280,36 @@ class CountDownTimerState extends State<CountDownTimer>
                     child: Column(
                       children: [
                         Padding(
+                            padding: EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0.0),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                        size: 50.0, Icons.arrow_back),
+                                    color: Colors.white),
+                                Spacer(),
+                                IconButton(
+                                    onPressed: () {
+                                      if (pausePlayIcon == Icons.pause) {
+                                        _workoutController.pause();
+                                        setState(() {
+                                          pausePlayIcon = Icons.play_arrow;
+                                        });
+                                      } else {
+                                        _workoutController.start();
+                                        setState(() {
+                                          pausePlayIcon = Icons.pause;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(size: 50.0, pausePlayIcon),
+                                    color: Colors.white),
+                              ],
+                            )),
+                        Padding(
                             padding: const EdgeInsets.fromLTRB(
                                 20.0, 100.0, 20.0, 20.0),
                             child: Text(
@@ -280,11 +337,15 @@ class CountDownTimerState extends State<CountDownTimer>
                             intervals = intervals + 1;
                             setState(() {
                               print("$intervals");
+                              print("Rest time:");
+                              print(workoutArgument.restTime);
                               if (intervals < workoutArgument.numExercises) {
                                 currentInterval = "rest";
+                                print("Restarting rest");
                                 _restController.restart();
                               } else {
                                 print("Done!");
+                                currentInterval = "done";
                                 _controllerCenter.play();
                               }
                             });
@@ -297,6 +358,36 @@ class CountDownTimerState extends State<CountDownTimer>
                     visible: currentInterval == "rest" ? true : false,
                     child: Column(
                       children: [
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0.0),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                        size: 50.0, Icons.arrow_back),
+                                    color: Colors.white),
+                                Spacer(),
+                                IconButton(
+                                    onPressed: () {
+                                      if (pausePlayIcon == Icons.pause) {
+                                        _restController.pause();
+                                        setState(() {
+                                          pausePlayIcon = Icons.play_arrow;
+                                        });
+                                      } else {
+                                        _restController.start();
+                                        setState(() {
+                                          pausePlayIcon = Icons.pause;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(size: 50.0, pausePlayIcon),
+                                    color: Colors.white),
+                              ],
+                            )),
                         const Padding(
                             padding:
                                 EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
@@ -307,7 +398,7 @@ class CountDownTimerState extends State<CountDownTimer>
                             )),
                         Countdown(
                           controller: _restController,
-                          seconds: 3,
+                          seconds: workoutArgument.restTime,
                           build: (_, double time) => Text(
                             time.toString(),
                             style: const TextStyle(
@@ -336,7 +427,7 @@ class CountDownTimerState extends State<CountDownTimer>
                     ),
                   ),
                   Visibility(
-                    visible: true,
+                    visible: currentInterval == "done" ? true : false,
                     child: ConfettiWidget(
                       confettiController: _controllerCenter,
                       blastDirectionality: BlastDirectionality

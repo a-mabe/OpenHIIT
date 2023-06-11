@@ -53,7 +53,7 @@ class _SetTimingsState extends State<SetTimings> {
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
                     final newValue = exerciseTime - 1;
-                    exerciseTime = newValue.clamp(1, 50);
+                    exerciseTime = newValue.clamp(1, 120);
                   }),
                 ),
                 Text('Working time: $exerciseTime seconds'),
@@ -61,7 +61,7 @@ class _SetTimingsState extends State<SetTimings> {
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
                     final newValue = exerciseTime + 1;
-                    exerciseTime = newValue.clamp(1, 50);
+                    exerciseTime = newValue.clamp(1, 120);
                   }),
                 ),
               ],
@@ -79,7 +79,7 @@ class _SetTimingsState extends State<SetTimings> {
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
                     final newValue = restTime - 1;
-                    restTime = newValue.clamp(1, 50);
+                    restTime = newValue.clamp(1, 120);
                   }),
                 ),
                 Text('Rest time: $restTime seconds'),
@@ -87,7 +87,7 @@ class _SetTimingsState extends State<SetTimings> {
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
                     final newValue = restTime + 1;
-                    restTime = newValue.clamp(1, 50);
+                    restTime = newValue.clamp(1, 120);
                   }),
                 ),
               ],
@@ -105,7 +105,7 @@ class _SetTimingsState extends State<SetTimings> {
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
                     final newValue = halfTime - 1;
-                    halfTime = newValue.clamp(1, 50);
+                    halfTime = newValue.clamp(1, 60);
                   }),
                 ),
                 Text('Half time: $halfTime seconds'),
@@ -129,10 +129,18 @@ class _SetTimingsState extends State<SetTimings> {
                 workoutArgument.restTime = restTime;
                 workoutArgument.halfTime = halfTime;
 
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
+                );
+
                 // Set the workout ID
                 workoutArgument.id = const Uuid().v1();
 
                 Database database = await DatabaseManager().initDB();
+
+                print(workoutArgument);
 
                 await DatabaseManager().insertList(workoutArgument, database);
               },
