@@ -16,55 +16,35 @@ void main() async {
 class WorkoutTimer extends StatelessWidget {
   const WorkoutTimer({super.key});
 
-  // This widget is the root of your application.
+  /// Application root.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  /// The list of workouts to be loaded with [DatabaseManager()].
   late Future<List<Workout>> workouts;
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
-  // final List<Workout> workouts = [Workout.empty()];
-
-  void createWorkoutPage() async {
+  /// Push to the [CreateWorkout()] page.
+  ///
+  /// Then, refresh the [workouts].
+  void pushCreateWorkoutPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CreateWorkout()),
@@ -74,113 +54,120 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
+  // ---
+
+  /// Generates the ListView to display [workouts].
+  Widget workoutListView(snapshot) {
+    return ListView.separated(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: snapshot.data!.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          // Title of the workout.
+          title: Text(snapshot.data![index].title),
+          // Workout metadata.
+          subtitle: Text(
+              '${jsonDecode(snapshot.data![index].exercises).length} exercises, X minutes'),
+          tileColor: Colors.blue[700],
+          onTap: () {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(index.toString())));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ViewWorkout(),
+                settings: RouteSettings(
+                  arguments: snapshot.data![index],
+                ),
+              ),
+            ).then((value) {
+              setState(() {
+                workouts = DatabaseManager().lists(DatabaseManager().initDB());
+              });
+            });
+          },
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    );
+  }
+  // ---
+
+  /// Generates the error message for an issue loading [workouts].
+  Widget workoutFetchError(snapshot) {
+    List<Widget> children;
+    children = <Widget>[
+      const Icon(
+        Icons.error_outline,
+        color: Colors.red,
+        size: 60,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Text('Error: ${snapshot.error}'),
+      ),
+    ];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
+  }
+  // ---
+
+  /// Generates the loading circle.
+  Widget workoutLoading() {
+    List<Widget> children;
+    children = const <Widget>[
+      SizedBox(
+        width: 60,
+        height: 60,
+        child: CircularProgressIndicator(),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: Text('Awaiting result...'),
+      ),
+    ];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
+  }
+  // ---
 
   @override
   Widget build(BuildContext context) {
     workouts = DatabaseManager().lists(DatabaseManager().initDB());
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(),
+
+      /// Pushes to [CreateWorkout()]
       floatingActionButton: FloatingActionButton(
-        onPressed: createWorkoutPage,
-        tooltip: 'Increment',
+        onPressed: pushCreateWorkoutPage,
+        tooltip: 'Create workout',
         child: const Icon(Icons.add),
       ),
+      // ---
+
       body: FutureBuilder<List<Workout>>(
         future: workouts,
         builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
-          List<Widget> children;
-          Widget returnValue;
-          // If data was loaded successfully...
+          /// When [workouts] has successfully loaded.
           if (snapshot.hasData) {
-            returnValue = ListView.separated(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8),
-              itemCount: snapshot.data!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(snapshot.data![index].title),
-                  subtitle: Text(
-                      '${jsonDecode(snapshot.data![index].exercises).length} exercises, X minutes'),
-                  tileColor: Colors.blue[700],
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(index.toString())));
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewWorkout(),
-                        settings: RouteSettings(
-                          arguments: snapshot.data![index],
-                        ),
-                      ),
-                    ).then((value) {
-                      setState(() {
-                        workouts =
-                            DatabaseManager().lists(DatabaseManager().initDB());
-                      });
-                    });
-                  },
-                );
-                // return Container(
-                //   height: 100,
-                //   color: Colors.amber[colorCodes[index]],
-                //   child: Column(children: [
-                //     Text(snapshot.data![index].title),
-                //     Text(snapshot.data![index].exercises),
-                //     Text(snapshot.data![index].exerciseTime.toString()),
-                //     Text(snapshot.data![index].restTime.toString()),
-                //     Text(snapshot.data![index].halfTime.toString())
-                //   ]),
-                // );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-            );
+            return workoutListView(snapshot);
           }
-          // If there was an error loading the data...
+
+          /// When there was an error loading [workouts].
           else if (snapshot.hasError) {
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              ),
-            ];
-            returnValue = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
-            );
+            return workoutFetchError(snapshot);
           }
-          // If the data is still being fetched...
-          else {
-            children = const <Widget>[
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              ),
-            ];
 
-            returnValue = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
-            );
+          /// While still waiting to load [workouts].
+          else {
+            return workoutLoading();
           }
-          return returnValue;
         },
       ),
     );

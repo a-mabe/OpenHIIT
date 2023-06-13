@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../workout_type/workout_type.dart';
@@ -33,13 +32,8 @@ class _ChooseNumberState extends State<ChooseNumber> {
   final _formKey = GlobalKey<FormState>();
   final workout = Workout.empty();
 
-  void submitNumExercises() {
+  void pushExercises() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -50,6 +44,17 @@ class _ChooseNumberState extends State<ChooseNumber> {
         ),
       );
     });
+  }
+
+  void submitForm() {
+    // Validate returns true if the form is valid, or false otherwise.
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      workout.numExercises = _currentIntValue;
+
+      pushExercises();
+    }
   }
 
   @override
@@ -123,14 +128,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  final form = _formKey.currentState!;
-                  if (form.validate()) {
-                    form.save();
-                    workout.numExercises = _currentIntValue;
-
-                    submitNumExercises();
-                  }
+                  submitForm();
                 },
                 child: const Text('Submit'),
               ),
@@ -139,40 +137,5 @@ class _ChooseNumberState extends State<ChooseNumber> {
         ],
       ),
     );
-
-    // Column(
-    //   children: <Widget>[
-    //     TextFormField(
-    //       // The validator receives the text that the user has entered.
-    //       validator: (value) {
-    //         if (value == null || value.isEmpty) {
-    //           return 'Please enter a name for the workout';
-    //         }
-    //         return null;
-    //       },
-    //     ),
-    //     const SizedBox(height: 16),
-    //     Text('Select number of exercises:',
-    //         style: Theme.of(context).textTheme.titleLarge),
-    //     NumberPicker(
-    //       value: _currentIntValue,
-    //       minValue: 1,
-    //       maxValue: 50,
-    //       step: 1,
-    //       haptics: true,
-    //       onChanged: (value) => setState(() => _currentIntValue = value),
-    //     ),
-    //     TextButton(
-    //       style: TextButton.styleFrom(
-    //           foregroundColor: Colors.white,
-    //           disabledForegroundColor: Colors.blue.withOpacity(0.38),
-    //           backgroundColor: Colors.blue),
-    //       onPressed: () {
-    //         submitNumExercises();
-    //       },
-    //       child: const Text('Submit'),
-    //     )
-    //   ],
-    // );
   }
 }
