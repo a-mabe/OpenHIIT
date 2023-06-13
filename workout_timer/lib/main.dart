@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ViewWorkout(),
+                builder: (context) => const ViewWorkout(),
                 settings: RouteSettings(
                   arguments: snapshot.data![index],
                 ),

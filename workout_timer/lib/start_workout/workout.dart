@@ -201,7 +201,7 @@ class CountDownTimerState extends State<CountDownTimer>
         backgroundColor: Colors.white10,
         body: SizedBox.expand(
           child: Container(
-            color: BackgroundColor(),
+            color: backgroundColor(),
             child: Center(
               child: Stack(
                 children: [
@@ -465,121 +465,10 @@ class CountDownTimerState extends State<CountDownTimer>
             //   },
             // ),
           ),
-        )
-        // body: Countdown(
-        //   controller: _controller,
-        //   seconds: workoutArgument.exerciseTime,
-        //   build: (_, double time) => Text(
-        //     time.toString(),
-        //     style: const TextStyle(
-        //       fontSize: 100,
-        //     ),
-        //   ),
-        //   interval: const Duration(milliseconds: 100),
-        //   onFinished: () async {
-        //     // await player.setSource(AssetSource('assets/audio/beep-3.wav'));
-        //     // await player.play(AssetSource('audio/beep-3.wav'));
-        //     await player.play(AssetSource('audio/beep-6.wav'));
-        //   },
-        // ),
-        // body: AnimatedBuilder(
-        //     animation: _controller,
-        //     builder: (context, child) {
-        //       return Stack(
-        //         children: <Widget>[
-        //           Align(
-        //             alignment: Alignment.bottomCenter,
-        //             child: Container(
-        //               color: Colors.amber,
-        //               height: _controller.value *
-        //                   MediaQuery.of(context).size.height,
-        //             ),
-        //           ),
-        //           Padding(
-        //             padding: EdgeInsets.all(8.0),
-        //             child: Column(
-        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //               children: <Widget>[
-        //                 Expanded(
-        //                   child: Align(
-        //                     alignment: FractionalOffset.center,
-        //                     child: AspectRatio(
-        //                       aspectRatio: 1.0,
-        //                       child: Stack(
-        //                         children: <Widget>[
-        //                           // Positioned.fill(
-        //                           //   child: CustomPaint(
-        //                           //       painter: CustomTimerPainter(
-        //                           //         animation: controller,
-        //                           //         backgroundColor: Colors.white,
-        //                           //         color: themeData.indicatorColor,
-        //                           //       )),
-        //                           // ),
-        //                           Align(
-        //                             alignment: FractionalOffset.center,
-        //                             child: Column(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceEvenly,
-        //                               crossAxisAlignment:
-        //                                   CrossAxisAlignment.center,
-        //                               children: <Widget>[
-        //                                 Countdown(
-        //                                   controller: _controller,
-        //                                   seconds: 5,
-        //                                   build: (_, double time) => Text(
-        //                                     time.toString(),
-        //                                     style: TextStyle(
-        //                                       fontSize: 100,
-        //                                     ),
-        //                                   ),
-        //                                   interval: Duration(milliseconds: 100),
-        //                                   onFinished: () {
-        //                                     ScaffoldMessenger.of(context)
-        //                                         .showSnackBar(
-        //                                       SnackBar(
-        //                                         content: Text('Timer is done!'),
-        //                                       ),
-        //                                     );
-        //                                   },
-        //                                 ),
-        //                               ],
-        //                             ),
-        //                           ),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                   ),
-        //                 ),
-        // AnimatedBuilder(
-        //     animation: controller,
-        //     builder: (context, child) {
-        //       return FloatingActionButton.extended(
-        //           onPressed: () {
-        //             if (controller.isAnimating) {
-        //               controller.stop();
-        //             } else {
-        //               controller.reverse(
-        //                   from: controller.value == 0.0
-        //                       ? 1.0
-        //                       : controller.value);
-        //             }
-        //           },
-        //           icon: Icon(controller.isAnimating
-        //               ? Icons.pause
-        //               : Icons.play_arrow),
-        //           label: Text(
-        //               controller.isAnimating ? "Pause" : "Play"));
-        //     }),
-        //           ],
-        //         ),
-        //       ),
-        //     ],
-        //   );
-        // }),
-        );
+        ));
   }
 
-  BackgroundColor() {
+  Color backgroundColor() {
     if (currentInterval == "workout") {
       return Colors.red;
     } else if (currentInterval == "rest") {
