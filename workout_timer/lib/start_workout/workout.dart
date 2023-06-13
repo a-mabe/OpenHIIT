@@ -148,7 +148,7 @@ class CountDownTimerState extends State<CountDownTimer>
                         Countdown(
                           controller: _workoutController,
                           seconds: 10,
-                          build: (_, double time) => Text(
+                          build: (_, int time) => Text(
                             time.toString(),
                             style: const TextStyle(
                                 fontSize: 140, color: Colors.white),
@@ -221,7 +221,7 @@ class CountDownTimerState extends State<CountDownTimer>
                         Countdown(
                           controller: _workoutController,
                           seconds: workoutArgument.exerciseTime,
-                          build: (_, double time) => Text(
+                          build: (_, int time) => Text(
                             time.toString(),
                             style: const TextStyle(
                                 fontSize: 140, color: Colors.white),
@@ -294,7 +294,7 @@ class CountDownTimerState extends State<CountDownTimer>
                         Countdown(
                           controller: _restController,
                           seconds: workoutArgument.restTime,
-                          build: (_, double time) => Text(
+                          build: (_, int time) => Text(
                             time.toString(),
                             style: const TextStyle(
                                 fontSize: 140, color: Colors.white),
