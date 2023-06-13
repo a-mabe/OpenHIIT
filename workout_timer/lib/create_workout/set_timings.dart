@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
+import 'package:workout_timer/main.dart';
 import '../workout_type/workout_type.dart';
 import '../database/database_manager.dart';
 
@@ -33,6 +34,33 @@ class _SetTimingsState extends State<SetTimings> {
   int exerciseTime = 20;
   int restTime = 10;
   int halfTime = 0;
+
+  void pushHome() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MyHomePage()),
+        (route) => false);
+  }
+
+  void submitWorkout(workoutArgument) async {
+    workoutArgument.exerciseTime = exerciseTime;
+    workoutArgument.restTime = restTime;
+    workoutArgument.halfTime = halfTime;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(
+              "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
+    );
+
+    // Set the workout ID
+    workoutArgument.id = const Uuid().v1();
+
+    Database database = await DatabaseManager().initDB();
+    await DatabaseManager().insertList(workoutArgument, database).then((value) {
+      pushHome();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,24 +153,7 @@ class _SetTimingsState extends State<SetTimings> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
               onPressed: () async {
-                workoutArgument.exerciseTime = exerciseTime;
-                workoutArgument.restTime = restTime;
-                workoutArgument.halfTime = halfTime;
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
-                );
-
-                // Set the workout ID
-                workoutArgument.id = const Uuid().v1();
-
-                Database database = await DatabaseManager().initDB();
-
-                print(workoutArgument);
-
-                await DatabaseManager().insertList(workoutArgument, database);
+                submitWorkout(workoutArgument);
               },
               child: const Text('Submit'),
             ),
