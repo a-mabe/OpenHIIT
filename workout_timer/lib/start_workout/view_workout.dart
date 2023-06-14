@@ -8,7 +8,6 @@ import 'workout.dart';
 
 class ViewWorkout extends StatefulWidget {
   const ViewWorkout({super.key});
-
   @override
   ViewWorkoutState createState() => ViewWorkoutState();
 }
