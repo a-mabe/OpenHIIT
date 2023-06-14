@@ -8,7 +8,6 @@ import 'workout.dart';
 
 class ViewWorkout extends StatefulWidget {
   const ViewWorkout({super.key});
-
   @override
   ViewWorkoutState createState() => ViewWorkoutState();
 }
@@ -27,9 +26,8 @@ class ViewWorkoutState extends State<ViewWorkout> {
         padding: const EdgeInsets.all(8),
         itemCount: exercises.length,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
+          return SizedBox(
             height: 50,
-            color: (index % 2 == 0) ? Colors.grey[50] : Colors.grey[100],
             child: Center(child: Text(exercises[index])),
           );
         },
