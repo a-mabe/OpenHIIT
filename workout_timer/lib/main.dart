@@ -50,6 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
   /// The list of workouts to be loaded with [DatabaseManager()].
   late Future<List<Workout>> workouts;
 
+  int calculateWorkoutTime(Workout workout) {
+    return (((workout.exerciseTime * workout.numExercises) +
+                (workout.restTime * (workout.numExercises - 1)) +
+                (workout.halfTime * workout.numExercises)) /
+            60)
+        .round();
+  }
+
   /// Push to the [CreateWorkout()] page.
   ///
   /// Then, refresh the [workouts].
@@ -76,10 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListTile(
           // Title of the workout.
           title: Text(snapshot.data![index].title),
+          titleTextStyle: const TextStyle(
+            fontSize: 20,
+          ),
           // Workout metadata.
           subtitle: Text(
-              '${jsonDecode(snapshot.data![index].exercises).length} exercises, X minutes'),
+              '''Exercises: ${jsonDecode(snapshot.data![index].exercises).length}
+Exercise time: ${snapshot.data![index].exerciseTime} seconds
+Rest time: ${snapshot.data![index].restTime} seconds
+Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
+          subtitleTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
           tileColor: Colors.blue[700],
+          minVerticalPadding: 15.0,
           onTap: () {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(index.toString())));
