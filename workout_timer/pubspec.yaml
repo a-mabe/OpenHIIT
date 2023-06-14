@@ -41,6 +41,7 @@ dependencies:
   timer_count_down: ^2.2.2
   audioplayers: ^4.1.0
   confetti: ^0.7.0
+  sqflite_common_ffi: ^2.2.5
 
 dev_dependencies:
   flutter_test:
