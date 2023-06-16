@@ -44,6 +44,7 @@ class CountDownTimerState extends State<CountDownTimer>
   final player = AudioPlayer();
   int intervals = 0;
   IconData pausePlayIcon = Icons.pause;
+  bool doneVisible = false;
 
   late ConfettiController _controllerCenter;
 
@@ -65,7 +66,7 @@ class CountDownTimerState extends State<CountDownTimer>
     // Method to convert degree to radians
     double degToRad(double deg) => deg * (pi / 180.0);
 
-    const numberOfPoints = 10;
+    const numberOfPoints = 5;
     final halfWidth = size.width / 2;
     final externalRadius = halfWidth;
     final internalRadius = halfWidth / 2.5;
@@ -89,8 +90,6 @@ class CountDownTimerState extends State<CountDownTimer>
   Widget build(BuildContext context) {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
-
-    print(workoutArgument);
 
     List<dynamic> exercises = jsonDecode(workoutArgument.exercises);
 
@@ -147,7 +146,7 @@ class CountDownTimerState extends State<CountDownTimer>
                             )),
                         Countdown(
                           controller: _workoutController,
-                          seconds: 10,
+                          seconds: 1,
                           build: (_, int time) => Text(
                             time.toString(),
                             style: const TextStyle(
@@ -234,6 +233,9 @@ class CountDownTimerState extends State<CountDownTimer>
                             await Future.delayed(
                                 const Duration(milliseconds: 200));
                             intervals = intervals + 1;
+                            if (!(intervals < workoutArgument.numExercises)) {
+                              await player.play(AssetSource('audio/bell.mp3'));
+                            }
                             setState(() {
                               if (intervals < workoutArgument.numExercises) {
                                 currentInterval = "rest";
@@ -241,6 +243,7 @@ class CountDownTimerState extends State<CountDownTimer>
                               } else {
                                 currentInterval = "done";
                                 _controllerCenter.play();
+                                doneVisible = !doneVisible;
                               }
                             });
                           },
@@ -313,9 +316,6 @@ class CountDownTimerState extends State<CountDownTimer>
                                 _workoutController.restart();
                               } else {}
                             });
-                            if (intervals == workoutArgument.numExercises) {
-                              await player.play(AssetSource('audio/bell.mp3'));
-                            }
                           },
                         ),
                       ],
@@ -323,21 +323,110 @@ class CountDownTimerState extends State<CountDownTimer>
                   ),
                   Visibility(
                     visible: currentInterval == "done" ? true : false,
-                    child: ConfettiWidget(
-                      confettiController: _controllerCenter,
-                      blastDirectionality: BlastDirectionality
-                          .explosive, // don't specify a direction, blast randomly
-                      shouldLoop:
-                          true, // start again as soon as the animation is finished
-                      colors: const [
-                        Colors.green,
-                        Colors.blue,
-                        Colors.pink,
-                        Colors.orange,
-                        Colors.purple
-                      ], // manually specify the colors to be used
-                      createParticlePath:
-                          drawStar, // define a custom shape/path.
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ConfettiWidget(
+                            confettiController: _controllerCenter,
+                            blastDirectionality: BlastDirectionality
+                                .explosive, // don't specify a direction, blast randomly
+                            shouldLoop:
+                                true, // start again as soon as the animation is finished
+                            colors: const [
+                              Colors.green,
+                              Colors.blue,
+                              Colors.pink,
+                              Colors.orange,
+                              Colors.purple
+                            ], // manually specify the colors to be used
+                            createParticlePath:
+                                drawStar, // define a custom shape/path.
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: AnimatedOpacity(
+                            opacity: doneVisible ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 800),
+                            child: SizedBox(
+                              width: 300,
+                              height: 300,
+                              // color: Colors.green,
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    const Text("Nice job!",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 45,
+                                            fontWeight: FontWeight.bold)),
+                                    const Spacer(),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Row(
+                                        children: [
+                                          TextButton.icon(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          const Color.fromARGB(
+                                                              133,
+                                                              255,
+                                                              255,
+                                                              255))),
+                                              label: const Text(
+                                                "Back",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              icon: Icon(Icons.arrow_back,
+                                                  color: Colors.white,
+                                                  size: 38)),
+                                          const Spacer(),
+                                          TextButton.icon(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color.fromARGB(133,
+                                                              255, 255, 255))),
+                                              label: Text(
+                                                "Restart",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22),
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  currentInterval = "start";
+                                                  start = true;
+                                                  intervals = 0;
+                                                  pausePlayIcon = Icons.pause;
+                                                  doneVisible = false;
+                                                  _workoutController.restart();
+                                                });
+                                              },
+                                              icon: Icon(Icons.restart_alt,
+                                                  color: Colors.white,
+                                                  size: 38))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -352,8 +441,10 @@ class CountDownTimerState extends State<CountDownTimer>
       return Colors.red;
     } else if (currentInterval == "rest") {
       return Colors.blue;
-    } else {
+    } else if (currentInterval == "start") {
       return Colors.teal;
+    } else {
+      return Color.fromARGB(255, 0, 225, 255);
     }
   }
 }
