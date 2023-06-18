@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
 import 'package:timer_count_down/timer_controller.dart';
 // import 'package:timer_count_down/timer_count_down.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -124,11 +125,13 @@ class CountDownTimerState extends State<CountDownTimer>
                                         _workoutController.pause();
                                         setState(() {
                                           pausePlayIcon = Icons.play_arrow;
+                                          Wakelock.disable();
                                         });
                                       } else {
                                         _workoutController.start();
                                         setState(() {
                                           pausePlayIcon = Icons.pause;
+                                          Wakelock.enable();
                                         });
                                       }
                                     },
@@ -195,11 +198,13 @@ class CountDownTimerState extends State<CountDownTimer>
                                         _workoutController.pause();
                                         setState(() {
                                           pausePlayIcon = Icons.play_arrow;
+                                          Wakelock.disable();
                                         });
                                       } else {
                                         _workoutController.start();
                                         setState(() {
                                           pausePlayIcon = Icons.pause;
+                                          Wakelock.enable();
                                         });
                                       }
                                     },
@@ -244,6 +249,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                 currentInterval = "done";
                                 _controllerCenter.play();
                                 doneVisible = !doneVisible;
+                                Wakelock.disable();
                               }
                             });
                           },
@@ -274,11 +280,13 @@ class CountDownTimerState extends State<CountDownTimer>
                                         _restController.pause();
                                         setState(() {
                                           pausePlayIcon = Icons.play_arrow;
+                                          Wakelock.disable();
                                         });
                                       } else {
                                         _restController.start();
                                         setState(() {
                                           pausePlayIcon = Icons.pause;
+                                          Wakelock.enable();
                                         });
                                       }
                                     },
