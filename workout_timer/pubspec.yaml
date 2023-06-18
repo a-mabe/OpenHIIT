@@ -42,6 +42,7 @@ dependencies:
   audioplayers: ^4.1.0
   confetti: ^0.7.0
   sqflite_common_ffi: ^2.2.5
+  wakelock: ^0.6.2
 
 dev_dependencies:
   flutter_test:
