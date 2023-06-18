@@ -215,7 +215,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                   ? exercises[intervals]
                                   : "",
                               style: const TextStyle(
-                                  fontSize: 40, color: Colors.white),
+                                  fontSize: 25, color: Colors.white),
                             )),
                         Countdown(
                           controller: _workoutController,

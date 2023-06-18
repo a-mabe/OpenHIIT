@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.workout_timer">
+    package="com.codepup.workout_timer">
    <application
         android:label="workout_timer"
         android:name="${applicationName}"
