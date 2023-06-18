@@ -146,7 +146,7 @@ class CountDownTimerState extends State<CountDownTimer>
                             )),
                         Countdown(
                           controller: _workoutController,
-                          seconds: 1,
+                          seconds: 10,
                           build: (_, int time) => Text(
                             time.toString(),
                             style: const TextStyle(
