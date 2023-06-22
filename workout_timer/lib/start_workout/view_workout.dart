@@ -18,7 +18,9 @@ class ViewWorkoutState extends State<ViewWorkout> {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
-    List<dynamic> exercises = jsonDecode(workoutArgument.exercises);
+    List<dynamic> exercises = workoutArgument.exercises != ""
+        ? jsonDecode(workoutArgument.exercises)
+        : [];
     Future<Database> database = DatabaseManager().initDB();
 
     Widget exerciseList() {
