@@ -92,7 +92,9 @@ class CountDownTimerState extends State<CountDownTimer>
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
-    List<dynamic> exercises = jsonDecode(workoutArgument.exercises);
+    List<dynamic> exercises = workoutArgument.exercises != ""
+        ? jsonDecode(workoutArgument.exercises)
+        : [];
 
     return Scaffold(
         backgroundColor: Colors.white10,

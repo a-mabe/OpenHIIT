@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../workout_type/workout_type.dart';
-import './set_exercises.dart';
+import './set_timings.dart';
 
-class CreateWorkout extends StatelessWidget {
-  const CreateWorkout({super.key});
+class CreateTimer extends StatelessWidget {
+  const CreateTimer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,31 +13,31 @@ class CreateWorkout extends StatelessWidget {
         title: const Text('New Workout'),
       ),
       body: const Center(
-        child: ChooseNumber(),
+        child: ChooseIntervals(),
       ),
     );
   }
 }
 
-class ChooseNumber extends StatefulWidget {
-  const ChooseNumber({super.key});
+class ChooseIntervals extends StatefulWidget {
+  const ChooseIntervals({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _ChooseNumberState createState() => _ChooseNumberState();
+  _ChooseIntervalsState createState() => _ChooseIntervalsState();
 }
 
-class _ChooseNumberState extends State<ChooseNumber> {
+class _ChooseIntervalsState extends State<ChooseIntervals> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
   final workout = Workout.empty();
 
-  void pushExercises() {
+  void pushTimings() {
     setState(() {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Exercises(),
+          builder: (context) => const Timings(),
           settings: RouteSettings(
             arguments: workout,
           ),
@@ -52,8 +52,9 @@ class _ChooseNumberState extends State<ChooseNumber> {
     if (form.validate()) {
       form.save();
       workout.numExercises = _currentIntValue;
+      workout.exercises = "";
 
-      pushExercises();
+      pushTimings();
     }
   }
 
@@ -67,7 +68,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
           const Padding(
             padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
             child: Text(
-              "Name this workout:",
+              "Name this timer:",
               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
             ),
           ),
@@ -87,7 +88,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
           const Padding(
             padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
             child: Text(
-              "How many exercises/sets?",
+              "How many intervals?",
               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
             ),
           ),

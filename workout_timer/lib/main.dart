@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'create_workout/create_workout.dart';
+import 'create_workout/select_timer.dart';
 import 'workout_type/workout_type.dart';
 import 'database/database_manager.dart';
 import 'start_workout/view_workout.dart';
@@ -61,10 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Push to the [CreateWorkout()] page.
   ///
   /// Then, refresh the [workouts].
-  void pushCreateWorkoutPage() async {
+  void pushSelectTimerPage() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CreateWorkout()),
+      MaterialPageRoute(builder: (context) => const SelectTimer()),
     ).then((value) {
       setState(() {
         workouts = DatabaseManager().lists(DatabaseManager().initDB());
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // Workout metadata.
           subtitle: Text(
-              '''Exercises: ${jsonDecode(snapshot.data![index].exercises).length}
+              '''Exercises: ${snapshot.data![index].exercises != "" ? jsonDecode(snapshot.data![index].exercises).length : ""}
 Exercise time: ${snapshot.data![index].exerciseTime} seconds
 Rest time: ${snapshot.data![index].restTime} seconds
 Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
@@ -168,11 +168,11 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
   Widget build(BuildContext context) {
     workouts = DatabaseManager().lists(DatabaseManager().initDB());
     return Scaffold(
-      appBar: AppBar(),
+      // appBar: AppBar(),
 
       /// Pushes to [CreateWorkout()]
       floatingActionButton: FloatingActionButton(
-        onPressed: pushCreateWorkoutPage,
+        onPressed: pushSelectTimerPage,
         tooltip: 'Create workout',
         child: const Icon(Icons.add),
       ),
