@@ -10,7 +10,7 @@ class CreateTimer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Workout'),
+        title: const Text('New Interval Timer'),
       ),
       body: const Center(
         child: ChooseIntervals(),
