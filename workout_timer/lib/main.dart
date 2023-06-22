@@ -178,7 +178,8 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
       ),
       // ---
 
-      body: FutureBuilder<List<Workout>>(
+      body: SafeArea(
+          child: FutureBuilder<List<Workout>>(
         future: workouts,
         builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
           /// When [workouts] has successfully loaded.
@@ -196,7 +197,7 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
             return workoutLoading();
           }
         },
-      ),
+      )),
     );
   }
 }

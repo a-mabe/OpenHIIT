@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:workout_timer/create_workout/create_workout.dart';
 import 'package:workout_timer/create_workout/create_timer.dart';
 import '../workout_type/workout_type.dart';
-import './set_exercises.dart';
 
 class SelectTimer extends StatelessWidget {
   const SelectTimer({super.key});
@@ -30,8 +28,6 @@ class SelectTimerType extends StatefulWidget {
 }
 
 class SelectTimerTypeState extends State<SelectTimerType> {
-  int _currentIntValue = 10;
-  final _formKey = GlobalKey<FormState>();
   final workout = Workout.empty();
 
   void pushCreateWorkout() {
@@ -68,97 +64,103 @@ class SelectTimerTypeState extends State<SelectTimerType> {
         preferredSize: const Size.fromHeight(80.0),
         child: Column(
           children: [
-            Expanded(
-                child: Padding(
-                    padding: const EdgeInsets.all(
-                      30.0,
-                    ),
-                    child: Card(
-                      // color: Colors.yellow,
-                      child: InkWell(
-                        child: const Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+            ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 270.0),
+                child: Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(
+                          30.0,
+                        ),
+                        child: Card(
+                          // color: Colors.yellow,
+                          child: InkWell(
+                            child: const Padding(
+                                padding: EdgeInsets.all(40.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                          child: Icon(Icons.alarm, size: 25),
+                                        ),
+                                        Text(
+                                          "Interval Timer",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          size: 25,
+                                        )
+                                      ],
+                                    ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                      child: Icon(Icons.alarm, size: 25),
-                                    ),
-                                    Text(
-                                      "Interval Timer",
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      size: 25,
+                                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                      child: Text(
+                                          "An interval timer is a tool that helps you track the time spent working and resting during a workout."),
                                     )
                                   ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                  child: Text(
-                                      "An interval timer is a tool that helps you track the time spent working and resting during a workout."),
-                                )
-                              ],
-                            )),
-                        onTap: () {
-                          pushCreateTimer();
-                        },
-                      ),
-                    ))),
-            Expanded(
-                child: Padding(
-                    padding: const EdgeInsets.all(
-                      30.0,
-                    ),
-                    child: Card(
-                      // color: Colors.yellow,
-                      child: InkWell(
-                        child: const Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+                                )),
+                            onTap: () {
+                              pushCreateTimer();
+                            },
+                          ),
+                        )))),
+            ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 270.0),
+                child: Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(
+                          30.0,
+                        ),
+                        child: Card(
+                          // color: Colors.yellow,
+                          child: InkWell(
+                            child: const Padding(
+                                padding: EdgeInsets.all(40.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                          child: Icon(Icons.fitness_center,
+                                              size: 25),
+                                        ),
+                                        Text(
+                                          "Workout",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          size: 25,
+                                        )
+                                      ],
+                                    ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                      child:
-                                          Icon(Icons.fitness_center, size: 25),
-                                    ),
-                                    Text(
-                                      "Workout",
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      size: 25,
+                                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                      child: Text(
+                                          "A workout is a planned set of exercise combined with an interval timer."),
                                     )
                                   ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                  child: Text(
-                                      "A workout is a planned set of exercise combined with an interval timer."),
-                                )
-                              ],
-                            )),
-                        onTap: () {
-                          pushCreateWorkout();
-                        },
-                      ),
-                    ))),
+                                )),
+                            onTap: () {
+                              pushCreateWorkout();
+                            },
+                          ),
+                        )))),
           ],
         ));
     // return Form(
