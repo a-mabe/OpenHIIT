@@ -110,7 +110,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "511983e8018666d925b951be7218417df0f548c2"
+      resolved-ref: de3472be63a3bf2bd06ba6500892cfb6b4d8db47
       url: "https://github.com/a-mabe/simple_count_down.git"
     source: git
     version: "2.2.2"
@@ -370,10 +370,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "281b672749af2edf259fc801f0fcba092257425bcd32a0ce1c8237130bc934c7"
+      sha256: f7511ddd6a2dda8ded9d849f8a925bb6020e0faa59db2443debc18d484e59401
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.2"
+    version: "2.0.0"
   stack_trace:
     dependency: transitive
     description:
