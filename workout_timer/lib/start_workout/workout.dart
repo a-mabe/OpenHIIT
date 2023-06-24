@@ -54,6 +54,7 @@ class CountDownTimerState extends State<CountDownTimer>
     super.initState();
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
+    Wakelock.enable();
   }
 
   @override
