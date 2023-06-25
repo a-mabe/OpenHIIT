@@ -183,13 +183,6 @@ class CountDownTimerState extends State<CountDownTimer>
                 // intervals < exercises.length ? exercises[intervals] : "",
                 style: const TextStyle(fontSize: 25, color: Colors.white),
               )),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 20.0),
-              child: Text(
-                timerScreenText(currentVisibleInterval, exercises),
-                // intervals < exercises.length ? exercises[intervals] : "",
-                style: const TextStyle(fontSize: 25, color: Colors.white),
-              )),
           Countdown(
             controller: _workoutController,
             seconds: seconds,
