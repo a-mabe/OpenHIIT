@@ -191,7 +191,7 @@ class DatabaseManager {
 
   /// Update the given list in the given database.
   ///
-  Future<void> updateList(Workout workout, Future<Database> database) async {
+  Future<void> updateList(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
     final db = await database;
