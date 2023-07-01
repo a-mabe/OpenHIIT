@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import '../create_workout/create_timer.dart';
+import '../create_workout/create_workout.dart';
 import '../database/database_manager.dart';
 import '../workout_type/workout_type.dart';
 import 'workout.dart';
@@ -13,6 +15,34 @@ class ViewWorkout extends StatefulWidget {
 }
 
 class ViewWorkoutState extends State<ViewWorkout> {
+  void pushCreateWorkout(workout) {
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CreateWorkout(),
+          settings: RouteSettings(
+            arguments: workout,
+          ),
+        ),
+      );
+    });
+  }
+
+  void pushCreateTimer(workout) {
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CreateTimer(),
+          settings: RouteSettings(
+            arguments: workout,
+          ),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Workout workoutArgument =
@@ -53,7 +83,11 @@ class ViewWorkoutState extends State<ViewWorkout> {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              print(workoutArgument);
+              if (exercises.isEmpty) {
+                pushCreateTimer(workoutArgument);
+              } else {
+                pushCreateWorkout(workoutArgument);
+              }
             },
           ),
         ],

@@ -30,9 +30,10 @@ class ChooseNumber extends StatefulWidget {
 class _ChooseNumberState extends State<ChooseNumber> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
-  final workout = Workout.empty();
+  bool changed = false;
+  // final workout = Workout.empty();
 
-  void pushExercises() {
+  void pushExercises(workout) {
     setState(() {
       Navigator.push(
         context,
@@ -46,19 +47,26 @@ class _ChooseNumberState extends State<ChooseNumber> {
     });
   }
 
-  void submitForm() {
+  void submitForm(workout) {
     // Validate returns true if the form is valid, or false otherwise.
     final form = _formKey.currentState!;
     if (form.validate()) {
       form.save();
       workout.numExercises = _currentIntValue;
 
-      pushExercises();
+      pushExercises(workout);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
+
+    if (!changed && workoutArgument.numExercises > 0) {
+      _currentIntValue = workoutArgument.numExercises;
+    }
+
     return Form(
       key: _formKey,
       child: Column(
@@ -74,6 +82,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
           Padding(
             padding: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 0.0),
             child: TextFormField(
+              initialValue: workoutArgument.title,
               // The validator receives the text that the user has entered.
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -81,7 +90,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
                 }
                 return null;
               },
-              onSaved: (val) => setState(() => workout.title = val!),
+              onSaved: (val) => setState(() => workoutArgument.title = val!),
             ),
           ),
           const Padding(
@@ -98,7 +107,10 @@ class _ChooseNumberState extends State<ChooseNumber> {
               maxValue: 50,
               step: 1,
               haptics: true,
-              onChanged: (value) => setState(() => _currentIntValue = value),
+              onChanged: (value) => setState(() {
+                _currentIntValue = value;
+                changed = true;
+              }),
             ),
           ),
           Center(
@@ -128,7 +140,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  submitForm();
+                  submitForm(workoutArgument);
                 },
                 child: const Text('Submit'),
               ),

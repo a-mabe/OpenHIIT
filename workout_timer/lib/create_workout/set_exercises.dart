@@ -62,6 +62,10 @@ class _SetExercisesState extends State<SetExercises> {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
+    List<dynamic> exercisesArgument = workoutArgument.exercises != ""
+        ? jsonDecode(workoutArgument.exercises)
+        : [];
+
     // final List<GlobalKey<FormState>> formKeys = [];
     List<bool> validators = [];
     List<String> exercises = [];
@@ -69,7 +73,11 @@ class _SetExercisesState extends State<SetExercises> {
     final formKey = GlobalKey<FormState>();
 
     for (var i = 0; i < workoutArgument.numExercises; i++) {
-      controllers.add(TextEditingController());
+      if (workoutArgument.exercises == "") {
+        controllers.add(TextEditingController());
+      } else {
+        controllers.add(TextEditingController(text: exercisesArgument[i]));
+      }
       validators.add(false);
     }
 
@@ -88,6 +96,9 @@ class _SetExercisesState extends State<SetExercises> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
             child: TextFormField(
+              // initialValue: workoutArgument.exercises == ""
+              // ? ""
+              // : exercisesArgument[index],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';

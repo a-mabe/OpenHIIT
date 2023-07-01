@@ -99,8 +99,8 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
           tileColor: Colors.blue[700],
           minVerticalPadding: 15.0,
           onTap: () {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(index.toString())));
+            // ScaffoldMessenger.of(context)
+            //     .showSnackBar(SnackBar(content: Text(index.toString())));
             Navigator.push(
               context,
               MaterialPageRoute(

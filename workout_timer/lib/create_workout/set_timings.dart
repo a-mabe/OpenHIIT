@@ -35,6 +35,10 @@ class _SetTimingsState extends State<SetTimings> {
   int restTime = 10;
   int halfTime = 0;
 
+  bool exerciseChanged = false;
+  bool restChanged = false;
+  bool halfChanged = false;
+
   void pushHome() {
     Navigator.pushAndRemoveUntil(
         context,
@@ -47,25 +51,47 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(
-              "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //       content: Text(
+    //           "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
+    // );
 
-    // Set the workout ID
-    workoutArgument.id = const Uuid().v1();
+    if (workoutArgument.id == "") {
+      // Set the workout ID
+      workoutArgument.id = const Uuid().v1();
 
-    Database database = await DatabaseManager().initDB();
-    await DatabaseManager().insertList(workoutArgument, database).then((value) {
-      pushHome();
-    });
+      Database database = await DatabaseManager().initDB();
+      await DatabaseManager()
+          .insertList(workoutArgument, database)
+          .then((value) {
+        pushHome();
+      });
+    } else {
+      Database database = await DatabaseManager().initDB();
+      await DatabaseManager()
+          .updateList(workoutArgument, database)
+          .then((value) {
+        pushHome();
+      });
+      ;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
+
+    if (!exerciseChanged) {
+      exerciseTime = workoutArgument.exerciseTime;
+    }
+    if (!restChanged) {
+      restTime = workoutArgument.restTime;
+    }
+    if (!halfChanged) {
+      halfTime = workoutArgument.halfTime;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +108,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = exerciseTime - 1;
                     exerciseTime = newValue.clamp(1, 120);
+                    exerciseChanged = true;
                   }),
                 ),
                 Text('Working time: $exerciseTime seconds'),
@@ -90,6 +117,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = exerciseTime + 1;
                     exerciseTime = newValue.clamp(1, 120);
+                    exerciseChanged = true;
                   }),
                 ),
               ],
@@ -108,6 +136,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = restTime - 1;
                     restTime = newValue.clamp(1, 120);
+                    restChanged = true;
                   }),
                 ),
                 Text('Rest time: $restTime seconds'),
@@ -116,6 +145,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = restTime + 1;
                     restTime = newValue.clamp(1, 120);
+                    restChanged = true;
                   }),
                 ),
               ],
@@ -134,6 +164,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = halfTime - 1;
                     halfTime = newValue.clamp(1, 60);
+                    halfChanged = true;
                   }),
                 ),
                 Text('Half time: $halfTime seconds'),
@@ -142,6 +173,7 @@ class _SetTimingsState extends State<SetTimings> {
                   onPressed: () => setState(() {
                     final newValue = halfTime + 1;
                     halfTime = newValue.clamp(1, 50);
+                    halfChanged = true;
                   }),
                 ),
               ],
