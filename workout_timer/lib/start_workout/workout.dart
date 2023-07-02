@@ -8,8 +8,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:count_down_sound/timer_count_down.dart';
 import 'package:confetti/confetti.dart';
 import '../workout_type/workout_type.dart';
-import '../widgets/card_item.dart';
-import '../models/list_model.dart';
+import '../widgets/card_item_animated.dart';
+import '../models/list_model_animated.dart';
 import '../models/list_tile_model.dart';
 
 class StartWorkout extends StatelessWidget {
@@ -76,7 +76,7 @@ class CountDownTimerState extends State<CountDownTimer>
 
   Widget _buildRemovedItem(
       ListTileModel item, BuildContext context, Animation<double> animation) {
-    return CardItem(
+    return CardItemAnimated(
         animation: animation,
         item: item,
         fontColor: Color.fromARGB(153, 255, 255, 255),
@@ -234,7 +234,7 @@ class CountDownTimerState extends State<CountDownTimer>
                 key: _listKey,
                 initialItemCount: intervalInfo.length,
                 itemBuilder: (context, index, animation) {
-                  return CardItem(
+                  return CardItemAnimated(
                     animation: animation,
                     item: intervalInfo[index],
                     fontColor: index == 0

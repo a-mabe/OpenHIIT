@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // Workout metadata.
           subtitle: Text(
-              '''Exercises: ${snapshot.data![index].exercises != "" ? jsonDecode(snapshot.data![index].exercises).length : ""}
+              '''${snapshot.data![index].exercises != "" ? 'Exercises: ${jsonDecode(snapshot.data![index].exercises).length}' : 'Intervals: ${snapshot.data![index].numExercises}'}
 Exercise time: ${snapshot.data![index].exerciseTime} seconds
 Rest time: ${snapshot.data![index].restTime} seconds
 Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),

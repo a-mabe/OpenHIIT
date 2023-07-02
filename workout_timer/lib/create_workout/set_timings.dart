@@ -83,14 +83,16 @@ class _SetTimingsState extends State<SetTimings> {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (!exerciseChanged) {
-      exerciseTime = workoutArgument.exerciseTime;
-    }
-    if (!restChanged) {
-      restTime = workoutArgument.restTime;
-    }
-    if (!halfChanged) {
-      halfTime = workoutArgument.halfTime;
+    if (workoutArgument.exerciseTime > 0) {
+      if (!exerciseChanged) {
+        exerciseTime = workoutArgument.exerciseTime;
+      }
+      if (!restChanged) {
+        restTime = workoutArgument.restTime;
+      }
+      if (!halfChanged) {
+        halfTime = workoutArgument.halfTime;
+      }
     }
 
     return Column(
