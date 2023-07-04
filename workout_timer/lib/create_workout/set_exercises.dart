@@ -86,19 +86,21 @@ class _SetExercisesState extends State<SetExercises> {
           (int index) {
         if (index == workoutArgument.numExercises) {
           // return the submit button
-          return ElevatedButton(
-            onPressed: () {
-              submitExercises(formKey, workoutArgument, exercises);
-            },
-            child: const Text('Submit'),
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                submitExercises(formKey, workoutArgument, exercises);
+              },
+              child: const Text('Submit'),
+            ),
           );
         } else {
           return Padding(
             padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
             child: TextFormField(
-              // initialValue: workoutArgument.exercises == ""
-              // ? ""
-              // : exercisesArgument[index],
+              textCapitalization: TextCapitalization.sentences,
+              maxLength: 40,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';

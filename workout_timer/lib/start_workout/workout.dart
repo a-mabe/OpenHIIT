@@ -113,9 +113,9 @@ class CountDownTimerState extends State<CountDownTimer>
       case 'start':
         return "Get ready";
       case 'workout':
-        return intervals < exercises.length ? exercises[intervals] : "";
+        return intervals < exercises.length ? exercises[intervals] : "Work";
       case 'rest':
-        return "REST";
+        return "Rest";
       default:
         return "";
     }
@@ -206,7 +206,7 @@ class CountDownTimerState extends State<CountDownTimer>
               child: Text(
                 timerScreenText(currentVisibleInterval, exercises),
                 // intervals < exercises.length ? exercises[intervals] : "",
-                style: const TextStyle(fontSize: 25, color: Colors.white),
+                style: const TextStyle(fontSize: 35, color: Colors.white),
               )),
           Countdown(
             controller: _workoutController,
@@ -217,6 +217,7 @@ class CountDownTimerState extends State<CountDownTimer>
             ),
             interval: const Duration(milliseconds: 100),
             endSound: endSound,
+            halfwayMark: workoutArgument.halfwayMark == 0 ? false : true,
             onFinished: () async {
               if (currentInterval == "start") {
                 startOnFinished();
@@ -462,6 +463,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                                   pausePlayIcon = Icons.pause;
                                                   doneVisible = false;
                                                   _workoutController.restart();
+                                                  Wakelock.enable();
                                                 });
                                               },
                                               icon: const Icon(

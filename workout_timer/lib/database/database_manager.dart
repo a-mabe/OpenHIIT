@@ -137,7 +137,8 @@ class DatabaseManager {
             exercises TEXT,
             exerciseTime INTEGER,
             restTime INTEGER,
-            halfTime INTEGER
+            halfTime INTEGER,
+            halfwayMark INTEGER
             )
             ''');
       /*await db.execute(tableEmployee +
@@ -270,7 +271,8 @@ class DatabaseManager {
           maps[i]['exercises'],
           maps[i]['exerciseTime'],
           maps[i]['restTime'],
-          maps[i]['halfTime']);
+          maps[i]['halfTime'],
+          maps[i]['halfwayMark']);
     });
   }
 

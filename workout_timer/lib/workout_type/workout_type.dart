@@ -47,6 +47,8 @@ class Workout {
   ///
   int halfTime = 0;
 
+  int halfwayMark = 0;
+
   ///
   /// -------------
   /// END FIELDS
@@ -67,7 +69,7 @@ class Workout {
   //     required this.halfTime});
 
   Workout(this.id, this.title, this.numExercises, this.exercises,
-      this.exerciseTime, this.restTime, this.halfTime);
+      this.exerciseTime, this.restTime, this.halfTime, this.halfwayMark);
 
   Workout.empty() {
     id = "";
@@ -77,6 +79,7 @@ class Workout {
     exerciseTime = 0;
     restTime = 0;
     halfTime = 0;
+    halfwayMark = 0;
   }
 
   ///
@@ -97,7 +100,8 @@ class Workout {
       'exercises': exercises,
       'exerciseTime': exerciseTime,
       'restTime': restTime,
-      'halfTime': halfTime
+      'halfTime': halfTime,
+      'halfwayMark': halfwayMark
     };
   }
 
@@ -106,7 +110,7 @@ class Workout {
   ///
   @override
   String toString() {
-    return 'Workout{title: $title, numExercises: $numExercises, exercises: $exercises, exerciseTime: $exerciseTime, restTime: $restTime, halfTime: $halfTime}';
+    return 'Workout{title: $title, numExercises: $numExercises, exercises: $exercises, exerciseTime: $exerciseTime, restTime: $restTime, halfTime: $halfTime, halfwayMark: $halfwayMark}';
   }
 
   ///

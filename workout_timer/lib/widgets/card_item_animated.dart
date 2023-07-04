@@ -38,78 +38,58 @@ class CardItemAnimated extends StatelessWidget {
           curve: Curves.easeIn,
           reverseCurve: Curves.easeOut)),
       child: Container(
-        color: Colors.transparent,
-        height: 50.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-              child: SizedBox(
-                width: 50,
-                child: Text(
-                  item.intervalString(),
-                  style: TextStyle(
-                      fontSize: 20, color: fontColor, fontWeight: fontWeight),
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+          border: Border(
+            top: BorderSide(
+              //                    <--- top side
+              color: Color.fromARGB(53, 255, 255, 255),
+              width: 3.0,
+            ),
+          ),
+        ),
+        // color: Colors.transparent,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: 75.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                child: SizedBox(
+                  width: 85,
+                  child: Text(
+                    item.intervalString(),
+                    style: TextStyle(
+                        fontSize: 25, color: fontColor, fontWeight: fontWeight),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              child: Text(
-                item.action,
-                style: TextStyle(
-                    fontSize: 20, color: fontColor, fontWeight: fontWeight),
+              SizedBox(
+                width: 225,
+                child: Text(
+                  item.action,
+                  style: TextStyle(
+                      fontSize: 25, color: fontColor, fontWeight: fontWeight),
+                ),
               ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: 40,
-              child: Text(
-                "${item.seconds}s",
-                style: TextStyle(
-                    fontSize: 20, color: fontColor, fontWeight: fontWeight),
-              ),
-            )
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-            //   child: Text(
-            //     item.intervalString(),
-            //     style: TextStyle(
-            //         fontSize: 20, color: fontColor, fontWeight: fontWeight),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
-            //   child: Text(
-            //     item.action,
-            //     style: TextStyle(
-            //         fontSize: 20, color: fontColor, fontWeight: fontWeight),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
-            //   child: Text(
-            //     "${item.seconds}s",
-            //     style: TextStyle(
-            //         fontSize: 20, color: fontColor, fontWeight: fontWeight),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
-            //   child: Text(
-            //     item.action,
-            //     style: textStyle,
-            //   ),
-            // ),
-            // Spacer(),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 40.0, 0.0),
-            //   child: Text(
-            //     item.intervalString(),
-            //     style: textStyle,
-            //   ),
-            // ),
-          ],
+              const Spacer(),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                  child: SizedBox(
+                    width: 40,
+                    child: Text(
+                      "${item.seconds}s",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: fontColor,
+                          fontWeight: fontWeight),
+                    ),
+                  ))
+            ],
+          ),
         ),
         // child: Container(
         //   // color: Colors.transparent,
