@@ -9,6 +9,7 @@ class CreateWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('New Workout'),
       ),
@@ -82,6 +83,8 @@ class _ChooseNumberState extends State<ChooseNumber> {
           Padding(
             padding: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 0.0),
             child: TextFormField(
+              textCapitalization: TextCapitalization.sentences,
+              maxLength: 40,
               initialValue: workoutArgument.title,
               // The validator receives the text that the user has entered.
               validator: (value) {

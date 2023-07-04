@@ -38,6 +38,7 @@ class _SetTimingsState extends State<SetTimings> {
   bool exerciseChanged = false;
   bool restChanged = false;
   bool halfChanged = false;
+  bool halfwayMark = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
@@ -50,6 +51,7 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.exerciseTime = exerciseTime;
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
+    workoutArgument.halfwayMark = workoutArgument.halfwayMark == false ? 0 : 1;
 
     // ScaffoldMessenger.of(context).showSnackBar(
     //   SnackBar(
@@ -83,14 +85,16 @@ class _SetTimingsState extends State<SetTimings> {
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (!exerciseChanged) {
-      exerciseTime = workoutArgument.exerciseTime;
-    }
-    if (!restChanged) {
-      restTime = workoutArgument.restTime;
-    }
-    if (!halfChanged) {
-      halfTime = workoutArgument.halfTime;
+    if (workoutArgument.exerciseTime > 0) {
+      if (!exerciseChanged) {
+        exerciseTime = workoutArgument.exerciseTime;
+      }
+      if (!restChanged) {
+        restTime = workoutArgument.restTime;
+      }
+      if (!halfChanged) {
+        halfTime = workoutArgument.halfTime;
+      }
     }
 
     return Column(
@@ -153,33 +157,45 @@ class _SetTimingsState extends State<SetTimings> {
           ),
         ),
         Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.timelapse),
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => setState(() {
-                    final newValue = halfTime - 1;
-                    halfTime = newValue.clamp(1, 60);
-                    halfChanged = true;
-                  }),
-                ),
-                Text('Half time: $halfTime seconds'),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => setState(() {
-                    final newValue = halfTime + 1;
-                    halfTime = newValue.clamp(1, 50);
-                    halfChanged = true;
-                  }),
-                ),
-              ],
-            ),
-          ),
-        ),
+            child: CheckboxListTile(
+          title: Text("Play sound at half time:"),
+          value: halfwayMark,
+          onChanged: (newValue) {
+            setState(() {
+              halfwayMark = newValue!;
+            });
+          },
+          // controlAffinity:
+          //     ListTileControlAffinity.leading, //  <-- leading Checkbox
+        )),
+        // Center(
+        //   child: Padding(
+        //     padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         const Icon(Icons.timelapse),
+        //         IconButton(
+        //           icon: const Icon(Icons.remove),
+        //           onPressed: () => setState(() {
+        //             final newValue = halfTime - 1;
+        //             halfTime = newValue.clamp(1, 60);
+        //             halfChanged = true;
+        //           }),
+        //         ),
+        //         Text('Half time: $halfTime seconds'),
+        //         IconButton(
+        //           icon: const Icon(Icons.add),
+        //           onPressed: () => setState(() {
+        //             final newValue = halfTime + 1;
+        //             halfTime = newValue.clamp(1, 50);
+        //             halfChanged = true;
+        //           }),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),

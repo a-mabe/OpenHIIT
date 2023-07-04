@@ -11,7 +11,7 @@ class ListTileModel<E> {
   int seconds;
 
   String intervalString() {
-    return interval == 0 ? "      " : "$interval/$total";
+    return interval == 0 ? "" : "$interval/$total";
   }
 
   // final GlobalKey<AnimatedListState> listKey;
