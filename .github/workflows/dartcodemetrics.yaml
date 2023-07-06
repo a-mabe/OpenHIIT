@@ -10,9 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./workout_timer
+    # defaults:
+    #   run:
+    #     working-directory: ./workout_timer
 
     steps:
       - uses: actions/checkout@v2
@@ -21,3 +21,4 @@ jobs:
         uses: dart-code-checker/dart-code-metrics-action@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./workout_timer
