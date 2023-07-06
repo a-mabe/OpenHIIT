@@ -15,5 +15,6 @@ jobs:
           
       - name: dart-code-metrics
         uses: dart-code-checker/dart-code-metrics-action@v3
+        working-directory: ./workout_timer
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
