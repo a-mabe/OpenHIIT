@@ -2,7 +2,7 @@ name: Dart_Code_Metrics
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   check:
