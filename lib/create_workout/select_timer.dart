@@ -9,6 +9,7 @@ class SelectTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text(''),
       ),
@@ -61,34 +62,34 @@ class SelectTimerTypeState extends State<SelectTimerType> {
   Widget timerOption(String optionText, String descriptionText,
       IconData optionIcon, bool timer) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 270.0),
+        constraints: const BoxConstraints(maxHeight: 190.0),
         child: Padding(
             padding: const EdgeInsets.all(
-              30.0,
+              10.0,
             ),
             child: Card(
               child: InkWell(
                 child: Padding(
-                    padding: const EdgeInsets.all(40.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              child: Icon(optionIcon, size: 25),
+                              padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: Icon(optionIcon, size: 20),
                             ),
                             Text(
                               optionText,
                               textAlign: TextAlign.left,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                             const Spacer(),
                             const Icon(
                               Icons.arrow_forward,
-                              size: 25,
+                              size: 20,
                             )
                           ],
                         ),
