@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'create_workout/select_timer.dart';
-import 'workout_type/workout_type.dart';
+import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
 import 'start_workout/view_workout.dart';
 
@@ -99,8 +99,6 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
           tileColor: Colors.blue[700],
           minVerticalPadding: 15.0,
           onTap: () {
-            // ScaffoldMessenger.of(context)
-            //     .showSnackBar(SnackBar(content: Text(index.toString())));
             Navigator.push(
               context,
               MaterialPageRoute(

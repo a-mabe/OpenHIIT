@@ -11,9 +11,10 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../workout_type/workout_type.dart';
+import '../workout_data_type/workout_type.dart';
 
 class DatabaseManager {
   ///
@@ -34,39 +35,9 @@ class DatabaseManager {
   ///
   static const String workoutTableName = "WorkoutTable";
 
-  /// The name of the table in the database where exercises are stored.
-  ///
-  /// e.g., "exercises"
-  ///
-  // static const String exerciseTableName = "exercises";
-
   ///
   /// -------------
   /// END FIELDS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// GETTERS/SETTERS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// END GETTERS/SETTERS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// CONSTRUCTORS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// END CONSTRUCTORS
   /// -------------
   ///
 
@@ -76,54 +47,8 @@ class DatabaseManager {
   /// -------------
   ///
 
-  /// Opens the database.
-  ///
-  // Future<Database> open() async {
-
-  //   String path = join(await getDatabasesPath(), "core1.db");
-  //   await deleteDatabase(path);
-
-  //   return openDatabase(
-  //     // Set the path to the database. Note: Using the `join` function from the
-  //     // `path` package is best practice to ensure the path is correctly
-  //     // constructed for each platform.
-  //     join(await getDatabasesPath(), databaseName),
-
-  //     // When the database is first created, create a table to store workouts.
-  //     onCreate: (db, version) async {
-  //       // Run the CREATE TABLE statement on the database.
-  //       await db.execute(
-  //         '''
-  //         CREATE TABLE WorkoutTable(id TEXT PRIMARY KEY,
-  //         title TEXT,
-  //         numExercises INTEGER,
-  //         exercises TEXT,
-  //         exerciseTime INTEGER,
-  //         restTime INTEGER,
-  //         halfTime INTEGER
-  //         )
-  //         ''',
-  //       );
-  //       // db.execute(
-  //       //   '''
-  //       //   CREATE TABLE items(listId TEXT PRIMARY KEY,
-  //       //   id TEXT,
-  //       //   title TEXT,
-  //       //   description TEXT,
-  //       //   icon TEXT,
-  //       //   status INTEGER
-  //       //   )
-  //       //   ''',
-  //       // );
-  //       log("Created the DB.");
-  //     },
-  //     // Set the version. This executes the onCreate function and provides a
-  //     // path to perform database upgrades and downgrades.
-  //     version: 1,
-  //   );
-  // }
   Future<Database> initDB() async {
-    print("initDB executed");
+    debugPrint("initDB executed");
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(await getDatabasesPath(), "core1.db");
     // Clear database for testing
@@ -141,14 +66,6 @@ class DatabaseManager {
             halfwayMark INTEGER
             )
             ''');
-      /*await db.execute(tableEmployee +
-          tableAudit +
-          tableProject +
-          tableJobPosition +
-          tableWorkType +
-          tableAssignedJobPosition +
-          tableTimeTrack +
-          tableAllowedWorkType);*/
     });
   }
 
@@ -172,24 +89,6 @@ class DatabaseManager {
     );
   }
 
-  /// Inserts the given item into the given database.
-  ///
-  // Future<void> insertItem(List<String> exercises, Future<Database> database) async {
-  //   /// Get a reference to the database.
-  //   ///
-  //   final db = await database;
-
-  //   /// Insert the TodoList into the correct table.
-  //   ///
-  //   /// In this case, replace any previous data.
-  //   ///
-  //   await db.insert(
-  //     exerciseTableName,
-  //     exercises.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
   /// Update the given list in the given database.
   ///
   Future<void> updateList(Workout workout, Database database) async {
@@ -207,23 +106,6 @@ class DatabaseManager {
     );
   }
 
-  /// Update the given item in the given database.
-  ///
-  // Future<void> updateItems(TodoItem todoItem, Future<Database> database) async {
-  //   /// Get a reference to the database.
-  //   ///
-  //   final db = await database;
-
-  //   await db.update(
-  //     listTableName,
-  //     todoItem.toMap(),
-  //     where: 'id = ?', // Ensure that the List has a matching id.
-  //     whereArgs: [
-  //       todoItem.id
-  //     ], // Pass the id as a whereArg to prevent SQL injection.
-  //   );
-  // }
-
   Future<void> deleteList(String id, Future<Database> database) async {
     /// Get a reference to the database.
     ///
@@ -237,20 +119,6 @@ class DatabaseManager {
       ], // Pass the List's id as a whereArg to prevent SQL injection.
     );
   }
-
-  // Future<void> deleteItem(int id, Future<Database> database) async {
-  //   /// Get a reference to the database.
-  //   ///
-  //   final db = await database;
-
-  //   await db.delete(
-  //     listTableName,
-  //     where: 'id = ?', // Use a `where` clause to delete a specific list.
-  //     whereArgs: [
-  //       id
-  //     ], // Pass the List's id as a whereArg to prevent SQL injection.
-  //   );
-  // }
 
   Future<List<Workout>> lists(Future<Database> database) async {
     /// Get a reference to the database.
@@ -275,29 +143,6 @@ class DatabaseManager {
           maps[i]['halfwayMark']);
     });
   }
-
-  // Future<List<TodoItem>> items(Future<Database> database) async {
-  //   /// Get a reference to the database.
-  //   ///
-  //   final db = await database;
-
-  //   /// Query the table for all the TodoItems.
-  //   ///
-  //   final List<Map<String, dynamic>> maps = await db.query(itemTableName);
-
-  //   /// Convert the List<Map<String, dynamic> into a List<TodoItem>.
-  //   ///
-  //   return List.generate(maps.length, (i) {
-  //     return TodoItem(
-  //       title: maps[i]['title'],
-  //       description: maps[i]['description'],
-  //       icon: maps[i]['icon'],
-  //       status: maps[i]['status'],
-  //       id: maps[i]['id'],
-  //       listId: maps[i]['listId'],
-  //     );
-  //   });
-  // }
 
   ///
   /// -------------

@@ -7,8 +7,8 @@ import 'package:timer_count_down/timer_controller.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:count_down_sound/timer_count_down.dart';
 import 'package:confetti/confetti.dart';
-import '../workout_type/workout_type.dart';
-import '../widgets/card_item_animated.dart';
+import '../workout_data_type/workout_type.dart';
+import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
 import '../models/list_tile_model.dart';
 
