@@ -6,8 +6,8 @@ import '../create_workout/create_timer.dart';
 import '../create_workout/create_workout.dart';
 import '../database/database_manager.dart';
 import '../models/list_model.dart';
-import '../workout_type/workout_type.dart';
-import '../widgets/card_item.dart';
+import '../workout_data_type/workout_type.dart';
+import '../card_widgets/card_item.dart';
 import '../models/list_tile_model.dart';
 import 'workout.dart';
 
@@ -53,12 +53,6 @@ class ViewWorkoutState extends State<ViewWorkout> {
     List<ListTileModel> listItems = [];
 
     for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-      // message.write('!');
-      // intervalInfo.insert(i + 1, exercises[i]);
-      print("Initialize list items");
-      print(workoutArgument.numExercises);
-      print(exercises.length);
-      print(i);
       if (i == 0) {
         listItems.add(ListTileModel(
             action: "Prepare",
@@ -94,8 +88,6 @@ class ViewWorkoutState extends State<ViewWorkout> {
           }
         }
       }
-
-      print("Added");
     }
 
     return listItems;
@@ -139,7 +131,6 @@ class ViewWorkoutState extends State<ViewWorkout> {
         listKey: _listKey,
         initialItems: listItems(exercises, workoutArgument),
       );
-      print(intervalInfo.length);
     }
 
     return Scaffold(

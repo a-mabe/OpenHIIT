@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import '../workout_type/workout_type.dart';
+import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
 
 class CreateTimer extends StatelessWidget {

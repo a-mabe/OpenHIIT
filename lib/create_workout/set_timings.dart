@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workout_timer/main.dart';
-import '../workout_type/workout_type.dart';
+import '../workout_data_type/workout_type.dart';
 import '../database/database_manager.dart';
 
 class Timings extends StatelessWidget {

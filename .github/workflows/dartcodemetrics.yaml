@@ -1,0 +1,23 @@
+name: Dart_Code_Metrics
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: dart-code-metrics-action
+
+    runs-on: ubuntu-latest
+
+    # defaults:
+    #   run:
+    #     working-directory: ./workout_timer
+
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: dart-code-metrics
+        uses: dart-code-checker/dart-code-metrics-action@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/list_tile_model.dart';
 
@@ -91,12 +90,6 @@ class CardItemAnimated extends StatelessWidget {
             ],
           ),
         ),
-        // child: Container(
-        //   // color: Colors.transparent,
-        //   child: Center(
-        //     child: Text('$item', style: textStyle),
-        //   ),
-        // ),
       ),
     );
   }
