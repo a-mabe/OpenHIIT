@@ -51,13 +51,7 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.exerciseTime = exerciseTime;
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
-    workoutArgument.halfwayMark = workoutArgument.halfwayMark == false ? 0 : 1;
-
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //       content: Text(
-    //           "${workoutArgument.restTime} + ${workoutArgument.exerciseTime}")),
-    // );
+    workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
 
     if (workoutArgument.id == "") {
       // Set the workout ID
