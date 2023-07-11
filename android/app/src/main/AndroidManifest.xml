@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepup.workout_timer">
    <application
-        android:label="workout_timer"
+        android:label="Workout Timer"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
