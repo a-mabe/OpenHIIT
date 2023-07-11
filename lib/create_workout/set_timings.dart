@@ -51,7 +51,12 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.exerciseTime = exerciseTime;
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
-    workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
+
+    if (exerciseTime > 6) {
+      workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
+    } else {
+      workoutArgument.halfwayMark = false;
+    }
 
     if (workoutArgument.id == "") {
       // Set the workout ID
@@ -150,18 +155,22 @@ class _SetTimingsState extends State<SetTimings> {
             ),
           ),
         ),
-        Center(
-            child: CheckboxListTile(
-          title: Text("Play sound at half time:"),
-          value: halfwayMark,
-          onChanged: (newValue) {
-            setState(() {
-              halfwayMark = newValue!;
-            });
-          },
-          // controlAffinity:
-          //     ListTileControlAffinity.leading, //  <-- leading Checkbox
-        )),
+        Visibility(
+          visible: exerciseTime > 6 ? true : false,
+          child: Center(
+              child: CheckboxListTile(
+            title: const Text("Play sound at half time:"),
+            value: halfwayMark,
+            onChanged: (newValue) {
+              setState(() {
+                halfwayMark = newValue!;
+              });
+            },
+            // controlAffinity:
+            //     ListTileControlAffinity.leading, //  <-- leading Checkbox
+          )),
+        ),
+
         // Center(
         //   child: Padding(
         //     padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
