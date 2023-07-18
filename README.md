@@ -33,7 +33,7 @@ To install and test OpenHIIT, follow these steps:
 
 3. Change your working directory to the cloned repository:
    ```
-   cd workout-interval-timer
+   cd openhiit
    ```
 
 4. Fetch the dependencies by running the following command:
