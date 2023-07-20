@@ -1,0 +1,35 @@
+name: Build Flutter App
+
+run-name: ${{ github.actor }} is building the app 🚀
+
+on: [push]
+  # pull_request:
+  #   types:
+  #     - opened
+  #     - reopened
+  #     - synchronize
+  #     - ready_for_review
+  #   branches:
+  #     - 'main'
+  #   paths-ignore:
+  #     - '**.md'
+  #     - 'doc/**'
+  #     - '.git/'
+  #     - '.vscode/'
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      # - run: flutter test
+      # - run: flutter build apk
+      # - run: flutter build appbundle
