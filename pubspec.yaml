@@ -45,6 +45,7 @@ dependencies:
   sqflite_common_ffi: ^2.2.5
   wakelock: ^0.6.2
   flutter_launcher_icons: ^0.13.1
+  coverage: ^1.6.3
 
 flutter_launcher_icons:
   android: "launcher_icon"

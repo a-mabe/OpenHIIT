@@ -154,6 +154,14 @@ packages:
       url: "https://github.com/a-mabe/simple_count_down.git"
     source: git
     version: "2.2.2"
+  coverage:
+    dependency: "direct main"
+    description:
+      name: coverage
+      sha256: "2fb815080e44a09b85e0f2ca8a820b15053982b2e714b59267719e8a9ff17097"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.3"
   crypto:
     dependency: transitive
     description:
@@ -281,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   matcher:
     dependency: transitive
     description:
@@ -313,6 +329,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  package_config:
+    dependency: transitive
+    description:
+      name: package_config
+      sha256: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   path:
     dependency: "direct main"
     description:
@@ -414,6 +438,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  source_maps:
+    dependency: transitive
+    description:
+      name: source_maps
+      sha256: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.12"
   source_span:
     dependency: transitive
     description:
@@ -534,6 +566,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  vm_service:
+    dependency: transitive
+    description:
+      name: vm_service
+      sha256: ada49637c27973c183dad90beb6bd781eea4c9f5f955d35da172de0af7bd3440
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.8.0"
   wakelock:
     dependency: "direct main"
     description:
