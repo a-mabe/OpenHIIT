@@ -38,5 +38,19 @@ void main() {
 
     // Verify the workout name was filled out.
     expect(find.text(workoutName), findsOneWidget);
+
+    // Verify the exercise number defaults to 10.
+    expect(find.text('10'), findsOneWidget);
+
+    // Reduce the number of exercises by 1.
+    await tester.tap(find.byIcon(Icons.remove));
+    await tester.pump();
+
+    // Reduce the number of exercises by 1.
+    await tester.tap(find.byIcon(Icons.remove));
+    await tester.pump();
+
+    // Verify the exercise number is 8 as expected.
+    expect(find.text('10'), findsOneWidget);
   });
 }
