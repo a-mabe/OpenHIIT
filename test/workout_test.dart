@@ -35,5 +35,8 @@ void main() {
     // Fill out the Workout name.
     expect(find.byType(TextFormField), findsOneWidget);
     await tester.enterText(find.byType(TextFormField), workoutName);
+
+    // Verify the workout name was filled out.
+    expect(find.text(workoutName), findsOneWidget);
   });
 }
