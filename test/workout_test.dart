@@ -12,6 +12,8 @@ import 'package:openhiit/main.dart';
 
 void main() {
   testWidgets('Load add workout smoke test', (WidgetTester tester) async {
+    String workoutName = "Test workout 1";
+
     // Build our app and trigger a frame.
     await tester.pumpWidget(const WorkoutTimer());
 
@@ -29,5 +31,9 @@ void main() {
 
     // Verify that the next page has loaded.
     expect(find.text('Name this workout:'), findsOneWidget);
+
+    // Fill out the Workout name.
+    expect(find.byType(TextFormField), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField), workoutName);
   });
 }
