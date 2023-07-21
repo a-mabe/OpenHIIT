@@ -25,7 +25,7 @@ void main() {
     expect(find.text('Workout'), findsOneWidget);
 
     // Tap to add a Workout.
-    await tester.tap(find.byIcon(Icons.fitness_center));
+    await tester.tap(find.byIcon(Icons.timer));
     await tester.pumpAndSettle();
 
     // Verify that the next page has loaded.
