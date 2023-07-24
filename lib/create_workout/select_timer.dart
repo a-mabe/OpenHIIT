@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/create_workout/create_workout.dart';
-import 'package:openhiit/create_workout/create_timer.dart';
+import './create_workout.dart';
+import './create_timer.dart';
 import '../workout_data_type/workout_type.dart';
 
 class SelectTimer extends StatelessWidget {
