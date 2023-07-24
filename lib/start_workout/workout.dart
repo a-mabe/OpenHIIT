@@ -494,11 +494,11 @@ class CountDownTimerState extends State<CountDownTimer>
 
   Color backgroundColor() {
     if (currentInterval == "workout") {
-      return Colors.red;
+      return Colors.green;
     } else if (currentInterval == "rest") {
-      return Colors.blue;
+      return Colors.red;
     } else if (currentInterval == "start") {
-      return Colors.teal;
+      return Colors.black;
     } else {
       return const Color.fromARGB(255, 0, 225, 255);
     }
