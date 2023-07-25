@@ -55,7 +55,7 @@ class _SetTimingsState extends State<SetTimings> {
     if (exerciseTime > 6) {
       workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
     } else {
-      workoutArgument.halfwayMark = false;
+      workoutArgument.halfwayMark = 0;
     }
 
     if (workoutArgument.id == "") {
