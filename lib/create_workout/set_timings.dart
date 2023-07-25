@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
 import '../database/database_manager.dart';
+import './set_sounds.dart';
 
 class Timings extends StatelessWidget {
   const Timings({super.key});
@@ -58,25 +59,37 @@ class _SetTimingsState extends State<SetTimings> {
       workoutArgument.halfwayMark = 0;
     }
 
-    if (workoutArgument.id == "") {
-      // Set the workout ID
-      workoutArgument.id = const Uuid().v1();
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Sounds(),
+          settings: RouteSettings(
+            arguments: workoutArgument,
+          ),
+        ),
+      );
+    });
 
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .insertList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
-    } else {
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .updateList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
-      ;
-    }
+    // if (workoutArgument.id == "") {
+    //   // Set the workout ID
+    //   workoutArgument.id = const Uuid().v1();
+
+    //   Database database = await DatabaseManager().initDB();
+    //   await DatabaseManager()
+    //       .insertList(workoutArgument, database)
+    //       .then((value) {
+    //     pushHome();
+    //   });
+    // } else {
+    //   Database database = await DatabaseManager().initDB();
+    //   await DatabaseManager()
+    //       .updateList(workoutArgument, database)
+    //       .then((value) {
+    //     pushHome();
+    //   });
+    //   ;
+    // }
   }
 
   @override

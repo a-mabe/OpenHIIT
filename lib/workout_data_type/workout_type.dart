@@ -49,6 +49,14 @@ class Workout {
 
   int halfwayMark = 0;
 
+  String workSound = "";
+
+  String restSound = "";
+
+  String halfwaySound = "";
+
+  String completeSound = "";
+
   ///
   /// -------------
   /// END FIELDS
@@ -80,6 +88,10 @@ class Workout {
     restTime = 0;
     halfTime = 0;
     halfwayMark = 0;
+    workSound = "";
+    restSound = "";
+    halfwaySound = "";
+    completeSound = "";
   }
 
   ///
@@ -101,7 +113,11 @@ class Workout {
       'exerciseTime': exerciseTime,
       'restTime': restTime,
       'halfTime': halfTime,
-      'halfwayMark': halfwayMark
+      'halfwayMark': halfwayMark,
+      'workSound': workSound,
+      'restSound': restSound,
+      'halfwaySound': halfwaySound,
+      'completeSound': completeSound
     };
   }
 

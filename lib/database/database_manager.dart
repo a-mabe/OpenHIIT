@@ -63,7 +63,11 @@ class DatabaseManager {
             exerciseTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
-            halfwayMark INTEGER
+            halfwayMark INTEGER,
+            workSound TEXT,
+            restSound TEXT,
+            halfwaySound TEXT,
+            completeSound TEXT
             )
             ''');
     });
