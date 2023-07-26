@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
-import '../database/database_manager.dart';
 import './set_sounds.dart';
 
 class Timings extends StatelessWidget {
@@ -70,26 +67,6 @@ class _SetTimingsState extends State<SetTimings> {
         ),
       );
     });
-
-    // if (workoutArgument.id == "") {
-    //   // Set the workout ID
-    //   workoutArgument.id = const Uuid().v1();
-
-    //   Database database = await DatabaseManager().initDB();
-    //   await DatabaseManager()
-    //       .insertList(workoutArgument, database)
-    //       .then((value) {
-    //     pushHome();
-    //   });
-    // } else {
-    //   Database database = await DatabaseManager().initDB();
-    //   await DatabaseManager()
-    //       .updateList(workoutArgument, database)
-    //       .then((value) {
-    //     pushHome();
-    //   });
-    //   ;
-    // }
   }
 
   @override
