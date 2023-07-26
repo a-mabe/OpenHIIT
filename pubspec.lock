@@ -149,8 +149,8 @@ packages:
     dependency: "direct dev"
     description:
       path: "."
-      ref: select-sound
-      resolved-ref: a5a3bc6e29d8833d036d306541f9f45251323bff
+      ref: master
+      resolved-ref: afdce0dab076ffe0c21304c51350b4ac0c124765
       url: "https://github.com/a-mabe/simple_count_down.git"
     source: git
     version: "2.2.2"
