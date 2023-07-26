@@ -46,7 +46,6 @@ class CountDownTimerState extends State<CountDownTimer>
   int intervals = 0;
   IconData pausePlayIcon = Icons.pause;
   bool doneVisible = false;
-  String workEndSound = "whistle";
 
   late ConfettiController _controllerCenter;
 
@@ -135,7 +134,8 @@ class CountDownTimerState extends State<CountDownTimer>
     await Future.delayed(const Duration(milliseconds: 400));
     intervals = intervals + 1;
     if (!(intervals < workoutArgument.numExercises)) {
-      await player.play(AssetSource('audio/bell.mp3'));
+      await player
+          .play(AssetSource('audio/${workoutArgument.completeSound}.mp3'));
     }
     setState(() {
       if (intervals < workoutArgument.numExercises) {
@@ -366,11 +366,11 @@ class CountDownTimerState extends State<CountDownTimer>
             child: Center(
               child: Stack(
                 children: [
-                  timerScreen(
-                      "start", exercises, "whistle", 10, workoutArgument),
-                  timerScreen("workout", exercises, "beep",
+                  timerScreen("start", exercises, workoutArgument.workSound, 10,
+                      workoutArgument),
+                  timerScreen("workout", exercises, workoutArgument.restSound,
                       workoutArgument.exerciseTime, workoutArgument),
-                  timerScreen("rest", exercises, "whistle",
+                  timerScreen("rest", exercises, workoutArgument.workSound,
                       workoutArgument.restTime, workoutArgument),
                   Visibility(
                     visible: currentInterval == "done" ? true : false,

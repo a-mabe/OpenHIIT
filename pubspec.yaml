@@ -80,7 +80,7 @@ dev_dependencies:
   count_down_sound:
     git:
       url: https://github.com/a-mabe/simple_count_down.git
-      ref: master # branch name
+      ref: select-sound # branch name
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

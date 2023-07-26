@@ -144,7 +144,11 @@ class DatabaseManager {
           maps[i]['exerciseTime'],
           maps[i]['restTime'],
           maps[i]['halfTime'],
-          maps[i]['halfwayMark']);
+          maps[i]['halfwayMark'],
+          maps[i]['workSound'],
+          maps[i]['restSound'],
+          maps[i]['halfwaySound'],
+          maps[i]['completeSound']);
     });
   }
 
