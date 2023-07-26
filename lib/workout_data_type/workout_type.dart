@@ -57,6 +57,8 @@ class Workout {
 
   String completeSound = "";
 
+  String countdownSound = "";
+
   ///
   /// -------------
   /// END FIELDS
@@ -88,7 +90,8 @@ class Workout {
       this.workSound,
       this.restSound,
       this.halfwaySound,
-      this.completeSound);
+      this.completeSound,
+      this.countdownSound);
 
   Workout.empty() {
     id = "";
@@ -103,6 +106,7 @@ class Workout {
     restSound = "";
     halfwaySound = "";
     completeSound = "";
+    countdownSound = "";
   }
 
   ///
@@ -128,7 +132,8 @@ class Workout {
       'workSound': workSound,
       'restSound': restSound,
       'halfwaySound': halfwaySound,
-      'completeSound': completeSound
+      'completeSound': completeSound,
+      'countdownSound': countdownSound
     };
   }
 

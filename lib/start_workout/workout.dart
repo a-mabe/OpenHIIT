@@ -219,6 +219,7 @@ class CountDownTimerState extends State<CountDownTimer>
             interval: const Duration(milliseconds: 100),
             endSound: endSound,
             halfwaySound: workoutArgument.halfwaySound,
+            countdownSound: workoutArgument.countdownSound,
             halfwayMark: (currentInterval == "workout") ? true : false,
             onFinished: () async {
               if (currentInterval == "start") {

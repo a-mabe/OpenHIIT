@@ -150,7 +150,7 @@ packages:
     description:
       path: "."
       ref: select-sound
-      resolved-ref: db68415dc77a9560abc9f2149a7832718dda316b
+      resolved-ref: a5a3bc6e29d8833d036d306541f9f45251323bff
       url: "https://github.com/a-mabe/simple_count_down.git"
     source: git
     version: "2.2.2"

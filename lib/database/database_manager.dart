@@ -67,7 +67,8 @@ class DatabaseManager {
             workSound TEXT,
             restSound TEXT,
             halfwaySound TEXT,
-            completeSound TEXT
+            completeSound TEXT,
+            countdownSound TEXT
             )
             ''');
     });
@@ -148,7 +149,8 @@ class DatabaseManager {
           maps[i]['workSound'],
           maps[i]['restSound'],
           maps[i]['halfwaySound'],
-          maps[i]['completeSound']);
+          maps[i]['completeSound'],
+          maps[i]['countdownSound']);
     });
   }
 

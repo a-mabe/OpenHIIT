@@ -19,6 +19,12 @@ const List<String> list = <String>[
   'none'
 ];
 
+const List<String> countdownSounds = <String>[
+  'countdown-beep',
+  'short-rest-beep',
+  'none'
+];
+
 class Sounds extends StatelessWidget {
   const Sounds({super.key});
 
@@ -51,11 +57,13 @@ class _SetSoundsState extends State<SetSounds> {
   String restSound = "short-rest-beep";
   String halfwaySound = "short-halfway-beep";
   String completeSound = "long-bell";
+  String countdownSound = "countdown-beep";
 
   bool workSoundChanged = false;
   bool restSoundChanged = false;
   bool halfwaySoundChanged = false;
   bool completeSoundChanged = false;
+  bool countdownSoundChanged = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
@@ -69,6 +77,7 @@ class _SetSoundsState extends State<SetSounds> {
     workoutArgument.restSound = restSound;
     workoutArgument.halfwaySound = halfwaySound;
     workoutArgument.completeSound = completeSound;
+    workoutArgument.countdownSound = countdownSound;
 
     if (workoutArgument.id == "") {
       // Set the workout ID
@@ -107,6 +116,9 @@ class _SetSoundsState extends State<SetSounds> {
       }
       if (!completeSoundChanged) {
         completeSound = workoutArgument.completeSound;
+      }
+      if (!countdownSoundChanged) {
+        countdownSound = workoutArgument.countdownSound;
       }
     }
 
@@ -263,6 +275,47 @@ class _SetSoundsState extends State<SetSounds> {
                     });
                   },
                   items: list.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+                  child: Text(
+                    "Countdown sound:",
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: countdownSound,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  underline: Container(
+                    height: 2,
+                  ),
+                  onChanged: (String? value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await player.play(AssetSource('audio/$value.mp3'));
+                    }
+                    setState(() {
+                      countdownSound = value!;
+                      countdownSoundChanged = true;
+                    });
+                  },
+                  items: countdownSounds
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
