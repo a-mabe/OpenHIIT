@@ -49,6 +49,16 @@ class Workout {
 
   int halfwayMark = 0;
 
+  String workSound = "";
+
+  String restSound = "";
+
+  String halfwaySound = "";
+
+  String completeSound = "";
+
+  String countdownSound = "";
+
   ///
   /// -------------
   /// END FIELDS
@@ -68,8 +78,20 @@ class Workout {
   //     required this.restTime,
   //     required this.halfTime});
 
-  Workout(this.id, this.title, this.numExercises, this.exercises,
-      this.exerciseTime, this.restTime, this.halfTime, this.halfwayMark);
+  Workout(
+      this.id,
+      this.title,
+      this.numExercises,
+      this.exercises,
+      this.exerciseTime,
+      this.restTime,
+      this.halfTime,
+      this.halfwayMark,
+      this.workSound,
+      this.restSound,
+      this.halfwaySound,
+      this.completeSound,
+      this.countdownSound);
 
   Workout.empty() {
     id = "";
@@ -80,6 +102,11 @@ class Workout {
     restTime = 0;
     halfTime = 0;
     halfwayMark = 0;
+    workSound = "";
+    restSound = "";
+    halfwaySound = "";
+    completeSound = "";
+    countdownSound = "";
   }
 
   ///
@@ -101,7 +128,12 @@ class Workout {
       'exerciseTime': exerciseTime,
       'restTime': restTime,
       'halfTime': halfTime,
-      'halfwayMark': halfwayMark
+      'halfwayMark': halfwayMark,
+      'workSound': workSound,
+      'restSound': restSound,
+      'halfwaySound': halfwaySound,
+      'completeSound': completeSound,
+      'countdownSound': countdownSound
     };
   }
 

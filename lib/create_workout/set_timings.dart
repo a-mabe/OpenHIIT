@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
-import '../database/database_manager.dart';
+import './set_sounds.dart';
 
 class Timings extends StatelessWidget {
   const Timings({super.key});
@@ -38,7 +36,7 @@ class _SetTimingsState extends State<SetTimings> {
   bool exerciseChanged = false;
   bool restChanged = false;
   bool halfChanged = false;
-  bool halfwayMark = false;
+  // bool halfwayMark = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
@@ -52,31 +50,23 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
 
-    if (exerciseTime > 6) {
-      workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
-    } else {
-      workoutArgument.halfwayMark = 0;
-    }
+    // if (exerciseTime > 6) {
+    //   workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
+    // } else {
+    //   workoutArgument.halfwayMark = 0;
+    // }
 
-    if (workoutArgument.id == "") {
-      // Set the workout ID
-      workoutArgument.id = const Uuid().v1();
-
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .insertList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
-    } else {
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .updateList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
-      ;
-    }
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Sounds(),
+          settings: RouteSettings(
+            arguments: workoutArgument,
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -155,21 +145,21 @@ class _SetTimingsState extends State<SetTimings> {
             ),
           ),
         ),
-        Visibility(
-          visible: exerciseTime > 6 ? true : false,
-          child: Center(
-              child: CheckboxListTile(
-            title: const Text("Play sound at half time:"),
-            value: halfwayMark,
-            onChanged: (newValue) {
-              setState(() {
-                halfwayMark = newValue!;
-              });
-            },
-            // controlAffinity:
-            //     ListTileControlAffinity.leading, //  <-- leading Checkbox
-          )),
-        ),
+        // Visibility(
+        //   visible: exerciseTime > 6 ? true : false,
+        //   child: Center(
+        //       child: CheckboxListTile(
+        //     title: const Text("Play sound at half time:"),
+        //     value: halfwayMark,
+        //     onChanged: (newValue) {
+        //       setState(() {
+        //         halfwayMark = newValue!;
+        //       });
+        //     },
+        //     // controlAffinity:
+        //     //     ListTileControlAffinity.leading, //  <-- leading Checkbox
+        //   )),
+        // ),
 
         // Center(
         //   child: Padding(
