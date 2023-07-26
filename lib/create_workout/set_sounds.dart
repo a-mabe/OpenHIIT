@@ -15,7 +15,8 @@ const List<String> list = <String>[
   'long-halfway-beep',
   'long-bell',
   'ding',
-  'thunk'
+  'thunk',
+  'none'
 ];
 
 class Sounds extends StatelessWidget {
@@ -133,7 +134,9 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
-                    await player.play(AssetSource('audio/$value.mp3'));
+                    if (value != 'none') {
+                      await player.play(AssetSource('audio/$value.mp3'));
+                    }
                     setState(() {
                       workSound = value!;
                       workSoundChanged = true;
@@ -171,7 +174,9 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
-                    await player.play(AssetSource('audio/$value.mp3'));
+                    if (value != 'none') {
+                      await player.play(AssetSource('audio/$value.mp3'));
+                    }
                     setState(() {
                       restSound = value!;
                       restSoundChanged = true;
@@ -209,7 +214,9 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
-                    await player.play(AssetSource('audio/$value.mp3'));
+                    if (value != 'none') {
+                      await player.play(AssetSource('audio/$value.mp3'));
+                    }
                     setState(() {
                       halfwaySound = value!;
                       halfwaySoundChanged = true;
@@ -247,7 +254,9 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
-                    await player.play(AssetSource('audio/$value.mp3'));
+                    if (value != 'none') {
+                      await player.play(AssetSource('audio/$value.mp3'));
+                    }
                     setState(() {
                       completeSound = value!;
                       completeSoundChanged = true;

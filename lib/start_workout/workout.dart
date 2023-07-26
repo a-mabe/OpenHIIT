@@ -133,7 +133,8 @@ class CountDownTimerState extends State<CountDownTimer>
   void workoutOnFinished(workoutArgument, exercises) async {
     await Future.delayed(const Duration(milliseconds: 400));
     intervals = intervals + 1;
-    if (!(intervals < workoutArgument.numExercises)) {
+    if (!(intervals < workoutArgument.numExercises) &&
+        workoutArgument.completeSound != 'none') {
       await player
           .play(AssetSource('audio/${workoutArgument.completeSound}.mp3'));
     }
@@ -217,10 +218,8 @@ class CountDownTimerState extends State<CountDownTimer>
             ),
             interval: const Duration(milliseconds: 100),
             endSound: endSound,
-            halfwayMark: (workoutArgument.halfwayMark == 1 &&
-                    currentInterval == "workout")
-                ? true
-                : false,
+            halfwaySound: workoutArgument.halfwaySound,
+            halfwayMark: (currentInterval == "workout") ? true : false,
             onFinished: () async {
               if (currentInterval == "start") {
                 startOnFinished();

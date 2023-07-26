@@ -36,7 +36,7 @@ class _SetTimingsState extends State<SetTimings> {
   bool exerciseChanged = false;
   bool restChanged = false;
   bool halfChanged = false;
-  bool halfwayMark = false;
+  // bool halfwayMark = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
@@ -50,11 +50,11 @@ class _SetTimingsState extends State<SetTimings> {
     workoutArgument.restTime = restTime;
     workoutArgument.halfTime = halfTime;
 
-    if (exerciseTime > 6) {
-      workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
-    } else {
-      workoutArgument.halfwayMark = 0;
-    }
+    // if (exerciseTime > 6) {
+    //   workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
+    // } else {
+    //   workoutArgument.halfwayMark = 0;
+    // }
 
     setState(() {
       Navigator.push(
@@ -145,21 +145,21 @@ class _SetTimingsState extends State<SetTimings> {
             ),
           ),
         ),
-        Visibility(
-          visible: exerciseTime > 6 ? true : false,
-          child: Center(
-              child: CheckboxListTile(
-            title: const Text("Play sound at half time:"),
-            value: halfwayMark,
-            onChanged: (newValue) {
-              setState(() {
-                halfwayMark = newValue!;
-              });
-            },
-            // controlAffinity:
-            //     ListTileControlAffinity.leading, //  <-- leading Checkbox
-          )),
-        ),
+        // Visibility(
+        //   visible: exerciseTime > 6 ? true : false,
+        //   child: Center(
+        //       child: CheckboxListTile(
+        //     title: const Text("Play sound at half time:"),
+        //     value: halfwayMark,
+        //     onChanged: (newValue) {
+        //       setState(() {
+        //         halfwayMark = newValue!;
+        //       });
+        //     },
+        //     // controlAffinity:
+        //     //     ListTileControlAffinity.leading, //  <-- leading Checkbox
+        //   )),
+        // ),
 
         // Center(
         //   child: Padding(
