@@ -48,11 +48,11 @@ void main() {
 
     // Reduce the number of exercises by 1.
     await tester.tap(find.byIcon(Icons.remove));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Reduce the number of exercises by 1.
     await tester.tap(find.byIcon(Icons.remove));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Verify the exercise number is 7 as expected.
     expect(find.text('7'), findsOneWidget);
