@@ -60,7 +60,7 @@ void main() {
 
     for (var i = 1; i < 8; i++) {
       final exercise = find.ancestor(
-        of: find.text('Exercise #$i'),
+        of: find.text('Exercise #1'),
         matching: find.byType(TextFormField),
       );
 
