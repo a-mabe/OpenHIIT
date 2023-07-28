@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:openhiit/main.dart';
 
-void changeTime(WidgetTester tester, int changeTime, String changeResult,
+Future changeTime(WidgetTester tester, int changeTime, String changeResult,
     String buttonKey) async {
   // Change time.
   for (var i = 0; i < changeTime; i++) {
@@ -85,10 +85,10 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    changeTime(tester, 2, '18', 'work-decrement');
-    changeTime(tester, 3, '21', 'work-increment');
-    changeTime(tester, 2, '8', 'rest-decrement');
-    changeTime(tester, 3, '11', 'rest-increment');
+    await changeTime(tester, 2, '18', 'work-decrement');
+    await changeTime(tester, 3, '21', 'work-increment');
+    await changeTime(tester, 2, '8', 'rest-decrement');
+    await changeTime(tester, 3, '11', 'rest-increment');
 
     // // Reduce working time.
     // for (var i = 0; i < 2; i++) {
