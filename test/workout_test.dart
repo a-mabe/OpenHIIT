@@ -10,6 +10,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:openhiit/main.dart';
 
+void changeTime(WidgetTester tester, int changeTime, String changeResult,
+    String buttonKey) async {
+  // Change time.
+  for (var i = 0; i < changeTime; i++) {
+    await tester.tap(find.byKey(Key(buttonKey)));
+    await tester.pumpAndSettle();
+  }
+
+  // Time should be changed.
+  expect(find.text(changeResult), findsOneWidget);
+}
+
 void main() {
   testWidgets('Add workout smoke test', (WidgetTester tester) async {
     String workoutName = "Test workout 1";
@@ -73,24 +85,29 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    // Reduce working time.
-    for (var i = 0; i < 2; i++) {
-      // Reduce the working time by 2.
-      await tester.tap(find.byKey(const Key('work-decrement')));
-      await tester.pumpAndSettle();
-    }
+    changeTime(tester, 2, '18', 'work-decrement');
+    changeTime(tester, 3, '21', 'work-increment');
+    changeTime(tester, 2, '8', 'rest-decrement');
+    changeTime(tester, 3, '11', 'rest-increment');
 
-    // Work time should be 18.
-    expect(find.text('18'), findsOneWidget);
+    // // Reduce working time.
+    // for (var i = 0; i < 2; i++) {
+    //   // Reduce the working time by 2.
+    //   await tester.tap(find.byKey(const Key('work-decrement')));
+    //   await tester.pumpAndSettle();
+    // }
 
-    // Increase working time.
-    for (var i = 0; i < 2; i++) {
-      // Increase the working time by 3.
-      await tester.tap(find.byKey(const Key('work-increment')));
-      await tester.pumpAndSettle();
-    }
+    // // Work time should be 18.
+    // expect(find.text('18'), findsOneWidget);
 
-    // Work time should be 21.
-    expect(find.text('21'), findsOneWidget);
+    // // Increase working time.
+    // for (var i = 0; i < 2; i++) {
+    //   // Increase the working time by 3.
+    //   await tester.tap(find.byKey(const Key('work-increment')));
+    //   await tester.pumpAndSettle();
+    // }
+
+    // // Work time should be 21.
+    // expect(find.text('21'), findsOneWidget);
   });
 }
