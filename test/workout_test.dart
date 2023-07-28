@@ -95,6 +95,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // TODO: Test selecting different sounds.
+    expect(find.text('short-whistle'), findsOneWidget);
 
     // Tap to go to the next page.
     await tester.tap(find.byType(ElevatedButton));
