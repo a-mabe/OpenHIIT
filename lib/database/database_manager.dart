@@ -66,7 +66,7 @@ class DatabaseManager {
     return await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
-            CREATE TABLE WorkoutTable(id TEXT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
