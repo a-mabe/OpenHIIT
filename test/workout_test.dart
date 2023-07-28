@@ -50,7 +50,29 @@ void main() {
     await tester.tap(find.byIcon(Icons.remove));
     await tester.pump();
 
-    // Verify the exercise number is 8 as expected.
-    expect(find.text('10'), findsOneWidget);
+    // Reduce the number of exercises by 1.
+    await tester.tap(find.byIcon(Icons.remove));
+    await tester.pump();
+
+    // Verify the exercise number is 7 as expected.
+    expect(find.text('7'), findsOneWidget);
+
+    // Tap to go to the next page.
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+
+    // Verify that the next page has loaded.
+    expect(find.text('List Exercises'), findsOneWidget);
+
+    for (var i = 1; i < 8; i++) {
+      final exercise = find.ancestor(
+        of: find.text('Exercise $i'),
+        matching: find.byType(TextFormField),
+      );
+
+      tester.enterText(exercise, 'testing $i');
+
+      expect(find.text('testing $i'), findsOneWidget);
+    }
   });
 }
