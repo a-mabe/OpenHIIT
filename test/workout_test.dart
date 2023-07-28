@@ -100,6 +100,6 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    // expect(find.text(workoutName), findsOneWidget);
+    expect(find.text(workoutName), findsOneWidget);
   });
 }

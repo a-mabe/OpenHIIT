@@ -11,9 +11,11 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../workout_data_type/workout_type.dart';
 
 class DatabaseManager {
@@ -49,6 +51,14 @@ class DatabaseManager {
 
   Future<Database> initDB() async {
     debugPrint("initDB executed");
+
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      // Change the default factory
+      databaseFactory = databaseFactoryFfi;
+    }
+
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(await getDatabasesPath(), "core1.db");
     // Clear database for testing
