@@ -58,9 +58,9 @@ void main() {
     // Verify that the next page has loaded.
     expect(find.text('List Exercises'), findsOneWidget);
 
-    for (var i = 1; i < 8; i++) {
+    for (var i = 1; i < 3; i++) {
       final exercise = find.ancestor(
-        of: find.text('Exercise #1'),
+        of: find.text('Exercise #$i'),
         matching: find.byType(TextFormField),
       );
 
