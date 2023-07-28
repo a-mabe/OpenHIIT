@@ -97,8 +97,8 @@ void main() {
     // TODO: Test selecting different sounds.
 
     // Tap to go to the next page.
-    // await tester.tap(find.byType(ElevatedButton));
-    // await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
 
     // expect(find.text(workoutName), findsOneWidget);
   });
