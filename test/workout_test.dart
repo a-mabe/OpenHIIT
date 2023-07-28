@@ -85,7 +85,7 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    await changeTime(tester, 2, '18', 'work-decrement');
+    await changeTime(tester, 2, 'Working time: 18 seconds', 'work-decrement');
     await changeTime(tester, 3, '21', 'work-increment');
     await changeTime(tester, 2, '8', 'rest-decrement');
     await changeTime(tester, 3, '11', 'rest-increment');
