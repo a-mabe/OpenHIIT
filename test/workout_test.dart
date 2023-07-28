@@ -90,24 +90,16 @@ void main() {
     await changeTime(tester, 2, 'Rest time: 8 seconds', 'rest-decrement');
     await changeTime(tester, 3, 'Rest time: 11 seconds', 'rest-increment');
 
-    // // Reduce working time.
-    // for (var i = 0; i < 2; i++) {
-    //   // Reduce the working time by 2.
-    //   await tester.tap(find.byKey(const Key('work-decrement')));
-    //   await tester.pumpAndSettle();
-    // }
+    // Tap to go to the next page.
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
 
-    // // Work time should be 18.
-    // expect(find.text('18'), findsOneWidget);
+    // TODO: Test selecting different sounds.
 
-    // // Increase working time.
-    // for (var i = 0; i < 2; i++) {
-    //   // Increase the working time by 3.
-    //   await tester.tap(find.byKey(const Key('work-increment')));
-    //   await tester.pumpAndSettle();
-    // }
+    // Tap to go to the next page.
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
 
-    // // Work time should be 21.
-    // expect(find.text('21'), findsOneWidget);
+    expect(find.text(workoutName), findsOneWidget);
   });
 }
