@@ -44,7 +44,7 @@ void main() {
 
     // Reduce the number of exercises by 1.
     await tester.tap(find.byIcon(Icons.remove));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Reduce the number of exercises by 1.
     await tester.tap(find.byIcon(Icons.remove));
@@ -70,7 +70,7 @@ void main() {
         matching: find.byType(TextFormField),
       );
 
-      tester.enterText(exercise, 'testing $i');
+      await tester.enterText(exercise, 'testing $i');
 
       expect(find.text('testing $i'), findsOneWidget);
     }
