@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
 void main() {
-  testWidgets('Load add workout smoke test', (WidgetTester tester) async {
+  testWidgets('Add workout smoke test', (WidgetTester tester) async {
     String workoutName = "Test workout 1";
 
     // Build our app and trigger a frame.
@@ -68,5 +68,29 @@ void main() {
 
       expect(find.text('testing $i'), findsOneWidget);
     }
+
+    // Tap to go to the next page.
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+
+    // Reduce working time.
+    for (var i = 0; i < 2; i++) {
+      // Reduce the working time by 2.
+      await tester.tap(find.byKey(const Key('work-decrement')));
+      await tester.pumpAndSettle();
+    }
+
+    // Work time should be 18.
+    expect(find.text('18'), findsOneWidget);
+
+    // Increase working time.
+    for (var i = 0; i < 2; i++) {
+      // Increase the working time by 3.
+      await tester.tap(find.byKey(const Key('work-increment')));
+      await tester.pumpAndSettle();
+    }
+
+    // Work time should be 21.
+    expect(find.text('21'), findsOneWidget);
   });
 }
