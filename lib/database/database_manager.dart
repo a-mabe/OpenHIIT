@@ -63,6 +63,27 @@ class DatabaseManager {
     String path = join(await getDatabasesPath(), "core1.db");
     // Clear database for testing
     // await deleteDatabase(path);
+    if (Platform.isWindows || Platform.isLinux) {
+      return await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
+            title TEXT,
+            numExercises INTEGER,
+            exercises TEXT,
+            exerciseTime INTEGER,
+            restTime INTEGER,
+            halfTime INTEGER,
+            halfwayMark INTEGER,
+            workSound TEXT,
+            restSound TEXT,
+            halfwaySound TEXT,
+            completeSound TEXT,
+            countdownSound TEXT
+            )
+            ''');
+      });
+    }
     return await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''

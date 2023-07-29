@@ -99,8 +99,6 @@ void main() {
 
     // Tap to go to the next page.
     await tester.tap(find.byType(ElevatedButton));
-    // await tester.pumpAndSettle();
-    await tester.pump(const Duration(milliseconds: 5000));
     await tester.pumpAndSettle();
 
     expect(find.text(workoutName), findsOneWidget);
