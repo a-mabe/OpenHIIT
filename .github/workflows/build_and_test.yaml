@@ -2,20 +2,20 @@ name: Build Flutter App
 
 run-name: ${{ github.actor }} is building the app 🚀
 
-on: [push]
-  # pull_request:
-  #   types:
-  #     - opened
-  #     - reopened
-  #     - synchronize
-  #     - ready_for_review
-  #   branches:
-  #     - 'main'
-  #   paths-ignore:
-  #     - '**.md'
-  #     - 'doc/**'
-  #     - '.git/'
-  #     - '.vscode/'
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**.md'
+      - 'doc/**'
+      - '.git/'
+      - '.vscode/'
 
 jobs:
   Build:
