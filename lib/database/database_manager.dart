@@ -11,9 +11,10 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../workout_data_type/workout_type.dart';
 
 class DatabaseManager {
@@ -49,14 +50,43 @@ class DatabaseManager {
 
   Future<Database> initDB() async {
     debugPrint("initDB executed");
+
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      // Change the default factory
+      databaseFactory = databaseFactoryFfiNoIsolate;
+    }
+
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(await getDatabasesPath(), "core1.db");
     // Clear database for testing
     // await deleteDatabase(path);
+    if (Platform.isWindows || Platform.isLinux) {
+      return await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
+            title TEXT,
+            numExercises INTEGER,
+            exercises TEXT,
+            exerciseTime INTEGER,
+            restTime INTEGER,
+            halfTime INTEGER,
+            halfwayMark INTEGER,
+            workSound TEXT,
+            restSound TEXT,
+            halfwaySound TEXT,
+            completeSound TEXT,
+            countdownSound TEXT
+            )
+            ''');
+      });
+    }
     return await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
-            CREATE TABLE WorkoutTable(id TEXT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,

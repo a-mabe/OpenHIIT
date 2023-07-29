@@ -97,6 +97,7 @@ class _SetTimingsState extends State<SetTimings> {
               children: [
                 const Icon(Icons.fitness_center),
                 IconButton(
+                  key: const Key('work-decrement'),
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
                     final newValue = exerciseTime - 1;
@@ -106,6 +107,7 @@ class _SetTimingsState extends State<SetTimings> {
                 ),
                 Text('Working time: $exerciseTime seconds'),
                 IconButton(
+                  key: const Key('work-increment'),
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
                     final newValue = exerciseTime + 1;
@@ -125,6 +127,7 @@ class _SetTimingsState extends State<SetTimings> {
               children: [
                 const Icon(Icons.snooze),
                 IconButton(
+                  key: const Key('rest-decrement'),
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
                     final newValue = restTime - 1;
@@ -134,6 +137,7 @@ class _SetTimingsState extends State<SetTimings> {
                 ),
                 Text('Rest time: $restTime seconds'),
                 IconButton(
+                  key: const Key('rest-increment'),
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
                     final newValue = restTime + 1;
