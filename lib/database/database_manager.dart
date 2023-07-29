@@ -56,7 +56,7 @@ class DatabaseManager {
       // Initialize FFI
       sqfliteFfiInit();
       // Change the default factory
-      databaseFactory = databaseFactoryFfi;
+      databaseFactory = databaseFactoryFfiNoIsolate;
     }
 
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
