@@ -13,8 +13,13 @@ const List<String> list = <String>[
   'long-rest-beep',
   'short-halfway-beep',
   'long-halfway-beep',
+  'harsh-beep',
+  'harsh-beep-sequence',
+  'halfway-beep2',
+  'horn',
   'long-bell',
   'ding',
+  'ding-sequence',
   'thunk',
   'none'
 ];
