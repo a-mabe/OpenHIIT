@@ -2,6 +2,10 @@
 
 ![Build and Test](https://github.com/a-mabe/openhiit/actions/workflows/build_and_test.yaml/badge.svg)
 
+:coffee: :tea: :cookie: All funds go towards an annual Apple Developer License to publish OpenHIIT on the app store. :cookie: :tea: :coffee:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/amabe)
+
 <a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=60px /></a>
 
 Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
