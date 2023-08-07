@@ -2,7 +2,7 @@
 name: New feature/improvement
 about: New feature or improvement to be implemented
 title: "[Feature/Improvement]"
-labels: enhancement
+labels: bug, enhancement
 assignees: ''
 
 ---
