@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -40,6 +41,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   /// The list of workouts to be loaded with [DatabaseManager()].
   late Future<List<Workout>> workouts;
+
+  @override
+  initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+  }
 
   int calculateWorkoutTime(Workout workout) {
     return (((workout.exerciseTime * workout.numExercises) +

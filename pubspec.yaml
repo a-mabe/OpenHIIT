@@ -46,6 +46,7 @@ dependencies:
   wakelock: ^0.6.2
   flutter_launcher_icons: ^0.13.1
   coverage: ^1.6.3
+  audio_session: ^0.1.16
 
 flutter_launcher_icons:
   android: "launcher_icon"
