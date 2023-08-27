@@ -10,6 +10,8 @@
 
 Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
 
+The timer package is being developed [here](https://github.com/a-mabe/background_timer).
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
