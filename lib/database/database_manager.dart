@@ -28,13 +28,13 @@ class DatabaseManager {
   ///
   /// e.g., "database.db"
   ///
-  static const String databaseName = "workouts.db";
+  static const String _databaseName = "workouts.db";
 
   /// The name of the table in the database where workouts are stored.
   ///
   /// e.g., "workouts"
   ///
-  static const String workoutTableName = "WorkoutTable";
+  static const String _workoutTableName = "WorkoutTable";
 
   ///
   /// -------------
@@ -109,7 +109,7 @@ class DatabaseManager {
   Future<void> insertList(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
-    final db = database;
+    final db = await database;
 
     log(workout.toString());
 
@@ -118,7 +118,7 @@ class DatabaseManager {
     /// In this case, replace any previous data.
     ///
     await db.insert(
-      workoutTableName,
+      _workoutTableName,
       workout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -129,15 +129,13 @@ class DatabaseManager {
   Future<void> updateList(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
-    final db = await database;
+    final db = database;
 
     await db.update(
-      workoutTableName,
+      _workoutTableName,
       workout.toMap(),
       where: 'id = ?', // Ensure that the List has a matching id.
-      whereArgs: [
-        workout.id
-      ], // Pass the id as a whereArg to prevent SQL injection.
+      whereArgs: [workout.id], // Pass the id as a whereArg to prevent SQL injection.
     );
   }
 
@@ -147,11 +145,9 @@ class DatabaseManager {
     final db = await database;
 
     await db.delete(
-      workoutTableName,
+      _workoutTableName,
       where: 'id = ?', // Use a `where` clause to delete a specific list.
-      whereArgs: [
-        id
-      ], // Pass the List's id as a whereArg to prevent SQL injection.
+      whereArgs: [id], // Pass the List's id as a whereArg to prevent SQL injection.
     );
   }
 
@@ -162,7 +158,7 @@ class DatabaseManager {
 
     /// Query the table for all the TodoLists.
     ///
-    final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
+    final List<Map<String, dynamic>> maps = await db.query(_workoutTableName);
 
     /// Convert the List<Map<String, dynamic> into a List<TodoList>.
     ///

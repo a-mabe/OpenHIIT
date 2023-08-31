@@ -18,7 +18,7 @@ class ViewWorkout extends StatefulWidget {
 }
 
 class ViewWorkoutState extends State<ViewWorkout> {
-  late ListModel<ListTileModel> intervalInfo;
+  late ListModel<ListTileModel> _intervalInfo;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   void pushCreateWorkout(workout) {
@@ -54,37 +54,52 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
     for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
       if (i == 0) {
-        listItems.add(ListTileModel(
+        listItems.add(
+          ListTileModel(
             action: "Prepare",
             interval: 0,
             total: workoutArgument.numExercises,
-            seconds: 10));
+            seconds: 10,
+          ),
+        );
       } else {
         if (exercises.length < workoutArgument.numExercises) {
-          listItems.add(ListTileModel(
+          listItems.add(
+            ListTileModel(
               action: "Work",
               interval: i,
               total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime));
+              seconds: workoutArgument.exerciseTime,
+            ),
+          );
           if (i < workoutArgument.numExercises) {
-            listItems.add(ListTileModel(
+            listItems.add(
+              ListTileModel(
                 action: "Rest",
                 interval: 0,
                 total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime));
+                seconds: workoutArgument.restTime,
+              ),
+            );
           }
         } else {
-          listItems.add(ListTileModel(
+          listItems.add(
+            ListTileModel(
               action: exercises[i - 1],
               interval: i,
               total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime));
+              seconds: workoutArgument.exerciseTime,
+            ),
+          );
           if (i < workoutArgument.numExercises) {
-            listItems.add(ListTileModel(
+            listItems.add(
+              ListTileModel(
                 action: "Rest",
                 interval: 0,
                 total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime));
+                seconds: workoutArgument.restTime,
+              ),
+            );
           }
         }
       }
@@ -96,7 +111,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
   @override
   void initState() {
     super.initState();
-    intervalInfo = ListModel<ListTileModel>(
+    _intervalInfo = ListModel<ListTileModel>(
       listKey: _listKey,
       initialItems: <ListTileModel>[],
     );
@@ -104,30 +119,24 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    List<dynamic> exercises = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
+    List<dynamic> exercises =
+        workoutArgument.exercises != "" ? jsonDecode(workoutArgument.exercises) : [];
     Future<Database> database = DatabaseManager().initDB();
 
     Widget exerciseList() {
       return ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: intervalInfo.length,
+        itemCount: _intervalInfo.length,
         itemBuilder: (BuildContext context, int index) {
-          return CardItem(item: intervalInfo[index]);
-          // return SizedBox(
-          //   height: 50,
-          //   child: Center(child: Text(exercises[index])),
-          // );
+          return CardItem(item: _intervalInfo[index]);
         },
       );
     }
 
-    if (intervalInfo.length == 0) {
-      intervalInfo = ListModel<ListTileModel>(
+    if (_intervalInfo.length == 0) {
+      _intervalInfo = ListModel<ListTileModel>(
         listKey: _listKey,
         initialItems: listItems(exercises, workoutArgument),
       );
@@ -159,59 +168,46 @@ class ViewWorkoutState extends State<ViewWorkout> {
           ),
         ],
         bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(80.0),
-            child: Row(
-              children: [
-                // Expanded(
-                //   flex: 1,
-                //   child: Container(
-                //     height: 80.0,
-                //     width: MediaQuery.of(context).size.width * 0.25,
-                //     color: Colors.red,
-                //   ),
-                // ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Container(
-                //     height: 80.0,
-                //     width: MediaQuery.of(context).size.width * 0.25,
-                //     color: Colors.blue,
-                //   ),
-                // ),
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const StartWorkout(),
-                          settings: RouteSettings(
-                            arguments: workoutArgument,
-                          ),
+          preferredSize: const Size.fromHeight(80.0),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const StartWorkout(),
+                        settings: RouteSettings(
+                          arguments: workoutArgument,
                         ),
-                      );
-                    },
-                    child: Ink(
-                        height: 80.0,
-                        width: MediaQuery.of(context).size.width * 0.25,
-                        color: Colors.green,
-                        child: const Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
-                            ),
-                            Text("Start")
-                          ],
-                        ))),
+                      ),
+                    );
+                  },
+                  child: Ink(
+                    height: 80.0,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    color: Colors.green,
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                          ),
+                          Text("Start")
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: exerciseList(),

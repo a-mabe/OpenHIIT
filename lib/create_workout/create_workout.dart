@@ -31,8 +31,7 @@ class ChooseNumber extends StatefulWidget {
 class _ChooseNumberState extends State<ChooseNumber> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
-  bool changed = false;
-  // final workout = Workout.empty();
+  bool _changed = false;
 
   void pushExercises(workout) {
     setState(() {
@@ -61,10 +60,9 @@ class _ChooseNumberState extends State<ChooseNumber> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (!changed && workoutArgument.numExercises > 0) {
+    if (!_changed && workoutArgument.numExercises > 0) {
       _currentIntValue = workoutArgument.numExercises;
     }
 
@@ -112,7 +110,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
               haptics: true,
               onChanged: (value) => setState(() {
                 _currentIntValue = value;
-                changed = true;
+                _changed = true;
               }),
             ),
           ),

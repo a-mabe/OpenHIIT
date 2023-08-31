@@ -27,27 +27,23 @@ class CardItemAnimated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TextStyle? textStyle = Theme.of(context).textTheme;
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1, 0),
         end: const Offset(0, 0),
       ).animate(CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeIn,
-          reverseCurve: Curves.easeOut)),
+          parent: animation, curve: Curves.easeIn, reverseCurve: Curves.easeOut)),
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.transparent,
           border: Border(
             top: BorderSide(
-              //                    <--- top side
+              // <--- top side
               color: Color.fromARGB(53, 255, 255, 255),
               width: 3.0,
             ),
           ),
         ),
-        // color: Colors.transparent,
         child: ConstrainedBox(
           constraints: const BoxConstraints(
             minHeight: 75.0,
@@ -62,7 +58,10 @@ class CardItemAnimated extends StatelessWidget {
                   child: Text(
                     item.intervalString(),
                     style: TextStyle(
-                        fontSize: 25, color: fontColor, fontWeight: fontWeight),
+                      fontSize: 25,
+                      color: fontColor,
+                      fontWeight: fontWeight,
+                    ),
                   ),
                 ),
               ),
@@ -71,22 +70,27 @@ class CardItemAnimated extends StatelessWidget {
                 child: Text(
                   item.action,
                   style: TextStyle(
-                      fontSize: 25, color: fontColor, fontWeight: fontWeight),
+                    fontSize: 25,
+                    color: fontColor,
+                    fontWeight: fontWeight,
+                  ),
                 ),
               ),
               const Spacer(),
               Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-                  child: SizedBox(
-                    width: 40,
-                    child: Text(
-                      "${item.seconds}s",
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: fontColor,
-                          fontWeight: fontWeight),
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                child: SizedBox(
+                  width: 40,
+                  child: Text(
+                    "${item.seconds}s",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: fontColor,
+                      fontWeight: fontWeight,
                     ),
-                  ))
+                  ),
+                ),
+              )
             ],
           ),
         ),

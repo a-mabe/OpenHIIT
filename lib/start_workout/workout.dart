@@ -18,11 +18,12 @@ class StartWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: SafeArea(
-      child: Center(
-        child: CountDownTimer(),
+      body: SafeArea(
+        child: Center(
+          child: CountDownTimer(),
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -33,37 +34,34 @@ class CountDownTimer extends StatefulWidget {
   CountDownTimerState createState() => CountDownTimerState();
 }
 
-class CountDownTimerState extends State<CountDownTimer>
-    with TickerProviderStateMixin {
+class CountDownTimerState extends State<CountDownTimer> with TickerProviderStateMixin {
   /// VARS
 
-  final CountdownController _workoutController =
-      CountdownController(autoStart: true);
+  final CountdownController _workoutController = CountdownController(autoStart: true);
 
-  String currentInterval = "start";
-  bool start = true;
-  final player = AudioPlayer();
-  int intervals = 0;
-  IconData pausePlayIcon = Icons.pause;
-  bool doneVisible = false;
+  String _currentInterval = "start";
+  bool _start = true;
+  final _player = AudioPlayer();
+  int _intervals = 0;
+  IconData _pausePlayIcon = Icons.pause;
+  bool _doneVisible = false;
 
   late ConfettiController _controllerCenter;
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  late ListModel<ListTileModel> intervalInfo;
+  late ListModel<ListTileModel> _intervalInfo;
 
   /// END VARS
 
   @override
   void initState() {
     super.initState();
-    intervalInfo = ListModel<ListTileModel>(
+    _intervalInfo = ListModel<ListTileModel>(
       listKey: _listKey,
       initialItems: <ListTileModel>[],
       removedItemBuilder: _buildRemovedItem,
     );
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 10));
+    _controllerCenter = ConfettiController(duration: const Duration(seconds: 10));
     Wakelock.enable();
     init();
   }
@@ -71,7 +69,7 @@ class CountDownTimerState extends State<CountDownTimer>
   void init() async {
     // final session = await AudioSession.instance;
     // await session.configure(const AudioSessionConfiguration.music());
-    await player.play(AssetSource('audio/blank.mp3'));
+    await _player.play(AssetSource('audio/blank.mp3'));
   }
 
   @override
@@ -83,10 +81,11 @@ class CountDownTimerState extends State<CountDownTimer>
   Widget _buildRemovedItem(
       ListTileModel item, BuildContext context, Animation<double> animation) {
     return CardItemAnimated(
-        animation: animation,
-        item: item,
-        fontColor: Color.fromARGB(153, 255, 255, 255),
-        fontWeight: FontWeight.normal);
+      animation: animation,
+      item: item,
+      fontColor: const Color.fromARGB(153, 255, 255, 255),
+      fontWeight: FontWeight.normal,
+    );
   }
 
   /// A custom Path to paint stars.
@@ -105,8 +104,8 @@ class CountDownTimerState extends State<CountDownTimer>
     path.moveTo(size.width, halfWidth);
 
     for (double step = 0; step < fullAngle; step += degreesPerStep) {
-      path.lineTo(halfWidth + externalRadius * cos(step),
-          halfWidth + externalRadius * sin(step));
+      path.lineTo(
+          halfWidth + externalRadius * cos(step), halfWidth + externalRadius * sin(step));
       path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
           halfWidth + internalRadius * sin(step + halfDegreesPerStep));
     }
@@ -119,7 +118,7 @@ class CountDownTimerState extends State<CountDownTimer>
       case 'start':
         return "Get ready";
       case 'workout':
-        return intervals < exercises.length ? exercises[intervals] : "Work";
+        return _intervals < exercises.length ? exercises[_intervals] : "Work";
       case 'rest':
         return "Rest";
       default:
@@ -130,30 +129,29 @@ class CountDownTimerState extends State<CountDownTimer>
   void startOnFinished() async {
     await Future.delayed(const Duration(milliseconds: 400));
     setState(() {
-      start = false;
-      currentInterval = "workout";
-      intervalInfo.removeAt(0);
+      _start = false;
+      _currentInterval = "workout";
+      _intervalInfo.removeAt(0);
       _workoutController.restart();
     });
   }
 
   void workoutOnFinished(workoutArgument, exercises) async {
     await Future.delayed(const Duration(milliseconds: 400));
-    intervals = intervals + 1;
-    if (!(intervals < workoutArgument.numExercises) &&
+    _intervals = _intervals + 1;
+    if (!(_intervals < workoutArgument.numExercises) &&
         workoutArgument.completeSound != 'none') {
-      await player
-          .play(AssetSource('audio/${workoutArgument.completeSound}.mp3'));
+      await _player.play(AssetSource('audio/${workoutArgument.completeSound}.mp3'));
     }
     setState(() {
-      if (intervals < workoutArgument.numExercises) {
-        currentInterval = "rest";
-        intervalInfo.removeAt(0);
+      if (_intervals < workoutArgument.numExercises) {
+        _currentInterval = "rest";
+        _intervalInfo.removeAt(0);
         _workoutController.restart();
       } else {
-        currentInterval = "done";
+        _currentInterval = "done";
         _controllerCenter.play();
-        doneVisible = !doneVisible;
+        _doneVisible = !_doneVisible;
         Wakelock.disable();
       }
     });
@@ -162,9 +160,9 @@ class CountDownTimerState extends State<CountDownTimer>
   void restOnFinished(workoutArgument) async {
     await Future.delayed(const Duration(milliseconds: 400));
     setState(() {
-      if (intervals < workoutArgument.numExercises) {
-        currentInterval = "workout";
-        intervalInfo.removeAt(0);
+      if (_intervals < workoutArgument.numExercises) {
+        _currentInterval = "workout";
+        _intervalInfo.removeAt(0);
         // intervalInfo.removeAt(intervals + 1);
         // intervalInfo.insert(intervalInfo.length, "Rest");
         _workoutController.restart();
@@ -173,49 +171,58 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   Widget timerScreen(
-      currentVisibleInterval, exercises, endSound, seconds, workoutArgument) {
+    currentVisibleInterval,
+    exercises,
+    endSound,
+    seconds,
+    workoutArgument,
+  ) {
     return Visibility(
-      visible: currentInterval == currentVisibleInterval ? true : false,
+      visible: _currentInterval == currentVisibleInterval ? true : false,
       child: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(size: 50.0, Icons.arrow_back),
-                      color: Colors.white),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        if (pausePlayIcon == Icons.pause) {
-                          _workoutController.pause();
-                          setState(() {
-                            pausePlayIcon = Icons.play_arrow;
-                            Wakelock.disable();
-                          });
-                        } else {
-                          _workoutController.start();
-                          setState(() {
-                            pausePlayIcon = Icons.pause;
-                            Wakelock.enable();
-                          });
-                        }
-                      },
-                      icon: Icon(size: 50.0, pausePlayIcon),
-                      color: Colors.white),
-                ],
-              )),
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(size: 50.0, Icons.arrow_back),
+                  color: Colors.white,
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    if (_pausePlayIcon == Icons.pause) {
+                      _workoutController.pause();
+                      setState(() {
+                        _pausePlayIcon = Icons.play_arrow;
+                        Wakelock.disable();
+                      });
+                    } else {
+                      _workoutController.start();
+                      setState(() {
+                        _pausePlayIcon = Icons.pause;
+                        Wakelock.enable();
+                      });
+                    }
+                  },
+                  icon: Icon(size: 50.0, _pausePlayIcon),
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
           Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-              child: Text(
-                timerScreenText(currentVisibleInterval, exercises),
-                // intervals < exercises.length ? exercises[intervals] : "",
-                style: const TextStyle(fontSize: 35, color: Colors.white),
-              )),
+            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+            child: Text(
+              timerScreenText(currentVisibleInterval, exercises),
+              // intervals < exercises.length ? exercises[intervals] : "",
+              style: const TextStyle(fontSize: 35, color: Colors.white),
+            ),
+          ),
           Countdown(
             controller: _workoutController,
             seconds: seconds,
@@ -227,34 +234,32 @@ class CountDownTimerState extends State<CountDownTimer>
             endSound: endSound,
             halfwaySound: workoutArgument.halfwaySound,
             countdownSound: workoutArgument.countdownSound,
-            halfwayMark: (currentInterval == "workout") ? true : false,
+            halfwayMark: (_currentInterval == "workout") ? true : false,
             onFinished: () async {
-              if (currentInterval == "start") {
+              if (_currentInterval == "start") {
                 startOnFinished();
-              } else if (currentInterval == "workout") {
+              } else if (_currentInterval == "workout") {
                 workoutOnFinished(workoutArgument, exercises);
-              } else if (currentInterval == "rest") {
+              } else if (_currentInterval == "rest") {
                 restOnFinished(workoutArgument);
               }
             },
           ),
           Expanded(
             child: Container(
-              color: Color.fromARGB(22, 0, 0, 0),
+              color: const Color.fromARGB(22, 0, 0, 0),
               child: AnimatedList(
                 key: _listKey,
-                initialItemCount: intervalInfo.length,
+                initialItemCount: _intervalInfo.length,
                 itemBuilder: (context, index, animation) {
                   return CardItemAnimated(
                     animation: animation,
-                    item: intervalInfo[index],
+                    item: _intervalInfo[index],
                     fontColor: index == 0
                         ? Colors.white
-                        : Color.fromARGB(153, 255, 255, 255),
-                    fontWeight:
-                        index == 0 ? FontWeight.bold : FontWeight.normal,
+                        : const Color.fromARGB(153, 255, 255, 255),
+                    fontWeight: index == 0 ? FontWeight.bold : FontWeight.normal,
                   );
-                  // return slideIt(context, index, animation);
                 },
               ),
             ),
@@ -309,37 +314,52 @@ class CountDownTimerState extends State<CountDownTimer>
       // message.write('!');
       // intervalInfo.insert(i + 1, exercises[i]);
       if (i == 0) {
-        listItems.add(ListTileModel(
+        listItems.add(
+          ListTileModel(
             action: "Prepare",
             interval: 0,
             total: workoutArgument.numExercises,
-            seconds: 10));
+            seconds: 10,
+          ),
+        );
       } else {
         if (exercises.length < workoutArgument.numExercises) {
-          listItems.add(ListTileModel(
+          listItems.add(
+            ListTileModel(
               action: "Work",
               interval: i,
               total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime));
+              seconds: workoutArgument.exerciseTime,
+            ),
+          );
           if (i < workoutArgument.numExercises) {
-            listItems.add(ListTileModel(
+            listItems.add(
+              ListTileModel(
                 action: "Rest",
                 interval: 0,
                 total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime));
+                seconds: workoutArgument.restTime,
+              ),
+            );
           }
         } else {
-          listItems.add(ListTileModel(
+          listItems.add(
+            ListTileModel(
               action: exercises[i - 1],
               interval: i,
               total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime));
+              seconds: workoutArgument.exerciseTime,
+            ),
+          );
           if (i < workoutArgument.numExercises) {
-            listItems.add(ListTileModel(
+            listItems.add(
+              ListTileModel(
                 action: "Rest",
                 interval: 0,
                 total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime));
+                seconds: workoutArgument.restTime,
+              ),
+            );
           }
         }
       }
@@ -350,15 +370,13 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    List<dynamic> exercises = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
+    List<dynamic> exercises =
+        workoutArgument.exercises != "" ? jsonDecode(workoutArgument.exercises) : [];
 
-    if (currentInterval == "start") {
-      intervalInfo = ListModel<ListTileModel>(
+    if (_currentInterval == "start") {
+      _intervalInfo = ListModel<ListTileModel>(
         listKey: _listKey,
         initialItems: listItems(exercises, workoutArgument),
         removedItemBuilder: _buildRemovedItem,
@@ -366,145 +384,158 @@ class CountDownTimerState extends State<CountDownTimer>
     }
 
     return Scaffold(
-        backgroundColor: Colors.white10,
-        body: SizedBox.expand(
-          child: Container(
-            color: backgroundColor(),
-            child: Center(
-              child: Stack(
-                children: [
-                  timerScreen("start", exercises, workoutArgument.workSound, 10,
-                      workoutArgument),
-                  timerScreen("workout", exercises, workoutArgument.restSound,
-                      workoutArgument.exerciseTime, workoutArgument),
-                  timerScreen("rest", exercises, workoutArgument.workSound,
-                      workoutArgument.restTime, workoutArgument),
-                  Visibility(
-                    visible: currentInterval == "done" ? true : false,
-                    maintainAnimation: true,
-                    maintainState: true,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: ConfettiWidget(
-                            confettiController: _controllerCenter,
-                            blastDirectionality: BlastDirectionality
-                                .explosive, // don't specify a direction, blast randomly
-                            shouldLoop:
-                                true, // start again as soon as the animation is finished
-                            colors: const [
-                              Colors.green,
-                              Colors.blue,
-                              Colors.pink,
-                              Colors.orange,
-                              Colors.purple
-                            ], // manually specify the colors to be used
-                            createParticlePath:
-                                drawStar, // define a custom shape/path.
-                          ),
+      backgroundColor: Colors.white10,
+      body: SizedBox.expand(
+        child: Container(
+          color: backgroundColor(),
+          child: Center(
+            child: Stack(
+              children: [
+                timerScreen(
+                    "start", exercises, workoutArgument.workSound, 10, workoutArgument),
+                timerScreen("workout", exercises, workoutArgument.restSound,
+                    workoutArgument.exerciseTime, workoutArgument),
+                timerScreen("rest", exercises, workoutArgument.workSound,
+                    workoutArgument.restTime, workoutArgument),
+                Visibility(
+                  visible: _currentInterval == "done" ? true : false,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: ConfettiWidget(
+                          confettiController: _controllerCenter,
+                          blastDirectionality: BlastDirectionality
+                              .explosive, // don't specify a direction, blast randomly
+                          shouldLoop:
+                              true, // start again as soon as the animation is finished
+                          colors: const [
+                            Colors.green,
+                            Colors.blue,
+                            Colors.pink,
+                            Colors.orange,
+                            Colors.purple
+                          ], // manually specify the colors to be used
+                          createParticlePath: drawStar, // define a custom shape/path.
                         ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: AnimatedOpacity(
-                            opacity: doneVisible ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 800),
-                            child: SizedBox(
-                              width: 300,
-                              height: 300,
-                              // color: Colors.green,
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    const Text("Nice job!",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 45,
-                                            fontWeight: FontWeight.bold)),
-                                    const Spacer(),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Row(
-                                        children: [
-                                          TextButton.icon(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          const Color.fromARGB(
-                                                              133,
-                                                              255,
-                                                              255,
-                                                              255))),
-                                              label: const Text(
-                                                "Back",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              icon: const Icon(Icons.arrow_back,
-                                                  color: Colors.white,
-                                                  size: 38)),
-                                          const Spacer(),
-                                          TextButton.icon(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          const Color.fromARGB(
-                                                              133,
-                                                              255,
-                                                              255,
-                                                              255))),
-                                              label: const Text(
-                                                "Restart",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22),
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  currentInterval = "start";
-                                                  start = true;
-                                                  intervals = 0;
-                                                  pausePlayIcon = Icons.pause;
-                                                  doneVisible = false;
-                                                  _workoutController.restart();
-                                                  Wakelock.enable();
-                                                });
-                                              },
-                                              icon: const Icon(
-                                                  Icons.restart_alt,
-                                                  color: Colors.white,
-                                                  size: 38))
-                                        ],
-                                      ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AnimatedOpacity(
+                          opacity: _doneVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 800),
+                          child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            // color: Colors.green,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Nice job!",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 45,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const Spacer(),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      children: [
+                                        TextButton.icon(
+                                          style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                133,
+                                                255,
+                                                255,
+                                                255,
+                                              ),
+                                            ),
+                                          ),
+                                          label: const Text(
+                                            "Back",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_back,
+                                            color: Colors.white,
+                                            size: 38,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        TextButton.icon(
+                                          style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                133,
+                                                255,
+                                                255,
+                                                255,
+                                              ),
+                                            ),
+                                          ),
+                                          label: const Text(
+                                            "Restart",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 22),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _currentInterval = "start";
+                                              _start = true;
+                                              _intervals = 0;
+                                              _pausePlayIcon = Icons.pause;
+                                              _doneVisible = false;
+                                              _workoutController.restart();
+                                              Wakelock.enable();
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            Icons.restart_alt,
+                                            color: Colors.white,
+                                            size: 38,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Color backgroundColor() {
-    if (currentInterval == "workout") {
+    if (_currentInterval == "workout") {
       return Colors.green;
-    } else if (currentInterval == "rest") {
+    } else if (_currentInterval == "rest") {
       return Colors.red;
-    } else if (currentInterval == "start") {
+    } else if (_currentInterval == "start") {
       return Colors.black;
     } else {
       return const Color.fromARGB(255, 0, 225, 255);

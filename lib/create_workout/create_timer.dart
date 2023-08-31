@@ -31,7 +31,7 @@ class ChooseIntervals extends StatefulWidget {
 class _ChooseIntervalsState extends State<ChooseIntervals> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
-  bool changed = false;
+  bool _changed = false;
 
   void pushTimings(workout) {
     setState(() {
@@ -61,10 +61,9 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (!changed && workoutArgument.numExercises > 0) {
+    if (!_changed && workoutArgument.numExercises > 0) {
       _currentIntValue = workoutArgument.numExercises;
     }
 
@@ -112,7 +111,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
               haptics: true,
               onChanged: (value) => setState(() {
                 _currentIntValue = value;
-                changed = true;
+                _changed = true;
               }),
             ),
           ),
@@ -123,8 +122,8 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
                 IconButton(
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
-                    final newValue = _currentIntValue - 1;
-                    _currentIntValue = newValue.clamp(1, 50);
+                    final newValue0 = _currentIntValue - 1;
+                    _currentIntValue = newValue0.clamp(1, 50);
                   }),
                 ),
                 Text('Current int value: $_currentIntValue'),

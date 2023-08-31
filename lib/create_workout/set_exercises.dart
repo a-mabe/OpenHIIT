@@ -29,9 +29,8 @@ class SetExercises extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _SetExercisesState extends State<SetExercises> {
-  // final bool _validate = false;
-  List<TextEditingController> controllers = [];
-  Workout workout = Workout.empty();
+  List<TextEditingController> _controllers = [];
+  Workout _workout = Workout.empty();
 
   void pushTimings() {
     setState(() {
@@ -40,7 +39,7 @@ class _SetExercisesState extends State<SetExercises> {
         MaterialPageRoute(
           builder: (context) => const Timings(),
           settings: RouteSettings(
-            arguments: workout,
+            arguments: _workout,
           ),
         ),
       );
@@ -52,38 +51,31 @@ class _SetExercisesState extends State<SetExercises> {
     if (form.validate()) {
       form.save();
       workoutArgument.exercises = jsonEncode(exercises);
-      workout = workoutArgument;
+      _workout = workoutArgument;
       pushTimings();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
-
-    List<dynamic> exercisesArgument = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
-
-    // final List<GlobalKey<FormState>> formKeys = [];
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
+    List<dynamic> exercisesArgument =
+        workoutArgument.exercises != "" ? jsonDecode(workoutArgument.exercises) : [];
     List<bool> validators = [];
     List<String> exercises = [];
-
     final formKey = GlobalKey<FormState>();
 
     for (var i = 0; i < workoutArgument.numExercises; i++) {
       if (workoutArgument.exercises == "") {
-        controllers.add(TextEditingController());
+        _controllers.add(TextEditingController());
       } else {
-        controllers.add(TextEditingController(text: exercisesArgument[i]));
+        _controllers.add(TextEditingController(text: exercisesArgument[i]));
       }
       validators.add(false);
     }
 
     List<Widget> createChildren() {
-      return List<Widget>.generate(workoutArgument.numExercises + 1,
-          (int index) {
+      return List<Widget>.generate(workoutArgument.numExercises + 1, (int index) {
         if (index == workoutArgument.numExercises) {
           // return the submit button
           return Padding(
@@ -107,13 +99,12 @@ class _SetExercisesState extends State<SetExercises> {
                 }
                 return null;
               },
-              controller: controllers[index],
+              controller: _controllers[index],
               decoration: InputDecoration(
                 labelText: 'Exercise #${index + 1}',
                 errorText: validators[index] ? 'Value Can\'t Be Empty' : null,
               ),
-              onSaved: (val) => setState(() =>
-                  exercises.add(val!)), // workoutArgument.exercises.add(val!)),
+              onSaved: (val) => setState(() => exercises.add(val!)),
             ),
           );
         }
@@ -126,7 +117,9 @@ class _SetExercisesState extends State<SetExercises> {
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Column(children: createChildren()),
+            child: Column(
+              children: createChildren(),
+            ),
           ),
         ],
       ),
