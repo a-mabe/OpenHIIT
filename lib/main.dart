@@ -53,22 +53,22 @@ class _MyHomePageState extends State<MyHomePage> {
     // await session.configure(const AudioSessionConfiguration.music());
 
     final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration(
-      avAudioSessionCategory: AVAudioSessionCategory.playback,
-      avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.mixWithOthers,
-      avAudioSessionMode: AVAudioSessionMode.defaultMode,
-      avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
-      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-      androidAudioAttributes: AndroidAudioAttributes(
-        contentType: AndroidAudioContentType.speech,
-        flags: AndroidAudioFlags.none,
-        usage: AndroidAudioUsage.voiceCommunication,
+    await session.configure(
+      const AudioSessionConfiguration(
+        avAudioSessionCategory: AVAudioSessionCategory.playback,
+        avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.mixWithOthers,
+        avAudioSessionMode: AVAudioSessionMode.defaultMode,
+        avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
+        avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+        androidAudioAttributes: AndroidAudioAttributes(
+          contentType: AndroidAudioContentType.speech,
+          flags: AndroidAudioFlags.none,
+          usage: AndroidAudioUsage.voiceCommunication,
+        ),
+        androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+        androidWillPauseWhenDucked: true,
       ),
-      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-      androidWillPauseWhenDucked: true,
-    ));
+    );
   }
 
   int calculateWorkoutTime(Workout workout) {
@@ -198,25 +198,26 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
       // ---
 
       body: SafeArea(
-          child: FutureBuilder<List<Workout>>(
-        future: workouts,
-        builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
-          /// When [workouts] has successfully loaded.
-          if (snapshot.hasData) {
-            return workoutListView(snapshot);
-          }
+        child: FutureBuilder<List<Workout>>(
+          future: workouts,
+          builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
+            /// When [workouts] has successfully loaded.
+            if (snapshot.hasData) {
+              return workoutListView(snapshot);
+            }
 
-          /// When there was an error loading [workouts].
-          else if (snapshot.hasError) {
-            return workoutFetchError(snapshot);
-          }
+            /// When there was an error loading [workouts].
+            else if (snapshot.hasError) {
+              return workoutFetchError(snapshot);
+            }
 
-          /// While still waiting to load [workouts].
-          else {
-            return workoutLoading();
-          }
-        },
-      )),
+            /// While still waiting to load [workouts].
+            else {
+              return workoutLoading();
+            }
+          },
+        ),
+      ),
     );
   }
 }

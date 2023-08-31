@@ -6,7 +6,7 @@ import '../main.dart';
 import '../workout_data_type/workout_type.dart';
 import '../database/database_manager.dart';
 
-const List<String> list = <String>[
+const List<String> soundsList = <String>[
   'short-whistle',
   'long-whistle',
   'short-rest-beep',
@@ -21,13 +21,13 @@ const List<String> list = <String>[
   'ding',
   'ding-sequence',
   'thunk',
-  'none'
+  'none',
 ];
 
 const List<String> countdownSounds = <String>[
   'countdown-beep',
   'short-rest-beep',
-  'none'
+  'none',
 ];
 
 class Sounds extends StatelessWidget {
@@ -56,49 +56,43 @@ class SetSounds extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _SetSoundsState extends State<SetSounds> {
-  final player = AudioPlayer();
+  final _player = AudioPlayer();
 
-  String workSound = "short-whistle";
-  String restSound = "short-rest-beep";
-  String halfwaySound = "short-halfway-beep";
-  String completeSound = "long-bell";
-  String countdownSound = "countdown-beep";
+  String _workSound = "short-whistle";
+  String _restSound = "short-rest-beep";
+  String _halfwaySound = "short-halfway-beep";
+  String _completeSound = "long-bell";
+  String _countdownSound = "countdown-beep";
 
-  bool workSoundChanged = false;
-  bool restSoundChanged = false;
-  bool halfwaySoundChanged = false;
-  bool completeSoundChanged = false;
-  bool countdownSoundChanged = false;
+  bool _workSoundChanged = false;
+  bool _restSoundChanged = false;
+  bool _halfwaySoundChanged = false;
+  bool _completeSoundChanged = false;
+  bool _countdownSoundChanged = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MyHomePage()),
-        (route) => false);
+        context, MaterialPageRoute(builder: (_) => const MyHomePage()), (route) => false);
   }
 
   void submitWorkout(Workout workoutArgument) async {
-    workoutArgument.workSound = workSound;
-    workoutArgument.restSound = restSound;
-    workoutArgument.halfwaySound = halfwaySound;
-    workoutArgument.completeSound = completeSound;
-    workoutArgument.countdownSound = countdownSound;
+    workoutArgument.workSound = _workSound;
+    workoutArgument.restSound = _restSound;
+    workoutArgument.halfwaySound = _halfwaySound;
+    workoutArgument.completeSound = _completeSound;
+    workoutArgument.countdownSound = _countdownSound;
 
     if (workoutArgument.id == "") {
       // Set the workout ID
       workoutArgument.id = const Uuid().v1();
 
       Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .insertList(workoutArgument, database)
-          .then((value) {
+      await DatabaseManager().insertList(workoutArgument, database).then((value) {
         pushHome();
       });
     } else {
       Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .updateList(workoutArgument, database)
-          .then((value) {
+      await DatabaseManager().updateList(workoutArgument, database).then((value) {
         pushHome();
       });
     }
@@ -106,24 +100,23 @@ class _SetSoundsState extends State<SetSounds> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout _workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (workoutArgument.workSound != "") {
-      if (!workSoundChanged) {
-        workSound = workoutArgument.workSound;
+    if (_workoutArgument.workSound != "") {
+      if (!_workSoundChanged) {
+        _workSound = _workoutArgument.workSound;
       }
-      if (!restSoundChanged) {
-        restSound = workoutArgument.restSound;
+      if (!_restSoundChanged) {
+        _restSound = _workoutArgument.restSound;
       }
-      if (!halfwaySoundChanged) {
-        halfwaySound = workoutArgument.halfwaySound;
+      if (!_halfwaySoundChanged) {
+        _halfwaySound = _workoutArgument.halfwaySound;
       }
-      if (!completeSoundChanged) {
-        completeSound = workoutArgument.completeSound;
+      if (!_completeSoundChanged) {
+        _completeSound = _workoutArgument.completeSound;
       }
-      if (!countdownSoundChanged) {
-        countdownSound = workoutArgument.countdownSound;
+      if (!_countdownSoundChanged) {
+        _countdownSound = _workoutArgument.countdownSound;
       }
     }
 
@@ -143,7 +136,7 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: workSound,
+                  value: _workSound,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   underline: Container(
@@ -152,14 +145,14 @@ class _SetSoundsState extends State<SetSounds> {
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
                     if (value != 'none') {
-                      await player.play(AssetSource('audio/$value.mp3'));
+                      await _player.play(AssetSource('audio/$value.mp3'));
                     }
                     setState(() {
-                      workSound = value!;
-                      workSoundChanged = true;
+                      _workSound = value!;
+                      _workSoundChanged = true;
                     });
                   },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
+                  items: soundsList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -183,7 +176,7 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: restSound,
+                  value: _restSound,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   underline: Container(
@@ -192,14 +185,14 @@ class _SetSoundsState extends State<SetSounds> {
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
                     if (value != 'none') {
-                      await player.play(AssetSource('audio/$value.mp3'));
+                      await _player.play(AssetSource('audio/$value.mp3'));
                     }
                     setState(() {
-                      restSound = value!;
-                      restSoundChanged = true;
+                      _restSound = value!;
+                      _restSoundChanged = true;
                     });
                   },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
+                  items: soundsList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -223,7 +216,7 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: halfwaySound,
+                  value: _halfwaySound,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   underline: Container(
@@ -232,14 +225,14 @@ class _SetSoundsState extends State<SetSounds> {
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
                     if (value != 'none') {
-                      await player.play(AssetSource('audio/$value.mp3'));
+                      await _player.play(AssetSource('audio/$value.mp3'));
                     }
                     setState(() {
-                      halfwaySound = value!;
-                      halfwaySoundChanged = true;
+                      _halfwaySound = value!;
+                      _halfwaySoundChanged = true;
                     });
                   },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
+                  items: soundsList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -263,7 +256,7 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: completeSound,
+                  value: _completeSound,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   underline: Container(
@@ -272,14 +265,14 @@ class _SetSoundsState extends State<SetSounds> {
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
                     if (value != 'none') {
-                      await player.play(AssetSource('audio/$value.mp3'));
+                      await _player.play(AssetSource('audio/$value.mp3'));
                     }
                     setState(() {
-                      completeSound = value!;
-                      completeSoundChanged = true;
+                      _completeSound = value!;
+                      _completeSoundChanged = true;
                     });
                   },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
+                  items: soundsList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -303,7 +296,7 @@ class _SetSoundsState extends State<SetSounds> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: countdownSound,
+                  value: _countdownSound,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   underline: Container(
@@ -312,15 +305,14 @@ class _SetSoundsState extends State<SetSounds> {
                   onChanged: (String? value) async {
                     // This is called when the user selects an item.
                     if (value != 'none') {
-                      await player.play(AssetSource('audio/$value.mp3'));
+                      await _player.play(AssetSource('audio/$value.mp3'));
                     }
                     setState(() {
-                      countdownSound = value!;
-                      countdownSoundChanged = true;
+                      _countdownSound = value!;
+                      _countdownSoundChanged = true;
                     });
                   },
-                  items: countdownSounds
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items: countdownSounds.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -336,7 +328,7 @@ class _SetSoundsState extends State<SetSounds> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
               onPressed: () async {
-                submitWorkout(workoutArgument);
+                submitWorkout(_workoutArgument);
               },
               child: const Text('Submit'),
             ),

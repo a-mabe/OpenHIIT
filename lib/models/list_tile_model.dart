@@ -1,9 +1,10 @@
 class ListTileModel<E> {
-  ListTileModel(
-      {required this.action,
-      required this.interval,
-      required this.total,
-      required this.seconds});
+  ListTileModel({
+    required this.action,
+    required this.interval,
+    required this.total,
+    required this.seconds,
+  });
 
   String action;
   int interval;

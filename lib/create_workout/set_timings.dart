@@ -29,28 +29,25 @@ class SetTimings extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _SetTimingsState extends State<SetTimings> {
-  int exerciseTime = 20;
-  int restTime = 10;
-  int halfTime = 0;
+  int _exerciseTime = 20;
+  int _restTime = 10;
+  int _halfTime = 0;
 
-  bool exerciseChanged = false;
-  bool restChanged = false;
-  bool halfChanged = false;
-  // bool halfwayMark = false;
+  bool _exerciseChanged = false;
+  bool _restChanged = false;
+  bool _halfChanged = false;
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MyHomePage()),
-        (route) => false);
+        context, MaterialPageRoute(builder: (_) => const MyHomePage()), (route) => false);
   }
 
   void submitWorkout(workoutArgument) async {
-    workoutArgument.exerciseTime = exerciseTime;
-    workoutArgument.restTime = restTime;
-    workoutArgument.halfTime = halfTime;
+    workoutArgument.exerciseTime = _exerciseTime;
+    workoutArgument.restTime = _restTime;
+    workoutArgument.halfTime = _halfTime;
 
-    // if (exerciseTime > 6) {
+    // if (_exerciseTime > 6) {
     //   workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
     // } else {
     //   workoutArgument.halfwayMark = 0;
@@ -71,18 +68,17 @@ class _SetTimingsState extends State<SetTimings> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
 
     if (workoutArgument.exerciseTime > 0) {
-      if (!exerciseChanged) {
-        exerciseTime = workoutArgument.exerciseTime;
+      if (!_exerciseChanged) {
+        _exerciseTime = workoutArgument.exerciseTime;
       }
-      if (!restChanged) {
-        restTime = workoutArgument.restTime;
+      if (!_restChanged) {
+        _restTime = workoutArgument.restTime;
       }
-      if (!halfChanged) {
-        halfTime = workoutArgument.halfTime;
+      if (!_halfChanged) {
+        _halfTime = workoutArgument.halfTime;
       }
     }
 
@@ -100,19 +96,19 @@ class _SetTimingsState extends State<SetTimings> {
                   key: const Key('work-decrement'),
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
-                    final newValue = exerciseTime - 1;
-                    exerciseTime = newValue.clamp(1, 120);
-                    exerciseChanged = true;
+                    final newValue = _exerciseTime - 1;
+                    _exerciseTime = newValue.clamp(1, 120);
+                    _exerciseChanged = true;
                   }),
                 ),
-                Text('Working time: $exerciseTime seconds'),
+                Text('Working time: $_exerciseTime seconds'),
                 IconButton(
                   key: const Key('work-increment'),
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
-                    final newValue = exerciseTime + 1;
-                    exerciseTime = newValue.clamp(1, 120);
-                    exerciseChanged = true;
+                    final newValue = _exerciseTime + 1;
+                    _exerciseTime = newValue.clamp(1, 120);
+                    _exerciseChanged = true;
                   }),
                 ),
               ],
@@ -130,19 +126,19 @@ class _SetTimingsState extends State<SetTimings> {
                   key: const Key('rest-decrement'),
                   icon: const Icon(Icons.remove),
                   onPressed: () => setState(() {
-                    final newValue = restTime - 1;
-                    restTime = newValue.clamp(1, 120);
-                    restChanged = true;
+                    final newValue = _restTime - 1;
+                    _restTime = newValue.clamp(1, 120);
+                    _restChanged = true;
                   }),
                 ),
-                Text('Rest time: $restTime seconds'),
+                Text('Rest time: $_restTime seconds'),
                 IconButton(
                   key: const Key('rest-increment'),
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
-                    final newValue = restTime + 1;
-                    restTime = newValue.clamp(1, 120);
-                    restChanged = true;
+                    final newValue = _restTime + 1;
+                    _restTime = newValue.clamp(1, 120);
+                    _restChanged = true;
                   }),
                 ),
               ],
@@ -150,7 +146,7 @@ class _SetTimingsState extends State<SetTimings> {
           ),
         ),
         // Visibility(
-        //   visible: exerciseTime > 6 ? true : false,
+        //   visible: _exerciseTime > 6 ? true : false,
         //   child: Center(
         //       child: CheckboxListTile(
         //     title: const Text("Play sound at half time:"),

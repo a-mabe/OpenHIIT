@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/list_tile_model.dart';
 
@@ -48,7 +47,7 @@ class CardItem extends StatelessWidget {
             child: Text(
               "${item.seconds}s",
             ),
-          )
+          ),
         ],
       ),
     );
