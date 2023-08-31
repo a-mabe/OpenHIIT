@@ -41,13 +41,18 @@ dependencies:
   sqflite: ^2.2.8+2
   uuid: ^3.0.7
   timer_count_down: ^2.2.2
-  audioplayers: ^4.1.0
+  audioplayers: ^5.1.0
   confetti: ^0.7.0
   sqflite_common_ffi: ^2.2.5
   wakelock: ^0.6.2
   flutter_launcher_icons: ^0.13.1
   coverage: ^1.6.3
   audio_session: ^0.1.16
+
+  background_timer:
+    git:
+      url: https://github.com/a-mabe/background_timer.git
+      ref: background-process-intervals # branch name
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -81,10 +86,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-  count_down_sound:
-    git:
-      url: https://github.com/a-mabe/simple_count_down.git
-      ref: master # branch name
+  # background_timer:
+  #   git:
+  #     url: https://github.com/a-mabe/background_timer.git
+  #     ref: background-process # branch name
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
