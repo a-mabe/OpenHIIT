@@ -141,6 +141,32 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
   }
   // ---
 
+  /// Generates the empty message for no [workouts] in DB.
+  Widget workoutEmpty() {
+    List<Widget> children;
+    children = <Widget>[
+      const Text(
+        'No saved timers',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 5),
+      const Text(
+        'Hit the + at the bottom to get started!',
+      ),
+    ];
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
+    );
+  }
+  // ---
+
   /// Generates the error message for an issue loading [workouts].
   Widget workoutFetchError(snapshot) {
     List<Widget> children;
@@ -155,9 +181,12 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
         child: Text('Error: ${snapshot.error}'),
       ),
     ];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
     );
   }
   // ---
@@ -176,9 +205,12 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
         child: Text('Awaiting result...'),
       ),
     ];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
     );
   }
   // ---
@@ -203,7 +235,11 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
           builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
             /// When [workouts] has successfully loaded.
             if (snapshot.hasData) {
-              return workoutListView(snapshot);
+              if (snapshot.data!.isEmpty) {
+                return workoutEmpty();
+              } else {
+                return workoutListView(snapshot);
+              }
             }
 
             /// When there was an error loading [workouts].
