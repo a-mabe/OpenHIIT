@@ -18,10 +18,8 @@ class StartWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: CountDownTimer(),
-        ),
+      body: Center(
+        child: CountDownTimer(),
       ),
     );
   }
@@ -384,145 +382,148 @@ class CountDownTimerState extends State<CountDownTimer> with TickerProviderState
     }
 
     return Scaffold(
-      backgroundColor: Colors.white10,
-      body: SizedBox.expand(
-        child: Container(
-          color: backgroundColor(),
-          child: Center(
-            child: Stack(
-              children: [
-                timerScreen(
-                    "start", exercises, workoutArgument.workSound, 10, workoutArgument),
-                timerScreen("workout", exercises, workoutArgument.restSound,
-                    workoutArgument.exerciseTime, workoutArgument),
-                timerScreen("rest", exercises, workoutArgument.workSound,
-                    workoutArgument.restTime, workoutArgument),
-                Visibility(
-                  visible: _currentInterval == "done" ? true : false,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: ConfettiWidget(
-                          confettiController: _controllerCenter,
-                          blastDirectionality: BlastDirectionality
-                              .explosive, // don't specify a direction, blast randomly
-                          shouldLoop:
-                              true, // start again as soon as the animation is finished
-                          colors: const [
-                            Colors.green,
-                            Colors.blue,
-                            Colors.pink,
-                            Colors.orange,
-                            Colors.purple
-                          ], // manually specify the colors to be used
-                          createParticlePath: drawStar, // define a custom shape/path.
+      backgroundColor: backgroundColor(),
+      body: SafeArea(
+        bottom: false,
+        child: SizedBox.expand(
+          child: Container(
+            color: backgroundColor(),
+            child: Center(
+              child: Stack(
+                children: [
+                  timerScreen(
+                      "start", exercises, workoutArgument.workSound, 10, workoutArgument),
+                  timerScreen("workout", exercises, workoutArgument.restSound,
+                      workoutArgument.exerciseTime, workoutArgument),
+                  timerScreen("rest", exercises, workoutArgument.workSound,
+                      workoutArgument.restTime, workoutArgument),
+                  Visibility(
+                    visible: _currentInterval == "done" ? true : false,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ConfettiWidget(
+                            confettiController: _controllerCenter,
+                            blastDirectionality: BlastDirectionality
+                                .explosive, // don't specify a direction, blast randomly
+                            shouldLoop:
+                                true, // start again as soon as the animation is finished
+                            colors: const [
+                              Colors.green,
+                              Colors.blue,
+                              Colors.pink,
+                              Colors.orange,
+                              Colors.purple
+                            ], // manually specify the colors to be used
+                            createParticlePath: drawStar, // define a custom shape/path.
+                          ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: AnimatedOpacity(
-                          opacity: _doneVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 800),
-                          child: SizedBox(
-                            width: 300,
-                            height: 300,
-                            // color: Colors.green,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Nice job!",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 45,
-                                      fontWeight: FontWeight.bold,
+                        Align(
+                          alignment: Alignment.center,
+                          child: AnimatedOpacity(
+                            opacity: _doneVisible ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 800),
+                            child: SizedBox(
+                              width: 300,
+                              height: 300,
+                              // color: Colors.green,
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "Nice job!",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 45,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Row(
-                                      children: [
-                                        TextButton.icon(
-                                          style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                133,
-                                                255,
-                                                255,
-                                                255,
+                                    const Spacer(),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Row(
+                                        children: [
+                                          TextButton.icon(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(
+                                                const Color.fromARGB(
+                                                  133,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          label: const Text(
-                                            "Back",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 22,
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_back,
-                                            color: Colors.white,
-                                            size: 38,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        TextButton.icon(
-                                          style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                133,
-                                                255,
-                                                255,
-                                                255,
-                                              ),
-                                            ),
-                                          ),
-                                          label: const Text(
-                                            "Restart",
-                                            style: TextStyle(
+                                            label: const Text(
+                                              "Back",
+                                              style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 22),
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            icon: const Icon(
+                                              Icons.arrow_back,
+                                              color: Colors.white,
+                                              size: 38,
+                                            ),
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _currentInterval = "start";
-                                              _start = true;
-                                              _intervals = 0;
-                                              _pausePlayIcon = Icons.pause;
-                                              _doneVisible = false;
-                                              _workoutController.restart();
-                                              Wakelock.enable();
-                                            });
-                                          },
-                                          icon: const Icon(
-                                            Icons.restart_alt,
-                                            color: Colors.white,
-                                            size: 38,
-                                          ),
-                                        )
-                                      ],
+                                          const Spacer(),
+                                          TextButton.icon(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(
+                                                const Color.fromARGB(
+                                                  133,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
+                                              ),
+                                            ),
+                                            label: const Text(
+                                              "Restart",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 22),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _currentInterval = "start";
+                                                _start = true;
+                                                _intervals = 0;
+                                                _pausePlayIcon = Icons.pause;
+                                                _doneVisible = false;
+                                                _workoutController.restart();
+                                                Wakelock.enable();
+                                              });
+                                            },
+                                            icon: const Icon(
+                                              Icons.restart_alt,
+                                              color: Colors.white,
+                                              size: 38,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
