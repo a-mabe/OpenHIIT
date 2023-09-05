@@ -144,6 +144,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(workoutArgument.colorInt),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.delete),

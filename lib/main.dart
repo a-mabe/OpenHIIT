@@ -102,22 +102,23 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.all(8),
       itemCount: snapshot.data!.length,
       itemBuilder: (BuildContext context, int index) {
+        Workout workout = snapshot.data![index] as Workout;
         return ListTile(
           // Title of the workout.
-          title: Text(snapshot.data![index].title),
+          title: Text(workout.title),
           titleTextStyle: const TextStyle(
             fontSize: 20,
           ),
           // Workout metadata.
           subtitle: Text(
-              '''${snapshot.data![index].exercises != "" ? 'Exercises: ${jsonDecode(snapshot.data![index].exercises).length}' : 'Intervals: ${snapshot.data![index].numExercises}'}
-Exercise time: ${snapshot.data![index].exerciseTime} seconds
-Rest time: ${snapshot.data![index].restTime} seconds
-Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
+              '''${workout.exercises != "" ? 'Exercises: ${jsonDecode(workout.exercises).length}' : 'Intervals: ${workout.numExercises}'}
+Exercise time: ${workout.exerciseTime} seconds
+Rest time: ${workout.restTime} seconds
+Total: ${calculateWorkoutTime(workout)} minutes'''),
           subtitleTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
-          tileColor: Colors.blue[700],
+          tileColor: Color(workout.colorInt),
           minVerticalPadding: 15.0,
           onTap: () {
             Navigator.push(
@@ -125,7 +126,7 @@ Total: ${calculateWorkoutTime(snapshot.data![index])} minutes'''),
               MaterialPageRoute(
                 builder: (context) => const ViewWorkout(),
                 settings: RouteSettings(
-                  arguments: snapshot.data![index],
+                  arguments: workout,
                 ),
               ),
             ).then((value) {

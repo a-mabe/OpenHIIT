@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
@@ -32,6 +33,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
   int _currentIntValue = 10;
   final _formKey = GlobalKey<FormState>();
   bool _changed = false;
+  Color _timerColor = Colors.blue;
 
   void pushTimings(workout) {
     setState(() {
@@ -47,13 +49,50 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
     });
   }
 
-  void submitForm(workout) {
+  void pickColor() {
+    Color selectedColor = _timerColor;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: MaterialColorPicker(
+            onMainColorChange: (value) {
+              selectedColor = value as Color;
+            },
+            allowShades: false,
+            selectedColor: selectedColor,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _timerColor = selectedColor;
+                  _changed = true;
+                });
+                Navigator.pop(context);
+              },
+              child: Text('Select'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void submitForm(Workout workout) {
     // Validate returns true if the form is valid, or false otherwise.
     final form = _formKey.currentState!;
     if (form.validate()) {
       form.save();
       workout.numExercises = _currentIntValue;
       workout.exercises = "";
+      workout.colorInt = _timerColor.value;
 
       pushTimings(workout);
     }
@@ -65,6 +104,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
 
     if (!_changed && workoutArgument.numExercises > 0) {
       _currentIntValue = workoutArgument.numExercises;
+      _timerColor = Color(workoutArgument.colorInt);
     }
 
     return Form(
@@ -135,6 +175,23 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
                   }),
                 ),
               ],
+            ),
+          ),
+          // Color picker
+          const Padding(
+            padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
+            child: Text(
+              "Set timer color:",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: GestureDetector(
+              onTap: pickColor,
+              child: CircleColor(
+                color: _timerColor,
+                circleSize: MediaQuery.of(context).size.width * 0.15,
+              ),
             ),
           ),
           Center(
