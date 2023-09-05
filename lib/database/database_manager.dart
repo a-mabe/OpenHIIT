@@ -63,8 +63,39 @@ class DatabaseManager {
     // Clear database for testing
     // await deleteDatabase(path);
     if (Platform.isWindows || Platform.isLinux) {
-      return await openDatabase(inMemoryDatabasePath, version: 1,
-          onCreate: (db, version) async {
+      return await openDatabase(
+        inMemoryDatabasePath,
+        version: 2,
+        onCreate: (db, version) async {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
+            title TEXT,
+            numExercises INTEGER,
+            exercises TEXT,
+            exerciseTime INTEGER,
+            restTime INTEGER,
+            halfTime INTEGER,
+            halfwayMark INTEGER,
+            workSound TEXT,
+            restSound TEXT,
+            halfwaySound TEXT,
+            completeSound TEXT,
+            countdownSound TEXT,
+            colorInt INTEGER
+            )
+            ''');
+        },
+        onUpgrade: (db, oldVersion, newVersion) async {
+          if (oldVersion < newVersion) {
+            await db.execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+          }
+        },
+      );
+    }
+    return await openDatabase(
+      path,
+      version: 3,
+      onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
@@ -78,30 +109,17 @@ class DatabaseManager {
             restSound TEXT,
             halfwaySound TEXT,
             completeSound TEXT,
-            countdownSound TEXT
+            countdownSound TEXT,
+            colorInt INTEGER
             )
             ''');
-      });
-    }
-    return await openDatabase(path, version: 2,
-        onCreate: (Database db, int version) async {
-      await db.execute('''
-            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            title TEXT,
-            numExercises INTEGER,
-            exercises TEXT,
-            exerciseTime INTEGER,
-            restTime INTEGER,
-            halfTime INTEGER,
-            halfwayMark INTEGER,
-            workSound TEXT,
-            restSound TEXT,
-            halfwaySound TEXT,
-            completeSound TEXT,
-            countdownSound TEXT
-            )
-            ''');
-    });
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < newVersion) {
+          await db.execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+        }
+      },
+    );
   }
 
   /// Inserts the given list into the given database.
@@ -164,19 +182,22 @@ class DatabaseManager {
     ///
     return List.generate(maps.length, (i) {
       return Workout(
-          maps[i]['id'],
-          maps[i]['title'],
-          maps[i]['numExercises'],
-          maps[i]['exercises'],
-          maps[i]['exerciseTime'],
-          maps[i]['restTime'],
-          maps[i]['halfTime'],
-          maps[i]['halfwayMark'],
-          maps[i]['workSound'],
-          maps[i]['restSound'],
-          maps[i]['halfwaySound'],
-          maps[i]['completeSound'],
-          maps[i]['countdownSound']);
+        maps[i]['id'],
+        maps[i]['title'],
+        maps[i]['numExercises'],
+        maps[i]['exercises'],
+        maps[i]['exerciseTime'],
+        maps[i]['restTime'],
+        maps[i]['halfTime'],
+        maps[i]['halfwayMark'],
+        maps[i]['workSound'],
+        maps[i]['restSound'],
+        maps[i]['halfwaySound'],
+        maps[i]['completeSound'],
+        maps[i]['countdownSound'],
+        maps[i]['colorInt'] ??
+            4280391411, // Default to blue if no previous color selected
+      );
     });
   }
 
