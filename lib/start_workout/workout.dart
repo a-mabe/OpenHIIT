@@ -54,7 +54,6 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   void initState() {
-    super.initState();
     intervalInfo = ListModel<ListTileModel>(
       listKey: _listKey,
       initialItems: <ListTileModel>[],
@@ -64,6 +63,7 @@ class CountDownTimerState extends State<CountDownTimer>
         ConfettiController(duration: const Duration(seconds: 10));
     Wakelock.enable();
     init();
+    super.initState();
   }
 
   void init() async {
