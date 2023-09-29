@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:audio_session/audio_session.dart';
+// import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -45,31 +45,31 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   initState() {
     super.initState();
-    init();
+    // init();
   }
 
-  void init() async {
-    // final session = await AudioSession.instance;
-    // await session.configure(const AudioSessionConfiguration.music());
+  // void init() async {
+  //   // final session = await AudioSession.instance;
+  //   // await session.configure(const AudioSessionConfiguration.music());
 
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration(
-      avAudioSessionCategory: AVAudioSessionCategory.playback,
-      avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.mixWithOthers,
-      avAudioSessionMode: AVAudioSessionMode.defaultMode,
-      avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
-      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-      androidAudioAttributes: AndroidAudioAttributes(
-        contentType: AndroidAudioContentType.speech,
-        flags: AndroidAudioFlags.none,
-        usage: AndroidAudioUsage.voiceCommunication,
-      ),
-      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-      androidWillPauseWhenDucked: true,
-    ));
-  }
+  //   final session = await AudioSession.instance;
+  //   await session.configure(const AudioSessionConfiguration(
+  //     avAudioSessionCategory: AVAudioSessionCategory.ambient,
+  //     avAudioSessionCategoryOptions:
+  //         AVAudioSessionCategoryOptions.mixWithOthers,
+  //     avAudioSessionMode: AVAudioSessionMode.defaultMode,
+  //     avAudioSessionRouteSharingPolicy:
+  //         AVAudioSessionRouteSharingPolicy.defaultPolicy,
+  //     avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+  //     androidAudioAttributes: AndroidAudioAttributes(
+  //       contentType: AndroidAudioContentType.music,
+  //       flags: AndroidAudioFlags.audibilityEnforced,
+  //       usage: AndroidAudioUsage.media,
+  //     ),
+  //     androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+  //     androidWillPauseWhenDucked: true,
+  //   ));
+  // }
 
   int calculateWorkoutTime(Workout workout) {
     return (((workout.exerciseTime * workout.numExercises) +

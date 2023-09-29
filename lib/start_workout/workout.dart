@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
@@ -56,6 +55,7 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   void initState() {
+    super.initState();
     intervalInfo = ListModel<ListTileModel>(
       listKey: _listKey,
       initialItems: <ListTileModel>[],
@@ -65,14 +65,40 @@ class CountDownTimerState extends State<CountDownTimer>
         ConfettiController(duration: const Duration(seconds: 10));
     Wakelock.enable();
     init();
-    super.initState();
   }
 
   void init() async {
     // final session = await AudioSession.instance;
     // await session.configure(const AudioSessionConfiguration.music());
-    await player.play(AssetSource('audio/blank.mp3'));
+
+    // final session = await AudioSession.instance;
+    // await session.configure(const AudioSessionConfiguration(
+    //   // avAudioSessionCategory: AVAudioSessionCategory.ambient,
+    //   avAudioSessionCategoryOptions:
+    //       AVAudioSessionCategoryOptions.mixWithOthers,
+    //   avAudioSessionMode: AVAudioSessionMode.defaultMode,
+    //   avAudioSessionRouteSharingPolicy:
+    //       AVAudioSessionRouteSharingPolicy.defaultPolicy,
+    //   avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+    //   androidAudioAttributes: AndroidAudioAttributes(
+    //     contentType: AndroidAudioContentType.music,
+    //     flags: AndroidAudioFlags.audibilityEnforced,
+    //     usage: AndroidAudioUsage.media,
+    //   ),
+    //   androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+    //   androidWillPauseWhenDucked: true,
+    // ));
+
+    // AssetSource('audio/blank.mp3')
+    // await player.setUrl('asset:audio/blank.mp3');
+    // await player.play();
   }
+
+  // void init() async {
+  //   // final session = await AudioSession.instance;
+  //   // await session.configure(const AudioSessionConfiguration.music());
+  //   // await player.play(AssetSource('audio/blank.mp3'));
+  // }
 
   @override
   void dispose() {
@@ -188,9 +214,12 @@ class CountDownTimerState extends State<CountDownTimer>
         : [];
 
     final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
-    if (shouldReset) {
-      shouldReset = false;
-      setState(() {
+
+    print(shouldReset);
+
+    setState(() {
+      if (shouldReset) {
+        shouldReset = false;
         intervalInfo = ListModel<ListTileModel>(
           listKey: listKey,
           initialItems: listItems(exercises, workoutArgument),
@@ -201,10 +230,12 @@ class CountDownTimerState extends State<CountDownTimer>
           _workoutController.restart();
           // restart = false;
         }
-      });
-    }
+      }
+    });
 
-    String currentStatus = "start";
+    print(intervalInfo.length);
+
+    // String currentStatus = "start";
 
     Widget complete() {
       return Visibility(
@@ -294,7 +325,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                           doneVisible = false;
                                           restart = true;
                                           done = false;
-                                          // _workoutController.restart();
+                                          _workoutController.restart();
                                           Wakelock.enable();
                                         });
                                       },
@@ -328,6 +359,7 @@ class CountDownTimerState extends State<CountDownTimer>
             restSound: workoutArgument.restSound,
             endSound: workoutArgument.completeSound,
             countdownSound: workoutArgument.countdownSound,
+            halfwaySound: workoutArgument.halfwaySound,
             numberOfIntervals: workoutArgument.numExercises,
             build: (_, BackgroundTimerData timerData) {
               if (timerData.status == "complete" && restart == false) {
@@ -342,36 +374,122 @@ class CountDownTimerState extends State<CountDownTimer>
                 restart = true;
               }
 
+              // if (timerData.paused) {
+              //   pausePlayIcon = Icons.play_arrow;
+              //   Wakelock.disable();
+              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   //   setState(() {
+              //   //     pausePlayIcon = Icons.play_arrow;
+              //   //     Wakelock.disable();
+              //   //   });
+              //   // });
+              // } else {
+              //   pausePlayIcon = Icons.pause;
+              //   Wakelock.disable();
+              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   //   setState(() {
+              //   //     pausePlayIcon = Icons.pause;
+              //   //     Wakelock.disable();
+              //   //   });
+              //   // });
+              // }
+
               print(intervalInfo.length);
 
               return Container(
-                  alignment: Alignment.center,
                   color: backgroundColor(timerData.status),
-                  child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
-                            child: Text(
-                              timerScreenText(timerData.numberOfIntervals,
-                                  timerData.status, exercises, workoutArgument),
-                              style:
-                                  TextStyle(fontSize: 30, color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              timerData.currentMicroSeconds.toString(),
-                              style:
-                                  TextStyle(fontSize: 160, color: Colors.white),
-                            ),
-                          )
-                        ],
-                      )));
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon:
+                                      const Icon(size: 50.0, Icons.arrow_back),
+                                  color: Colors.white),
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () {
+                                    print(timerData.paused);
+                                    if (!timerData.paused) {
+                                      // setState(() {});
+                                      _workoutController.pause();
+                                      // pausePlayIcon = Icons.play_arrow;
+                                      // Wakelock.disable();
+                                      // setState(() {
+                                      //   pausePlayIcon = Icons.play_arrow;
+                                      //   Wakelock.disable();
+                                      // });
+                                      // WidgetsBinding.instance
+                                      //     .addPostFrameCallback((_) {
+                                      //   setState(() {
+                                      //     pausePlayIcon = Icons.play_arrow;
+                                      //     Wakelock.enable();
+                                      //   });
+                                      // });
+                                    } else {
+                                      _workoutController.resume();
+                                      // pausePlayIcon = Icons.pause;
+                                      // Wakelock.enable();
+                                      // setState(() {
+                                      //   pausePlayIcon = Icons.pause;
+                                      //   Wakelock.enable();
+                                      // });
+                                      // WidgetsBinding.instance
+                                      //     .addPostFrameCallback((_) {
+                                      //   setState(() {
+                                      //     pausePlayIcon = Icons.pause;
+                                      //     Wakelock.disable();
+                                      //   });
+                                      // });
+                                      // // setState(() {});
+                                    }
+                                  },
+                                  icon: Icon(
+                                      size: 50.0,
+                                      timerData.paused
+                                          ? Icons.play_arrow
+                                          : Icons.pause),
+                                  color: Colors.white),
+                            ],
+                          )),
+                      Container(
+                          alignment: Alignment.center,
+                          child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 20.0, 0.0, 0.0),
+                                    child: Text(
+                                      timerScreenText(
+                                          timerData.numberOfIntervals,
+                                          timerData.status,
+                                          exercises,
+                                          workoutArgument),
+                                      style: TextStyle(
+                                          fontSize: 30, color: Colors.white),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      timerData.currentMicroSeconds.toString(),
+                                      style: TextStyle(
+                                          fontSize: 160, color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              )))
+                    ],
+                  ));
             },
             onFinished: () {
               print("FINISHED");
@@ -395,41 +513,6 @@ class CountDownTimerState extends State<CountDownTimer>
               });
             },
           ),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(size: 50.0, Icons.arrow_back),
-                      color: Colors.white),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        if (pausePlayIcon == Icons.pause) {
-                          _workoutController.pause();
-                          // pausePlayIcon = Icons.play_arrow;
-                          // Wakelock.disable();
-                          setState(() {
-                            pausePlayIcon = Icons.play_arrow;
-                            Wakelock.disable();
-                          });
-                        } else {
-                          _workoutController.resume();
-                          // pausePlayIcon = Icons.pause;
-                          // Wakelock.enable();
-                          setState(() {
-                            pausePlayIcon = Icons.pause;
-                            Wakelock.enable();
-                          });
-                        }
-                      },
-                      icon: Icon(size: 50.0, pausePlayIcon),
-                      color: Colors.white),
-                ],
-              )),
           Align(
               alignment: Alignment.bottomCenter,
               child: FractionallySizedBox(
