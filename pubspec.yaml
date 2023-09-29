@@ -53,6 +53,7 @@ dependencies:
     git:
       url: https://github.com/a-mabe/background_timer.git
       ref: background-process-intervals # branch name
+  just_audio: ^0.9.35
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -96,9 +97,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   assets:
     - assets/audio/
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
