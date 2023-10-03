@@ -55,7 +55,7 @@ class CountDownTimerState extends State<CountDownTimer>
   @override
   void initState() {
     super.initState();
-    intervalInfo = ListModel<ListTileModel>(
+    _intervalInfo = ListModel<ListTileModel>(
       listKey: _listKey,
       initialItems: <ListTileModel>[],
       removedItemBuilder: _buildRemovedItem,
@@ -63,41 +63,7 @@ class CountDownTimerState extends State<CountDownTimer>
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
     Wakelock.enable();
-    init();
   }
-
-  void init() async {
-    // final session = await AudioSession.instance;
-    // await session.configure(const AudioSessionConfiguration.music());
-
-    // final session = await AudioSession.instance;
-    // await session.configure(const AudioSessionConfiguration(
-    //   // avAudioSessionCategory: AVAudioSessionCategory.ambient,
-    //   avAudioSessionCategoryOptions:
-    //       AVAudioSessionCategoryOptions.mixWithOthers,
-    //   avAudioSessionMode: AVAudioSessionMode.defaultMode,
-    //   avAudioSessionRouteSharingPolicy:
-    //       AVAudioSessionRouteSharingPolicy.defaultPolicy,
-    //   avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-    //   androidAudioAttributes: AndroidAudioAttributes(
-    //     contentType: AndroidAudioContentType.music,
-    //     flags: AndroidAudioFlags.audibilityEnforced,
-    //     usage: AndroidAudioUsage.media,
-    //   ),
-    //   androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-    //   androidWillPauseWhenDucked: true,
-    // ));
-
-    // AssetSource('audio/blank.mp3')
-    // await player.setUrl('asset:audio/blank.mp3');
-    // await player.play();
-  }
-
-  // void init() async {
-  //   // final session = await AudioSession.instance;
-  //   // await session.configure(const AudioSessionConfiguration.music());
-  //   // await player.play(AssetSource('audio/blank.mp3'));
-  // }
 
   @override
   void dispose() {
@@ -159,8 +125,6 @@ class CountDownTimerState extends State<CountDownTimer>
     List<ListTileModel> listItems = [];
 
     for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-      // message.write('!');
-      // intervalInfo.insert(i + 1, exercises[i]);
       if (i == 0) {
         listItems.add(
           ListTileModel(
@@ -235,22 +199,18 @@ class CountDownTimerState extends State<CountDownTimer>
     setState(() {
       if (shouldReset) {
         shouldReset = false;
-        intervalInfo = ListModel<ListTileModel>(
+        _intervalInfo = ListModel<ListTileModel>(
           listKey: listKey,
           initialItems: listItems(exercises, workoutArgument),
           removedItemBuilder: _buildRemovedItem,
         );
-        print("${intervalInfo.length}");
+        print("${_intervalInfo.length}");
         if (restart) {
           _workoutController.restart();
           // restart = false;
         }
       }
     });
-
-    print(intervalInfo.length);
-
-    // String currentStatus = "start";
 
     Widget complete() {
       return Visibility(
@@ -361,9 +321,7 @@ class CountDownTimerState extends State<CountDownTimer>
     }
 
     return SafeArea(
-      // child: Container(
-      // color: _backgroundColor,
-
+      bottom: false,
       child: Stack(
         children: [
           Countdown(
@@ -378,38 +336,11 @@ class CountDownTimerState extends State<CountDownTimer>
             numberOfIntervals: workoutArgument.numExercises,
             build: (_, BackgroundTimerData timerData) {
               if (timerData.status == "complete" && restart == false) {
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                // _controllerCenter.play();
-                // doneVisible = true;
-                // Wakelock.disable();
-                // });
                 done = true;
               } else {
                 done = false;
                 restart = true;
               }
-
-              // if (timerData.paused) {
-              //   pausePlayIcon = Icons.play_arrow;
-              //   Wakelock.disable();
-              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-              //   //   setState(() {
-              //   //     pausePlayIcon = Icons.play_arrow;
-              //   //     Wakelock.disable();
-              //   //   });
-              //   // });
-              // } else {
-              //   pausePlayIcon = Icons.pause;
-              //   Wakelock.disable();
-              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-              //   //   setState(() {
-              //   //     pausePlayIcon = Icons.pause;
-              //   //     Wakelock.disable();
-              //   //   });
-              //   // });
-              // }
-
-              print(intervalInfo.length);
 
               return Container(
                   color: backgroundColor(timerData.status),
@@ -430,39 +361,10 @@ class CountDownTimerState extends State<CountDownTimer>
                               const Spacer(),
                               IconButton(
                                   onPressed: () {
-                                    print(timerData.paused);
                                     if (!timerData.paused) {
-                                      // setState(() {});
                                       _workoutController.pause();
-                                      // pausePlayIcon = Icons.play_arrow;
-                                      // Wakelock.disable();
-                                      // setState(() {
-                                      //   pausePlayIcon = Icons.play_arrow;
-                                      //   Wakelock.disable();
-                                      // });
-                                      // WidgetsBinding.instance
-                                      //     .addPostFrameCallback((_) {
-                                      //   setState(() {
-                                      //     pausePlayIcon = Icons.play_arrow;
-                                      //     Wakelock.enable();
-                                      //   });
-                                      // });
                                     } else {
                                       _workoutController.resume();
-                                      // pausePlayIcon = Icons.pause;
-                                      // Wakelock.enable();
-                                      // setState(() {
-                                      //   pausePlayIcon = Icons.pause;
-                                      //   Wakelock.enable();
-                                      // });
-                                      // WidgetsBinding.instance
-                                      //     .addPostFrameCallback((_) {
-                                      //   setState(() {
-                                      //     pausePlayIcon = Icons.pause;
-                                      //     Wakelock.disable();
-                                      //   });
-                                      // });
-                                      // // setState(() {});
                                     }
                                   },
                                   icon: Icon(
@@ -488,7 +390,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                           timerData.status,
                                           exercises,
                                           workoutArgument),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 30, color: Colors.white),
                                     ),
                                   ),
@@ -497,7 +399,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                         0.0, 0.0, 0.0, 0.0),
                                     child: Text(
                                       timerData.currentMicroSeconds.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 160, color: Colors.white),
                                     ),
                                   )
@@ -507,23 +409,15 @@ class CountDownTimerState extends State<CountDownTimer>
                   ));
             },
             onFinished: () {
-              print("FINISHED");
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                print("---------------------------");
-                print(intervalInfo.length);
-                intervalInfo.removeAt(0);
-                print("REMOVED");
-                if (intervalInfo.length == 0) {
-                  Future.delayed(Duration(microseconds: 500000), () {
+                _intervalInfo.removeAt(0);
+                if (_intervalInfo.length == 0) {
+                  Future.delayed(const Duration(microseconds: 500000), () {
                     setState(() {
-                      // _showText = true;
                       doneVisible = true;
                       _controllerCenter.play();
                     });
                   });
-                  // setState(() {
-                  //   doneVisible = true;
-                  // });
                 }
               });
             },
@@ -535,17 +429,17 @@ class CountDownTimerState extends State<CountDownTimer>
                   heightFactor: 0.5,
                   child: Container(
                       alignment: AlignmentDirectional.bottomCenter,
-                      color: Color.fromARGB(22, 0, 0, 0),
+                      color: const Color.fromARGB(22, 0, 0, 0),
                       child: AnimatedList(
                         key: listKey,
-                        initialItemCount: intervalInfo.length,
+                        initialItemCount: _intervalInfo.length,
                         itemBuilder: (context, index, animation) {
                           return CardItemAnimated(
                             animation: animation,
-                            item: intervalInfo[index],
+                            item: _intervalInfo[index],
                             fontColor: index == 0
                                 ? Colors.white
-                                : Color.fromARGB(153, 255, 255, 255),
+                                : const Color.fromARGB(153, 255, 255, 255),
                             fontWeight: index == 0
                                 ? FontWeight.bold
                                 : FontWeight.normal,
