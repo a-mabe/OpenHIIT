@@ -145,7 +145,7 @@ class _SetTimingsState extends State<SetTimings> {
                   NumberPicker(
                     value: _restTime,
                     minValue: 1,
-                    maxValue: 50,
+                    maxValue: 120,
                     step: 1,
                     axis: Axis.horizontal,
                     haptics: true,
