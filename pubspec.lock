@@ -94,7 +94,7 @@ packages:
     description:
       path: "."
       ref: background-process-intervals
-      resolved-ref: "25e284cf7a3aa1924c80b5275a7bb7d9ef28236a"
+      resolved-ref: d5a7e90681912432443aece929c2b76b24e3557f
       url: "https://github.com/a-mabe/background_timer.git"
     source: git
     version: "0.0.1"
@@ -303,10 +303,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_local_notifications
-      sha256: "3002092e5b8ce2f86c3361422e52e6db6776c23ee21e0b2f71b892bf4259ef04"
+      sha256: "501ed9d54f1c8c0535b7991bade36f9e7e3b45a2346401f03775c1ec7a3c06ae"
       url: "https://pub.dev"
     source: hosted
-    version: "15.1.1"
+    version: "15.1.2"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
