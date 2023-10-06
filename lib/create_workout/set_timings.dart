@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_sounds.dart';
@@ -39,7 +40,9 @@ class _SetTimingsState extends State<SetTimings> {
 
   void pushHome() {
     Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (_) => const MyHomePage()), (route) => false);
+        context,
+        MaterialPageRoute(builder: (_) => const MyHomePage()),
+        (route) => false);
   }
 
   void submitWorkout(workoutArgument) async {
@@ -68,7 +71,8 @@ class _SetTimingsState extends State<SetTimings> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
 
     if (workoutArgument.exerciseTime > 0) {
       if (!_exerciseChanged) {
@@ -87,33 +91,48 @@ class _SetTimingsState extends State<SetTimings> {
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Icon(Icons.fitness_center),
-                IconButton(
-                  key: const Key('work-decrement'),
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => setState(() {
-                    final newValue = _exerciseTime - 1;
-                    _exerciseTime = newValue.clamp(1, 120);
-                    _exerciseChanged = true;
-                  }),
-                ),
-                Text('Working time: $_exerciseTime seconds'),
-                IconButton(
-                  key: const Key('work-increment'),
-                  icon: const Icon(Icons.add),
-                  onPressed: () => setState(() {
-                    final newValue = _exerciseTime + 1;
-                    _exerciseTime = newValue.clamp(1, 120);
-                    _exerciseChanged = true;
-                  }),
-                ),
-              ],
-            ),
-          ),
+                Column(children: [
+                  NumberPicker(
+                    value: _exerciseTime,
+                    minValue: 1,
+                    maxValue: 120,
+                    step: 1,
+                    axis: Axis.horizontal,
+                    haptics: true,
+                    onChanged: (value) => setState(() {
+                      _exerciseTime = value;
+                      _exerciseChanged = true;
+                    }),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        key: const Key('work-decrement'),
+                        icon: const Icon(Icons.remove),
+                        onPressed: () => setState(() {
+                          final newValue = _exerciseTime - 1;
+                          _exerciseTime = newValue.clamp(1, 120);
+                          _exerciseChanged = true;
+                        }),
+                      ),
+                      Text('Working time: $_exerciseTime seconds'),
+                      IconButton(
+                        key: const Key('work-increment'),
+                        icon: const Icon(Icons.add),
+                        onPressed: () => setState(() {
+                          final newValue = _exerciseTime + 1;
+                          _exerciseTime = newValue.clamp(1, 120);
+                          _exerciseChanged = true;
+                        }),
+                      ),
+                    ],
+                  ),
+                ])
+              ])),
         ),
         Center(
           child: Padding(
@@ -122,25 +141,41 @@ class _SetTimingsState extends State<SetTimings> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.snooze),
-                IconButton(
-                  key: const Key('rest-decrement'),
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => setState(() {
-                    final newValue = _restTime - 1;
-                    _restTime = newValue.clamp(1, 120);
-                    _restChanged = true;
-                  }),
-                ),
-                Text('Rest time: $_restTime seconds'),
-                IconButton(
-                  key: const Key('rest-increment'),
-                  icon: const Icon(Icons.add),
-                  onPressed: () => setState(() {
-                    final newValue = _restTime + 1;
-                    _restTime = newValue.clamp(1, 120);
-                    _restChanged = true;
-                  }),
-                ),
+                Column(children: [
+                  NumberPicker(
+                    value: _restTime,
+                    minValue: 1,
+                    maxValue: 120,
+                    step: 1,
+                    axis: Axis.horizontal,
+                    haptics: true,
+                    onChanged: (value) => setState(() {
+                      _restTime = value;
+                      _restChanged = true;
+                    }),
+                  ),
+                  Row(children: [
+                    IconButton(
+                      key: const Key('rest-decrement'),
+                      icon: const Icon(Icons.remove),
+                      onPressed: () => setState(() {
+                        final newValue = _restTime - 1;
+                        _restTime = newValue.clamp(1, 120);
+                        _restChanged = true;
+                      }),
+                    ),
+                    Text('Rest time: $_restTime seconds'),
+                    IconButton(
+                      key: const Key('rest-increment'),
+                      icon: const Icon(Icons.add),
+                      onPressed: () => setState(() {
+                        final newValue = _restTime + 1;
+                        _restTime = newValue.clamp(1, 120);
+                        _restChanged = true;
+                      }),
+                    ),
+                  ]),
+                ]),
               ],
             ),
           ),
