@@ -23,9 +23,6 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - soundpool (0.0.1):
     - Flutter
   - sqflite (0.0.3):
