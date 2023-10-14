@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
-import 'package:just_audio/just_audio.dart';
+// import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
@@ -39,7 +40,7 @@ class CountDownTimerState extends State<CountDownTimer>
   final CountdownController _workoutController =
       CountdownController(autoStart: true);
 
-  final player = AudioPlayer();
+  // final player = AudioPlayer();
 
   IconData pausePlayIcon = Icons.pause;
   bool doneVisible = false;
@@ -298,7 +299,10 @@ class CountDownTimerState extends State<CountDownTimer>
                                             fontWeight: FontWeight.bold,
                                             fontSize: 22),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        final session =
+                                            await AudioSession.instance;
+                                        session.setActive(false);
                                         setState(() {
                                           shouldReset = true;
                                           doneVisible = false;
