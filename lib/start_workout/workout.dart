@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
-// import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
@@ -40,9 +39,9 @@ class CountDownTimerState extends State<CountDownTimer>
   final CountdownController _workoutController =
       CountdownController(autoStart: true);
 
-  // final player = AudioPlayer();
-
   IconData pausePlayIcon = Icons.pause;
+  int currentWorkInterval = 0;
+  bool flipCurrentWorkInterval = true;
   bool doneVisible = false;
   bool done = false;
 
@@ -114,14 +113,24 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   String timerScreenText(interval, status, exercises, Workout workoutArgument) {
+    print("------------- interval");
+    print(currentWorkInterval);
+    print("------------- end");
+
     switch (status) {
       case 'start':
         return "Get ready";
       case 'work':
-        return workoutArgument.numExercises < exercises.length
-            ? exercises[exercises.length - interval]
+        String exercise = workoutArgument.numExercises == exercises.length
+            ? exercises[interval]
             : "Work";
+        flipCurrentWorkInterval = true;
+        return exercise;
       case 'rest':
+        if (flipCurrentWorkInterval) {
+          currentWorkInterval++;
+          flipCurrentWorkInterval = false;
+        }
         return "Rest";
       default:
         return "";
@@ -314,6 +323,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                           doneVisible = false;
                                           restart = true;
                                           done = false;
+                                          // currentWorkInterval = 0;
                                           // _workoutController.restart();
                                           Wakelock.enable();
                                         });
@@ -400,13 +410,9 @@ class CountDownTimerState extends State<CountDownTimer>
               // }
 
               if (timerData.status == "complete" && restart == false) {
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                // _controllerCenter.play();
-                // doneVisible = true;
-                // Wakelock.disable();
-                // });
                 done = true;
               } else if (timerData.status == "start") {
+                currentWorkInterval = 0;
                 ListModel<ListTileModel> intervalList =
                     ListModel<ListTileModel>(
                   listKey: listKey,
@@ -496,7 +502,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                         0.0, 20.0, 0.0, 0.0),
                                     child: Text(
                                       timerScreenText(
-                                          timerData.numberOfIntervals,
+                                          currentWorkInterval,
                                           timerData.status,
                                           exercises,
                                           workoutArgument),
