@@ -48,6 +48,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   coverage: ^1.6.3
   audio_session: ^0.1.16
+  flutter_material_color_picker: ^1.2.0
 
   background_timer:
     git:
