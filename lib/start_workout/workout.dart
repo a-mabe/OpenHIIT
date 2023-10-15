@@ -64,6 +64,12 @@ class CountDownTimerState extends State<CountDownTimer>
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
     Wakelock.enable();
+    init();
+  }
+
+  void init() async {
+    final session = await AudioSession.instance;
+    session.setActive(false);
   }
 
   @override
