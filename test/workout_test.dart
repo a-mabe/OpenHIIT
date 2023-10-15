@@ -63,6 +63,12 @@ void main() {
     // Verify the exercise number is 2 as expected.
     expect(find.text('2'), findsOneWidget);
 
+    await tester.dragUntilVisible(
+      find.byType(ElevatedButton), // what you want to find
+      find.byType(SingleChildScrollView), // widget you want to scroll
+      const Offset(-250, 0), // delta to move
+    );
+
     // Tap to go to the next page.
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
