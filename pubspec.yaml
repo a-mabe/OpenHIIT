@@ -53,7 +53,7 @@ dependencies:
   background_timer:
     git:
       url: https://github.com/a-mabe/background_timer.git
-      ref: background-process-intervals # branch name
+      ref: main # branch name
   just_audio: ^0.9.35
 
 flutter_launcher_icons:
