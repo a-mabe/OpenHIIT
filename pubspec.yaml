@@ -55,6 +55,7 @@ dependencies:
       url: https://github.com/a-mabe/background_timer.git
       ref: main # branch name
   just_audio: ^0.9.35
+  soundpool: ^2.4.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

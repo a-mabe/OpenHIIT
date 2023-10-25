@@ -625,7 +625,7 @@ packages:
     source: sdk
     version: "0.0.99"
   soundpool:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: soundpool
       sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
