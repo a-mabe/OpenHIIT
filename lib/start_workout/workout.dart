@@ -113,10 +113,6 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   String timerScreenText(interval, status, exercises, Workout workoutArgument) {
-    print("------------- interval");
-    print(currentWorkInterval);
-    print("------------- end");
-
     switch (status) {
       case 'start':
         return "Get ready";
@@ -213,8 +209,6 @@ class CountDownTimerState extends State<CountDownTimer>
 
     final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
-    print(shouldReset);
-
     setState(() {
       if (shouldReset) {
         shouldReset = false;
@@ -224,7 +218,6 @@ class CountDownTimerState extends State<CountDownTimer>
           removedItemBuilder: _buildRemovedItem,
         );
         intervalTotal = intervalInfo.length;
-        print("${intervalInfo.length}");
         if (restart) {
           _workoutController.restart();
           restart = false;
@@ -239,7 +232,7 @@ class CountDownTimerState extends State<CountDownTimer>
           maintainState: true,
           child: Container(
             alignment: Alignment.center,
-            color: Color.fromARGB(255, 0, 225, 255),
+            color: const Color.fromARGB(255, 0, 225, 255),
             child: Stack(
               children: [
                 Align(
@@ -357,58 +350,20 @@ class CountDownTimerState extends State<CountDownTimer>
             halfwaySound: workoutArgument.halfwaySound,
             numberOfWorkIntervals: workoutArgument.numExercises,
             onFinished: () {
-              print("FINISHED");
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (intervalInfo.length == 1) {
                   intervalInfo.removeAt(0);
-                  print("should be empty");
-                  print(intervalInfo.length);
 
-                  Future.delayed(Duration(microseconds: 500000), () {
+                  Future.delayed(const Duration(microseconds: 500000), () {
                     setState(() {
-                      // _showText = true;
                       doneVisible = true;
                       _controllerCenter.play();
-
-                      // intervalInfo = ListModel<ListTileModel>(
-                      //   listKey: listKey,
-                      //   initialItems: listItems(exercises, workoutArgument),
-                      //   removedItemBuilder: _buildRemovedItem,
-                      // );
                     });
                   });
-
-                  // intervalInfo = ListModel<ListTileModel>(
-                  //   listKey: listKey,
-                  //   initialItems: listItems(exercises, workoutArgument),
-                  //   removedItemBuilder: _buildRemovedItem,
-                  // );
                 }
-                // print("---------------------------");
-                // print(intervalInfo.length);
-                // intervalInfo.removeAt(0);
-
-                // print("REMOVED");
-                // if (intervalInfo.length == 0) {
-                //   Future.delayed(Duration(microseconds: 500000), () {
-                //     setState(() {
-                //       // _showText = true;
-                //       doneVisible = true;
-                //       _controllerCenter.play();
-                //     });
-                //   });
-                // }
               });
             },
             build: (_, BackgroundTimerData timerData) {
-              // if (timerData.status == "complete") {
-              //   doneVisible = true;
-              //   // shouldReset = true;
-              // } else {
-              //   doneVisible = false;
-              //   // shouldReset = false;
-              // }
-
               if (timerData.status == "complete" && restart == false) {
                 done = true;
               } else if (timerData.status == "start") {
@@ -422,10 +377,8 @@ class CountDownTimerState extends State<CountDownTimer>
 
                 int count = 0;
                 while (intervalInfo.length < intervalTotal) {
-                  // if (intervalInfo.length > 0 && doneVisible == false) {
                   intervalInfo.insert(count, intervalList[count]);
                   count++;
-                  // }
                 }
               } else {
                 done = false;
@@ -438,27 +391,6 @@ class CountDownTimerState extends State<CountDownTimer>
                   intervalInfo.removeAt(0);
                 }
               }
-
-              // int intervalDifference =
-              // if ()
-
-              // if (intervalsCompleted > 0) {
-              //   WidgetsBinding.instance.addPostFrameCallback((_) {
-              //     print("Remove");
-              //     _intervalInfo.removeAt(0);
-              //     intervalsCompleted--;
-              //     // if (_intervalInfo.length == 0) {
-              //     //   Future.delayed(const Duration(microseconds: 500000), () {
-              //     //     setState(() {
-              //     //       doneVisible = true;
-              //     //       _controllerCenter.play();
-              //     //     });
-              //     //   });
-              //   });
-              // }
-
-              print(intervalsCompleted);
-              print(intervalInfo.length);
 
               return Stack(children: [
                 Container(
@@ -547,170 +479,11 @@ class CountDownTimerState extends State<CountDownTimer>
                                       ? FontWeight.bold
                                       : FontWeight.normal,
                                 );
-                                // return slideIt(context, index, animation);
                               },
                             )))),
                 complete()
               ]);
-            })
-        // child: Stack(
-        //   children: [
-        //     Countdown(
-        //       controller: _workoutController,
-        //       workSeconds: workoutArgument.exerciseTime,
-        //       restSeconds: workoutArgument.restTime,
-        //       workSound: workoutArgument.workSound,
-        //       restSound: workoutArgument.restSound,
-        //       endSound: workoutArgument.completeSound,
-        //       countdownSound: workoutArgument.countdownSound,
-        //       halfwaySound: workoutArgument.halfwaySound,
-        //       numberOfIntervals: workoutArgument.numExercises,
-        //       build: (_, BackgroundTimerData timerData) {
-        //         if (timerData.status == "complete" && restart == false) {
-        //           done = true;
-        //         } else {
-        //           done = false;
-        //           restart = true;
-        //         }
-
-        //         return Text("Hi");
-
-        //         // return Container(
-        //         //     color: backgroundColor(timerData.status),
-        //         //     child: AnimatedList(
-        //         //         initialItemCount: 5,
-        //         //         itemBuilder: (context, index, animation) {
-        //         //           return Text("Hi");
-        //         //         }));
-
-        //         // return AnimatedList(
-        //         //     initialItemCount: 5,
-        //         //     itemBuilder: (context, index, animation) {
-        //         //       return Text("Hi");
-        //         //     });
-
-        //         // if (currentStatus != timerData.status) {}
-        //         // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //         //   _intervalInfo.removeAt(0);
-        //         //   if (_intervalInfo.length == 0) {
-        //         //     Future.delayed(const Duration(microseconds: 500000), () {
-        //         //       setState(() {
-        //         //         doneVisible = true;
-        //         //         _controllerCenter.play();
-        //         //       });
-        //         //     });
-        //         //   }
-        //         // });
-
-        //         // return Container(
-        //         //     color: backgroundColor(timerData.status),
-        //         //     child: Column(
-        //         //       children: [
-        //         //         Padding(
-        //         //             padding:
-        //         //                 const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
-        //         //             child: Row(
-        //         //               children: [
-        //         //                 IconButton(
-        //         //                     onPressed: () {
-        //         //                       Navigator.pop(context);
-        //         //                     },
-        //         //                     icon:
-        //         //                         const Icon(size: 50.0, Icons.arrow_back),
-        //         //                     color: Colors.white),
-        //         //                 const Spacer(),
-        //         //                 IconButton(
-        //         //                     onPressed: () {
-        //         //                       if (!timerData.paused) {
-        //         //                         _workoutController.pause();
-        //         //                       } else {
-        //         //                         _workoutController.resume();
-        //         //                       }
-        //         //                     },
-        //         //                     icon: Icon(
-        //         //                         size: 50.0,
-        //         //                         timerData.paused
-        //         //                             ? Icons.play_arrow
-        //         //                             : Icons.pause),
-        //         //                     color: Colors.white),
-        //         //               ],
-        //         //             )),
-        //         //         Container(
-        //         //             alignment: Alignment.center,
-        //         //             child: Align(
-        //         //                 alignment: Alignment.topCenter,
-        //         //                 child: Column(
-        //         //                   children: [
-        //         //                     Padding(
-        //         //                       padding: const EdgeInsets.fromLTRB(
-        //         //                           0.0, 20.0, 0.0, 0.0),
-        //         //                       child: Text(
-        //         //                         timerScreenText(
-        //         //                             timerData.numberOfIntervals,
-        //         //                             timerData.status,
-        //         //                             exercises,
-        //         //                             workoutArgument),
-        //         //                         style: const TextStyle(
-        //         //                             fontSize: 30, color: Colors.white),
-        //         //                       ),
-        //         //                     ),
-        //         //                     Padding(
-        //         //                       padding: const EdgeInsets.fromLTRB(
-        //         //                           0.0, 0.0, 0.0, 0.0),
-        //         //                       child: Text(
-        //         //                         timerData.currentMicroSeconds.toString(),
-        //         //                         style: const TextStyle(
-        //         //                             fontSize: 160, color: Colors.white),
-        //         //                       ),
-        //         //                     )
-        //         //                   ],
-        //         //                 ))),
-        //         //       ],
-        //         //     ));
-        //       },
-        //       onFinished: () {
-        //         // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //         //   _intervalInfo.removeAt(0);
-        //         //   if (_intervalInfo.length == 0) {
-        //         //     Future.delayed(const Duration(microseconds: 500000), () {
-        //         //       setState(() {
-        //         //         doneVisible = true;
-        //         //         _controllerCenter.play();
-        //         //       });
-        //         //     });
-        //         //   }
-        //         // });
-        //       },
-        //     ),
-        //     // Align(
-        //     //     alignment: Alignment.bottomCenter,
-        //     //     child: FractionallySizedBox(
-        //     //         widthFactor: 1.0,
-        //     //         heightFactor: 0.5,
-        //     //         child: Container(
-        //     //             alignment: AlignmentDirectional.bottomCenter,
-        //     //             color: const Color.fromARGB(22, 0, 0, 0),
-        //     //             child: AnimatedList(
-        //     //               key: listKey,
-        //     //               initialItemCount: _intervalInfo.length,
-        //     //               itemBuilder: (context, index, animation) {
-        //     //                 return CardItemAnimated(
-        //     //                   animation: animation,
-        //     //                   item: _intervalInfo[index],
-        //     //                   fontColor: index == 0
-        //     //                       ? Colors.white
-        //     //                       : const Color.fromARGB(153, 255, 255, 255),
-        //     //                   fontWeight: index == 0
-        //     //                       ? FontWeight.bold
-        //     //                       : FontWeight.normal,
-        //     //                 );
-        //     //                 // return slideIt(context, index, animation);
-        //     //               },
-        //     //             )))),
-        //     complete()
-        //   ],
-        // ),
-        );
+            }));
   }
 
   Color backgroundColor(String status) {
