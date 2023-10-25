@@ -35,7 +35,7 @@ class ListModel<E> {
 
   E removeAt(int index) {
     final E removedItem = _items.removeAt(index);
-    if (removedItem != null) {
+    if (removedItem != null && _animatedList != null) {
       _animatedList!.removeItem(
         index,
         (BuildContext context, Animation<double> animation) {

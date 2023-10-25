@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:audio_session/audio_session.dart';
+// import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -45,30 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   initState() {
     super.initState();
-    init();
-  }
-
-  void init() async {
-    // final session = await AudioSession.instance;
-    // await session.configure(const AudioSessionConfiguration.music());
-
-    final session = await AudioSession.instance;
-    await session.configure(
-      const AudioSessionConfiguration(
-        avAudioSessionCategory: AVAudioSessionCategory.playback,
-        avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.mixWithOthers,
-        avAudioSessionMode: AVAudioSessionMode.defaultMode,
-        avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
-        avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-        androidAudioAttributes: AndroidAudioAttributes(
-          contentType: AndroidAudioContentType.speech,
-          flags: AndroidAudioFlags.none,
-          usage: AndroidAudioUsage.voiceCommunication,
-        ),
-        androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-        androidWillPauseWhenDucked: true,
-      ),
-    );
+    // init();
   }
 
   int calculateWorkoutTime(Workout workout) {
@@ -233,7 +210,8 @@ Total: ${calculateWorkoutTime(workout)} minutes'''),
       body: SafeArea(
         child: FutureBuilder<List<Workout>>(
           future: workouts,
-          builder: (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Workout>> snapshot) {
             /// When [workouts] has successfully loaded.
             if (snapshot.hasData) {
               if (snapshot.data!.isEmpty) {
