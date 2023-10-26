@@ -150,7 +150,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
               child: NumberPicker(
                 value: _currentIntValue,
                 minValue: 1,
-                maxValue: 50,
+                maxValue: 100,
                 step: 1,
                 haptics: true,
                 onChanged: (value) => setState(() {
@@ -167,7 +167,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
                     icon: const Icon(Icons.remove),
                     onPressed: () => setState(() {
                       final newValue0 = _currentIntValue - 1;
-                      _currentIntValue = newValue0.clamp(1, 50);
+                      _currentIntValue = newValue0.clamp(1, 100);
                     }),
                   ),
                   Text('Current int value: $_currentIntValue'),
@@ -175,7 +175,7 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
                     icon: const Icon(Icons.add),
                     onPressed: () => setState(() {
                       final newValue = _currentIntValue + 1;
-                      _currentIntValue = newValue.clamp(1, 50);
+                      _currentIntValue = newValue.clamp(1, 100);
                     }),
                   ),
                 ],
