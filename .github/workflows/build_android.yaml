@@ -30,10 +30,10 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-      - name: Build AppBundle
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - name: Build AppBundle
         run: flutter pub get && flutter build appbundle
       - name: Upload AppBundle
         uses: actions/upload-artifact@v3.1.3
