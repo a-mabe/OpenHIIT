@@ -19,22 +19,40 @@ on: push
 #       - '.git/'
 #       - '.vscode/'
 
+runs:
+  using: "composite"
+  steps:
+      - uses: docker/setup-buildx-action@v1
+
+      - uses: docker/login-action@v1
+        with:
+          username: ${{inputs.registry_username}}
+          password: ${{inputs.registry_password}}
+
+      - uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build AppBundle
+      - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Setup Java
         uses: actions/setup-java@v2
-        uses: actions/upload-artifact@v3.1.3
         with:
           distribution: 'zulu'
           java-version: '11'
+      - name: Build AppBundle
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-        run: flutter pub get
-        run: flutter build appbundle
+        run: flutter pub get && flutter build appbundle
+      - name: Upload AppBundle
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: release
           path: build/app/outputs/bundle/release/app-release.aab
