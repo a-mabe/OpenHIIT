@@ -149,7 +149,7 @@ jobs:
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v3
         with:
-         name: Release IPA
+         name: release-ipa
          # Path to the release files
          path: build/ios/ipa/*.ipa
 
@@ -166,11 +166,23 @@ jobs:
       contents: write
     steps:
 
-      - name: Download artifacts
+      - name: Download Android APK Artifact
         uses: actions/download-artifact@master
         with:
-          name: builds
-          path: build/
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
+
+      - name: Download Android AAB Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Download iOS IPA Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: release-ipa
+          path: build/ios/ipa/*.ipa
 
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
