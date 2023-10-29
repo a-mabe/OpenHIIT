@@ -102,7 +102,7 @@ jobs:
           generateReleaseNotes: "true"
 
   BuildiOSRelease:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     environment: production
     needs: GetVersionNumber
     permissions:
