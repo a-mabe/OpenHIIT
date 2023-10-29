@@ -30,14 +30,12 @@ jobs:
       version: ${{ steps.version.outputs.content }}
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Read file
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
           path: VERSION
-            
-
 
   BuildAndroidRelease:
     runs-on: ubuntu-latest
@@ -50,15 +48,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Checkout the repository code and get packages.
+      - name: Checkout app code
+        uses: actions/checkout@v3
+
       # Set up Flutter.
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable"
+
       - run: flutter doctor -v
 
-      # Checkout the repository code and get packages.
-      - name: Checkout app code
-        uses: actions/checkout@v3
       - run: flutter pub get
 
       - name: Download Android keystore
@@ -93,18 +93,17 @@ jobs:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Create Release
+      - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
         with:
           artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
           draft: "true"
-          tag: "1.0.0"
+          tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
 
-  PublishAndroidRelease:
+  BuildiOSRelease:
     runs-on: ubuntu-latest
     environment: production
     needs: GetVersionNumber
-    steps:
-      - name: Test
-        run: echo ${{needs.GetVersionNumber.outputs.version}}
+    permissions:
+      contents: write
