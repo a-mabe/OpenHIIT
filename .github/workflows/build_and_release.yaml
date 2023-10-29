@@ -82,24 +82,24 @@ jobs:
         run: flutter build appbundle
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Upload Android AppBundle Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Create Draft Release
-        uses: ncipollo/release-action@v1.13.0
-        with:
-          artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
-          draft: "true"
-          tag: ${{needs.GetVersionNumber.outputs.version}}
-          generateReleaseNotes: "true"
+      # - name: Create Draft Release
+      #   uses: ncipollo/release-action@v1.13.0
+      #   with:
+      #     artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
+      #     draft: "true"
+      #     tag: ${{needs.GetVersionNumber.outputs.version}}
+      #     generateReleaseNotes: "true"
 
   BuildiOSRelease:
     runs-on: macos-latest
@@ -110,7 +110,7 @@ jobs:
     steps:
       # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Install the Apple certificate and provisioning profile 
       - name: Install the Apple certificate and provisioning profile
@@ -137,3 +137,30 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # Set up Flutter.
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - run: flutter doctor -v
+
+      - run: flutter pub get
+
+      # Build and sign the ipa using a single flutter command
+      - name: Building IPA
+        run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+          
+      # Collect the file and upload as artifact         
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v3
+        with:
+         name: Release IPA
+         # Path to the release files
+         path: build/ios/ipa/*.ipa
+
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
