@@ -20,8 +20,7 @@ on: push
 #       - '.vscode/'
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  BuildAndroidRelease:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: production
@@ -57,10 +56,10 @@ jobs:
           echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
 
-      - name: Build APK
+      - name: Build Android Release APK
         run: flutter build apk --release
 
-      - name: Android Release Build
+      - name: Build Android Release AppBundle
         run: flutter build appbundle
 
       - name: Upload APK Artifact
@@ -69,7 +68,7 @@ jobs:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
-      - name: Upload Android App Bundle Artifact
+      - name: Upload Android AppBundle Artifact
         uses: actions/upload-artifact@v2
         with:
           name: release-aab
@@ -80,45 +79,9 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
           draft: "true"
-            
+          tag: "1.0.0"
 
-      # - name: Build APK
-      #   run: flutter build apk --split-per-abi --release
-
-      # - name: Build APP BUNDLE
-      #   run: flutter build appbundle
-
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1.10.0
-      #   with:
-      #     artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
-
-      # - name: Upload a Build Artifact
-      #   uses: actions/upload-artifact@v3.1.0
-      #   with:
-      #     name: release-apk
-      #     path: build/app/outputs/apk/
-  # Build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v3
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'zulu'
-  #         java-version: '11'
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: 'stable'
-  #     - name: Build AppBundle
-  #       run: flutter pub get && flutter build appbundle
-  #     - name: Upload AppBundle
-  #       uses: actions/upload-artifact@v3.1.3
-  #       with:
-  #         name: release
-  #         path: build/app/outputs/bundle/release/app-release.aab
-
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1.13.0
-            
+  PublishAndroidRelease:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: BuildAndroidRelease
