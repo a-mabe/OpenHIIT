@@ -24,6 +24,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: write
 
@@ -47,7 +48,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.0.3
         with:
           fileName: upload-keystore.jks
-          encodedString: kdslfjklajflsa # ${{ secrets.KEYSTORE_FILE_BASE64 }}
+          encodedString: # ${{ secrets.KEYSTORE_FILE_BASE64 }}
 
       - name: Create key.properties
         run: |
