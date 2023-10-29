@@ -20,10 +20,27 @@ on: push
 #       - '.vscode/'
 
 jobs:
-  BuildAndroidRelease:
-    # The type of runner that the job will run on
+
+  GetVersionNumber:
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.content }}
+    steps:
+      - name: Read file
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: VERSION
+            
+
+
+  BuildAndroidRelease:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: GetVersionNumber
     permissions:
       contents: write
 
@@ -80,11 +97,12 @@ jobs:
           artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
           draft: "true"
           tag: "1.0.0"
+          generateReleaseNotes: "true"
 
   PublishAndroidRelease:
     runs-on: ubuntu-latest
     environment: production
-    needs: BuildAndroidRelease
+    needs: GetVersionNumber
     steps:
       - name: Test
-        run: echo "HI"
+        run: echo ${{needs.GetVersionNumber.outputs.version}}
