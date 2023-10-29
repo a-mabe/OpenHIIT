@@ -143,14 +143,13 @@ jobs:
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
-        run: flutter build ipa --release
+        run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
           
       # Collect the file and upload as artifact         
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v3
         with:
          name: release-ipa
-         # Path to the release files
          path: build/ios/ipa/*.ipa
 
       - name: Clean up keychain and provisioning profile
