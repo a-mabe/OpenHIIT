@@ -47,7 +47,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.0.3
         with:
           fileName: upload-keystore.jks
-          encodedString: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+          encodedString: kdslfjklajflsa # ${{ secrets.KEYSTORE_FILE_BASE64 }}
 
       - name: Create key.properties
         run: |
