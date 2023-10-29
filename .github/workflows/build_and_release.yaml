@@ -93,14 +93,6 @@ jobs:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
-      # - name: Create Draft Release
-      #   uses: ncipollo/release-action@v1.13.0
-      #   with:
-      #     artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
-      #     draft: "true"
-      #     tag: ${{needs.GetVersionNumber.outputs.version}}
-      #     generateReleaseNotes: "true"
-
   BuildiOSRelease:
     runs-on: macos-latest
     environment: production
@@ -164,3 +156,18 @@ jobs:
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
           rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+
+  CreateDraftRelease:
+    runs-on: macos-latest
+    environment: production
+    needs: [BuildAndroidRelease, BuildiOSRelease]
+    permissions:
+      contents: write
+    steps:
+      - name: Create Draft Release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab, build/ios/ipa/*.ipa"
+          draft: "true"
+          tag: ${{needs.GetVersionNumber.outputs.version}}
+          generateReleaseNotes: "true"
