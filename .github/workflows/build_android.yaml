@@ -85,5 +85,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: BuildAndroidRelease
-      - name: Test
-        run: echo "HI"
+      steps:
+        - name: Test
+          run: echo "HI"
