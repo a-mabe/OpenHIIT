@@ -57,8 +57,23 @@ jobs:
           echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
 
+      - name: Build APK
+        run: flutter build apk --release
+
       - name: Android Release Build
         run: flutter build appbundle
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
+
+      - name: Upload Android App Bundle Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-release
+          path: build/app/outputs/bundle/release/app-release.aab
 
       # - name: Build APK
       #   run: flutter build apk --split-per-abi --release
