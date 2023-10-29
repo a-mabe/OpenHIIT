@@ -160,7 +160,7 @@ jobs:
 
   CreateDraftRelease:
     runs-on: macos-latest
-    needs: [BuildAndroidRelease, BuildiOSRelease, GetVersionNumber]
+    needs: [BuildiOSRelease, GetVersionNumber]
     permissions:
       contents: write
     steps:
