@@ -192,3 +192,4 @@ jobs:
           draft: "true"
           tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
+          
