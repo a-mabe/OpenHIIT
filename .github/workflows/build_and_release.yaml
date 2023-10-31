@@ -145,7 +145,7 @@ jobs:
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
-        run: flutter build ipa --release # --export-options-plist=$RUNNER_TEMP/ExportOptions.plist
+        run: flutter build ipa # --release # --export-options-plist=$RUNNER_TEMP/ExportOptions.plist
           
       # Collect the file and upload as artifact         
       - name: Upload IPA Artifact
@@ -192,4 +192,3 @@ jobs:
           draft: "true"
           tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
-          
