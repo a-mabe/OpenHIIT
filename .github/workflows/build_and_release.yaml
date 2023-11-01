@@ -39,61 +39,61 @@ jobs:
       - name: Print version
         run: echo ${{ steps.version.outputs.content }}
 
-  # BuildAndroidRelease:
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs: GetVersionNumber
-  #   permissions:
-  #     contents: write
+  BuildAndroidRelease:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: GetVersionNumber
+    permissions:
+      contents: write
 
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - uses: actions/checkout@v3
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
 
-  #     # Checkout the repository code and get packages.
-  #     - name: Checkout app code
-  #       uses: actions/checkout@v3
+      # Checkout the repository code and get packages.
+      - name: Checkout app code
+        uses: actions/checkout@v3
 
-  #     # Set up Flutter.
-  #     - uses: subosito/flutter-action@v1
-  #       with:
-  #         channel: "stable"
+      # Set up Flutter.
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
 
-  #     - run: flutter doctor -v
+      - run: flutter doctor -v
 
-  #     - run: flutter pub get
+      - run: flutter pub get
 
-  #     - name: Download Android keystore
-  #       id: android_keystore
-  #       uses: timheuer/base64-to-file@v1.0.3
-  #       with:
-  #         fileName: upload-keystore.jks
-  #         encodedString: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: upload-keystore.jks
+          encodedString: ${{ secrets.KEYSTORE_FILE_BASE64 }}
 
-  #     - name: Create key.properties
-  #       run: |
-  #         echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-  #         echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
-  #         echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
-  #         echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
 
-  #     - name: Build Android Release APK
-  #       run: flutter build apk --release
+      - name: Build Android Release APK
+        run: flutter build apk --release
 
-  #     - name: Build Android Release AppBundle
-  #       run: flutter build appbundle
+      - name: Build Android Release AppBundle
+        run: flutter build appbundle
 
-  #     - name: Upload APK Artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: release-apk
-  #         path: build/app/outputs/apk/release/app-release.apk
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
 
-  #     - name: Upload Android AppBundle Artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: release-aab
-  #         path: build/app/outputs/bundle/release/app-release.aab
+      - name: Upload Android AppBundle Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
 
   BuildiOSRelease:
     runs-on: macos-latest
@@ -193,4 +193,3 @@ jobs:
           draft: "true"
           tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
-          
