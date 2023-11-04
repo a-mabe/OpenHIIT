@@ -177,7 +177,7 @@ jobs:
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "app-release.apk, app-release.aab, release-ipa.ipa"
+          artifacts: "release-aab.zip, release-apk.zip, release-ipa.zip"
           draft: "true"
           tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
