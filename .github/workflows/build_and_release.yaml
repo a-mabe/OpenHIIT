@@ -3,9 +3,7 @@ name: Build Flutter App
 run-name: ${{ github.actor }} is building the Android app bundle 🚀
 
 on:
-  push:
-    branches:
-      - main
+  push
 
 jobs:
 
@@ -170,6 +168,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: release-ipa
+
+      - name: Test
+        run: ls
 
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
