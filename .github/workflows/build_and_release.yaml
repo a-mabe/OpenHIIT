@@ -157,19 +157,19 @@ jobs:
     steps:
 
       - name: Download Android APK Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Download Android AAB Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
       - name: Download iOS IPA Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-ipa
           path: build/ios/ipa/release-ipa.ipa
