@@ -169,9 +169,6 @@ jobs:
         with:
           name: release-ipa
 
-      - name: Test
-        run: ls
-
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
         with:
