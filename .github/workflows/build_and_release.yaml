@@ -3,7 +3,9 @@ name: Build Flutter App
 run-name: ${{ github.actor }} is building the Android app bundle 🚀
 
 on:
-  push
+  push:
+    branches:
+      - main
 
 jobs:
 
