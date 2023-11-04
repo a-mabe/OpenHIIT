@@ -4,20 +4,10 @@ run-name: ${{ github.actor }} is building the Android app bundle 🚀
 
 on: push
 
-# on:
-#   pull_request:
-#     types:
-#       - opened
-#       - reopened
-#       - synchronize
-#       - ready_for_review
-#     branches:
-#       - 'main'
-#     paths-ignore:
-#       - '**.md'
-#       - 'doc/**'
-#       - '.git/'
-#       - '.vscode/'
+on:
+  push:
+    branches:
+      - 'main'
 
 jobs:
 
