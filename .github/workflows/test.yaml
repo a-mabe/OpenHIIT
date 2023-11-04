@@ -1,6 +1,6 @@
 name: Build Flutter App
 
-run-name: ${{ github.actor }} is building the app 🚀
+run-name: ${{ github.actor }} is testing the app
 
 on:
   pull_request:
@@ -31,5 +31,3 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
       - run: flutter test
-      # - run: flutter build apk
-      # - run: flutter build appbundle
