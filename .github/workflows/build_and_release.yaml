@@ -160,19 +160,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: release-apk
-          path: app-release.apk
 
       - name: Download Android AAB Artifact
         uses: actions/download-artifact@v3
         with:
           name: release-aab
-          path: app-release.aab
 
       - name: Download iOS IPA Artifact
         uses: actions/download-artifact@v3
         with:
           name: release-ipa
-          path: release-ipa.ipa
 
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
