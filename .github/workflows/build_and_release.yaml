@@ -141,7 +141,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
          name: release-ipa
-         path: build/ios/ipa/release-ipa.ipa
+         path: build/ios/ipa/*.ipa
 
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
@@ -172,7 +172,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: release-ipa
-          path: build/ios/ipa/release-ipa.ipa
+          path: build/ios/ipa/*.ipa
 
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
