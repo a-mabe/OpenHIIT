@@ -5,7 +5,7 @@ run-name: ${{ github.actor }} is building the Android app bundle 🚀
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
 
