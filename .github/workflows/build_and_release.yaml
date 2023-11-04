@@ -141,7 +141,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
          name: release-ipa
-         path: build/ios/ipa/*.ipa
+         path: build/ios/ipa/release-ipa.ipa
 
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
@@ -157,27 +157,27 @@ jobs:
     steps:
 
       - name: Download Android APK Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Download Android AAB Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
       - name: Download iOS IPA Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: release-ipa
-          path: build/ios/ipa/*.ipa
+          path: build/ios/ipa/release-ipa.ipa
 
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab, build/ios/ipa/*.ipa"
+          artifacts: "build/app/outputs/apk/release/app-release.apk, build/app/outputs/bundle/release/app-release.aab, build/ios/ipa/*.ipa"
           draft: "true"
           tag: ${{needs.GetVersionNumber.outputs.version}}
           generateReleaseNotes: "true"
