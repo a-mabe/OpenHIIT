@@ -1,6 +1,6 @@
 # OpenHIIT - Beta Release
 
-![Build and Test](https://github.com/a-mabe/openhiit/actions/workflows/build_and_test.yaml/badge.svg)
+![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/test.yaml/badge.svg)
 
 :coffee: :tea: :cookie: All funds go towards an annual Apple Developer License to publish OpenHIIT on the app store. :cookie: :tea: :coffee:
 
