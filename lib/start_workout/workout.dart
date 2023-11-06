@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -66,7 +68,27 @@ class CountDownTimerState extends State<CountDownTimer>
     init();
   }
 
+  void _updateAppbar() async {
+    var brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    Brightness statusBarBrightness;
+
+    if (isDarkMode) {
+      statusBarBrightness = Brightness.dark;
+    } else {
+      statusBarBrightness = Brightness.light;
+    }
+
+    Future.delayed(Duration(milliseconds: 500)).then((_) =>
+        SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarBrightness: statusBarBrightness)));
+  }
+
   void init() async {
+    _updateAppbar();
+
     final session = await AudioSession.instance;
     session.setActive(false);
   }
@@ -200,6 +222,8 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
