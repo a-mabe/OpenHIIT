@@ -28,7 +28,7 @@ class DatabaseManager {
   ///
   /// e.g., "database.db"
   ///
-  static const String _databaseName = "workouts.db";
+  static const String _databaseName = "core1.db";
 
   /// The name of the table in the database where workouts are stored.
   ///
@@ -59,7 +59,7 @@ class DatabaseManager {
     }
 
     //Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(await getDatabasesPath(), "core1.db");
+    String path = join(await getDatabasesPath(), _databaseName);
     // Clear database for testing
     // await deleteDatabase(path);
     if (Platform.isWindows || Platform.isLinux) {
@@ -87,7 +87,8 @@ class DatabaseManager {
         },
         onUpgrade: (db, oldVersion, newVersion) async {
           if (oldVersion < newVersion) {
-            await db.execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
           }
         },
       );
@@ -116,7 +117,8 @@ class DatabaseManager {
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < newVersion) {
-          await db.execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+          await db
+              .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
         }
       },
     );
@@ -153,7 +155,9 @@ class DatabaseManager {
       _workoutTableName,
       workout.toMap(),
       where: 'id = ?', // Ensure that the List has a matching id.
-      whereArgs: [workout.id], // Pass the id as a whereArg to prevent SQL injection.
+      whereArgs: [
+        workout.id
+      ], // Pass the id as a whereArg to prevent SQL injection.
     );
   }
 
@@ -165,7 +169,9 @@ class DatabaseManager {
     await db.delete(
       _workoutTableName,
       where: 'id = ?', // Use a `where` clause to delete a specific list.
-      whereArgs: [id], // Pass the List's id as a whereArg to prevent SQL injection.
+      whereArgs: [
+        id
+      ], // Pass the List's id as a whereArg to prevent SQL injection.
     );
   }
 

@@ -87,7 +87,8 @@ class SelectTimerTypeState extends State<SelectTimerType> {
                       Text(
                         optionText,
                         textAlign: TextAlign.left,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                       const Spacer(),
                       const Icon(

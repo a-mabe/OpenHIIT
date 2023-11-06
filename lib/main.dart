@@ -3,6 +3,7 @@ import 'dart:convert';
 
 // import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
@@ -56,6 +57,23 @@ class _MyHomePageState extends State<MyHomePage> {
         .round();
   }
 
+  void _updateAppbar(context) async {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    Brightness statusBarBrightness;
+
+    if (isDarkMode) {
+      statusBarBrightness = Brightness.dark;
+    } else {
+      statusBarBrightness = Brightness.light;
+    }
+
+    Future.delayed(Duration(milliseconds: 100)).then((_) =>
+        SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarBrightness: statusBarBrightness)));
+  }
+
   /// Push to the [CreateWorkout()] page.
   ///
   /// Then, refresh the [workouts].
@@ -64,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),
     ).then((value) {
+      _updateAppbar(context);
       setState(() {
         workouts = DatabaseManager().lists(DatabaseManager().initDB());
       });
@@ -107,6 +126,7 @@ Total: ${calculateWorkoutTime(workout)} minutes'''),
                 ),
               ),
             ).then((value) {
+              _updateAppbar(context);
               setState(() {
                 workouts = DatabaseManager().lists(DatabaseManager().initDB());
               });
@@ -197,8 +217,6 @@ Total: ${calculateWorkoutTime(workout)} minutes'''),
   Widget build(BuildContext context) {
     workouts = DatabaseManager().lists(DatabaseManager().initDB());
     return Scaffold(
-      // appBar: AppBar(),
-
       /// Pushes to [CreateWorkout()]
       floatingActionButton: FloatingActionButton(
         onPressed: pushSelectTimerPage,
