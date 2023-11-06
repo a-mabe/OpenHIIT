@@ -217,13 +217,6 @@ Total: ${calculateWorkoutTime(workout)} minutes'''),
   Widget build(BuildContext context) {
     workouts = DatabaseManager().lists(DatabaseManager().initDB());
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   // backgroundColor: Color(0x44000000),
-      //   elevation: 0,
-      // ),
-
       /// Pushes to [CreateWorkout()]
       floatingActionButton: FloatingActionButton(
         onPressed: pushSelectTimerPage,

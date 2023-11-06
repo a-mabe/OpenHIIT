@@ -222,8 +222,6 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
