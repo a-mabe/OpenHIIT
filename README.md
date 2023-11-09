@@ -1,12 +1,17 @@
-# OpenHIIT - Beta Release
+# OpenHIIT
 
 ![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/test.yaml/badge.svg)
+![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
 
-:coffee: :tea: :cookie: All funds go towards an annual Apple Developer License to publish OpenHIIT on the app store. :cookie: :tea: :coffee:
+<p align="center">
+   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/a72fb0f0-c0bc-4c24-8585-87c0f6b6b1c2" width="200"/>
+</p>
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/amabe)
-
-<a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=60px /></a>
+<p align="center">
+  <a href="https://www.buymeacoffee.com/amabe"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" width="200" /></a>
+  <a href=""><img src="./assets/Google_Play_Badge.svg" width="140" /></a>
+  <a href=""><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
+</p>
 
 Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
 
@@ -21,9 +26,7 @@ The timer package is being developed [here](https://github.com/a-mabe/background
 6. [License](#license)
 
 ## Introduction
-OpenHIIT is a mobile application designed to assist users in their workout routines by providing customizable interval timers. It aims to help users maintain an efficient workout pace by setting intervals for exercise and rest periods.
-
-Please note that this application is currently under development and has been released for beta testing. Your feedback and bug reports are greatly appreciated to improve the app and make it more useful for all users.
+OpenHIIT is a fully open source mobile application designed to assist users in their workout routines by providing customizable interval timers. It aims to help users maintain an efficient workout pace by setting intervals for exercise and rest periods.
 
 ## Features
 - **Customizable Timers**: Create and customize interval timers according to your workout requirements.
