@@ -9,8 +9,8 @@
 
 <p align="center">
   <a href="https://www.buymeacoffee.com/amabe"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" width="200" /></a>
-  <a href=""><img src="./assets/Google_Play_Badge.svg" width="140" /></a>
-  <a href=""><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
+  <a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="140" /></a>
+  <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
 </p>
 
 Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
@@ -33,6 +33,13 @@ OpenHIIT is a fully open source mobile application designed to assist users in t
 - **Multiple Intervals**: Set multiple exercise and rest intervals in a single timer session.
 - **Visual and Audio Cues**: Get visual and audio cues to indicate the start and end of each interval.
 - **Save and Load**: Save your favorite interval timer configurations and load them for future use.
+
+<p align="center">
+   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c7cc5c99-54ff-48a1-9aa9-8ec157454be6" width="150">
+   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c974463f-466d-480d-bf4f-8476258657a9" width="150">
+   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/6bfd8386-6576-4b2d-8ade-255252c13358" width="150">
+   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/57dc7d12-54bc-46c5-aae4-19967065a7e5" width="150">
+</p>
 
 ## Installation
 To install and test OpenHIIT, follow these steps:
