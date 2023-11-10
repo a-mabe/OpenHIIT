@@ -1,4 +1,4 @@
-name: Build Flutter App
+name: Build and Release Flutter App
 
 run-name: ${{ github.actor }} is building the Android app bundle 🚀
 
@@ -7,7 +7,8 @@ on:
     branches:
       - main
     paths-ignore:
-      - '*.md'
+      - '**.md'
+      - '**.yaml'
 
 jobs:
 
