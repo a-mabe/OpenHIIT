@@ -148,7 +148,6 @@ class _SetSoundsState extends State<SetSounds> {
           widthFactor: 0.8,
           child: SoundDropdown(
               title: "Work Sound",
-              // description: "Marks the start of each work interval",
               initialSelection: _workSound,
               pool: pool,
               soundsList: soundsList,
@@ -167,7 +166,6 @@ class _SetSoundsState extends State<SetSounds> {
           widthFactor: 0.8,
           child: SoundDropdown(
               title: "Rest Sound",
-              // description: "Marks the start of each rest interval",
               initialSelection: _restSound,
               pool: pool,
               soundsList: soundsList,
@@ -186,7 +184,6 @@ class _SetSoundsState extends State<SetSounds> {
           widthFactor: 0.8,
           child: SoundDropdown(
               title: "Halfway Sound",
-              // description: "Played at the halfway mark of each work interval",
               initialSelection: _halfwaySound,
               pool: pool,
               soundsList: soundsList,
@@ -205,8 +202,6 @@ class _SetSoundsState extends State<SetSounds> {
           widthFactor: 0.8,
           child: SoundDropdown(
               title: "Countdown Sound",
-              // description:
-              //     "Played at the 3, 2, and 1 second marks of each interval",
               initialSelection: _countdownSound,
               pool: pool,
               soundsList: countdownSounds,
@@ -225,8 +220,6 @@ class _SetSoundsState extends State<SetSounds> {
           widthFactor: 0.8,
           child: SoundDropdown(
               title: "Timer End Sound",
-              // description:
-              // "Played at the end of the timer, when all intervals have completed",
               initialSelection: _completeSound,
               pool: pool,
               soundsList: soundsList,

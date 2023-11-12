@@ -11,8 +11,6 @@ import '../data/sound_name_map.dart';
 class SoundDropdown extends StatefulWidget {
   final String title;
 
-  // final String description;
-
   final String initialSelection;
 
   final Soundpool pool;
@@ -72,16 +70,6 @@ class SoundDropdownState extends State<SoundDropdown>
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-          //   child: Text(
-          //     widget.description,
-          //     style: TextStyle(
-          //         // color: Colors.grey[700],
-          //         // fontWeight: FontWeight.bold,
-          //         ),
-          //   ),
-          // ),
           DropdownMenu<String>(
             width: 240,
             initialSelection: widget.initialSelection,
