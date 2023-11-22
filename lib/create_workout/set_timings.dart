@@ -39,10 +39,8 @@ class _SetTimingsState extends State<SetTimings> {
   bool _halfChanged = false;
 
   void pushHome() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MyHomePage()),
-        (route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
   }
 
   void submitWorkout(workoutArgument) async {

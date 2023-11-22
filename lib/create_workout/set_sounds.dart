@@ -73,36 +73,51 @@ class _SetSoundsState extends State<SetSounds> {
   bool _countdownSoundChanged = false;
 
   void pushHome() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MyHomePage()),
-        (route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
   }
 
-  void submitWorkout(Workout workoutArgument) async {
+  void submitWorkout(Workout workoutArgument, submitDisabled) async {
+    setState(() {
+      submitDisabled = true;
+    });
+
     workoutArgument.workSound = _workSound;
     workoutArgument.restSound = _restSound;
     workoutArgument.halfwaySound = _halfwaySound;
     workoutArgument.completeSound = _completeSound;
     workoutArgument.countdownSound = _countdownSound;
 
+    Database database = await DatabaseManager().initDB();
+
+    await updateDatabase(database, workoutArgument).then((value) => pushHome());
+  }
+
+  Future updateDatabase(database, Workout workoutArgument) async {
+    bool newWorkout = false;
+    List<Workout> workouts =
+        await DatabaseManager().lists(DatabaseManager().initDB());
+
     if (workoutArgument.id == "") {
+      newWorkout = true;
       // Set the workout ID
       workoutArgument.id = const Uuid().v1();
+      workouts.insert(0, workoutArgument);
 
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .insertList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
+      for (var i = 0; i < workouts.length; i++) {
+        if (i == 0 && newWorkout) {
+          print("Inserting new workout");
+          await DatabaseManager().insertList(workouts[i], database);
+        } else {
+          print("Updating old workout");
+          if (newWorkout && i > 0) {
+            workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
+          }
+          await DatabaseManager().updateList(workouts[i], database);
+        }
+      }
     } else {
-      Database database = await DatabaseManager().initDB();
-      await DatabaseManager()
-          .updateList(workoutArgument, database)
-          .then((value) {
-        pushHome();
-      });
+      await DatabaseManager().updateList(workoutArgument, database);
     }
   }
 
@@ -115,6 +130,8 @@ class _SetSoundsState extends State<SetSounds> {
     var allSounds = soundsList + countdownSounds;
 
     var soundIdMap = {};
+
+    bool submitDisabled = false;
 
     for (final sound in allSounds) {
       soundIdMap[sound] = loadSound(sound, pool);
@@ -238,9 +255,11 @@ class _SetSoundsState extends State<SetSounds> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
-              onPressed: () async {
-                submitWorkout(workoutArgument);
-              },
+              onPressed: submitDisabled
+                  ? null
+                  : () async {
+                      submitWorkout(workoutArgument, submitDisabled);
+                    },
               child: const Text('Submit'),
             ),
           ),

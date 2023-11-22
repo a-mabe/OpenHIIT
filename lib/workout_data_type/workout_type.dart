@@ -65,6 +65,12 @@ class Workout {
   ///
   int colorInt = 0;
 
+  /// Index of the workout
+  ///
+  /// e.g., 6
+  ///
+  int workoutIndex = 0;
+
   ///
   /// -------------
   /// END FIELDS
@@ -85,21 +91,21 @@ class Workout {
   //     required this.halfTime});
 
   Workout(
-    this.id,
-    this.title,
-    this.numExercises,
-    this.exercises,
-    this.exerciseTime,
-    this.restTime,
-    this.halfTime,
-    this.halfwayMark,
-    this.workSound,
-    this.restSound,
-    this.halfwaySound,
-    this.completeSound,
-    this.countdownSound,
-    this.colorInt,
-  );
+      this.id,
+      this.title,
+      this.numExercises,
+      this.exercises,
+      this.exerciseTime,
+      this.restTime,
+      this.halfTime,
+      this.halfwayMark,
+      this.workSound,
+      this.restSound,
+      this.halfwaySound,
+      this.completeSound,
+      this.countdownSound,
+      this.colorInt,
+      this.workoutIndex);
 
   Workout.empty() {
     id = "";
@@ -116,6 +122,7 @@ class Workout {
     completeSound = "";
     countdownSound = "";
     colorInt = 4280391411;
+    workoutIndex = 0;
   }
 
   ///
@@ -144,6 +151,7 @@ class Workout {
       'completeSound': completeSound,
       'countdownSound': countdownSound,
       'colorInt': colorInt,
+      'workoutIndex': workoutIndex,
     };
   }
 
@@ -152,7 +160,7 @@ class Workout {
   ///
   @override
   String toString() {
-    return 'Workout{title: $title, numExercises: $numExercises, exercises: $exercises, exerciseTime: $exerciseTime, restTime: $restTime, halfTime: $halfTime, halfwayMark: $halfwayMark, colorInt: $colorInt}';
+    return 'Workout{title: $title, numExercises: $numExercises, exercises: $exercises, exerciseTime: $exerciseTime, restTime: $restTime, halfTime: $halfTime, halfwayMark: $halfwayMark, colorInt: $colorInt, index: $workoutIndex}';
   }
 
   ///
