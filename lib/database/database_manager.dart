@@ -87,6 +87,10 @@ class DatabaseManager {
             ''');
         },
         onUpgrade: (db, oldVersion, newVersion) async {
+          if (oldVersion == 1) {
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+          }
           if (oldVersion < newVersion) {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
@@ -118,6 +122,10 @@ class DatabaseManager {
             ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion == 2) {
+          await db
+              .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+        }
         if (oldVersion < newVersion) {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
@@ -132,8 +140,6 @@ class DatabaseManager {
     /// Get a reference to the database.
     ///
     final db = database;
-
-    log(workout.toString());
 
     /// Insert the TodoList into the correct table.
     ///

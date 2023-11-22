@@ -106,10 +106,8 @@ class _SetSoundsState extends State<SetSounds> {
 
       for (var i = 0; i < workouts.length; i++) {
         if (i == 0 && newWorkout) {
-          print("Inserting new workout");
           await DatabaseManager().insertList(workouts[i], database);
         } else {
-          print("Updating old workout");
           if (newWorkout && i > 0) {
             workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
           }

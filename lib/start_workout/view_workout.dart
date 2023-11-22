@@ -117,12 +117,35 @@ class ViewWorkoutState extends State<ViewWorkout> {
     );
   }
 
+  Future deleteList(workoutArgument, database) async {
+    List<Workout> workouts =
+        await DatabaseManager().lists(DatabaseManager().initDB());
+
+    Workout toBeDeleted = workouts[workoutArgument.workoutIndex];
+    workouts.removeAt(toBeDeleted.workoutIndex);
+    await DatabaseManager().deleteList(workoutArgument.id, database);
+    workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
+
+    print("To be deleted workoutIndex: ${toBeDeleted.workoutIndex}");
+
+    for (int i = toBeDeleted.workoutIndex; i < workouts.length; i++) {
+      print("Current i: $i");
+      print("Current workout title: ${workouts[i].title}");
+      print("Current workoutIndex: ${workouts[i].workoutIndex}");
+      workouts[i].workoutIndex = i;
+      await DatabaseManager()
+          .updateList(workouts[i], await DatabaseManager().initDB());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
 
-    List<dynamic> exercises =
-        workoutArgument.exercises != "" ? jsonDecode(workoutArgument.exercises) : [];
+    List<dynamic> exercises = workoutArgument.exercises != ""
+        ? jsonDecode(workoutArgument.exercises)
+        : [];
     Future<Database> database = DatabaseManager().initDB();
 
     Widget exerciseList() {
@@ -150,11 +173,11 @@ class ViewWorkoutState extends State<ViewWorkout> {
             icon: const Icon(Icons.delete),
             tooltip: 'Show Snackbar',
             onPressed: () async {
-              await DatabaseManager()
-                  .deleteList(workoutArgument.id, database)
-                  .then((value) {
-                Navigator.pop(context);
-              });
+              await deleteList(workoutArgument, database)
+                  .then((value) => Navigator.pop(context));
+              //     .then((value) async {
+              //   Navigator.pop(context);
+              // });
             },
           ),
           IconButton(

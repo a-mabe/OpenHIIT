@@ -234,15 +234,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (snapshot.data!.isEmpty) {
                             return workoutEmpty();
                           } else {
-                            print("Updating the notesList!!!!!!!!!!");
                             noteList = snapshot.data;
                             noteList.sort((a, b) =>
                                 a.workoutIndex.compareTo(b.workoutIndex));
                             for (var i = 0; i < noteList.length; i++) {
-                              print("------");
-                              print(noteList[i].title);
-                              print(noteList[i].workoutIndex);
-                              print("------");
+                              print(
+                                  "--------------------------------------------------------");
+                              print("yeet ${noteList[i].title}");
+                              print(
+                                  "yeet Workout index: ${noteList[i].workoutIndex}");
+                              print("yeet Index: $i");
+                              print(
+                                  "--------------------------------------------------------");
                             }
                             return workoutListView(snapshot);
                           }
