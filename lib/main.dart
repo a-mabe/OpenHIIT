@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -91,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ).then((value) {
-                    // _updateAppbar(context);
+                    _updateAppbar(context);
                     setState(() {
                       workouts =
                           DatabaseManager().lists(DatabaseManager().initDB());
@@ -176,12 +177,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  void _updateAppbar(context) async {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    Brightness statusBarBrightness;
+
+    if (isDarkMode) {
+      statusBarBrightness = Brightness.dark;
+    } else {
+      statusBarBrightness = Brightness.light;
+    }
+
+    Future.delayed(const Duration(milliseconds: 100)).then((_) =>
+        SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarBrightness: statusBarBrightness)));
+  }
+
   void pushSelectTimerPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),
     ).then((value) {
-      // _updateAppbar(context);
+      _updateAppbar(context);
       setState(() {
         workouts = DatabaseManager().lists(DatabaseManager().initDB());
       });
