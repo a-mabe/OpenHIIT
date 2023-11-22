@@ -118,24 +118,18 @@ class ViewWorkoutState extends State<ViewWorkout> {
   }
 
   Future deleteList(workoutArgument, database) async {
-    List<Workout> workouts =
-        await DatabaseManager().lists(DatabaseManager().initDB());
-
-    Workout toBeDeleted = workouts[workoutArgument.workoutIndex];
-    workouts.removeAt(toBeDeleted.workoutIndex);
-    await DatabaseManager().deleteList(workoutArgument.id, database);
-    workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
-
-    print("To be deleted workoutIndex: ${toBeDeleted.workoutIndex}");
-
-    for (int i = toBeDeleted.workoutIndex; i < workouts.length; i++) {
-      print("Current i: $i");
-      print("Current workout title: ${workouts[i].title}");
-      print("Current workoutIndex: ${workouts[i].workoutIndex}");
-      workouts[i].workoutIndex = i;
-      await DatabaseManager()
-          .updateList(workouts[i], await DatabaseManager().initDB());
-    }
+    await DatabaseManager()
+        .deleteList(workoutArgument.id, database)
+        .then((value) async {
+      List<Workout> workouts =
+          await DatabaseManager().lists(DatabaseManager().initDB());
+      workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
+      for (int i = workoutArgument.workoutIndex; i < workouts.length; i++) {
+        workouts[i].workoutIndex = i;
+        await DatabaseManager()
+            .updateList(workouts[i], await DatabaseManager().initDB());
+      }
+    });
   }
 
   @override

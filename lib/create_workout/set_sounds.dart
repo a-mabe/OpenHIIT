@@ -73,8 +73,10 @@ class _SetSoundsState extends State<SetSounds> {
   bool _countdownSoundChanged = false;
 
   void pushHome() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MyHomePage()),
+        (route) => false);
   }
 
   void submitWorkout(Workout workoutArgument, submitDisabled) async {
@@ -94,23 +96,19 @@ class _SetSoundsState extends State<SetSounds> {
   }
 
   Future updateDatabase(database, Workout workoutArgument) async {
-    bool newWorkout = false;
-    List<Workout> workouts =
-        await DatabaseManager().lists(DatabaseManager().initDB());
-
     if (workoutArgument.id == "") {
-      newWorkout = true;
+      List<Workout> workouts =
+          await DatabaseManager().lists(DatabaseManager().initDB());
+
       // Set the workout ID
       workoutArgument.id = const Uuid().v1();
       workouts.insert(0, workoutArgument);
 
       for (var i = 0; i < workouts.length; i++) {
-        if (i == 0 && newWorkout) {
+        if (i == 0) {
           await DatabaseManager().insertList(workouts[i], database);
         } else {
-          if (newWorkout && i > 0) {
-            workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          }
+          workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
           await DatabaseManager().updateList(workouts[i], database);
         }
       }

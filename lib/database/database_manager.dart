@@ -10,7 +10,6 @@
 ///
 
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
