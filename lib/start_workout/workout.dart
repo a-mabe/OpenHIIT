@@ -19,7 +19,7 @@ class StartWorkout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: CountDownTimer(),
       ),
@@ -231,6 +231,8 @@ class CountDownTimerState extends State<CountDownTimer>
 
     final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
+    String backgroundColorStatus = "start";
+
     setState(() {
       if (shouldReset) {
         shouldReset = false;
@@ -359,153 +361,162 @@ class CountDownTimerState extends State<CountDownTimer>
           ));
     }
 
-    return SafeArea(
-        bottom: false,
-        child: Countdown(
-            controller: _workoutController,
-            workSeconds: workoutArgument.exerciseTime,
-            restSeconds: workoutArgument.restTime,
-            workSound: workoutArgument.workSound,
-            restSound: workoutArgument.restSound,
-            endSound: workoutArgument.completeSound,
-            countdownSound: workoutArgument.countdownSound,
-            halfwaySound: workoutArgument.halfwaySound,
-            numberOfWorkIntervals: workoutArgument.numExercises,
-            onFinished: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (intervalInfo.length == 1) {
-                  intervalInfo.removeAt(0);
+    return Scaffold(
+      body: Countdown(
+          controller: _workoutController,
+          workSeconds: workoutArgument.exerciseTime,
+          restSeconds: workoutArgument.restTime,
+          workSound: workoutArgument.workSound,
+          restSound: workoutArgument.restSound,
+          endSound: workoutArgument.completeSound,
+          countdownSound: workoutArgument.countdownSound,
+          halfwaySound: workoutArgument.halfwaySound,
+          numberOfWorkIntervals: workoutArgument.numExercises,
+          onFinished: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (intervalInfo.length == 1) {
+                intervalInfo.removeAt(0);
 
-                  Future.delayed(const Duration(microseconds: 500000), () {
-                    setState(() {
-                      doneVisible = true;
-                      _controllerCenter.play();
-                    });
+                Future.delayed(const Duration(microseconds: 500000), () {
+                  setState(() {
+                    doneVisible = true;
+                    _controllerCenter.play();
                   });
-                }
-              });
-            },
-            build: (_, BackgroundTimerData timerData) {
-              if (timerData.status == "complete" && restart == false) {
-                done = true;
-              } else if (timerData.status == "start") {
-                currentWorkInterval = 0;
-                ListModel<ListTileModel> intervalList =
-                    ListModel<ListTileModel>(
-                  listKey: listKey,
-                  initialItems: listItems(exercises, workoutArgument),
-                  removedItemBuilder: _buildRemovedItem,
-                );
-
-                int count = 0;
-                while (intervalInfo.length < intervalTotal) {
-                  intervalInfo.insert(count, intervalList[count]);
-                  count++;
-                }
-              } else {
-                done = false;
-                restart = true;
+                });
               }
+            });
+          },
+          build: (_, BackgroundTimerData timerData) {
+            backgroundColorStatus = timerData.status;
 
-              while ((intervalInfo.length + timerData.numberOfIntervals) >
-                  intervalTotal) {
-                if (intervalInfo.length > 0 && doneVisible == false) {
-                  intervalInfo.removeAt(0);
-                }
+            if (timerData.status == "complete" && restart == false) {
+              done = true;
+            } else if (timerData.status == "start") {
+              currentWorkInterval = 0;
+              ListModel<ListTileModel> intervalList = ListModel<ListTileModel>(
+                listKey: listKey,
+                initialItems: listItems(exercises, workoutArgument),
+                removedItemBuilder: _buildRemovedItem,
+              );
+
+              int count = 0;
+              while (intervalInfo.length < intervalTotal) {
+                intervalInfo.insert(count, intervalList[count]);
+                count++;
               }
+            } else {
+              done = false;
+              restart = true;
+            }
 
-              return Stack(children: [
-                Container(
-                  color: backgroundColor(timerData.status),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
-                        child: Row(children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(size: 50.0, Icons.arrow_back),
-                              color: Colors.white),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                if (!timerData.paused) {
-                                  _workoutController.pause();
-                                } else {
-                                  _workoutController.resume();
-                                }
-                              },
-                              icon: Icon(
-                                  size: 50.0,
-                                  timerData.paused
-                                      ? Icons.play_arrow
-                                      : Icons.pause),
-                              color: Colors.white),
-                        ]),
-                      ),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerScreenText(
-                                          currentWorkInterval,
-                                          timerData.status,
-                                          exercises,
-                                          workoutArgument),
-                                      style: const TextStyle(
-                                          fontSize: 30, color: Colors.white),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerData.currentMicroSeconds.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 160, color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ))),
-                    ],
-                  ),
+            while ((intervalInfo.length + timerData.numberOfIntervals) >
+                intervalTotal) {
+              if (intervalInfo.length > 0 && doneVisible == false) {
+                intervalInfo.removeAt(0);
+              }
+            }
+
+            return Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: 5,
+                  backgroundColor: backgroundColor(backgroundColorStatus),
+                  shadowColor: Colors.transparent,
                 ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FractionallySizedBox(
-                        widthFactor: 1.0,
-                        heightFactor: 0.5,
-                        child: Container(
-                            alignment: AlignmentDirectional.bottomCenter,
-                            color: const Color.fromARGB(22, 0, 0, 0),
-                            child: AnimatedList(
-                              key: listKey,
-                              initialItemCount: intervalInfo.length,
-                              itemBuilder: (context, index, animation) {
-                                return CardItemAnimated(
-                                  animation: animation,
-                                  item: intervalInfo[index],
-                                  fontColor: index == 0
-                                      ? Colors.white
-                                      : const Color.fromARGB(
-                                          153, 255, 255, 255),
-                                  fontWeight: index == 0
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                );
-                              },
-                            )))),
-                complete()
-              ]);
-            }));
+                body: Stack(children: [
+                  Container(
+                    color: backgroundColor(timerData.status),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
+                          child: Row(children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(size: 50.0, Icons.arrow_back),
+                                color: Colors.white),
+                            const Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  if (!timerData.paused) {
+                                    _workoutController.pause();
+                                  } else {
+                                    _workoutController.resume();
+                                  }
+                                },
+                                icon: Icon(
+                                    size: 50.0,
+                                    timerData.paused
+                                        ? Icons.play_arrow
+                                        : Icons.pause),
+                                color: Colors.white),
+                          ]),
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 20.0, 0.0, 0.0),
+                                      child: Text(
+                                        timerScreenText(
+                                            currentWorkInterval,
+                                            timerData.status,
+                                            exercises,
+                                            workoutArgument),
+                                        style: const TextStyle(
+                                            fontSize: 30, color: Colors.white),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0.0),
+                                      child: Text(
+                                        timerData.currentMicroSeconds
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 160, color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ))),
+                      ],
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FractionallySizedBox(
+                          widthFactor: 1.0,
+                          heightFactor: 0.5,
+                          child: Container(
+                              alignment: AlignmentDirectional.bottomCenter,
+                              color: const Color.fromARGB(22, 0, 0, 0),
+                              child: AnimatedList(
+                                key: listKey,
+                                initialItemCount: intervalInfo.length,
+                                itemBuilder: (context, index, animation) {
+                                  return CardItemAnimated(
+                                    animation: animation,
+                                    item: intervalInfo[index],
+                                    fontColor: index == 0
+                                        ? Colors.white
+                                        : const Color.fromARGB(
+                                            153, 255, 255, 255),
+                                    fontWeight: index == 0
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  );
+                                },
+                              )))),
+                  complete()
+                ]));
+          }),
+    );
   }
 
   Color backgroundColor(String status) {

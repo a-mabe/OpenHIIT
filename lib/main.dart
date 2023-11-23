@@ -235,6 +235,12 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Create workout',
         child: const Icon(Icons.add),
       ),
+      appBar: AppBar(
+        toolbarHeight: 5,
+        // foregroundColor: Colors.white,
+        // backgroundColor: Colors.white,
+        // shadowColor: Colors.transparent,
+      ),
       body: SafeArea(
           child: Container(
               padding: const EdgeInsets.all(8.0),
