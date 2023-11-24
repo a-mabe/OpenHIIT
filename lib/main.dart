@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -45,8 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
   late Future<List<Workout>> workouts;
 
   void _onReorder(int oldIndex, int newIndex) async {
-    if (newIndex > reorderableWorkoutList.length)
+    if (newIndex > reorderableWorkoutList.length) {
       newIndex = reorderableWorkoutList.length;
+    }
     if (oldIndex < newIndex) newIndex -= 1;
 
     final Workout item = reorderableWorkoutList[oldIndex];
@@ -61,9 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
+    Database database = await DatabaseManager().initDB();
+
     for (var i = 0; i < reorderableWorkoutList.length; i++) {
-      await DatabaseManager().updateList(
-          reorderableWorkoutList[i], await DatabaseManager().initDB());
+      await DatabaseManager().updateList(reorderableWorkoutList[i], database);
     }
   }
 
@@ -218,9 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       appBar: AppBar(
         toolbarHeight: 0,
-        // foregroundColor: Colors.white,
-        // backgroundColor: Colors.white,
-        // shadowColor: Colors.transparent,
       ),
       body: SafeArea(
           child: Container(
