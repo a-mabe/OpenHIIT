@@ -68,27 +68,7 @@ class CountDownTimerState extends State<CountDownTimer>
     init();
   }
 
-  void _updateAppbar() async {
-    var brightness =
-        SchedulerBinding.instance.platformDispatcher.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-
-    Brightness statusBarBrightness;
-
-    if (isDarkMode) {
-      statusBarBrightness = Brightness.dark;
-    } else {
-      statusBarBrightness = Brightness.light;
-    }
-
-    Future.delayed(Duration(milliseconds: 500)).then((_) =>
-        SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarBrightness: statusBarBrightness)));
-  }
-
   void init() async {
-    _updateAppbar();
-
     final session = await AudioSession.instance;
     session.setActive(false);
   }

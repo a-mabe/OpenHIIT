@@ -92,7 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ).then((value) {
-                    _updateAppbar(context);
                     setState(() {
                       workouts =
                           DatabaseManager().lists(DatabaseManager().initDB());
@@ -177,29 +176,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  void _updateAppbar(context) async {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-
-    Brightness statusBarBrightness;
-
-    if (isDarkMode) {
-      statusBarBrightness = Brightness.dark;
-    } else {
-      statusBarBrightness = Brightness.light;
-    }
-
-    Future.delayed(const Duration(milliseconds: 100)).then((_) =>
-        SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarBrightness: statusBarBrightness)));
-  }
-
   void pushSelectTimerPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),
     ).then((value) {
-      _updateAppbar(context);
       setState(() {
         workouts = DatabaseManager().lists(DatabaseManager().initDB());
       });
@@ -236,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
-        toolbarHeight: 5,
+        toolbarHeight: 0,
         // foregroundColor: Colors.white,
         // backgroundColor: Colors.white,
         // shadowColor: Colors.transparent,
