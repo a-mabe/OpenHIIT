@@ -10,7 +10,6 @@
 ///
 
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -65,7 +64,7 @@ class DatabaseManager {
     if (Platform.isWindows || Platform.isLinux) {
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 2,
+        version: 3,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -81,21 +80,26 @@ class DatabaseManager {
             halfwaySound TEXT,
             completeSound TEXT,
             countdownSound TEXT,
-            colorInt INTEGER
+            colorInt INTEGER,
+            workoutIndex INTEGER
             )
             ''');
         },
         onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion < newVersion) {
+          if (oldVersion == 1) {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+          }
+          if (oldVersion < newVersion) {
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
           }
         },
       );
     }
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -111,14 +115,19 @@ class DatabaseManager {
             halfwaySound TEXT,
             completeSound TEXT,
             countdownSound TEXT,
-            colorInt INTEGER
+            colorInt INTEGER,
+            workoutIndex INTEGER
             )
             ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < newVersion) {
+        if (oldVersion == 2) {
           await db
               .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+        }
+        if (oldVersion < newVersion) {
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
         }
       },
     );
@@ -129,9 +138,7 @@ class DatabaseManager {
   Future<void> insertList(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
-    final db = await database;
-
-    log(workout.toString());
+    final db = database;
 
     /// Insert the TodoList into the correct table.
     ///
@@ -203,6 +210,8 @@ class DatabaseManager {
         maps[i]['countdownSound'],
         maps[i]['colorInt'] ??
             4280391411, // Default to blue if no previous color selected
+        maps[i]['workoutIndex'] ??
+            i, // Default to the current index if no index change passed
       );
     });
   }
