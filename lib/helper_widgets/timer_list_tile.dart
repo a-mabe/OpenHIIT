@@ -3,9 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../workout_data_type/workout_type.dart';
 
-/// Possible interval states
-// enum IntervalStates { start, work, rest, complete }
-
 ///
 /// Background service countdown interval timer.
 ///
@@ -24,9 +21,6 @@ class TimerListTile extends StatefulWidget {
     required this.workout,
     required this.onTap,
     required this.index,
-    // required this.description,
-    // required this.build,
-    // this.status = 'start',
   }) : super(key: key);
 
   @override
@@ -54,7 +48,6 @@ class TimerListTileState extends State<TimerListTile>
         key: Key('$widget.index'),
         color: Color(widget.workout.colorInt),
         child: ListTile(
-          // key: Key('$widget.index'),
           // Title of the workout.
           title: Text(widget.workout.title),
           titleTextStyle: const TextStyle(
@@ -69,7 +62,6 @@ Total: ${calculateWorkoutTime(widget.workout)} minutes'''),
           subtitleTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
-          // tileColor: Color(widget.workout.colorInt),
           minVerticalPadding: 15.0,
           onTap: () {
             widget.onTap!();
@@ -79,34 +71,6 @@ Total: ${calculateWorkoutTime(widget.workout)} minutes'''),
             child: const Icon(Icons.drag_handle),
           ),
         ));
-//     return Padding(
-//         padding: const EdgeInsets.all(8.0), //your choice
-//         child: ListTile(
-//           // key: Key('$widget.index'),
-//           // Title of the workout.
-//           title: Text(widget.workout.title),
-//           titleTextStyle: const TextStyle(
-//             fontSize: 20,
-//           ),
-//           // Workout metadata.
-//           subtitle: Text(
-//               '''${widget.workout.exercises != "" ? 'Exercises: ${jsonDecode(widget.workout.exercises).length}' : 'Intervals: ${widget.workout.numExercises}'}
-// Exercise time: ${widget.workout.exerciseTime} seconds
-// Rest time: ${widget.workout.restTime} seconds
-// Total: ${calculateWorkoutTime(widget.workout)} minutes'''),
-//           subtitleTextStyle: const TextStyle(
-//             fontWeight: FontWeight.bold,
-//           ),
-//           tileColor: Color(widget.workout.colorInt),
-//           minVerticalPadding: 15.0,
-//           onTap: () {
-//             widget.onTap!();
-//           },
-//           trailing: ReorderableDragStartListener(
-//             index: widget.index,
-//             child: const Icon(Icons.drag_handle),
-//           ),
-//         ));
   }
 
   int calculateWorkoutTime(Workout workout) {

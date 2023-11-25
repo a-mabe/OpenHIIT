@@ -169,9 +169,6 @@ class ViewWorkoutState extends State<ViewWorkout> {
             onPressed: () async {
               await deleteList(workoutArgument, database)
                   .then((value) => Navigator.pop(context));
-              //     .then((value) async {
-              //   Navigator.pop(context);
-              // });
             },
           ),
           IconButton(

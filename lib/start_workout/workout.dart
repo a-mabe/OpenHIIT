@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -19,7 +17,7 @@ class StartWorkout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CountDownTimer(),
       ),
@@ -265,7 +263,6 @@ class CountDownTimerState extends State<CountDownTimer>
                     child: SizedBox(
                       width: 300,
                       height: 300,
-                      // color: Colors.green,
                       child: Center(
                         child: Column(
                           children: [
@@ -320,8 +317,6 @@ class CountDownTimerState extends State<CountDownTimer>
                                           doneVisible = false;
                                           restart = true;
                                           done = false;
-                                          // currentWorkInterval = 0;
-                                          // _workoutController.restart();
                                           Wakelock.enable();
                                         });
                                       },
