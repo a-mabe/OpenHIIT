@@ -196,7 +196,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const StartWorkout(),
+                        builder: (context) => const CountDownTimer(),
                         settings: RouteSettings(
                           arguments: workoutArgument,
                         ),
