@@ -166,9 +166,43 @@ class ViewWorkoutState extends State<ViewWorkout> {
           IconButton(
             icon: const Icon(Icons.delete),
             tooltip: 'Show Snackbar',
-            onPressed: () async {
-              await deleteList(workoutArgument, database)
-                  .then((value) => Navigator.pop(context));
+            // onPressed: () async {
+            //   await deleteList(workoutArgument, database)
+            //       .then((value) => Navigator.pop(context));
+            // },
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Confirm to delete'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text(
+                              'Are you sure you would like to delete ${workoutArgument.title}?'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Delete'),
+                        onPressed: () async {
+                          await deleteList(workoutArgument, database)
+                              .then((value) => Navigator.pop(context));
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
           IconButton(
