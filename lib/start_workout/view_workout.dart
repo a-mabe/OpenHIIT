@@ -175,7 +175,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Confirm to delete'),
+                    title: Text('Delete ${workoutArgument.title}'),
                     content: SingleChildScrollView(
                       child: ListBody(
                         children: <Widget>[
