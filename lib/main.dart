@@ -212,46 +212,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /// Pushes to [CreateWorkout()]
-      floatingActionButton: FloatingActionButton(
-        onPressed: pushSelectTimerPage,
-        tooltip: 'Create workout',
-        child: const Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        toolbarHeight: 0,
-      ),
-      body: SafeArea(
-          child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.882,
-                  child: FutureBuilder(
-                      future: workouts,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        /// When [workouts] has successfully loaded.
-                        if (snapshot.hasData) {
-                          if (snapshot.data!.isEmpty) {
-                            return workoutEmpty();
-                          } else {
-                            reorderableWorkoutList = snapshot.data;
-                            reorderableWorkoutList.sort((a, b) =>
-                                a.workoutIndex.compareTo(b.workoutIndex));
-                            return workoutListView(snapshot);
-                          }
-                        }
+    return Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: SafeArea(
+          child: Scaffold(
 
-                        /// When there was an error loading [workouts].
-                        else if (snapshot.hasError) {
-                          return workoutFetchError(snapshot);
-                        }
+              /// Pushes to [CreateWorkout()]
+              floatingActionButton: FloatingActionButton(
+                onPressed: pushSelectTimerPage,
+                tooltip: 'Create workout',
+                child: const Icon(Icons.add),
+              ),
+              body: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.882,
+                      child: FutureBuilder(
+                          future: workouts,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            /// When [workouts] has successfully loaded.
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.isEmpty) {
+                                return workoutEmpty();
+                              } else {
+                                reorderableWorkoutList = snapshot.data;
+                                reorderableWorkoutList.sort((a, b) =>
+                                    a.workoutIndex.compareTo(b.workoutIndex));
+                                return workoutListView(snapshot);
+                              }
+                            }
 
-                        /// While still waiting to load [workouts].
-                        else {
-                          return workoutLoading();
-                        }
-                      })))),
-    );
+                            /// When there was an error loading [workouts].
+                            else if (snapshot.hasError) {
+                              return workoutFetchError(snapshot);
+                            }
+
+                            /// While still waiting to load [workouts].
+                            else {
+                              return workoutLoading();
+                            }
+                          })))),
+        ));
   }
 }
