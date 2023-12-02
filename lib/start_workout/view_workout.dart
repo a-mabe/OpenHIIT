@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import '../create_workout/create_timer.dart';
 import '../create_workout/create_workout.dart';
@@ -132,8 +133,25 @@ class ViewWorkoutState extends State<ViewWorkout> {
     });
   }
 
+  Color iconColor() {
+    final darkMode =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    if (darkMode == Brightness.dark) {
+      return Colors.white;
+    } else {
+      return Colors.black;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
+        false;
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Theme.of(context).brightness,
+    ));
+
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
@@ -164,12 +182,8 @@ class ViewWorkoutState extends State<ViewWorkout> {
         backgroundColor: Color(workoutArgument.colorInt),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: Icon(Icons.delete, color: iconColor()),
             tooltip: 'Show Snackbar',
-            // onPressed: () async {
-            //   await deleteList(workoutArgument, database)
-            //       .then((value) => Navigator.pop(context));
-            // },
             onPressed: () {
               showDialog(
                 context: context,
@@ -206,7 +220,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: Icon(Icons.edit, color: iconColor()),
             onPressed: () {
               if (exercises.isEmpty) {
                 pushCreateTimer(workoutArgument);
@@ -232,7 +246,14 @@ class ViewWorkoutState extends State<ViewWorkout> {
                           arguments: workoutArgument,
                         ),
                       ),
-                    );
+                    ).then((value) {
+                      WidgetsBinding.instance.renderViews.first
+                          .automaticSystemUiAdjustment = false;
+
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                        statusBarBrightness: Theme.of(context).brightness,
+                      ));
+                    });
                   },
                   child: Ink(
                     height: 80.0,
