@@ -212,6 +212,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
+        false;
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Theme.of(context).brightness,
+    ));
+
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: SafeArea(

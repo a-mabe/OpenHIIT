@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -200,6 +201,13 @@ class CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
+        false;
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+    ));
+
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 

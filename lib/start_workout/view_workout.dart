@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import '../create_workout/create_timer.dart';
 import '../create_workout/create_workout.dart';
@@ -144,6 +145,13 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
+        false;
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Theme.of(context).brightness,
+    ));
+
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
@@ -238,7 +246,14 @@ class ViewWorkoutState extends State<ViewWorkout> {
                           arguments: workoutArgument,
                         ),
                       ),
-                    );
+                    ).then((value) {
+                      WidgetsBinding.instance.renderViews.first
+                          .automaticSystemUiAdjustment = false;
+
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                        statusBarBrightness: Theme.of(context).brightness,
+                      ));
+                    });
                   },
                   child: Ink(
                     height: 80.0,
