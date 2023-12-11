@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -12,6 +14,88 @@ import '../workout_data_type/workout_type.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
 import '../models/list_tile_model.dart';
+
+// List<double>? presetFontSizes = [
+//   400,
+//   395,
+//   390,
+//   385,
+//   380,
+//   375,
+//   370,
+//   365,
+//   360,
+//   355,
+//   350,
+//   345,
+//   340,
+//   335,
+//   330,
+//   325,
+//   320,
+//   315,
+//   310,
+//   305,
+//   300,
+//   295,
+//   290,
+//   285,
+//   280,
+//   275,
+//   270,
+//   265,
+//   260,
+//   255,
+//   250,
+//   245,
+//   240,
+//   235,
+//   230,
+//   225,
+//   220,
+//   215,
+//   210,
+//   205,
+//   200,
+//   195,
+//   190,
+//   185,
+//   180,
+//   175,
+//   170,
+//   165,
+//   160,
+//   155,
+//   150,
+//   145,
+//   140,
+//   135,
+//   130,
+//   125,
+//   120,
+//   115,
+//   110,
+//   105,
+//   100,
+//   95,
+//   90,
+//   85,
+//   80,
+//   75,
+//   70,
+//   65,
+//   60,
+//   55,
+//   50,
+//   45,
+//   40,
+//   35,
+//   30,
+//   25,
+//   20,
+//   15,
+//   10
+// ];
 
 class StartWorkout extends StatelessWidget {
   const StartWorkout({super.key});
@@ -142,6 +226,7 @@ class CountDownTimerState extends State<CountDownTimer>
         listItems.add(
           ListTileModel(
             action: "Prepare",
+            showMinutes: workoutArgument.showMinutes,
             interval: 0,
             total: workoutArgument.numExercises,
             seconds: 10,
@@ -152,6 +237,7 @@ class CountDownTimerState extends State<CountDownTimer>
           listItems.add(
             ListTileModel(
               action: "Work",
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -161,6 +247,7 @@ class CountDownTimerState extends State<CountDownTimer>
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,
@@ -171,6 +258,7 @@ class CountDownTimerState extends State<CountDownTimer>
           listItems.add(
             ListTileModel(
               action: exercises[i - 1],
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -180,6 +268,7 @@ class CountDownTimerState extends State<CountDownTimer>
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,
@@ -408,8 +497,8 @@ class CountDownTimerState extends State<CountDownTimer>
                   color: backgroundColor(timerData.status),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
+                      Expanded(
+                        flex: 6,
                         child: Row(children: [
                           IconButton(
                               onPressed: () {
@@ -434,46 +523,45 @@ class CountDownTimerState extends State<CountDownTimer>
                               color: Colors.white),
                         ]),
                       ),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerScreenText(
-                                          currentWorkInterval,
-                                          timerData.status,
-                                          exercises,
-                                          workoutArgument),
-                                      style: const TextStyle(
-                                          fontSize: 30, color: Colors.white),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerData.currentMicroSeconds.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 160, color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ))),
-                    ],
-                  ),
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FractionallySizedBox(
-                        widthFactor: 1.0,
-                        heightFactor: 0.5,
+                      Expanded(
+                        flex: 10,
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                10.0, 10.0, 10.0, 10.0),
+                            child: FittedBox(
+                              child: Text(
+                                timerScreenText(
+                                    currentWorkInterval,
+                                    timerData.status,
+                                    exercises,
+                                    workoutArgument),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            )),
+                      ),
+                      Expanded(
+                        flex: 34,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                          child: AutoSizeText(
+                            timerText(timerData.currentMicroSeconds.toString(),
+                                workoutArgument),
+                            maxLines: 1,
+                            minFontSize: 20,
+                            // presetFontSizes: presetFontSizes,
+                            style: GoogleFonts.dmMono(
+                              fontSize: 20000,
+                              height: 1.1,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 50,
                         child: Container(
-                            alignment: AlignmentDirectional.bottomCenter,
                             color: const Color.fromARGB(22, 0, 0, 0),
                             child: AnimatedList(
                               key: listKey,
@@ -491,7 +579,11 @@ class CountDownTimerState extends State<CountDownTimer>
                                       : FontWeight.normal,
                                 );
                               },
-                            )))),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
                 complete()
               ]))));
         });
@@ -506,6 +598,27 @@ class CountDownTimerState extends State<CountDownTimer>
       return Colors.black;
     } else {
       return const Color.fromARGB(255, 0, 225, 255);
+    }
+  }
+
+  String timerText(String currentSeconds, Workout workout) {
+    if (workout.showMinutes == 1) {
+      int currentSecondsInt = int.parse(currentSeconds);
+      int seconds = currentSecondsInt % 60;
+      int minutes = ((currentSecondsInt - seconds) / 60).round();
+
+      if (minutes == 0) {
+        return currentSeconds;
+      }
+
+      String secondsString = seconds.toString();
+      if (seconds < 10) {
+        secondsString = "0$seconds";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return currentSeconds;
     }
   }
 }

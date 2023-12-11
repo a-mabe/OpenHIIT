@@ -37,7 +37,7 @@ class _SetExercisesState extends State<SetExercises> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Timings(),
+          builder: (context) => const SetTimings(),
           settings: RouteSettings(
             arguments: _workout,
           ),
@@ -58,9 +58,11 @@ class _SetExercisesState extends State<SetExercises> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument = ModalRoute.of(context)!.settings.arguments as Workout;
-    List<dynamic> exercisesArgument =
-        workoutArgument.exercises != "" ? jsonDecode(workoutArgument.exercises) : [];
+    Workout workoutArgument =
+        ModalRoute.of(context)!.settings.arguments as Workout;
+    List<dynamic> exercisesArgument = workoutArgument.exercises != ""
+        ? jsonDecode(workoutArgument.exercises)
+        : [];
     List<bool> validators = [];
     List<String> exercises = [];
     final formKey = GlobalKey<FormState>();
@@ -69,13 +71,15 @@ class _SetExercisesState extends State<SetExercises> {
       if (workoutArgument.exercises == "") {
         _controllers.add(TextEditingController());
       } else {
-        _controllers.add(TextEditingController(text: exercisesArgument[i]));
+        _controllers.add(TextEditingController(
+            text: i < exercisesArgument.length ? exercisesArgument[i] : ""));
       }
       validators.add(false);
     }
 
     List<Widget> createChildren() {
-      return List<Widget>.generate(workoutArgument.numExercises + 1, (int index) {
+      return List<Widget>.generate(workoutArgument.numExercises + 1,
+          (int index) {
         if (index == workoutArgument.numExercises) {
           // return the submit button
           return Padding(

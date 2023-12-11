@@ -56,6 +56,8 @@ dependencies:
       ref: main # branch name
   just_audio: ^0.9.35
   soundpool: ^2.4.1
+  auto_size_text: ^3.0.0
+  google_fonts: ^6.1.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -101,6 +103,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audio/
+    - assets/google_fonts/
 
 
   # The following line ensures that the Material Icons font is

@@ -71,6 +71,12 @@ class Workout {
   ///
   int workoutIndex = 0;
 
+  /// Whether the timer should display minutes.
+  ///
+  /// e.g., 0 for false
+  ///
+  int showMinutes = 0;
+
   ///
   /// -------------
   /// END FIELDS
@@ -105,7 +111,8 @@ class Workout {
       this.completeSound,
       this.countdownSound,
       this.colorInt,
-      this.workoutIndex);
+      this.workoutIndex,
+      this.showMinutes);
 
   Workout.empty() {
     id = "";
@@ -123,6 +130,7 @@ class Workout {
     countdownSound = "";
     colorInt = 4280391411;
     workoutIndex = 0;
+    showMinutes = 0;
   }
 
   ///
@@ -152,6 +160,7 @@ class Workout {
       'countdownSound': countdownSound,
       'colorInt': colorInt,
       'workoutIndex': workoutIndex,
+      'showMinutes': showMinutes,
     };
   }
 

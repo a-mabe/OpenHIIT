@@ -42,6 +42,26 @@ class TimerListTileState extends State<TimerListTile>
     super.dispose();
   }
 
+  String timeString(int showMinutes, int seconds) {
+    if (showMinutes == 1) {
+      int secondsRemainder = seconds % 60;
+      int minutes = ((seconds - secondsRemainder) / 60).round();
+
+      if (minutes == 0) {
+        return "${seconds.toString()} seconds";
+      }
+
+      String secondsString = secondsRemainder.toString();
+      if (secondsRemainder < 10) {
+        secondsString = "0$secondsRemainder";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return "${seconds.toString()} seconds";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -55,10 +75,10 @@ class TimerListTileState extends State<TimerListTile>
           ),
           // Workout metadata.
           subtitle: Text(
-              '''${widget.workout.exercises != "" ? 'Exercises: ${jsonDecode(widget.workout.exercises).length}' : 'Intervals: ${widget.workout.numExercises}'}
-Exercise time: ${widget.workout.exerciseTime} seconds
-Rest time: ${widget.workout.restTime} seconds
-Total: ${calculateWorkoutTime(widget.workout)} minutes'''),
+              '''${widget.workout.exercises != "" ? 'Exercises - ${jsonDecode(widget.workout.exercises).length}' : 'Intervals - ${widget.workout.numExercises}'}
+Exercise time - ${timeString(widget.workout.showMinutes, widget.workout.exerciseTime)}
+Rest time - ${timeString(widget.workout.showMinutes, widget.workout.restTime)}
+Total - ${calculateWorkoutTime(widget.workout)} minutes'''),
           subtitleTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),

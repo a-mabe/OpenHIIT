@@ -1,12 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import '../models/list_tile_model.dart';
 
-/// Displays its integer item as 'item N' on a Card whose color is based on
-/// the item's value.
-///
-/// The text is displayed in bright green if [selected] is
-/// true. This widget's height is based on the [animation] parameter, it
-/// varies from 0 to 128 as the animation varies from 0.0 to 1.0.
 class CardItemAnimated extends StatelessWidget {
   const CardItemAnimated({
     super.key,
@@ -27,12 +22,15 @@ class CardItemAnimated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = (MediaQuery.of(context).size.height) / 12;
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1, 0),
         end: const Offset(0, 0),
       ).animate(CurvedAnimation(
-          parent: animation, curve: Curves.easeIn, reverseCurve: Curves.easeOut)),
+          parent: animation,
+          curve: Curves.easeIn,
+          reverseCurve: Curves.easeOut)),
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.transparent,
@@ -45,51 +43,47 @@ class CardItemAnimated extends StatelessWidget {
           ),
         ),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: 75.0,
-          ),
+          constraints:
+              BoxConstraints(minHeight: height, maxHeight: height + 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                child: SizedBox(
-                  width: 85,
-                  child: Text(
-                    item.intervalString(),
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: fontColor,
-                      fontWeight: fontWeight,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 225,
-                child: Text(
-                  item.action,
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: fontColor,
-                    fontWeight: fontWeight,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-                child: SizedBox(
-                  width: 40,
-                  child: Text(
-                    "${item.seconds}s",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: fontColor,
-                      fontWeight: fontWeight,
-                    ),
-                  ),
-                ),
+              Expanded(
+                  flex: 20,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 20.0, 8.0, 20.0),
+                      child: AutoSizeText(
+                        item.intervalString().isEmpty
+                            ? "       "
+                            : item.intervalString(),
+                        maxLines: 1,
+                        minFontSize: 0,
+                        maxFontSize: 20000,
+                        style: TextStyle(fontSize: 20000, color: fontColor),
+                      ))),
+              Expanded(
+                  flex: 60,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                      child: AutoSizeText(
+                        item.action.padRight(50, " "),
+                        maxLines: 2,
+                        minFontSize: 20,
+                        maxFontSize: 20000,
+                        style: TextStyle(fontSize: 20000, color: fontColor),
+                      ))),
+              Expanded(
+                flex: 20,
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20.0, 10.0, 20.0),
+                    child: AutoSizeText(
+                      item.timeString(),
+                      maxLines: 1,
+                      minFontSize: 0,
+                      maxFontSize: 20000,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(fontSize: 20000, color: fontColor),
+                    )),
               )
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:characters/characters.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_exercises.dart';
@@ -34,6 +35,13 @@ class _ChooseNumberState extends State<ChooseNumber> {
   final _formKey = GlobalKey<FormState>();
   bool _changed = false;
   Color _timerColor = Colors.blue;
+
+  List<Widget> timerDisplayOptions = <Widget>[
+    Text('102s'),
+    Text('1:42'),
+  ];
+
+  List<bool> selectedTimerDisplay = <bool>[true, false];
 
   void pushExercises(workout) {
     setState(() {
@@ -92,6 +100,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
       form.save();
       workout.numExercises = _currentIntValue;
       workout.colorInt = _timerColor.value;
+      workout.showMinutes = selectedTimerDisplay[0] == true ? 0 : 1;
 
       pushExercises(workout);
     }
@@ -105,6 +114,8 @@ class _ChooseNumberState extends State<ChooseNumber> {
     if (!_changed && workoutArgument.numExercises > 0) {
       _currentIntValue = workoutArgument.numExercises;
       _timerColor = Color(workoutArgument.colorInt);
+      selectedTimerDisplay =
+          workoutArgument.showMinutes == 1 ? [false, true] : [true, false];
     }
 
     return Form(
@@ -137,6 +148,52 @@ class _ChooseNumberState extends State<ChooseNumber> {
                 onSaved: (val) => setState(() => workoutArgument.title = val!),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
+              child: Text(
+                "Timer display style:",
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 0.0),
+              child: ToggleButtons(
+                direction: Axis.horizontal,
+                onPressed: (int index) {
+                  setState(() {
+                    _changed = true;
+                    // The button that is tapped is set to true, and the others to false.
+                    for (int i = 0; i < selectedTimerDisplay.length; i++) {
+                      selectedTimerDisplay[i] = i == index;
+                    }
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.blue,
+                selectedColor: Colors.white,
+                fillColor: Colors.blue,
+                color: Colors.blue,
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 80.0,
+                ),
+                isSelected: selectedTimerDisplay,
+                children: timerDisplayOptions,
+              ),
+            )),
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+              child: selectedTimerDisplay[0] == true
+                  ? const Text("Max 999 seconds")
+                  : const Text("Max 99 minutes (99:00)"),
+            )),
             const Padding(
               padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
               child: Text(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,6 +14,11 @@ import 'helper_widgets/timer_list_tile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
 
   runApp(const WorkoutTimer());
 }
@@ -233,7 +239,6 @@ class _MyHomePageState extends State<MyHomePage> {
               body: Container(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.882,
                       child: FutureBuilder(
                           future: workouts,
                           builder:
