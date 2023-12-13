@@ -56,6 +56,11 @@ void main() {
 
     for (var i = 0; i < 8; i++) {
       // Reduce the number of exercises by 1.
+      await tester.dragUntilVisible(
+        find.byIcon(Icons.remove), // what you want to find
+        find.byType(SingleChildScrollView), // widget you want to scroll
+        const Offset(-250, 0), // delta to move
+      );
       await tester.tap(find.byIcon(Icons.remove));
       await tester.pumpAndSettle();
     }
