@@ -64,13 +64,13 @@ void main() {
     expect(find.text('2'), findsOneWidget);
 
     await tester.dragUntilVisible(
-      find.byType(ElevatedButton), // what you want to find
+      find.byType(InkWell), // what you want to find
       find.byType(SingleChildScrollView), // widget you want to scroll
       const Offset(-250, 0), // delta to move
     );
 
     // Tap to go to the next page.
-    await tester.tap(find.byType(ElevatedButton));
+    await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
 
     // Verify that the next page has loaded.
@@ -88,7 +88,7 @@ void main() {
     }
 
     // Tap to go to the next page.
-    await tester.tap(find.byType(ElevatedButton));
+    await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
 
     await changeTime(tester, 2, 'Working time: 18 seconds', 'work-decrement');
@@ -97,7 +97,7 @@ void main() {
     await changeTime(tester, 3, 'Rest time: 11 seconds', 'rest-increment');
 
     // Tap to go to the next page.
-    await tester.tap(find.byType(ElevatedButton));
+    await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
 
     // TODO: Test selecting different sounds.
