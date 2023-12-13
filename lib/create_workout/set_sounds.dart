@@ -260,37 +260,26 @@ class _SetSoundsState extends State<SetSounds> {
                     });
                   }),
             ),
-            FractionallySizedBox(
-              widthFactor: 0.8,
-              child: SoundDropdown(
-                  title: "Timer End Sound",
-                  initialSelection: _completeSound,
-                  pool: pool,
-                  soundsList: soundsList,
-                  onFinished: (value) async {
-                    // This is called when the user selects an item.
-                    if (value != 'none') {
-                      await pool.play(await soundIdMap[value]);
-                    }
-                    setState(() {
-                      _completeSound = value!;
-                      _completeSoundChanged = true;
-                    });
-                  }),
-            ),
-            // Center(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(vertical: 16.0),
-            //     child: ElevatedButton(
-            //       onPressed: submitDisabled
-            //           ? null
-            //           : () async {
-            //               submitWorkout(workoutArgument, submitDisabled);
-            //             },
-            //       child: const Text('Submit'),
-            //     ),
-            //   ),
-            // ),
+            Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: SoundDropdown(
+                      title: "Timer End Sound",
+                      initialSelection: _completeSound,
+                      pool: pool,
+                      soundsList: soundsList,
+                      onFinished: (value) async {
+                        // This is called when the user selects an item.
+                        if (value != 'none') {
+                          await pool.play(await soundIdMap[value]);
+                        }
+                        setState(() {
+                          _completeSound = value!;
+                          _completeSoundChanged = true;
+                        });
+                      }),
+                )),
           ],
         ));
   }

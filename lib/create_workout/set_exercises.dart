@@ -3,22 +3,6 @@ import 'dart:convert';
 import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
 
-class Exercises extends StatelessWidget {
-  const Exercises({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('List Exercises'),
-      ),
-      body: const Center(
-        child: SetExercises(),
-      ),
-    );
-  }
-}
-
 class SetExercises extends StatefulWidget {
   const SetExercises({super.key});
 
@@ -115,18 +99,26 @@ class _SetExercisesState extends State<SetExercises> {
       });
     }
 
-    return Form(
-      key: formKey,
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              children: createChildren(),
-            ),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('List Exercises'),
       ),
+      body: Center(
+          child: Form(
+              key: formKey,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Column(
+                        children: createChildren(),
+                      ),
+                    ),
+                  ],
+                ),
+              ))),
     );
   }
 }

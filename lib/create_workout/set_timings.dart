@@ -70,6 +70,7 @@ class _SetTimingsState extends State<SetTimings> {
 
   Widget buildSecondsForm(Workout workoutArgument) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text('Enter Time Intervals'),
         ),
@@ -105,139 +106,144 @@ class _SetTimingsState extends State<SetTimings> {
           ),
         ),
         body: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
-                    child: Text(
-                      "Work interval time:",
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                          initialValue: workoutArgument.exerciseTime == 0
-                              ? ""
-                              : workoutArgument.exerciseTime
-                                  .toString()
-                                  .characters
-                                  .take(3)
-                                  .toString(),
-                          keyboardType: TextInputType.number,
-                          autocorrect: false,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            NumericalRangeFormatter(min: 1, max: 999),
-                          ],
-                          // textInputAction: TextInputAction.done,
-                          style: const TextStyle(fontSize: 40),
-                          textAlign: TextAlign.center,
-                          maxLength: 3,
-                          decoration: const InputDecoration(
-                            hintText: "00",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            counterText: "",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter time';
-                            }
-                            return null;
-                          },
-                          onSaved: (val) => setState(() => workoutArgument
-                              .exerciseTime = val!
-                                  .contains(".")
-                              ? int.parse(val.substring(0, val.indexOf(".")))
-                              : int.parse(val)),
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+                        child: Text(
+                          "Work interval time:",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "s",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          ))
-                    ],
-                  )),
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
-                    child: Text(
-                      "Rest interval time:",
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                            initialValue: workoutArgument.restTime == 0
-                                ? ""
-                                : workoutArgument.restTime
-                                    .toString()
-                                    .characters
-                                    .take(3)
-                                    .toString(),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                              NumericalRangeFormatter(min: 1, max: 999),
-                            ],
-                            textInputAction: TextInputAction.done,
-                            style: const TextStyle(fontSize: 40),
-                            textAlign: TextAlign.center,
-                            maxLength: 3,
-                            decoration: const InputDecoration(
-                              hintText: "00",
-                              border: InputBorder.none,
-                              fillColor: Colors.white,
-                              counterText: "",
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                              initialValue: workoutArgument.exerciseTime == 0
+                                  ? ""
+                                  : workoutArgument.exerciseTime
+                                      .toString()
+                                      .characters
+                                      .take(3)
+                                      .toString(),
+                              keyboardType: TextInputType.number,
+                              autocorrect: false,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                NumericalRangeFormatter(min: 1, max: 999),
+                              ],
+                              // textInputAction: TextInputAction.done,
+                              style: const TextStyle(fontSize: 40),
+                              textAlign: TextAlign.center,
+                              maxLength: 3,
+                              decoration: const InputDecoration(
+                                hintText: "00",
+                                border: InputBorder.none,
+                                fillColor: Colors.white,
+                                counterText: "",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Enter time';
+                                }
+                                return null;
+                              },
+                              onSaved: (val) => setState(() => workoutArgument
+                                      .exerciseTime =
+                                  val!.contains(".")
+                                      ? int.parse(
+                                          val.substring(0, val.indexOf(".")))
+                                      : int.parse(val)),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter time';
-                              }
-                              return null;
-                            },
-                            onSaved: (val) => setState(() => workoutArgument
-                                .restTime = val!
-                                    .contains(".")
-                                ? int.parse(val.substring(0, val.indexOf(".")))
-                                : int.parse(val))),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "s",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          ))
-                    ],
-                  )),
-            ],
-          ),
-        ));
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "s",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              ))
+                        ],
+                      )),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+                        child: Text(
+                          "Rest interval time:",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                                initialValue: workoutArgument.restTime == 0
+                                    ? ""
+                                    : workoutArgument.restTime
+                                        .toString()
+                                        .characters
+                                        .take(3)
+                                        .toString(),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  NumericalRangeFormatter(min: 1, max: 999),
+                                ],
+                                textInputAction: TextInputAction.done,
+                                style: const TextStyle(fontSize: 40),
+                                textAlign: TextAlign.center,
+                                maxLength: 3,
+                                decoration: const InputDecoration(
+                                  hintText: "00",
+                                  border: InputBorder.none,
+                                  fillColor: Colors.white,
+                                  counterText: "",
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter time';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (val) => setState(() => workoutArgument
+                                        .restTime =
+                                    val!.contains(".")
+                                        ? int.parse(
+                                            val.substring(0, val.indexOf(".")))
+                                        : int.parse(val))),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "s",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              ))
+                        ],
+                      )),
+                ],
+              ),
+            )));
   }
 
   Widget buildMinutesSecondsForm(Workout workoutArgument, int workMinutes,
@@ -279,202 +285,208 @@ class _SetTimingsState extends State<SetTimings> {
           ),
         ),
         body: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
-                    child: Text(
-                      "Work interval time:",
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                          initialValue: workoutArgument.exerciseTime == 0
-                              ? ""
-                              : calcMinutes(workoutArgument.exerciseTime)
-                                  .toString(),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            NumericalRangeFormatter(min: 1, max: 99),
-                          ],
-                          textInputAction: TextInputAction.done,
-                          style: const TextStyle(fontSize: 40),
-                          textAlign: TextAlign.center,
-                          maxLength: 2,
-                          decoration: const InputDecoration(
-                            hintText: "00",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            counterText: "",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter time';
-                            }
-                            return null;
-                          },
-                          onSaved: (val) =>
-                              setState(() => workMinutes = int.parse(val!)),
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+                        child: Text(
+                          "Work interval time:",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "m",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          )),
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                          initialValue: workoutArgument.exerciseTime == 0
-                              ? ""
-                              : calcSeconds(workoutArgument.exerciseTime)
-                                  .toString(),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            NumericalRangeFormatter(min: 0, max: 59),
-                          ],
-                          textInputAction: TextInputAction.done,
-                          style: const TextStyle(fontSize: 40),
-                          textAlign: TextAlign.center,
-                          maxLength: 2,
-                          decoration: const InputDecoration(
-                            hintText: "00",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            counterText: "",
-                          ),
-                          onSaved: (val) {
-                            if (val != "") {
-                              setState(() => workSeconds = int.parse(val!));
-                            } else {
-                              setState(() => workSeconds = 0);
-                            }
-                          },
-                        ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "s",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          ))
-                    ],
-                  )),
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0.0),
-                    child: Text(
-                      "Rest interval time:",
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                          initialValue: workoutArgument.restTime == 0
-                              ? ""
-                              : calcMinutes(workoutArgument.restTime)
-                                  .toString(),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            NumericalRangeFormatter(min: 1, max: 99),
-                          ],
-                          textInputAction: TextInputAction.done,
-                          style: const TextStyle(fontSize: 40),
-                          textAlign: TextAlign.center,
-                          maxLength: 2,
-                          decoration: const InputDecoration(
-                            hintText: "00",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            counterText: "",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter time';
-                            }
-                            return null;
-                          },
-                          onSaved: (val) =>
-                              setState(() => restMinutes = int.parse(val!)),
-                        ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "m",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          )),
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                            initialValue: workoutArgument.restTime == 0
-                                ? ""
-                                : calcSeconds(workoutArgument.restTime)
-                                    .toString(),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                              NumericalRangeFormatter(min: 0, max: 59),
-                            ],
-                            textInputAction: TextInputAction.done,
-                            style: const TextStyle(fontSize: 40),
-                            textAlign: TextAlign.center,
-                            maxLength: 2,
-                            decoration: const InputDecoration(
-                              hintText: "00",
-                              border: InputBorder.none,
-                              fillColor: Colors.white,
-                              counterText: "",
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                              initialValue: workoutArgument.exerciseTime == 0
+                                  ? ""
+                                  : calcMinutes(workoutArgument.exerciseTime)
+                                      .toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                NumericalRangeFormatter(min: 1, max: 99),
+                              ],
+                              textInputAction: TextInputAction.done,
+                              style: const TextStyle(fontSize: 40),
+                              textAlign: TextAlign.center,
+                              maxLength: 2,
+                              decoration: const InputDecoration(
+                                hintText: "00",
+                                border: InputBorder.none,
+                                fillColor: Colors.white,
+                                counterText: "",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Enter time';
+                                }
+                                return null;
+                              },
+                              onSaved: (val) =>
+                                  setState(() => workMinutes = int.parse(val!)),
                             ),
-                            onSaved: (val) {
-                              if (val != "") {
-                                setState(() => restSeconds = int.parse(val!));
-                              } else {
-                                setState(() => restSeconds = 0);
-                              }
-                            }),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                          child: Text(
-                            "s",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 25),
-                          ))
-                    ],
-                  )),
-            ],
-          ),
-        ));
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "m",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              )),
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                              initialValue: workoutArgument.exerciseTime == 0
+                                  ? ""
+                                  : calcSeconds(workoutArgument.exerciseTime)
+                                      .toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                NumericalRangeFormatter(min: 0, max: 59),
+                              ],
+                              textInputAction: TextInputAction.done,
+                              style: const TextStyle(fontSize: 40),
+                              textAlign: TextAlign.center,
+                              maxLength: 2,
+                              decoration: const InputDecoration(
+                                hintText: "00",
+                                border: InputBorder.none,
+                                fillColor: Colors.white,
+                                counterText: "",
+                              ),
+                              onSaved: (val) {
+                                if (val != "") {
+                                  setState(() => workSeconds = int.parse(val!));
+                                } else {
+                                  setState(() => workSeconds = 0);
+                                }
+                              },
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "s",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              ))
+                        ],
+                      )),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+                        child: Text(
+                          "Rest interval time:",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                              initialValue: workoutArgument.restTime == 0
+                                  ? ""
+                                  : calcMinutes(workoutArgument.restTime)
+                                      .toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                NumericalRangeFormatter(min: 1, max: 99),
+                              ],
+                              textInputAction: TextInputAction.done,
+                              style: const TextStyle(fontSize: 40),
+                              textAlign: TextAlign.center,
+                              maxLength: 2,
+                              decoration: const InputDecoration(
+                                hintText: "00",
+                                border: InputBorder.none,
+                                fillColor: Colors.white,
+                                counterText: "",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Enter time';
+                                }
+                                return null;
+                              },
+                              onSaved: (val) =>
+                                  setState(() => restMinutes = int.parse(val!)),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "m",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              )),
+                          SizedBox(
+                            width: 70,
+                            child: TextFormField(
+                                initialValue: workoutArgument.restTime == 0
+                                    ? ""
+                                    : calcSeconds(workoutArgument.restTime)
+                                        .toString(),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  NumericalRangeFormatter(min: 0, max: 59),
+                                ],
+                                textInputAction: TextInputAction.done,
+                                style: const TextStyle(fontSize: 40),
+                                textAlign: TextAlign.center,
+                                maxLength: 2,
+                                decoration: const InputDecoration(
+                                  hintText: "00",
+                                  border: InputBorder.none,
+                                  fillColor: Colors.white,
+                                  counterText: "",
+                                ),
+                                onSaved: (val) {
+                                  if (val != "") {
+                                    setState(
+                                        () => restSeconds = int.parse(val!));
+                                  } else {
+                                    setState(() => restSeconds = 0);
+                                  }
+                                }),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              child: Text(
+                                "s",
+                                textAlign: TextAlign.left,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 25),
+                              ))
+                        ],
+                      )),
+                ],
+              ),
+            )));
   }
 }
 

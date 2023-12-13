@@ -276,12 +276,15 @@ class _ChooseIntervalsState extends State<ChooseIntervals> {
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Center(
-                  child: GestureDetector(
-                    onTap: pickColor,
-                    child: CircleColor(
-                      color: _timerColor,
-                      circleSize: MediaQuery.of(context).size.width * 0.15,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: pickColor,
+                      child: CircleColor(
+                        color: _timerColor,
+                        circleSize: MediaQuery.of(context).size.width * 0.15,
+                      ),
                     ),
                   ),
                 ),

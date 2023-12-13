@@ -48,7 +48,7 @@ class _ChooseNumberState extends State<ChooseNumber> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Exercises(),
+          builder: (context) => const SetExercises(),
           settings: RouteSettings(
             arguments: workout,
           ),
@@ -275,12 +275,15 @@ class _ChooseNumberState extends State<ChooseNumber> {
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Center(
-                  child: GestureDetector(
-                    onTap: pickColor,
-                    child: CircleColor(
-                      color: _timerColor,
-                      circleSize: MediaQuery.of(context).size.width * 0.15,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: pickColor,
+                      child: CircleColor(
+                        color: _timerColor,
+                        circleSize: MediaQuery.of(context).size.width * 0.15,
+                      ),
                     ),
                   ),
                 ),
