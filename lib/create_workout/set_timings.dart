@@ -31,7 +31,7 @@ class _SetTimingsState extends State<SetTimings> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Sounds(),
+          builder: (context) => const SetSounds(),
           settings: RouteSettings(
             arguments: workoutArgument,
           ),
@@ -139,7 +139,7 @@ class _SetTimingsState extends State<SetTimings> {
                           autocorrect: false,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly,
-                            NumericalRangeFormatter(min: 5, max: 999),
+                            NumericalRangeFormatter(min: 1, max: 999),
                           ],
                           // textInputAction: TextInputAction.done,
                           style: const TextStyle(fontSize: 40),
@@ -202,7 +202,7 @@ class _SetTimingsState extends State<SetTimings> {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly,
-                              NumericalRangeFormatter(min: 5, max: 999),
+                              NumericalRangeFormatter(min: 1, max: 999),
                             ],
                             textInputAction: TextInputAction.done,
                             style: const TextStyle(fontSize: 40),

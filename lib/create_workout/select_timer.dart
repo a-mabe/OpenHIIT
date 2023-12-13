@@ -36,7 +36,7 @@ class SelectTimerTypeState extends State<SelectTimerType> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CreateWorkout(),
+          builder: (context) => const ChooseNumber(),
           settings: RouteSettings(
             arguments: _workout,
           ),
@@ -50,7 +50,7 @@ class SelectTimerTypeState extends State<SelectTimerType> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CreateTimer(),
+          builder: (context) => const ChooseIntervals(),
           settings: RouteSettings(
             arguments: _workout,
           ),

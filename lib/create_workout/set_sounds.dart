@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:soundpool/soundpool.dart';
@@ -34,21 +35,21 @@ const List<String> countdownSounds = <String>[
   'none',
 ];
 
-class Sounds extends StatelessWidget {
-  const Sounds({super.key});
+// class Sounds extends StatelessWidget {
+//   const Sounds({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Sounds'),
-      ),
-      body: const Center(
-        child: SetSounds(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Select Sounds'),
+//       ),
+//       body: const Center(
+//         child: SetSounds(),
+//       ),
+//     );
+//   }
+// }
 
 class SetSounds extends StatefulWidget {
   const SetSounds({super.key});
@@ -154,114 +155,144 @@ class _SetSoundsState extends State<SetSounds> {
       }
     }
 
-    return ListView(
-      padding: const EdgeInsets.only(top: 30),
-      children: [
-        FractionallySizedBox(
-          widthFactor: 0.8,
-          child: SoundDropdown(
-              title: "Work Sound",
-              initialSelection: _workSound,
-              pool: pool,
-              soundsList: soundsList,
-              onFinished: (value) async {
-                // This is called when the user selects an item.
-                if (value != 'none') {
-                  await pool.play(await soundIdMap[value]);
-                }
-                setState(() {
-                  _workSound = value!;
-                  _workSoundChanged = true;
-                });
-              }),
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Select Sounds'),
         ),
-        FractionallySizedBox(
-          widthFactor: 0.8,
-          child: SoundDropdown(
-              title: "Rest Sound",
-              initialSelection: _restSound,
-              pool: pool,
-              soundsList: soundsList,
-              onFinished: (value) async {
-                // This is called when the user selects an item.
-                if (value != 'none') {
-                  await pool.play(await soundIdMap[value]);
-                }
-                setState(() {
-                  _restSound = value!;
-                  _restSoundChanged = true;
-                });
-              }),
-        ),
-        FractionallySizedBox(
-          widthFactor: 0.8,
-          child: SoundDropdown(
-              title: "Halfway Sound",
-              initialSelection: _halfwaySound,
-              pool: pool,
-              soundsList: soundsList,
-              onFinished: (value) async {
-                // This is called when the user selects an item.
-                if (value != 'none') {
-                  await pool.play(await soundIdMap[value]);
-                }
-                setState(() {
-                  _halfwaySound = value!;
-                  _halfwaySoundChanged = true;
-                });
-              }),
-        ),
-        FractionallySizedBox(
-          widthFactor: 0.8,
-          child: SoundDropdown(
-              title: "Countdown Sound",
-              initialSelection: _countdownSound,
-              pool: pool,
-              soundsList: countdownSounds,
-              onFinished: (value) async {
-                // This is called when the user selects an item.
-                if (value != 'none') {
-                  await pool.play(await soundIdMap[value]);
-                }
-                setState(() {
-                  _countdownSound = value!;
-                  _countdownSoundChanged = true;
-                });
-              }),
-        ),
-        FractionallySizedBox(
-          widthFactor: 0.8,
-          child: SoundDropdown(
-              title: "Timer End Sound",
-              initialSelection: _completeSound,
-              pool: pool,
-              soundsList: soundsList,
-              onFinished: (value) async {
-                // This is called when the user selects an item.
-                if (value != 'none') {
-                  await pool.play(await soundIdMap[value]);
-                }
-                setState(() {
-                  _completeSound = value!;
-                  _completeSoundChanged = true;
-                });
-              }),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: submitDisabled
-                  ? null
-                  : () async {
-                      submitWorkout(workoutArgument, submitDisabled);
-                    },
-              child: const Text('Submit'),
+        bottomSheet: InkWell(
+          onTap: submitDisabled
+              ? null
+              : () async {
+                  submitWorkout(workoutArgument, submitDisabled);
+                },
+          child: Ink(
+            height: MediaQuery.of(context).size.height / 12,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.blue,
+            child: const Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AutoSizeText(
+                    "Submit",
+                    minFontSize: 18,
+                    maxFontSize: 40,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ],
-    );
+        body: ListView(
+          padding: const EdgeInsets.only(top: 30),
+          children: [
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: SoundDropdown(
+                  title: "Work Sound",
+                  initialSelection: _workSound,
+                  pool: pool,
+                  soundsList: soundsList,
+                  onFinished: (value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await pool.play(await soundIdMap[value]);
+                    }
+                    setState(() {
+                      _workSound = value!;
+                      _workSoundChanged = true;
+                    });
+                  }),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: SoundDropdown(
+                  title: "Rest Sound",
+                  initialSelection: _restSound,
+                  pool: pool,
+                  soundsList: soundsList,
+                  onFinished: (value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await pool.play(await soundIdMap[value]);
+                    }
+                    setState(() {
+                      _restSound = value!;
+                      _restSoundChanged = true;
+                    });
+                  }),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: SoundDropdown(
+                  title: "Halfway Sound",
+                  initialSelection: _halfwaySound,
+                  pool: pool,
+                  soundsList: soundsList,
+                  onFinished: (value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await pool.play(await soundIdMap[value]);
+                    }
+                    setState(() {
+                      _halfwaySound = value!;
+                      _halfwaySoundChanged = true;
+                    });
+                  }),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: SoundDropdown(
+                  title: "Countdown Sound",
+                  initialSelection: _countdownSound,
+                  pool: pool,
+                  soundsList: countdownSounds,
+                  onFinished: (value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await pool.play(await soundIdMap[value]);
+                    }
+                    setState(() {
+                      _countdownSound = value!;
+                      _countdownSoundChanged = true;
+                    });
+                  }),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: SoundDropdown(
+                  title: "Timer End Sound",
+                  initialSelection: _completeSound,
+                  pool: pool,
+                  soundsList: soundsList,
+                  onFinished: (value) async {
+                    // This is called when the user selects an item.
+                    if (value != 'none') {
+                      await pool.play(await soundIdMap[value]);
+                    }
+                    setState(() {
+                      _completeSound = value!;
+                      _completeSoundChanged = true;
+                    });
+                  }),
+            ),
+            // Center(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(vertical: 16.0),
+            //     child: ElevatedButton(
+            //       onPressed: submitDisabled
+            //           ? null
+            //           : () async {
+            //               submitWorkout(workoutArgument, submitDisabled);
+            //             },
+            //       child: const Text('Submit'),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ));
   }
 
   static Future<int> loadSound(String sound, Soundpool pool) async {

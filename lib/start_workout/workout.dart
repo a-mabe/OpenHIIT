@@ -214,7 +214,7 @@ class CountDownTimerState extends State<CountDownTimer>
         }
         return "Rest";
       default:
-        return "";
+        return "Rest";
     }
   }
 

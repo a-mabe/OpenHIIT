@@ -22,7 +22,7 @@ class CardItemAnimated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = (MediaQuery.of(context).size.height) / 12;
+    double height = 50;
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1, 0),
