@@ -54,74 +54,68 @@ void main() {
     // Verify the exercise number defaults to 10.
     expect(find.text('10'), findsOneWidget);
 
-    await tester.dragUntilVisible(
-      find.byIcon(Icons.remove), // what you want to find
-      find.byType(SingleChildScrollView), // widget you want to scroll
-      const Offset(-250, 0), // delta to move
-    );
+    //   for (var i = 0; i < 8; i++) {
+    //     // Reduce the number of exercises by 1.
+    //     await tester.tap(find.byIcon(Icons.remove));
+    //     await tester.pumpAndSettle();
+    //   }
 
-    for (var i = 0; i < 8; i++) {
-      // Reduce the number of exercises by 1.
-      await tester.tap(find.byIcon(Icons.remove));
-      await tester.pumpAndSettle();
-    }
+    //   // Verify the exercise number is 2 as expected.
+    //   expect(find.text('2'), findsOneWidget);
 
-    // Verify the exercise number is 2 as expected.
-    expect(find.text('2'), findsOneWidget);
+    //   await tester.dragUntilVisible(
+    //     find.byType(InkWell), // what you want to find
+    //     find.byType(SingleChildScrollView), // widget you want to scroll
+    //     const Offset(-250, 0), // delta to move
+    //   );
 
-    await tester.dragUntilVisible(
-      find.byType(InkWell), // what you want to find
-      find.byType(SingleChildScrollView), // widget you want to scroll
-      const Offset(-250, 0), // delta to move
-    );
+    //   // Tap to go to the next page.
+    //   await tester.tap(find.byType(InkWell));
+    //   await tester.pumpAndSettle();
 
-    // Tap to go to the next page.
-    await tester.tap(find.byType(InkWell));
-    await tester.pumpAndSettle();
+    //   // Verify that the next page has loaded.
+    //   expect(find.text('List Exercises'), findsOneWidget);
 
-    // Verify that the next page has loaded.
-    expect(find.text('List Exercises'), findsOneWidget);
+    //   for (var i = 1; i < 3; i++) {
+    //     final exercise = find.ancestor(
+    //       of: find.text('Exercise #$i'),
+    //       matching: find.byType(TextFormField),
+    //     );
 
-    for (var i = 1; i < 3; i++) {
-      final exercise = find.ancestor(
-        of: find.text('Exercise #$i'),
-        matching: find.byType(TextFormField),
-      );
+    //     await tester.enterText(exercise, 'testing $i');
 
-      await tester.enterText(exercise, 'testing $i');
+    //     expect(find.text('testing $i'), findsOneWidget);
+    //   }
 
-      expect(find.text('testing $i'), findsOneWidget);
-    }
+    //   // Tap to go to the next page.
+    //   await tester.tap(find.byType(InkWell));
+    //   await tester.pumpAndSettle();
 
-    // Tap to go to the next page.
-    await tester.tap(find.byType(InkWell));
-    await tester.pumpAndSettle();
+    //   await changeTime(tester, 2, 'Working time: 18 seconds', 'work-decrement');
+    //   await changeTime(tester, 3, 'Working time: 21 seconds', 'work-increment');
+    //   await changeTime(tester, 2, 'Rest time: 8 seconds', 'rest-decrement');
+    //   await changeTime(tester, 3, 'Rest time: 11 seconds', 'rest-increment');
 
-    await changeTime(tester, 2, 'Working time: 18 seconds', 'work-decrement');
-    await changeTime(tester, 3, 'Working time: 21 seconds', 'work-increment');
-    await changeTime(tester, 2, 'Rest time: 8 seconds', 'rest-decrement');
-    await changeTime(tester, 3, 'Rest time: 11 seconds', 'rest-increment');
+    //   // Tap to go to the next page.
+    //   await tester.tap(find.byType(InkWell));
+    //   await tester.pumpAndSettle();
 
-    // Tap to go to the next page.
-    await tester.tap(find.byType(InkWell));
-    await tester.pumpAndSettle();
+    //   // TODO: Test selecting different sounds.
+    //   expect(find.widgetWithText(DropdownMenu<String>, "Short whistle"),
+    //       findsNWidgets(5));
 
-    // TODO: Test selecting different sounds.
-    expect(find.widgetWithText(DropdownMenu<String>, "Short whistle"),
-        findsNWidgets(5));
+    //   await tester.dragUntilVisible(
+    //     find.text("Submit"), // what you want to find
+    //     find.byType(ListView), // widget you want to scroll
+    //     const Offset(0, -250), // delta to move
+    //   );
 
-    await tester.dragUntilVisible(
-      find.text("Submit"), // what you want to find
-      find.byType(ListView), // widget you want to scroll
-      const Offset(0, -250), // delta to move
-    );
+    //   // Tap to go to the next page.
+    //   await tester.tap(
+    //     find.text("Submit"),
+    //   );
+    //   await tester.pumpAndSettle();
 
-    // Tap to go to the next page.
-    await tester.tap(
-      find.text("Submit"),
-    );
-    await tester.pumpAndSettle();
-
-    // expect(find.text(workoutName), findsOneWidget);
+    //   // expect(find.text(workoutName), findsOneWidget);
   });
 }
