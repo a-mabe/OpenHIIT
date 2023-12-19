@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -14,88 +15,6 @@ import '../workout_data_type/workout_type.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
 import '../models/list_tile_model.dart';
-
-// List<double>? presetFontSizes = [
-//   400,
-//   395,
-//   390,
-//   385,
-//   380,
-//   375,
-//   370,
-//   365,
-//   360,
-//   355,
-//   350,
-//   345,
-//   340,
-//   335,
-//   330,
-//   325,
-//   320,
-//   315,
-//   310,
-//   305,
-//   300,
-//   295,
-//   290,
-//   285,
-//   280,
-//   275,
-//   270,
-//   265,
-//   260,
-//   255,
-//   250,
-//   245,
-//   240,
-//   235,
-//   230,
-//   225,
-//   220,
-//   215,
-//   210,
-//   205,
-//   200,
-//   195,
-//   190,
-//   185,
-//   180,
-//   175,
-//   170,
-//   165,
-//   160,
-//   155,
-//   150,
-//   145,
-//   140,
-//   135,
-//   130,
-//   125,
-//   120,
-//   115,
-//   110,
-//   105,
-//   100,
-//   95,
-//   90,
-//   85,
-//   80,
-//   75,
-//   70,
-//   65,
-//   60,
-//   55,
-//   50,
-//   45,
-//   40,
-//   35,
-//   30,
-//   25,
-//   20,
-//   15,
-//   10
-// ];
 
 class StartWorkout extends StatelessWidget {
   const StartWorkout({super.key});
@@ -498,36 +417,44 @@ class CountDownTimerState extends State<CountDownTimer>
                   child: Column(
                     children: [
                       Expanded(
-                        flex: 6,
-                        child: Row(children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(size: 50.0, Icons.arrow_back),
-                              color: Colors.white),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                if (!timerData.paused) {
-                                  _workoutController.pause();
-                                } else {
-                                  _workoutController.resume();
-                                }
-                              },
-                              icon: Icon(
-                                  size: 50.0,
-                                  timerData.paused
-                                      ? Icons.play_arrow
-                                      : Icons.pause),
-                              color: Colors.white),
-                        ]),
-                      ),
+                          flex: 6,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(children: [
+                              IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                      minHeight: 400, minWidth: 80),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon:
+                                      const Icon(size: 50.0, Icons.arrow_back),
+                                  color: Colors.white),
+                              const Spacer(),
+                              IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  constraints: const BoxConstraints(
+                                      minHeight: 300, minWidth: 80),
+                                  onPressed: () {
+                                    if (!timerData.paused) {
+                                      _workoutController.pause();
+                                    } else {
+                                      _workoutController.resume();
+                                    }
+                                  },
+                                  icon: Icon(
+                                      size: 40.0,
+                                      timerData.paused
+                                          ? Icons.play_arrow
+                                          : Icons.pause),
+                                  color: Colors.white),
+                            ]),
+                          )),
                       Expanded(
-                        flex: 10,
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                10.0, 10.0, 10.0, 10.0),
+                          flex: 10,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                             child: FittedBox(
                               child: Text(
                                 timerScreenText(
@@ -535,15 +462,16 @@ class CountDownTimerState extends State<CountDownTimer>
                                     timerData.status,
                                     exercises,
                                     workoutArgument),
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(
+                                    color: Colors.white, height: 1),
                               ),
-                            )),
-                      ),
+                            ),
+                          )),
                       Expanded(
                         flex: 34,
                         child: Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                           child: AutoSizeText(
                             timerText(timerData.currentMicroSeconds.toString(),
                                 workoutArgument),

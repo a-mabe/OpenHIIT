@@ -27,7 +27,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ChooseNumber(),
+          builder: (context) => const CreateWorkout(),
           settings: RouteSettings(
             arguments: workout,
           ),

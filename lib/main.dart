@@ -30,7 +30,7 @@ class WorkoutTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'OpenHIIT',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
       darkTheme: ThemeData.dark(), // standard dark theme
@@ -48,9 +48,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  /// List of workouts for reordering. The newly reordered
+  /// workout indeices with be saved to the DB.
+  ///
   List<Workout> reorderableWorkoutList = [];
+
+  /// The initial list of workouts to be loaded fresh
+  /// from the DB.
+  ///
   late Future<List<Workout>> workouts;
 
+  /// Initialize...
+  @override
+  void initState() {
+    super.initState();
+    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+  }
+  // ---
+
+  /// What to do on reorder of the list of workouts, i.e. a workout
+  /// is dragged to a new position.
+  ///
   void _onReorder(int oldIndex, int newIndex) async {
     if (newIndex > reorderableWorkoutList.length) {
       newIndex = reorderableWorkoutList.length;
@@ -75,43 +93,56 @@ class _MyHomePageState extends State<MyHomePage> {
       await DatabaseManager().updateList(reorderableWorkoutList[i], database);
     }
   }
+  // ---
 
-  @override
-  void initState() {
-    super.initState();
-    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+  void onWorkoutTap(Workout tappedWorkout) {
+    /// Push the ViewWorkout page.
+    ///
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ViewWorkout(),
+
+        /// Pass the [tappedWorkout] as an argument to
+        /// the ViewWorkout page.
+        settings: RouteSettings(
+          arguments: tappedWorkout,
+        ),
+      ),
+    ).then((value) {
+      /// When we come back to the hompage, refresh the
+      /// list of workouts by reloading from the DB.
+      ///
+      setState(() {
+        workouts = DatabaseManager().lists(DatabaseManager().initDB());
+      });
+    });
   }
+  // ---
 
+  /// Return the UI to display [reorderableWorkoutList].
+  ///
   Widget workoutListView(snapshot) {
     return ReorderableListView(
         onReorder: _onReorder,
         proxyDecorator: proxyDecorator,
         children: [
+          /// For workout in the returned DB data snapshot.
+          ///
           for (final workout in snapshot.data)
             TimerListTile(
                 key: Key('${workout.workoutIndex}'),
                 workout: workout,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ViewWorkout(),
-                      settings: RouteSettings(
-                        arguments: workout,
-                      ),
-                    ),
-                  ).then((value) {
-                    setState(() {
-                      workouts =
-                          DatabaseManager().lists(DatabaseManager().initDB());
-                    });
-                  });
+                  onWorkoutTap(workout);
                 },
                 index: workout.workoutIndex),
         ]);
   }
+  // ---
 
   /// Generates the empty message for no [workouts] in DB.
+  ///
   Widget workoutEmpty() {
     List<Widget> children;
     children = <Widget>[
@@ -138,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // ---
 
   /// Generates the error message for an issue loading [workouts].
+  ///
   Widget workoutFetchError(snapshot) {
     List<Widget> children;
     children = <Widget>[
@@ -161,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  /// Generates the loading circle.
+  /// Generates the loading circle, display as workouts
+  /// are being loaded from the DB.
+  ///
   Widget workoutLoading() {
     List<Widget> children;
     children = const <Widget>[
@@ -185,11 +219,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  /// Load the page for the user to select whether they'd like
+  /// to create a new interval timer or workout.
+  ///
   void pushSelectTimerPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),
     ).then((value) {
+      /// When we come back to the hompage, refresh the
+      /// list of workouts by reloading from the DB.
+      ///
       setState(() {
         workouts = DatabaseManager().lists(DatabaseManager().initDB());
       });
@@ -197,12 +237,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  /// The widget to return for a workout tile as it's being dragged.
+  /// This AnimatedBuilder will slightly increase the elevation of the dragged
+  /// workout without changing other UI elements.
+  ///
   Widget proxyDecorator(Widget child, int index, Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         final double animValue = Curves.easeInOut.transform(animation.value);
-        // final double elevation = lerpDouble(1, 6, animValue)!;
         final double scale = lerpDouble(1, 1.02, animValue)!;
         return Transform.scale(
             scale: scale,
@@ -213,9 +256,10 @@ class _MyHomePageState extends State<MyHomePage> {
       child: child,
     );
   }
+  // ---
 
-  /// ---
-
+  /// Build the home screen UI.
+  ///
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
@@ -230,10 +274,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: SafeArea(
           child: Scaffold(
 
-              /// Pushes to [CreateWorkout()]
+              /// Pushes to [SelectTimer()]
               floatingActionButton: FloatingActionButton(
                 onPressed: pushSelectTimerPage,
-                tooltip: 'Create workout',
+                tooltip: 'Create a new timer',
                 child: const Icon(Icons.add),
               ),
               body: Container(
@@ -267,4 +311,5 @@ class _MyHomePageState extends State<MyHomePage> {
                           })))),
         ));
   }
+  // ---
 }

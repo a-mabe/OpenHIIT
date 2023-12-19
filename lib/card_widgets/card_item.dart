@@ -43,7 +43,7 @@ class CardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      height: 50.0,
+      height: MediaQuery.of(context).size.height / 12,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

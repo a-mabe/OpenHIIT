@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
+import 'helper_widgets/submit_button.dart';
 
 class SetExercises extends StatefulWidget {
   const SetExercises({super.key});
@@ -13,112 +14,142 @@ class SetExercises extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _SetExercisesState extends State<SetExercises> {
-  List<TextEditingController> _controllers = [];
-  Workout _workout = Workout.empty();
+  /// The list of validators to be used in the form. Each
+  /// validator will correspond to one TextFormField.
+  ///
+  List<bool> validators = [];
 
-  void pushTimings() {
+  /// The list of validators to be used in the form. Each
+  /// validator will correspond to one TextFormField.
+  ///
+  List<TextEditingController> controllers = [];
+
+  /// The list of exercises the user had filled out in the form. Each
+  /// validator will correspond to one TextFormField.
+  ///
+  List<String> exercises = [];
+
+  /// The global key for the form.
+  ///
+  final formKey = GlobalKey<FormState>();
+
+  void generateTextControllers(Workout workout) {
+    /// If the workout already had a list of exercises and the
+    /// number of exercises is being updated, check the old
+    /// length so that the form fields can be prepopulated with
+    /// the old exercises.
+    ///
+    int currentNumExercises =
+        workout.exercises != "" ? jsonDecode(workout.exercises).length : 0;
+
+    List currentExercises = [];
+
+    if (currentNumExercises > 0) {
+      currentExercises = jsonDecode(workout.exercises);
+    }
+
+    for (var i = 0; i < workout.numExercises; i++) {
+      validators.add(false);
+      if (i < currentNumExercises) {
+        // If there might be a previously set exercise, use it!
+        controllers.add(TextEditingController(text: currentExercises[i]));
+      } else {
+        // Otherwise, blank text controller.
+        controllers.add(TextEditingController());
+      }
+    }
+  }
+
+  /// Generate the list of TextFormFields based off of the number of exercises.
+  ///
+  List<Widget> generateTextFormFields(Workout workout) {
+    return List<Widget>.generate(workout.numExercises, (int index) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
+        child: TextFormField(
+          textCapitalization: TextCapitalization.sentences,
+          maxLength: 40,
+
+          /// Validate that the field is filled out.
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
+          controller: controllers[index],
+          decoration: InputDecoration(
+            labelText: 'Exercise #${index + 1}',
+            errorText: validators[index] ? 'Value Can\'t Be Empty' : null,
+          ),
+          // onSaved push the value into the list of exercises.
+          onSaved: (val) => setState(() => exercises.add(val!)),
+        ),
+      );
+    });
+  }
+
+  /// Push to the [SetTimings] view.
+  ///
+  void pushTimings(Workout workout) {
     setState(() {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SetTimings(),
           settings: RouteSettings(
-            arguments: _workout,
+            arguments: workout,
           ),
         ),
       );
     });
   }
 
-  void submitExercises(formKey, workoutArgument, exercises) {
+  /// Submit the form and call [pushTimings].
+  ///
+  void submitExercises(
+      GlobalKey<FormState> formKey, Workout workout, List exercises) {
     final form = formKey.currentState!;
     if (form.validate()) {
       form.save();
-      workoutArgument.exercises = jsonEncode(exercises);
-      _workout = workoutArgument;
-      pushTimings();
+      workout.exercises = jsonEncode(exercises);
+      pushTimings(workout);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
-    List<dynamic> exercisesArgument = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
-    List<bool> validators = [];
-    List<String> exercises = [];
-    final formKey = GlobalKey<FormState>();
+    /// Grab the [workout] that was passed to this view
+    /// from the previous view.
+    ///
+    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    for (var i = 0; i < workoutArgument.numExercises; i++) {
-      if (workoutArgument.exercises == "") {
-        _controllers.add(TextEditingController());
-      } else {
-        _controllers.add(TextEditingController(
-            text: i < exercisesArgument.length ? exercisesArgument[i] : ""));
-      }
-      validators.add(false);
-    }
-
-    List<Widget> createChildren() {
-      return List<Widget>.generate(workoutArgument.numExercises + 1,
-          (int index) {
-        if (index == workoutArgument.numExercises) {
-          // return the submit button
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                submitExercises(formKey, workoutArgument, exercises);
-              },
-              child: const Text('Submit'),
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
-            child: TextFormField(
-              textCapitalization: TextCapitalization.sentences,
-              maxLength: 40,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-              controller: _controllers[index],
-              decoration: InputDecoration(
-                labelText: 'Exercise #${index + 1}',
-                errorText: validators[index] ? 'Value Can\'t Be Empty' : null,
-              ),
-              onSaved: (val) => setState(() => exercises.add(val!)),
-            ),
-          );
-        }
-      });
-    }
+    /// Generate the text controllers.
+    ///
+    generateTextControllers(workout);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('List Exercises'),
-      ),
-      body: Center(
-          child: Form(
-              key: formKey,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
-                child: CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: const Text("Set Exercises"),
+        ),
+        bottomSheet: SubmitButton(
+          text: "Submit",
+          color: Colors.blue,
+          onTap: () {
+            submitExercises(formKey, workout, exercises);
+          },
+        ),
+        body: SizedBox(
+            height: (MediaQuery.of(context).size.height * 10) / 12,
+            child: SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+                    child: Form(
+                      key: formKey,
                       child: Column(
-                        children: createChildren(),
+                        children: generateTextFormFields(workout),
                       ),
-                    ),
-                  ],
-                ),
-              ))),
-    );
+                    )))));
   }
 }
