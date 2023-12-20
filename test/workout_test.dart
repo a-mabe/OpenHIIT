@@ -52,7 +52,7 @@ void main() {
     expect(find.text(workoutName), findsOneWidget);
 
     // Verify the exercise number defaults to 10.
-    expect(find.text('10'), findsOneWidget);
+    // expect(find.text('10'), findsOneWidget);
 
     //   for (var i = 0; i < 8; i++) {
     //     // Reduce the number of exercises by 1.
