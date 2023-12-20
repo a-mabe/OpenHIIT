@@ -102,6 +102,7 @@ class CreateFormState extends State<CreateForm> {
                               color: Color.fromARGB(255, 107, 107, 107),
                               fontSize: 18)),
                       TextFormField(
+                        key: const Key('timer-name'),
                         initialValue: widget.workout.title,
                         // The validator receives the text that the user has entered.
                         validator: (value) {
