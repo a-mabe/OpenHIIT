@@ -42,7 +42,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the next page has loaded.
-    expect(find.text('Name this workout:'), findsOneWidget);
+    expect(find.text('Enter a name:'), findsOneWidget);
 
     // Fill out the Workout name.
     expect(find.byType(TextFormField), findsOneWidget);
