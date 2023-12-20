@@ -9,73 +9,73 @@ class Workout {
 
   /// The workout ID.
   ///
-  String id = "";
+  late String id;
 
   /// The name of the to-do item.
   ///
   /// e.g., "Tuesday Workout"
   ///
-  String title = "";
+  late String title;
 
   /// The number of exercises.
   ///
   /// e.g., "I need to do X but do it in Y way"
   ///
-  int numExercises = 0;
+  late int numExercises;
 
   /// List of the exercises.
   ///
   /// e.g., ["Burpee", "Push-ups", "Rows"]
   ///
-  String exercises = "";
+  late String exercises;
 
   /// Amount of time for an exercise, in seconds.
   ///
   /// e.g., 30
   ///
-  int exerciseTime = 0;
+  late int exerciseTime;
 
   /// Amount of time between exercises, in seconds. (Rest time)
   ///
   /// e.g., 30
   ///
-  int restTime = 0;
+  late int restTime;
 
   /// Amount of time within an exercise to change sides, in seconds. (Half time)
   ///
   /// e.g., 5
   ///
-  int halfTime = 0;
+  late int halfTime;
 
-  int halfwayMark = 0;
+  late int halfwayMark;
 
-  String workSound = "";
+  late String workSound;
 
-  String restSound = "";
+  late String restSound;
 
-  String halfwaySound = "";
+  late String halfwaySound;
 
-  String completeSound = "";
+  late String completeSound;
 
-  String countdownSound = "";
+  late String countdownSound;
 
   /// Color selected for the background of the workout
   ///
   /// e.g., 456787899
   ///
-  int colorInt = 0;
+  late int colorInt;
 
   /// Index of the workout
   ///
   /// e.g., 6
   ///
-  int workoutIndex = 0;
+  late int workoutIndex;
 
   /// Whether the timer should display minutes.
   ///
   /// e.g., 0 for false
   ///
-  int showMinutes = 0;
+  late int showMinutes;
 
   ///
   /// -------------
@@ -123,11 +123,11 @@ class Workout {
     restTime = 0;
     halfTime = 0;
     halfwayMark = 0;
-    workSound = "";
-    restSound = "";
-    halfwaySound = "";
-    completeSound = "";
-    countdownSound = "";
+    workSound = "short-whistle";
+    restSound = "short-rest-beep";
+    halfwaySound = "short-halfway-beep";
+    countdownSound = "countdown-beep";
+    completeSound = "long-bell";
     colorInt = 4280391411;
     workoutIndex = 0;
     showMinutes = 0;

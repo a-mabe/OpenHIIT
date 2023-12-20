@@ -220,7 +220,7 @@ class _SetTimingsState extends State<SetTimings> {
                         },
                         unit: "s",
                         min: 1,
-                        max: 99),
+                        max: 999),
                   ],
                 ),
                 const Padding(
@@ -255,7 +255,7 @@ class _SetTimingsState extends State<SetTimings> {
                         },
                         unit: "s",
                         min: 1,
-                        max: 99),
+                        max: 999),
                   ],
                 ),
               ],

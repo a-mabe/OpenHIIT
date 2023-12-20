@@ -62,7 +62,7 @@ class NumberInputState extends State<NumberInput> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-            width: 70,
+            width: 80,
             child: TextFormField(
               initialValue: widget.numberValue == 0
                   ? ""
@@ -75,7 +75,7 @@ class NumberInputState extends State<NumberInput> {
               textInputAction: TextInputAction.done,
               style: const TextStyle(fontSize: 40),
               textAlign: TextAlign.center,
-              maxLength: 2,
+              maxLength: 3,
               decoration: const InputDecoration(
                 hintText: "00",
                 errorMaxLines: 2,
@@ -88,7 +88,7 @@ class NumberInputState extends State<NumberInput> {
               onSaved: widget.onSaved,
             )),
         Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
             child: Text(
               widget.unit,
               textAlign: TextAlign.left,

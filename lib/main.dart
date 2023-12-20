@@ -15,6 +15,8 @@ import 'helper_widgets/timer_list_tile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// Monospaced font licensing.
+  ///
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
@@ -95,6 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  /// Method called when a workout is tapped. Opens up the view workout page
+  /// for that workout.
+  ///
   void onWorkoutTap(Workout tappedWorkout) {
     /// Push the ViewWorkout page.
     ///
