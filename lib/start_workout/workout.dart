@@ -211,10 +211,6 @@ class CountDownTimerState extends State<CountDownTimer>
     WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
         false;
 
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.dark,
-    ));
-
     Workout workoutArgument =
         ModalRoute.of(context)!.settings.arguments as Workout;
 
@@ -377,6 +373,10 @@ class CountDownTimerState extends State<CountDownTimer>
           });
         },
         build: (_, BackgroundTimerData timerData) {
+          SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+          ));
+
           backgroundColorStatus = timerData.status;
 
           if (timerData.status == "complete" && restart == false) {
@@ -423,16 +423,6 @@ class CountDownTimerState extends State<CountDownTimer>
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(children: [
-                              // IconButton(
-                              //     padding: EdgeInsets.zero,
-                              //     constraints: const BoxConstraints(
-                              //         minHeight: 400, minWidth: 80),
-                              //     onPressed: () {
-                              //       Navigator.pop(context);
-                              //     },
-                              //     icon:
-                              //         const Icon(size: 50.0, Icons.arrow_back),
-                              //     color: Colors.white),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
@@ -500,23 +490,6 @@ class CountDownTimerState extends State<CountDownTimer>
                                       ),
                                     )),
                               )
-                              // IconButton(
-                              //     padding: EdgeInsets.all(0),
-                              //     constraints: const BoxConstraints(
-                              //         minHeight: 300, minWidth: 80),
-                              //     onPressed: () {
-                              //       if (!timerData.paused) {
-                              //         _workoutController.pause();
-                              //       } else {
-                              //         _workoutController.resume();
-                              //       }
-                              //     },
-                              //     icon: Icon(
-                              //         size: 40.0,
-                              //         timerData.paused
-                              //             ? Icons.play_arrow
-                              //             : Icons.pause),
-                              //     color: Colors.white),
                             ]),
                           )),
                       Expanded(
