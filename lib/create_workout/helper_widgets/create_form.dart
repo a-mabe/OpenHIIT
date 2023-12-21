@@ -8,6 +8,7 @@
 /// Defines a sample widget class.
 ///
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:openhiit/create_workout/helper_widgets/clock_picker.dart';
@@ -85,10 +86,11 @@ class CreateFormState extends State<CreateForm> {
     // ---
 
     return SizedBox(
-        height: (MediaQuery.of(context).size.height * 9) / 12,
+        height: (MediaQuery.of(context).size.height) -
+            MediaQuery.of(context).size.height / 12,
         child: SingleChildScrollView(
             child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 35),
                 child: Form(
                   key: widget.formKey,
                   child: Column(
@@ -97,10 +99,15 @@ class CreateFormState extends State<CreateForm> {
                     children: <Widget>[
                       /// Workout/timer name form field.
                       ///
-                      const Text("Enter a name:",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 107, 107, 107),
-                              fontSize: 18)),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 22,
+                        child: const AutoSizeText("Enter a name:",
+                            maxFontSize: 50,
+                            minFontSize: 16,
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 107, 107, 107),
+                                fontSize: 30)),
+                      ),
                       TextFormField(
                         key: const Key('timer-name'),
                         initialValue: widget.workout.title,
@@ -119,12 +126,18 @@ class CreateFormState extends State<CreateForm> {
 
                       /// Workout/timer color form field.
                       ///
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                          child: Text("Set color:",
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height / 22,
+                          child: const AutoSizeText("Set color:",
+                              maxFontSize: 50,
+                              minFontSize: 16,
                               style: TextStyle(
                                   color: Color.fromARGB(255, 107, 107, 107),
-                                  fontSize: 18))),
+                                  fontSize: 30)),
+                        ),
+                      ),
                       Center(
                           child: ColorPicker(
                         onTap: () {
@@ -135,12 +148,18 @@ class CreateFormState extends State<CreateForm> {
 
                       /// Workout/timer number of intervals.
                       ///
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                          child: Text("Number of intervals:",
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height / 22,
+                          child: const AutoSizeText("Number of intervals:",
+                              maxFontSize: 50,
+                              minFontSize: 16,
                               style: TextStyle(
                                   color: Color.fromARGB(255, 107, 107, 107),
-                                  fontSize: 18))),
+                                  fontSize: 30)),
+                        ),
+                      ),
                       NumberInput(
                           numberValue: widget.workout.numExercises,
                           formatter: (value) {
@@ -163,12 +182,18 @@ class CreateFormState extends State<CreateForm> {
 
                       /// Workout/timer timer display
                       ///
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                          child: Text("Timer display:",
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height / 22,
+                          child: const AutoSizeText("Timer display:",
+                              maxFontSize: 50,
+                              minFontSize: 16,
                               style: TextStyle(
                                   color: Color.fromARGB(255, 107, 107, 107),
-                                  fontSize: 18))),
+                                  fontSize: 30)),
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 35),
                           child: ClockPicker(

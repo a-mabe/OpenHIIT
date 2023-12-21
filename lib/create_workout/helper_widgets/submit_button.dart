@@ -45,29 +45,32 @@ class SubmitButtonState extends State<SubmitButton> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        widget.onTap();
-      },
-      child: Ink(
-        height: MediaQuery.of(context).size.height / 12,
+    return Container(
+        decoration: BoxDecoration(
+            color: widget.color,
+            // border: Border.fromBorderSide(BorderSide.lerp(a, b, t))
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         width: MediaQuery.of(context).size.width,
-        color: widget.color,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AutoSizeText(
-                widget.text,
-                minFontSize: 18,
-                maxFontSize: 40,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )
-            ],
+        height: MediaQuery.of(context).size.height / 12,
+        child: InkWell(
+          onTap: () {
+            widget.onTap();
+          },
+          child: Ink(
+            height: MediaQuery.of(context).size.height / 12,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+                child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: AutoSizeText(
+                      widget.text,
+                      minFontSize: 18,
+                      // maxFontSize: 200,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 40),
+                    ))),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

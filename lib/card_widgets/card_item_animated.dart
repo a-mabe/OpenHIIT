@@ -43,8 +43,9 @@ class CardItemAnimated extends StatelessWidget {
           ),
         ),
         child: ConstrainedBox(
-          constraints:
-              BoxConstraints(minHeight: height, maxHeight: height + 15),
+          constraints: BoxConstraints(
+              minHeight: height,
+              maxHeight: MediaQuery.of(context).size.height / 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

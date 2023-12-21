@@ -415,45 +415,97 @@ class CountDownTimerState extends State<CountDownTimer>
                   color: backgroundColor(timerData.status),
                   child: Column(
                     children: [
-                      Expanded(
-                          flex: 6,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Row(children: [
-                              IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(
-                                      minHeight: 400, minWidth: 80),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon:
-                                      const Icon(size: 50.0, Icons.arrow_back),
-                                  color: Colors.white),
-                              const Spacer(),
-                              IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  constraints: const BoxConstraints(
-                                      minHeight: 300, minWidth: 80),
-                                  onPressed: () {
-                                    if (!timerData.paused) {
-                                      _workoutController.pause();
-                                    } else {
-                                      _workoutController.resume();
-                                    }
-                                  },
-                                  icon: Icon(
-                                      size: 40.0,
-                                      timerData.paused
-                                          ? Icons.play_arrow
-                                          : Icons.pause),
-                                  color: Colors.white),
-                            ]),
-                          )),
+                      // Padding(
+                      //     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      //     child:
                       Expanded(
                           flex: 10,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(children: [
+                              // IconButton(
+                              //     padding: EdgeInsets.zero,
+                              //     constraints: const BoxConstraints(
+                              //         minHeight: 400, minWidth: 80),
+                              //     onPressed: () {
+                              //       Navigator.pop(context);
+                              //     },
+                              //     icon:
+                              //         const Icon(size: 50.0, Icons.arrow_back),
+                              //     color: Colors.white),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: const Color.fromARGB(
+                                              70, 0, 0, 0)),
+                                      // color: Colors.purple,
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        color: Colors.white,
+                                        Icons.arrow_back,
+                                        size: 50,
+                                      ),
+                                    )),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  if (!timerData.paused) {
+                                    _workoutController.pause();
+                                  } else {
+                                    _workoutController.resume();
+                                  }
+                                },
+                                child: Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: Color.fromARGB(70, 0, 0, 0)),
+                                      // color: Colors.purple,
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        color: Colors.white,
+                                        timerData.paused
+                                            ? Icons.play_arrow
+                                            : Icons.pause,
+                                        size: 50,
+                                      ),
+                                    )),
+                              )
+                              // IconButton(
+                              //     padding: EdgeInsets.all(0),
+                              //     constraints: const BoxConstraints(
+                              //         minHeight: 300, minWidth: 80),
+                              //     onPressed: () {
+                              //       if (!timerData.paused) {
+                              //         _workoutController.pause();
+                              //       } else {
+                              //         _workoutController.resume();
+                              //       }
+                              //     },
+                              //     icon: Icon(
+                              //         size: 40.0,
+                              //         timerData.paused
+                              //             ? Icons.play_arrow
+                              //             : Icons.pause),
+                              //     color: Colors.white),
+                            ]),
+                          )),
+                      Expanded(
+                          flex: 8,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: FittedBox(
                               child: Text(
                                 timerScreenText(
@@ -471,7 +523,8 @@ class CountDownTimerState extends State<CountDownTimer>
                         child: Padding(
                           padding:
                               const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                          child: AutoSizeText(
+                          child: Center(
+                              child: AutoSizeText(
                             timerText(timerData.currentMicroSeconds.toString(),
                                 workoutArgument),
                             maxLines: 1,
@@ -483,11 +536,11 @@ class CountDownTimerState extends State<CountDownTimer>
                               color: Colors.white,
                             ),
                             textAlign: TextAlign.center,
-                          ),
+                          )),
                         ),
                       ),
                       Expanded(
-                        flex: 50,
+                        flex: 48,
                         child: Container(
                             color: const Color.fromARGB(22, 0, 0, 0),
                             child: AnimatedList(

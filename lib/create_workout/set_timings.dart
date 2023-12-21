@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../workout_data_type/workout_type.dart';
@@ -64,21 +65,29 @@ class _SetTimingsState extends State<SetTimings> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text("Enter the work time:",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 107, 107, 107),
-                            fontSize: 18))),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 22,
+                  child: const AutoSizeText("Enter the work time:",
+                      maxFontSize: 50,
+                      minFontSize: 16,
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 107, 107, 107),
+                          fontSize: 30)),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
                         numberValue: workout.exerciseTime,
                         formatter: (value) {
-                          return (workout.exerciseTime -
-                                  (workout.exerciseTime % 60)) /
-                              60;
+                          int calculation = ((workout.exerciseTime -
+                                      (workout.exerciseTime % 60)) /
+                                  60)
+                              .round();
+                          if (calculation == 0) {
+                            return "";
+                          }
+                          return calculation;
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -120,20 +129,31 @@ class _SetTimingsState extends State<SetTimings> {
                         max: 59),
                   ],
                 ),
-                const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: Text("Enter the rest time:",
+                const SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                    height: MediaQuery.of(context).size.height / 22,
+                    child: const AutoSizeText("Enter the rest time:",
+                        maxFontSize: 50,
+                        minFontSize: 16,
                         style: TextStyle(
                             color: Color.fromARGB(255, 107, 107, 107),
-                            fontSize: 18))),
+                            fontSize: 30))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
                         numberValue: workout.restTime,
                         formatter: (value) {
-                          return (workout.restTime - (workout.restTime % 60)) /
-                              60;
+                          int calculation =
+                              ((workout.restTime - (workout.restTime % 60)) /
+                                      60)
+                                  .round();
+                          if (calculation == 0) {
+                            return "";
+                          }
+                          return calculation;
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
