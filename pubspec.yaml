@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 
-version: 1.2.0+15
+version: 1.2.1+16
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -39,7 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   numberpicker: ^2.1.2
   sqflite: ^2.2.8+2
-  uuid: ^3.0.7
+  uuid: ^4.2.2
   timer_count_down: ^2.2.2
   audioplayers: ^5.1.0
   confetti: ^0.7.0
@@ -89,7 +89,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   # background_timer:
   #   git:
