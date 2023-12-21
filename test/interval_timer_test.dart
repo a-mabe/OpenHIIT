@@ -29,6 +29,6 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the next page has loaded.
-    expect(find.text('Name this timer:'), findsOneWidget);
+    expect(find.text('Enter a name:'), findsOneWidget);
   });
 }

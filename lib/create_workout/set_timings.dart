@@ -1,24 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
-import '../main.dart';
+import 'package:flutter/services.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_sounds.dart';
-
-class Timings extends StatelessWidget {
-  const Timings({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Enter Time Intervals'),
-      ),
-      body: const Center(
-        child: SetTimings(),
-      ),
-    );
-  }
-}
+import 'helper_widgets/number_input.dart';
+import 'helper_widgets/submit_button.dart';
 
 class SetTimings extends StatefulWidget {
   const SetTimings({super.key});
@@ -30,210 +16,291 @@ class SetTimings extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _SetTimingsState extends State<SetTimings> {
-  int _exerciseTime = 20;
-  int _restTime = 10;
-  int _halfTime = 0;
+  /// The global key for the form.
+  ///
+  final formKey = GlobalKey<FormState>();
 
-  bool _exerciseChanged = false;
-  bool _restChanged = false;
-  bool _halfChanged = false;
+  int workMinutes = 0;
+  int workSeconds = 0;
+  int restMinutes = 0;
+  int restSeconds = 0;
 
-  void pushHome() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
+  int calcMinutes(int seconds) {
+    return (seconds - (seconds % 60)) ~/ 60;
   }
 
-  void submitWorkout(workoutArgument) async {
-    workoutArgument.exerciseTime = _exerciseTime;
-    workoutArgument.restTime = _restTime;
-    workoutArgument.halfTime = _halfTime;
+  int calcSeconds(int seconds) {
+    return (seconds % 60);
+  }
 
-    // if (_exerciseTime > 6) {
-    //   workoutArgument.halfwayMark = halfwayMark == false ? 0 : 1;
-    // } else {
-    //   workoutArgument.halfwayMark = 0;
-    // }
+  void submitTimings(Workout workout) async {
+    // Validate returns true if the form is valid, or false otherwise.
+    final form = formKey.currentState!;
+    if (form.validate()) {
+      form.save();
 
-    setState(() {
+      workout.exerciseTime = (workMinutes * 60) + workSeconds;
+      workout.restTime = (restMinutes * 60) + restSeconds;
+
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Sounds(),
+          builder: (context) => const SetSounds(),
           settings: RouteSettings(
-            arguments: workoutArgument,
+            arguments: workout,
           ),
         ),
       );
-    });
+    }
+  }
+
+  Widget returnMinutesSecondsForm(Workout workout) {
+    return SizedBox(
+        height: (MediaQuery.of(context).size.height * 10) / 12,
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 22,
+                  child: const AutoSizeText("Enter the work time:",
+                      maxFontSize: 50,
+                      minFontSize: 16,
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 107, 107, 107),
+                          fontSize: 30)),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NumberInput(
+                        numberValue: workout.exerciseTime,
+                        formatter: (value) {
+                          int calculation = ((workout.exerciseTime -
+                                      (workout.exerciseTime % 60)) /
+                                  60)
+                              .round();
+                          if (calculation == 0) {
+                            return "";
+                          }
+                          return calculation;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter time';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            workMinutes = value!.contains(".")
+                                ? int.parse(
+                                    value.substring(0, value.indexOf(".")))
+                                : int.parse(value);
+                          });
+                        },
+                        unit: "m",
+                        min: 1,
+                        max: 99),
+                    NumberInput(
+                        numberValue: workout.exerciseTime,
+                        formatter: (value) {
+                          return workout.exerciseTime % 60;
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                        onSaved: (value) {
+                          if (value != "") {
+                            setState(() => workSeconds = value!.contains(".")
+                                ? int.parse(
+                                    value.substring(0, value.indexOf(".")))
+                                : int.parse(value));
+                          } else {
+                            setState(() => workSeconds = 0);
+                          }
+                        },
+                        unit: "s",
+                        min: 0,
+                        max: 59),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                    height: MediaQuery.of(context).size.height / 22,
+                    child: const AutoSizeText("Enter the rest time:",
+                        maxFontSize: 50,
+                        minFontSize: 16,
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 107, 107, 107),
+                            fontSize: 30))),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NumberInput(
+                        numberValue: workout.restTime,
+                        formatter: (value) {
+                          int calculation =
+                              ((workout.restTime - (workout.restTime % 60)) /
+                                      60)
+                                  .round();
+                          if (calculation == 0) {
+                            return "";
+                          }
+                          return calculation;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter time';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => setState(() => restMinutes = value!
+                                .contains(".")
+                            ? int.parse(value.substring(0, value.indexOf(".")))
+                            : int.parse(value)),
+                        unit: "m",
+                        min: 1,
+                        max: 99),
+                    NumberInput(
+                        numberValue: workout.restTime,
+                        formatter: (value) {
+                          return workout.restTime % 60;
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                        onSaved: (value) {
+                          if (value != "") {
+                            setState(() => restSeconds = value!.contains(".")
+                                ? int.parse(
+                                    value.substring(0, value.indexOf(".")))
+                                : int.parse(value));
+                          } else {
+                            setState(() => restSeconds = 0);
+                          }
+                        },
+                        unit: "s",
+                        min: 0,
+                        max: 59),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )));
+  }
+
+  Widget returnSecondsForm(Workout workout) {
+    return SizedBox(
+        height: (MediaQuery.of(context).size.height * 10) / 12,
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Text("Enter the work time:",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 107, 107, 107),
+                            fontSize: 18))),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NumberInput(
+                        numberValue: workout.exerciseTime,
+                        formatter: (value) {
+                          return workout.exerciseTime;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter time';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          if (value != "") {
+                            setState(() => workSeconds = value!.contains(".")
+                                ? int.parse(
+                                    value.substring(0, value.indexOf(".")))
+                                : int.parse(value));
+                          } else {
+                            setState(() => workSeconds = 0);
+                          }
+                        },
+                        unit: "s",
+                        min: 1,
+                        max: 999),
+                  ],
+                ),
+                const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: Text("Enter the rest time:",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 107, 107, 107),
+                            fontSize: 18))),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NumberInput(
+                        numberValue: workout.restTime,
+                        formatter: (value) {
+                          return workout.restTime;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter time';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          if (value != "") {
+                            setState(() => restSeconds = value!.contains(".")
+                                ? int.parse(
+                                    value.substring(0, value.indexOf(".")))
+                                : int.parse(value));
+                          } else {
+                            setState(() => restSeconds = 0);
+                          }
+                        },
+                        unit: "s",
+                        min: 1,
+                        max: 999),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )));
   }
 
   @override
   Widget build(BuildContext context) {
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    if (workoutArgument.exerciseTime > 0) {
-      if (!_exerciseChanged) {
-        _exerciseTime = workoutArgument.exerciseTime;
-      }
-      if (!_restChanged) {
-        _restTime = workoutArgument.restTime;
-      }
-      if (!_halfChanged) {
-        _halfTime = workoutArgument.halfTime;
-      }
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Icon(Icons.fitness_center),
-                Column(children: [
-                  NumberPicker(
-                    value: _exerciseTime,
-                    minValue: 1,
-                    maxValue: 120,
-                    step: 1,
-                    axis: Axis.horizontal,
-                    haptics: true,
-                    onChanged: (value) => setState(() {
-                      _exerciseTime = value;
-                      _exerciseChanged = true;
-                    }),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        key: const Key('work-decrement'),
-                        icon: const Icon(Icons.remove),
-                        onPressed: () => setState(() {
-                          final newValue = _exerciseTime - 1;
-                          _exerciseTime = newValue.clamp(1, 120);
-                          _exerciseChanged = true;
-                        }),
-                      ),
-                      Text('Working time: $_exerciseTime seconds'),
-                      IconButton(
-                        key: const Key('work-increment'),
-                        icon: const Icon(Icons.add),
-                        onPressed: () => setState(() {
-                          final newValue = _exerciseTime + 1;
-                          _exerciseTime = newValue.clamp(1, 120);
-                          _exerciseChanged = true;
-                        }),
-                      ),
-                    ],
-                  ),
-                ])
-              ])),
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("New Interval Timer"),
         ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.snooze),
-                Column(children: [
-                  NumberPicker(
-                    value: _restTime,
-                    minValue: 1,
-                    maxValue: 120,
-                    step: 1,
-                    axis: Axis.horizontal,
-                    haptics: true,
-                    onChanged: (value) => setState(() {
-                      _restTime = value;
-                      _restChanged = true;
-                    }),
-                  ),
-                  Row(children: [
-                    IconButton(
-                      key: const Key('rest-decrement'),
-                      icon: const Icon(Icons.remove),
-                      onPressed: () => setState(() {
-                        final newValue = _restTime - 1;
-                        _restTime = newValue.clamp(1, 120);
-                        _restChanged = true;
-                      }),
-                    ),
-                    Text('Rest time: $_restTime seconds'),
-                    IconButton(
-                      key: const Key('rest-increment'),
-                      icon: const Icon(Icons.add),
-                      onPressed: () => setState(() {
-                        final newValue = _restTime + 1;
-                        _restTime = newValue.clamp(1, 120);
-                        _restChanged = true;
-                      }),
-                    ),
-                  ]),
-                ]),
-              ],
-            ),
-          ),
+        bottomSheet: SubmitButton(
+          text: "Submit",
+          color: Colors.blue,
+          onTap: () {
+            submitTimings(workout);
+          },
         ),
-        // Visibility(
-        //   visible: _exerciseTime > 6 ? true : false,
-        //   child: Center(
-        //       child: CheckboxListTile(
-        //     title: const Text("Play sound at half time:"),
-        //     value: halfwayMark,
-        //     onChanged: (newValue) {
-        //       setState(() {
-        //         halfwayMark = newValue!;
-        //       });
-        //     },
-        //     // controlAffinity:
-        //     //     ListTileControlAffinity.leading, //  <-- leading Checkbox
-        //   )),
-        // ),
-
-        // Center(
-        //   child: Padding(
-        //     padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         const Icon(Icons.timelapse),
-        //         IconButton(
-        //           icon: const Icon(Icons.remove),
-        //           onPressed: () => setState(() {
-        //             final newValue = halfTime - 1;
-        //             halfTime = newValue.clamp(1, 60);
-        //             halfChanged = true;
-        //           }),
-        //         ),
-        //         Text('Half time: $halfTime seconds'),
-        //         IconButton(
-        //           icon: const Icon(Icons.add),
-        //           onPressed: () => setState(() {
-        //             final newValue = halfTime + 1;
-        //             halfTime = newValue.clamp(1, 50);
-        //             halfChanged = true;
-        //           }),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                submitWorkout(workoutArgument);
-              },
-              child: const Text('Submit'),
-            ),
-          ),
-        ),
-      ],
-    );
+        body: workout.showMinutes == 1
+            ? returnMinutesSecondsForm(workout)
+            : returnSecondsForm(workout));
   }
 }

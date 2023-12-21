@@ -41,7 +41,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CreateTimer(),
+          builder: (context) => const ChooseIntervals(),
           settings: RouteSettings(
             arguments: workout,
           ),
@@ -58,6 +58,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
         listItems.add(
           ListTileModel(
             action: "Prepare",
+            showMinutes: workoutArgument.showMinutes,
             interval: 0,
             total: workoutArgument.numExercises,
             seconds: 10,
@@ -68,6 +69,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
           listItems.add(
             ListTileModel(
               action: "Work",
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -77,6 +79,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,
@@ -87,6 +90,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
           listItems.add(
             ListTileModel(
               action: exercises[i - 1],
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -96,6 +100,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:background_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
@@ -130,7 +132,7 @@ class CountDownTimerState extends State<CountDownTimer>
         }
         return "Rest";
       default:
-        return "";
+        return "Rest";
     }
   }
 
@@ -142,6 +144,7 @@ class CountDownTimerState extends State<CountDownTimer>
         listItems.add(
           ListTileModel(
             action: "Prepare",
+            showMinutes: workoutArgument.showMinutes,
             interval: 0,
             total: workoutArgument.numExercises,
             seconds: 10,
@@ -152,6 +155,7 @@ class CountDownTimerState extends State<CountDownTimer>
           listItems.add(
             ListTileModel(
               action: "Work",
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -161,6 +165,7 @@ class CountDownTimerState extends State<CountDownTimer>
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,
@@ -171,6 +176,7 @@ class CountDownTimerState extends State<CountDownTimer>
           listItems.add(
             ListTileModel(
               action: exercises[i - 1],
+              showMinutes: workoutArgument.showMinutes,
               interval: i,
               total: workoutArgument.numExercises,
               seconds: workoutArgument.exerciseTime,
@@ -180,6 +186,7 @@ class CountDownTimerState extends State<CountDownTimer>
             listItems.add(
               ListTileModel(
                 action: "Rest",
+                showMinutes: workoutArgument.showMinutes,
                 interval: 0,
                 total: workoutArgument.numExercises,
                 seconds: workoutArgument.restTime,
@@ -408,72 +415,133 @@ class CountDownTimerState extends State<CountDownTimer>
                   color: backgroundColor(timerData.status),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
-                        child: Row(children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(size: 50.0, Icons.arrow_back),
-                              color: Colors.white),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                if (!timerData.paused) {
-                                  _workoutController.pause();
-                                } else {
-                                  _workoutController.resume();
-                                }
-                              },
-                              icon: Icon(
-                                  size: 50.0,
-                                  timerData.paused
-                                      ? Icons.play_arrow
-                                      : Icons.pause),
-                              color: Colors.white),
-                        ]),
+                      // Padding(
+                      //     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      //     child:
+                      Expanded(
+                          flex: 10,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(children: [
+                              // IconButton(
+                              //     padding: EdgeInsets.zero,
+                              //     constraints: const BoxConstraints(
+                              //         minHeight: 400, minWidth: 80),
+                              //     onPressed: () {
+                              //       Navigator.pop(context);
+                              //     },
+                              //     icon:
+                              //         const Icon(size: 50.0, Icons.arrow_back),
+                              //     color: Colors.white),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: const Color.fromARGB(
+                                              70, 0, 0, 0)),
+                                      // color: Colors.purple,
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        color: Colors.white,
+                                        Icons.arrow_back,
+                                        size: 50,
+                                      ),
+                                    )),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  if (!timerData.paused) {
+                                    _workoutController.pause();
+                                  } else {
+                                    _workoutController.resume();
+                                  }
+                                },
+                                child: Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: Color.fromARGB(70, 0, 0, 0)),
+                                      // color: Colors.purple,
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        color: Colors.white,
+                                        timerData.paused
+                                            ? Icons.play_arrow
+                                            : Icons.pause,
+                                        size: 50,
+                                      ),
+                                    )),
+                              )
+                              // IconButton(
+                              //     padding: EdgeInsets.all(0),
+                              //     constraints: const BoxConstraints(
+                              //         minHeight: 300, minWidth: 80),
+                              //     onPressed: () {
+                              //       if (!timerData.paused) {
+                              //         _workoutController.pause();
+                              //       } else {
+                              //         _workoutController.resume();
+                              //       }
+                              //     },
+                              //     icon: Icon(
+                              //         size: 40.0,
+                              //         timerData.paused
+                              //             ? Icons.play_arrow
+                              //             : Icons.pause),
+                              //     color: Colors.white),
+                            ]),
+                          )),
+                      Expanded(
+                          flex: 8,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: FittedBox(
+                              child: Text(
+                                timerScreenText(
+                                    currentWorkInterval,
+                                    timerData.status,
+                                    exercises,
+                                    workoutArgument),
+                                style: const TextStyle(
+                                    color: Colors.white, height: 1),
+                              ),
+                            ),
+                          )),
+                      Expanded(
+                        flex: 34,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          child: Center(
+                              child: AutoSizeText(
+                            timerText(timerData.currentMicroSeconds.toString(),
+                                workoutArgument),
+                            maxLines: 1,
+                            minFontSize: 20,
+                            // presetFontSizes: presetFontSizes,
+                            style: GoogleFonts.dmMono(
+                              fontSize: 20000,
+                              height: 1.1,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
                       ),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerScreenText(
-                                          currentWorkInterval,
-                                          timerData.status,
-                                          exercises,
-                                          workoutArgument),
-                                      style: const TextStyle(
-                                          fontSize: 30, color: Colors.white),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      timerData.currentMicroSeconds.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 160, color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ))),
-                    ],
-                  ),
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FractionallySizedBox(
-                        widthFactor: 1.0,
-                        heightFactor: 0.5,
+                      Expanded(
+                        flex: 48,
                         child: Container(
-                            alignment: AlignmentDirectional.bottomCenter,
                             color: const Color.fromARGB(22, 0, 0, 0),
                             child: AnimatedList(
                               key: listKey,
@@ -491,7 +559,11 @@ class CountDownTimerState extends State<CountDownTimer>
                                       : FontWeight.normal,
                                 );
                               },
-                            )))),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
                 complete()
               ]))));
         });
@@ -506,6 +578,27 @@ class CountDownTimerState extends State<CountDownTimer>
       return Colors.black;
     } else {
       return const Color.fromARGB(255, 0, 225, 255);
+    }
+  }
+
+  String timerText(String currentSeconds, Workout workout) {
+    if (workout.showMinutes == 1) {
+      int currentSecondsInt = int.parse(currentSeconds);
+      int seconds = currentSecondsInt % 60;
+      int minutes = ((currentSecondsInt - seconds) / 60).round();
+
+      if (minutes == 0) {
+        return currentSeconds;
+      }
+
+      String secondsString = seconds.toString();
+      if (seconds < 10) {
+        secondsString = "0$seconds";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return currentSeconds;
     }
   }
 }

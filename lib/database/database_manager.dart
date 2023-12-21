@@ -64,7 +64,7 @@ class DatabaseManager {
     if (Platform.isWindows || Platform.isLinux) {
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 3,
+        version: 4,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -81,7 +81,8 @@ class DatabaseManager {
             completeSound TEXT,
             countdownSound TEXT,
             colorInt INTEGER,
-            workoutIndex INTEGER
+            workoutIndex INTEGER,
+            showMinutes INTEGER
             )
             ''');
         },
@@ -90,16 +91,20 @@ class DatabaseManager {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
           }
-          if (oldVersion < newVersion) {
+          if (oldVersion == 2) {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
+          }
+          if (oldVersion < newVersion) {
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
           }
         },
       );
     }
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -116,7 +121,8 @@ class DatabaseManager {
             completeSound TEXT,
             countdownSound TEXT,
             colorInt INTEGER,
-            workoutIndex INTEGER
+            workoutIndex INTEGER,
+            showMinutes INTEGER
             )
             ''');
       },
@@ -125,9 +131,13 @@ class DatabaseManager {
           await db
               .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
         }
-        if (oldVersion < newVersion) {
+        if (oldVersion == 3) {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
+        }
+        if (oldVersion < newVersion) {
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
         }
       },
     );
@@ -195,24 +205,25 @@ class DatabaseManager {
     ///
     return List.generate(maps.length, (i) {
       return Workout(
-        maps[i]['id'],
-        maps[i]['title'],
-        maps[i]['numExercises'],
-        maps[i]['exercises'],
-        maps[i]['exerciseTime'],
-        maps[i]['restTime'],
-        maps[i]['halfTime'],
-        maps[i]['halfwayMark'],
-        maps[i]['workSound'],
-        maps[i]['restSound'],
-        maps[i]['halfwaySound'],
-        maps[i]['completeSound'],
-        maps[i]['countdownSound'],
-        maps[i]['colorInt'] ??
-            4280391411, // Default to blue if no previous color selected
-        maps[i]['workoutIndex'] ??
-            i, // Default to the current index if no index change passed
-      );
+          maps[i]['id'],
+          maps[i]['title'],
+          maps[i]['numExercises'],
+          maps[i]['exercises'],
+          maps[i]['exerciseTime'],
+          maps[i]['restTime'],
+          maps[i]['halfTime'],
+          maps[i]['halfwayMark'],
+          maps[i]['workSound'],
+          maps[i]['restSound'],
+          maps[i]['halfwaySound'],
+          maps[i]['completeSound'],
+          maps[i]['countdownSound'],
+          maps[i]['colorInt'] ??
+              4280391411, // Default to blue if no previous color selected
+          maps[i]['workoutIndex'] ??
+              i, // Default to the current index if no index change passed
+          maps[i]['showMinutes'] ?? 0 // Default to 0 if no previous selection
+          );
     });
   }
 

@@ -19,11 +19,31 @@ class CardItem extends StatelessWidget {
   final ListTileModel item;
   final bool selected;
 
+  String timeString(showMinutes, seconds) {
+    if (showMinutes == 1) {
+      int secondsRemainder = seconds % 60;
+      int minutes = ((seconds - secondsRemainder) / 60).round();
+
+      if (minutes == 0) {
+        return "${seconds.toString()}s";
+      }
+
+      String secondsString = secondsRemainder.toString();
+      if (secondsRemainder < 10) {
+        secondsString = "0$secondsRemainder";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return ("${seconds.toString()}s");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      height: 50.0,
+      height: MediaQuery.of(context).size.height / 12,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -43,9 +63,9 @@ class CardItem extends StatelessWidget {
           ),
           const Spacer(),
           SizedBox(
-            width: 40,
+            width: 60,
             child: Text(
-              "${item.seconds}s",
+              timeString(item.showMinutes, item.seconds),
             ),
           ),
         ],
