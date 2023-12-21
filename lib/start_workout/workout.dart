@@ -443,15 +443,23 @@ class CountDownTimerState extends State<CountDownTimer>
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(40),
-                                          color: const Color.fromARGB(
-                                              70, 0, 0, 0)),
+                                          color: MediaQuery.of(context)
+                                                      .orientation ==
+                                                  Orientation.portrait
+                                              ? const Color.fromARGB(
+                                                  70, 0, 0, 0)
+                                              : Colors.transparent),
                                       // color: Colors.purple,
                                       width: 50,
                                       height: 50,
                                       child: Icon(
                                         color: Colors.white,
                                         Icons.arrow_back,
-                                        size: 50,
+                                        size: MediaQuery.of(context)
+                                                    .orientation ==
+                                                Orientation.portrait
+                                            ? 50
+                                            : 30,
                                       ),
                                     )),
                               ),
@@ -470,7 +478,12 @@ class CountDownTimerState extends State<CountDownTimer>
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(40),
-                                          color: Color.fromARGB(70, 0, 0, 0)),
+                                          color: MediaQuery.of(context)
+                                                      .orientation ==
+                                                  Orientation.portrait
+                                              ? const Color.fromARGB(
+                                                  70, 0, 0, 0)
+                                              : Colors.transparent),
                                       // color: Colors.purple,
                                       width: 50,
                                       height: 50,
@@ -479,7 +492,11 @@ class CountDownTimerState extends State<CountDownTimer>
                                         timerData.paused
                                             ? Icons.play_arrow
                                             : Icons.pause,
-                                        size: 50,
+                                        size: MediaQuery.of(context)
+                                                    .orientation ==
+                                                Orientation.portrait
+                                            ? 50
+                                            : 30,
                                       ),
                                     )),
                               )

@@ -20,9 +20,13 @@ class CardItemAnimated extends StatelessWidget {
   final ListTileModel item;
   final bool selected;
 
+  double calcPadding(context) {
+    return MediaQuery.of(context).orientation == Orientation.portrait ? 15 : 5;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double height = 50;
+    double height = 20;
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1, 0),
@@ -52,7 +56,8 @@ class CardItemAnimated extends StatelessWidget {
               Expanded(
                   flex: 20,
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 20.0, 8.0, 20.0),
+                      padding: EdgeInsets.fromLTRB(10.0, calcPadding(context),
+                          8.0, calcPadding(context)),
                       child: AutoSizeText(
                         item.intervalString().isEmpty
                             ? "       "
@@ -65,7 +70,8 @@ class CardItemAnimated extends StatelessWidget {
               Expanded(
                   flex: 60,
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                      padding: EdgeInsets.fromLTRB(
+                          8.0, calcPadding(context), 8.0, calcPadding(context)),
                       child: AutoSizeText(
                         item.action.padRight(50, " "),
                         maxLines: 2,
@@ -76,7 +82,8 @@ class CardItemAnimated extends StatelessWidget {
               Expanded(
                 flex: 20,
                 child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 20.0, 10.0, 20.0),
+                    padding: EdgeInsets.fromLTRB(
+                        8.0, calcPadding(context), 10.0, calcPadding(context)),
                     child: AutoSizeText(
                       item.timeString(),
                       maxLines: 1,
