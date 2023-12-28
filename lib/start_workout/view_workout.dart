@@ -7,6 +7,7 @@ import '../helper_widgets/start_button.dart';
 import 'package:sqflite/sqflite.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../database/database_manager.dart';
+import '../helper_widgets/view_workout_appbar.dart';
 import '../models/list_model.dart';
 import '../workout_data_type/workout_type.dart';
 import '../models/list_tile_model.dart';
@@ -29,25 +30,30 @@ class ViewWorkoutState extends State<ViewWorkout> {
   ///
   late ListModel<ListTileModel> intervalInfo;
 
-  Color iconColor() {
-    final darkMode =
-        WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    if (darkMode == Brightness.dark) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
-
+  /// Asynchronously deletes a workout list from the database and updates the
+  /// workout indices of remaining lists accordingly.
+  ///
+  /// Parameters:
+  ///   - [workoutArgument]: The 'Workout' object representing the list to be deleted.
+  ///
+  /// Returns:
+  ///   - A Future representing the completion of the delete operation.
   Future deleteList(workoutArgument) async {
+    // Initialize the database.
     Future<Database> database = DatabaseManager().initDB();
 
+    // Delete the specified workout list from the database.
     await DatabaseManager()
         .deleteList(workoutArgument.id, database)
         .then((value) async {
+      // Retrieve the updated list of workouts from the database.
       List<Workout> workouts =
           await DatabaseManager().lists(DatabaseManager().initDB());
+
+      // Sort the workouts based on their workout indices.
       workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
+
+      // Update the workout indices of remaining lists after the deleted list.
       for (int i = workoutArgument.workoutIndex; i < workouts.length; i++) {
         workouts[i].workoutIndex = i;
         await DatabaseManager()
@@ -88,68 +94,26 @@ class ViewWorkoutState extends State<ViewWorkout> {
                   ),
                 ),
               ).then((value) {
-                WidgetsBinding.instance.renderViews.first
-                    .automaticSystemUiAdjustment = false;
-
-                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                  statusBarBrightness: Theme.of(context).brightness,
-                ));
+                setStatusBarBrightness(context);
               });
             },
           )),
-      appBar: AppBar(
-        title: Text(workout.title),
-        backgroundColor: Color(workout.colorInt),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete, color: iconColor()),
-            tooltip: 'Delete timer',
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Delete ${workout.title}'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: <Widget>[
-                          Text(
-                              'Are you sure you would like to delete ${workout.title}?'),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Delete'),
-                        onPressed: () {
-                          deleteList(workout)
-                              .then((value) => Navigator.pop(context));
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.edit, color: iconColor()),
-            onPressed: () {
-              if (exercises.isEmpty) {
-                pushCreateTimer(workout, context);
-              } else {
-                pushCreateWorkout(workout, context);
-              }
-            },
-          ),
-        ],
+      appBar: ViewWorkoutAppBar(
+        workout: workout,
+        height: MediaQuery.of(context).orientation == Orientation.portrait
+            ? 40
+            : 80,
+        onDelete: () {
+          deleteList(workout).then((value) => Navigator.pop(context));
+          Navigator.of(context).pop();
+        },
+        onEdit: () {
+          if (exercises.isEmpty) {
+            pushCreateTimer(workout, context);
+          } else {
+            pushCreateWorkout(workout, context);
+          }
+        },
       ),
       body: Container(
           color: Color(workout.colorInt),

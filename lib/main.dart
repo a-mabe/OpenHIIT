@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'create_workout/select_timer.dart';
@@ -267,12 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ///
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
-        false;
-
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Theme.of(context).brightness,
-    ));
+    setStatusBarBrightness(context);
 
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
