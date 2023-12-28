@@ -4,7 +4,7 @@
 ![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
 
 <p align="center">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/a72fb0f0-c0bc-4c24-8585-87c0f6b6b1c2" width="200"/>
+   <img src="./assets/icon/openhiit-icon.png" width="150"/>
 </p>
 
 <p align="center">
