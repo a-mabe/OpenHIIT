@@ -3,30 +3,53 @@ import 'package:flutter/material.dart';
 import '../models/list_tile_model.dart';
 
 class CardItemAnimated extends StatelessWidget {
+  /// Color of the font used in each card.
+  ///
+  final Color fontColor;
+
+  /// Weight of the font used in each card.
+  ///
+  final FontWeight fontWeight;
+
+  /// Background color of each card.
+  ///
+  final Color backgroundColor;
+
+  /// Animation to used when removing a list item.
+  ///
+  final Animation<double> animation;
+
+  /// Object that contains all interval data to display
+  /// in the ListTile.
+  ///
+  final ListTileModel item;
+
+  /// Function to invoke on ListTile tap.
+  ///
+  final VoidCallback? onTap;
+
   const CardItemAnimated({
     super.key,
     this.onTap,
-    this.selected = false,
     required this.fontColor,
+    required this.backgroundColor,
     required this.fontWeight,
     required this.animation,
     required this.item,
   });
 
-  final Color fontColor;
-  final FontWeight fontWeight;
-  final Animation<double> animation;
-  final VoidCallback? onTap;
-  final ListTileModel item;
-  final bool selected;
-
+  /// Calculate padding to place around text depending on the device orientation.
+  ///
   double calcPadding(context) {
     return MediaQuery.of(context).orientation == Orientation.portrait ? 15 : 5;
   }
 
   @override
   Widget build(BuildContext context) {
-    double height = 20;
+    /// Minimum height that each ListTile can be.
+    ///
+    double minHeight = 20;
+
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1, 0),
@@ -36,11 +59,11 @@ class CardItemAnimated extends StatelessWidget {
           curve: Curves.easeIn,
           reverseCurve: Curves.easeOut)),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.transparent,
-          border: Border(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          // Set top border.
+          border: const Border(
             top: BorderSide(
-              // <--- top side
               color: Color.fromARGB(53, 255, 255, 255),
               width: 3.0,
             ),
@@ -48,25 +71,72 @@ class CardItemAnimated extends StatelessWidget {
         ),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-              minHeight: height,
+              minHeight: minHeight,
               maxHeight: MediaQuery.of(context).size.height / 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              // Interval number, e.g. 1/8.
               Expanded(
                   flex: 20,
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(10.0, calcPadding(context),
-                          8.0, calcPadding(context)),
-                      child: AutoSizeText(
-                        item.intervalString().isEmpty
-                            ? "       "
-                            : item.intervalString(),
-                        maxLines: 1,
-                        minFontSize: 0,
-                        maxFontSize: 20000,
-                        style: TextStyle(fontSize: 20000, color: fontColor),
-                      ))),
+                      padding: EdgeInsets.fromLTRB(15, 0, 8, 0),
+                      child: Row(
+                        children: [
+                          Text(
+                            item.intervalString().isEmpty
+                                ? ""
+                                : item.interval.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * .065),
+                          ),
+                          Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                  padding: EdgeInsets.fromLTRB(
+                                      0,
+                                      0,
+                                      0,
+                                      (MediaQuery.of(context).size.height *
+                                          .022)),
+                                  child: Text(
+                                    item.intervalString().isEmpty
+                                        ? ""
+                                        : "/${item.total}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                .022),
+                                  ))),
+                        ],
+                      )
+                      // Padding(
+                      //     padding: EdgeInsets.fromLTRB(
+                      //         10.0, calcPadding(context), 0, calcPadding(context)),
+                      //     child: Row(
+                      //       children: [
+                      //         AutoSizeText(
+                      //           item.intervalString().isEmpty
+                      //               ? "       "
+                      //               : item.interval.toString(),
+                      //           maxLines: 1,
+                      //           minFontSize: 0,
+                      //           maxFontSize: 20000,
+                      //           style: TextStyle(fontSize: 20000, color: fontColor),
+                      //         ),
+                      //         Text(
+                      //           item.intervalString().isEmpty ? "       " : "/10",
+                      //           maxLines: 1,
+                      //           style: TextStyle(fontSize: 20, color: fontColor),
+                      //           textAlign: TextAlign.end,
+                      //         )
+                      //       ],
+                      //     ))
+                      )),
+              // Current interval text, "Work" if no exercise provided.
               Expanded(
                   flex: 60,
                   child: Padding(
@@ -79,11 +149,12 @@ class CardItemAnimated extends StatelessWidget {
                         maxFontSize: 20000,
                         style: TextStyle(fontSize: 20000, color: fontColor),
                       ))),
+              // Time allotted to the interval.
               Expanded(
                 flex: 20,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(
-                        8.0, calcPadding(context), 10.0, calcPadding(context)),
+                        8.0, calcPadding(context), 15, calcPadding(context)),
                     child: AutoSizeText(
                       item.timeString(),
                       maxLines: 1,

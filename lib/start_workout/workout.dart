@@ -10,6 +10,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
+import '../helper_functions/functions.dart';
 import '../workout_data_type/workout_type.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
@@ -87,6 +88,7 @@ class CountDownTimerState extends State<CountDownTimer>
       item: item,
       fontColor: const Color.fromARGB(153, 255, 255, 255),
       fontWeight: FontWeight.normal,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -134,70 +136,6 @@ class CountDownTimerState extends State<CountDownTimer>
       default:
         return "Rest";
     }
-  }
-
-  List<ListTileModel> listItems(List exercises, Workout workoutArgument) {
-    List<ListTileModel> listItems = [];
-
-    for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-      if (i == 0) {
-        listItems.add(
-          ListTileModel(
-            action: "Prepare",
-            showMinutes: workoutArgument.showMinutes,
-            interval: 0,
-            total: workoutArgument.numExercises,
-            seconds: 10,
-          ),
-        );
-      } else {
-        if (exercises.length < workoutArgument.numExercises) {
-          listItems.add(
-            ListTileModel(
-              action: "Work",
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        } else {
-          listItems.add(
-            ListTileModel(
-              action: exercises[i - 1],
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        }
-      }
-    }
-
-    return listItems;
   }
 
   bool shouldReset = true;
@@ -547,6 +485,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                   fontWeight: index == 0
                                       ? FontWeight.bold
                                       : FontWeight.normal,
+                                  backgroundColor: Colors.transparent,
                                 );
                               },
                             )),

@@ -4,14 +4,14 @@ import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
 import './helper_widgets/submit_button.dart';
 
-class ChooseIntervals extends StatefulWidget {
-  const ChooseIntervals({super.key});
+class CreateTimer extends StatefulWidget {
+  const CreateTimer({super.key});
 
   @override
-  ChooseIntervalsState createState() => ChooseIntervalsState();
+  CreateTimerState createState() => CreateTimerState();
 }
 
-class ChooseIntervalsState extends State<ChooseIntervals> {
+class CreateTimerState extends State<CreateTimer> {
   @override
   Widget build(BuildContext context) {
     /// Grab the [workout] that was passed to this view
