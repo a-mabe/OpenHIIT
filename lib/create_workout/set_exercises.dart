@@ -68,6 +68,7 @@ class _SetExercisesState extends State<SetExercises> {
       return Padding(
         padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
         child: TextFormField(
+          key: Key('exercise-$index'),
           textCapitalization: TextCapitalization.sentences,
           maxLength: 40,
 
