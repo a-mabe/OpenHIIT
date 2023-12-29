@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../helper_functions/functions.dart';
 import '../helper_widgets/start_button.dart';
 import 'package:sqflite/sqflite.dart';
@@ -64,16 +63,25 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    /// Extracting the Workout object from the route arguments.
+    ///
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
+    /// Parsing the exercises data from the Workout object.
+    ///
     List<dynamic> exercises =
         workout.exercises != "" ? jsonDecode(workout.exercises) : [];
 
+    /// Creating a ListModel to manage the list of ListTileModel items.
+    ///
     intervalInfo = ListModel<ListTileModel>(
-      listKey: listKey,
-      initialItems: listItems(exercises, workout),
+      listKey: listKey, // Providing a key for the list.
+      initialItems:
+          listItems(exercises, workout), // Initializing the list with items.
     );
 
+    /// Getting the height of the current screen using MediaQuery.
+    ///
     double sizeHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(

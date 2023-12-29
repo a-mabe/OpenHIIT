@@ -1,13 +1,3 @@
-/// Copyright (C) 2021 Abigail Mabe - All Rights Reserved
-/// You may use, distribute and modify this code under the terms
-/// of the license.
-///
-/// You should have received a copy of the license with this file.
-/// If not, please email <mabe.abby.a@gmail.com>
-///
-/// Defines a sample widget class.
-///
-
 import 'package:flutter/material.dart';
 
 class TimerOptionCard extends StatefulWidget {
@@ -30,12 +20,11 @@ class TimerOptionCard extends StatefulWidget {
   final String optionDescription;
 
   const TimerOptionCard(
-      {Key? key,
+      {super.key,
       required this.onTap,
       required this.optionIcon,
       required this.optionTitle,
-      required this.optionDescription})
-      : super(key: key);
+      required this.optionDescription});
 
   @override
   TimerOptionCardState createState() => TimerOptionCardState();

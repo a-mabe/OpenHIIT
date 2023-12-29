@@ -359,14 +359,15 @@ class CountDownTimerState extends State<CountDownTimer>
                       Expanded(
                           flex: 10,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(children: [
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
-                                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius:
@@ -392,6 +393,17 @@ class CountDownTimerState extends State<CountDownTimer>
                                     )),
                               ),
                               const Spacer(),
+                              Text(
+                                intervalInfo[0].intervalString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).orientation ==
+                                                Orientation.portrait
+                                            ? 30
+                                            : 20),
+                              ),
+                              const Spacer(),
                               GestureDetector(
                                 onTap: () {
                                   if (!timerData.paused) {
@@ -401,7 +413,8 @@ class CountDownTimerState extends State<CountDownTimer>
                                   }
                                 },
                                 child: Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 15, 0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius:
@@ -433,7 +446,7 @@ class CountDownTimerState extends State<CountDownTimer>
                       Expanded(
                           flex: 8,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: FittedBox(
                               child: Text(
                                 timerScreenText(
@@ -457,10 +470,11 @@ class CountDownTimerState extends State<CountDownTimer>
                                 workoutArgument),
                             maxLines: 1,
                             minFontSize: 20,
+                            maxFontSize: 20000,
                             // presetFontSizes: presetFontSizes,
                             style: GoogleFonts.dmMono(
                               fontSize: 20000,
-                              height: 1.1,
+                              height: .9,
                               color: Colors.white,
                             ),
                             textAlign: TextAlign.center,

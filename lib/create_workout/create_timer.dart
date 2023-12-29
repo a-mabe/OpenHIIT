@@ -23,7 +23,7 @@ class CreateTimerState extends State<CreateTimer> {
     //
     // Note: This is a `GlobalKey<FormState>`,
     // not a GlobalKey<MyCustomFormState>.
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     /// Push to the SetTimings page.
     ///
@@ -46,7 +46,7 @@ class CreateTimerState extends State<CreateTimer> {
     ///
     void submitForm(Workout workout) {
       // Validate returns true if the form is valid, or false otherwise.
-      final form = _formKey.currentState!;
+      final form = formKey.currentState!;
       if (form.validate()) {
         form.save();
         pushTimings(workout);
@@ -65,6 +65,6 @@ class CreateTimerState extends State<CreateTimer> {
             submitForm(workout);
           },
         ),
-        body: CreateForm(workout: workout, formKey: _formKey));
+        body: CreateForm(workout: workout, formKey: formKey));
   }
 }

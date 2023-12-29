@@ -1,13 +1,3 @@
-/// Copyright (C) 2021 Abigail Mabe - All Rights Reserved
-/// You may use, distribute and modify this code under the terms
-/// of the license.
-///
-/// You should have received a copy of the license with this file.
-/// If not, please email <mabe.abby.a@gmail.com>
-///
-/// Defines a sample widget class.
-///
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -23,8 +13,7 @@ class CreateForm extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
 
-  const CreateForm({Key? key, required this.workout, required this.formKey})
-      : super(key: key);
+  const CreateForm({super.key, required this.workout, required this.formKey});
 
   @override
   CreateFormState createState() => CreateFormState();
@@ -122,13 +111,13 @@ class CreateFormState extends State<CreateForm> {
                         onSaved: (String? val) {
                           widget.workout.title = val!;
                         },
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
 
                       /// Workout/timer color form field.
                       ///
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height / 22,
                           child: const AutoSizeText("Set color:",
@@ -141,6 +130,7 @@ class CreateFormState extends State<CreateForm> {
                       ),
                       Center(
                           child: ColorPicker(
+                        key: const Key('color-picker'),
                         onTap: () {
                           pickColor();
                         },
@@ -150,7 +140,7 @@ class CreateFormState extends State<CreateForm> {
                       /// Workout/timer number of intervals.
                       ///
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height / 22,
                           child: const AutoSizeText("Number of intervals:",
@@ -162,6 +152,7 @@ class CreateFormState extends State<CreateForm> {
                         ),
                       ),
                       NumberInput(
+                          numberInputKey: const Key('interval-input'),
                           numberValue: widget.workout.numExercises,
                           formatter: (value) {
                             return value;
@@ -172,10 +163,8 @@ class CreateFormState extends State<CreateForm> {
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            setState(() {
-                              widget.workout.numExercises = int.parse(value!);
-                            });
+                          onSaved: (String? val) {
+                            widget.workout.numExercises = int.parse(val!);
                           },
                           unit: "intervals",
                           min: 1,
@@ -184,7 +173,7 @@ class CreateFormState extends State<CreateForm> {
                       /// Workout/timer timer display
                       ///
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height / 22,
                           child: const AutoSizeText("Timer display:",

@@ -23,7 +23,7 @@ class SoundDropdown extends StatefulWidget {
   /// Simple countdown timer
   ///
   const SoundDropdown({
-    Key? key,
+    super.key,
     required this.title,
     // required this.description,
     required this.initialSelection,
@@ -32,7 +32,7 @@ class SoundDropdown extends StatefulWidget {
     required this.onFinished,
     // required this.build,
     // this.status = 'start',
-  }) : super(key: key);
+  });
 
   @override
   SoundDropdownState createState() => SoundDropdownState();

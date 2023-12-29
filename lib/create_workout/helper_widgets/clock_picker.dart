@@ -1,13 +1,3 @@
-/// Copyright (C) 2021 Abigail Mabe - All Rights Reserved
-/// You may use, distribute and modify this code under the terms
-/// of the license.
-///
-/// You should have received a copy of the license with this file.
-/// If not, please email <mabe.abby.a@gmail.com>
-///
-/// Defines a sample widget class.
-///
-
 import 'package:flutter/material.dart';
 
 class ClockPicker extends StatefulWidget {
@@ -23,11 +13,10 @@ class ClockPicker extends StatefulWidget {
   final Function(int) onPressed;
 
   const ClockPicker(
-      {Key? key,
+      {super.key,
       required this.displayOption,
       required this.selectedTimerDisplayOptions,
-      required this.onPressed})
-      : super(key: key);
+      required this.onPressed});
 
   @override
   ClockPickerState createState() => ClockPickerState();

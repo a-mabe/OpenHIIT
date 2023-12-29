@@ -72,7 +72,10 @@ class CardItemAnimated extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(
               minHeight: minHeight,
-              maxHeight: MediaQuery.of(context).size.height / 10),
+              maxHeight:
+                  MediaQuery.of(context).orientation == Orientation.portrait
+                      ? MediaQuery.of(context).size.height / 10
+                      : MediaQuery.of(context).size.height / 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -80,68 +83,79 @@ class CardItemAnimated extends StatelessWidget {
               Expanded(
                   flex: 20,
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 8, 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            item.intervalString().isEmpty
-                                ? ""
-                                : item.interval.toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.height * .065),
-                          ),
-                          Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      0,
-                                      0,
-                                      0,
-                                      (MediaQuery.of(context).size.height *
-                                          .022)),
-                                  child: Text(
-                                    item.intervalString().isEmpty
-                                        ? ""
-                                        : "/${item.total}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                .022),
-                                  ))),
-                        ],
-                      )
-                      // Padding(
-                      //     padding: EdgeInsets.fromLTRB(
-                      //         10.0, calcPadding(context), 0, calcPadding(context)),
-                      //     child: Row(
-                      //       children: [
-                      //         AutoSizeText(
-                      //           item.intervalString().isEmpty
-                      //               ? "       "
-                      //               : item.interval.toString(),
-                      //           maxLines: 1,
-                      //           minFontSize: 0,
-                      //           maxFontSize: 20000,
-                      //           style: TextStyle(fontSize: 20000, color: fontColor),
-                      //         ),
-                      //         Text(
-                      //           item.intervalString().isEmpty ? "       " : "/10",
-                      //           maxLines: 1,
-                      //           style: TextStyle(fontSize: 20, color: fontColor),
-                      //           textAlign: TextAlign.end,
-                      //         )
-                      //       ],
-                      //     ))
-                      )),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 8, 0),
+                      child: AutoSizeText(
+                        item.intervalString().isEmpty
+                            ? ""
+                            : item.interval.toString(),
+                        maxLines: 1,
+                        minFontSize: 14,
+                        maxFontSize: 500,
+                        style: TextStyle(
+                          color: fontColor,
+                          fontSize: 500,
+                        ),
+                      ))
+                  // child: Padding(
+                  //     padding: const EdgeInsets.fromLTRB(15, 0, 12, 0),
+                  //     child: Row(
+                  //       children: [
+                  //         Expanded(
+                  //           flex: 28,
+                  //           child: Align(
+                  //               alignment: Alignment.bottomRight,
+                  //               child: AutoSizeText(
+                  //                 item.intervalString().isEmpty
+                  //                     ? ""
+                  //                     : item.interval.toString(),
+                  //                 maxLines: 1,
+                  //                 minFontSize: 14,
+                  //                 maxFontSize: 500,
+                  //                 style: const TextStyle(
+                  //                     color: Colors.white,
+                  //                     fontSize: 500,
+                  //                     height: 2),
+                  //               )),
+                  //         ),
+                  //         Expanded(
+                  //           flex: 2,
+                  //           child: Align(
+                  //               alignment: Alignment.bottomLeft,
+                  //               child: AutoSizeText(
+                  //                 item.intervalString().isEmpty
+                  //                     ? ""
+                  //                     : "/${item.total}",
+                  //                 maxLines: 1,
+                  //                 minFontSize: 1,
+                  //                 maxFontSize: 500,
+                  //                 style: const TextStyle(
+                  //                     color: Colors.white,
+                  //                     fontSize: 500,
+                  //                     height: 3),
+                  //               )
+                  //               // Padding(
+                  //               //     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  //               //     child: AutoSizeText(
+                  //               //       item.intervalString().isEmpty
+                  //               //           ? ""
+                  //               //           : "/${item.total}",
+                  //               //       maxLines: 1,
+                  //               //       minFontSize: 14,
+                  //               //       maxFontSize: 500,
+                  //               //       style: const TextStyle(
+                  //               //           color: Colors.white, fontSize: 500),
+                  //               //     ))
+                  //               ),
+                  //         ),
+                  //       ],
+                  //     ))
+                  ),
               // Current interval text, "Work" if no exercise provided.
               Expanded(
                   flex: 60,
                   child: Padding(
                       padding: EdgeInsets.fromLTRB(
-                          8.0, calcPadding(context), 8.0, calcPadding(context)),
+                          8, calcPadding(context), 8.0, calcPadding(context)),
                       child: AutoSizeText(
                         item.action.padRight(50, " "),
                         maxLines: 2,

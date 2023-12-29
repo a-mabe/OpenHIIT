@@ -39,20 +39,21 @@ class _SetExercisesState extends State<SetExercises> {
     /// length so that the form fields can be prepopulated with
     /// the old exercises.
     ///
-    int currentNumExercises =
+    int currentNumWorkoutExercises =
         workout.exercises != "" ? jsonDecode(workout.exercises).length : 0;
 
-    List currentExercises = [];
+    List currentWorkoutExercises = [];
 
-    if (currentNumExercises > 0) {
-      currentExercises = jsonDecode(workout.exercises);
+    if (currentNumWorkoutExercises > 0) {
+      currentWorkoutExercises = jsonDecode(workout.exercises);
     }
 
     for (var i = 0; i < workout.numExercises; i++) {
       validators.add(false);
-      if (i < currentNumExercises) {
+      if (i < currentNumWorkoutExercises) {
         // If there might be a previously set exercise, use it!
-        controllers.add(TextEditingController(text: currentExercises[i]));
+        controllers
+            .add(TextEditingController(text: currentWorkoutExercises[i]));
       } else {
         // Otherwise, blank text controller.
         controllers.add(TextEditingController());
@@ -124,9 +125,27 @@ class _SetExercisesState extends State<SetExercises> {
     ///
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
+    Workout workoutCopy = Workout(
+        workout.id,
+        workout.title,
+        workout.numExercises,
+        workout.exercises,
+        workout.exerciseTime,
+        workout.restTime,
+        workout.halfTime,
+        workout.halfwayMark,
+        workout.workSound,
+        workout.restSound,
+        workout.halfwaySound,
+        workout.completeSound,
+        workout.countdownSound,
+        workout.colorInt,
+        workout.workoutIndex,
+        workout.showMinutes);
+
     /// Generate the text controllers.
     ///
-    generateTextControllers(workout);
+    generateTextControllers(workoutCopy);
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -137,7 +156,7 @@ class _SetExercisesState extends State<SetExercises> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitExercises(formKey, workout, exercises);
+            submitExercises(formKey, workoutCopy, exercises);
           },
         ),
         body: SizedBox(
@@ -148,7 +167,7 @@ class _SetExercisesState extends State<SetExercises> {
                     child: Form(
                       key: formKey,
                       child: Column(
-                        children: generateTextFormFields(workout),
+                        children: generateTextFormFields(workoutCopy),
                       ),
                     )))));
   }
