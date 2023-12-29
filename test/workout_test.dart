@@ -71,7 +71,7 @@ void main() {
     ///
 
     // Verify that the setTimings view has loaded
-    expect(find.text('Enter the work time:'), findsOneWidget);
+    expect(find.byKey(Key('work-seconds')), findsOneWidget);
 
     // Enter work time
     await tester.enterText(find.byKey(Key('work-seconds')), '60');
