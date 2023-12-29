@@ -42,6 +42,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: <Widget>[
         // Defines the delete button.
         IconButton(
+          key: const Key("delete-workout"),
           icon: const Icon(Icons.delete, color: Colors.white),
           tooltip: 'Delete timer',
           onPressed: () {
@@ -77,6 +78,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         // Defines the edit button.
         IconButton(
+          key: const Key("edit-workout"),
           icon: const Icon(Icons.edit, color: Colors.white),
           onPressed: onEdit,
         ),

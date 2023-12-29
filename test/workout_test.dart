@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
 void main() {
-  testWidgets('Test CreateForm submission', (WidgetTester tester) async {
+  testWidgets('Test CreateWorkout', (WidgetTester tester) async {
     String workoutName = "Test workout 1";
 
     // Build our app and trigger a frame.
@@ -29,10 +29,10 @@ void main() {
     expect(find.text('Enter a name:'), findsOneWidget);
 
     // Enter a name
-    await tester.enterText(find.byKey(Key('timer-name')), workoutName);
+    await tester.enterText(find.byKey(const Key('timer-name')), workoutName);
 
     // Tap the color picker
-    await tester.tap(find.byKey(Key('color-picker')));
+    await tester.tap(find.byKey(const Key('color-picker')));
     await tester.pumpAndSettle(); // Wait for the dialog to appear
 
     // In the color picker dialog, select a color
@@ -40,7 +40,7 @@ void main() {
     await tester.pumpAndSettle(); // Wait for the dialog to close
 
     // Enter the number of intervals
-    await tester.enterText(find.byKey(Key('interval-input')), '5');
+    await tester.enterText(find.byKey(const Key('interval-input')), '3');
 
     // Tap the Timer Display option (assuming there are two options)
     // await tester.tap(find.text('Timer display:').last);
@@ -56,9 +56,10 @@ void main() {
     ///
 
     // Enter exercise names
-    await tester.enterText(find.byKey(Key('exercise-0')), 'Push-ups');
-    await tester.enterText(find.byKey(Key('exercise-1')), 'Sit-ups');
-    await tester.enterText(find.byKey(Key('exercise-2')), 'Jumping Jacks');
+    await tester.enterText(find.byKey(const Key('exercise-0')), 'Push-ups');
+    await tester.enterText(find.byKey(const Key('exercise-1')), 'Sit-ups');
+    await tester.enterText(
+        find.byKey(const Key('exercise-2')), 'Jumping Jacks');
 
     // Tap the Submit button
     await tester.tap(find.text('Submit'));
@@ -71,13 +72,13 @@ void main() {
     ///
 
     // Verify that the setTimings view has loaded
-    expect(find.byKey(Key('work-seconds')), findsOneWidget);
+    expect(find.byKey(const Key('work-seconds')), findsOneWidget);
 
     // Enter work time
-    await tester.enterText(find.byKey(Key('work-seconds')), '60');
+    await tester.enterText(find.byKey(const Key('work-seconds')), '60');
 
     // Enter rest time
-    await tester.enterText(find.byKey(Key('rest-seconds')), '30');
+    await tester.enterText(find.byKey(const Key('rest-seconds')), '30');
 
     // Tap the Submit button
     await tester.tap(find.text('Submit'));
@@ -93,33 +94,37 @@ void main() {
     expect(find.text('Work Sound'), findsOneWidget);
 
     // Tap the dropdowns and select sound options
-    await tester.tap(find.byKey(Key('work-sound')));
+    await tester.tap(find.byKey(const Key('work-sound')));
     await tester.pumpAndSettle();
-    await tester
-        .tap(find.text('Long whistle')); // Replace with the actual option
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byKey(Key('rest-sound')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Beep')); // Replace with the actual option
+    await tester.tap(find.descendant(
+        of: find.byKey(const Key('work-sound')),
+        matching: find.text('Long whistle')));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(Key('halfway-sound')));
+    await tester.tap(find.byKey(const Key('rest-sound')));
     await tester.pumpAndSettle();
-    await tester.tap(
-        find.text('Quick beep sequence')); // Replace with the actual option
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byKey(Key('countdown-sound')));
-    await tester.pumpAndSettle();
-    await tester
-        .tap(find.text('Countdown beep')); // Replace with the actual option
+    await tester.tap(find.descendant(
+        of: find.byKey(const Key('rest-sound')), matching: find.text("Ding")));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(Key('end-sound')));
+    await tester.tap(find.byKey(const Key('halfway-sound')));
     await tester.pumpAndSettle();
-    await tester
-        .tap(find.text('Long whistle')); // Replace with the actual option
+    await tester.tap(find.descendant(
+        of: find.byKey(const Key('halfway-sound')),
+        matching: find.text('Quick beep sequence')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('countdown-sound')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(
+        of: find.byKey(const Key('countdown-sound')),
+        matching: find.text('Beep')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('end-sound')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(
+        of: find.byKey(const Key('end-sound')), matching: find.text('Horn')));
     await tester.pumpAndSettle();
 
     // Tap the Submit button
@@ -128,130 +133,38 @@ void main() {
     // Wait for the navigation to complete
     await tester.pumpAndSettle();
 
-    // Verify that the form was submitted successfully
-    // Add your verification logic based on your application's behavior
-    // expect(find.text(workoutName), findsOneWidget);
+    ///
+    /// MAIN PAGE
+    ///
+
+    // Verify that the workout was submitted successfully
+    expect(find.text(workoutName), findsOneWidget);
+
+    // Tap the workout to view details
+    await tester.tap(find.text(workoutName));
+
+    // Wait for the navigation to complete
+    await tester.pumpAndSettle();
+
+    // Verify the ViewWorkout page has loaded
+    expect(find.text("Start"), findsOneWidget);
+
+    // Find and tap the delete button
+    await tester.tap(find.byKey(const Key('delete-workout')));
+
+    // Wait for the dialog to appear
+    await tester.pumpAndSettle();
+
+    // Verify that the dialog is displayed
+    expect(find.text('Delete $workoutName'), findsOneWidget);
+
+    // Tap the Delete button in the dialog
+    await tester.tap(find.text('Delete'));
+
+    // Wait for the dialog to close
+    await tester.pumpAndSettle();
+
+    // Verify that the workout is no longer displayed
+    expect(find.text(workoutName), findsOneWidget);
   });
 }
-
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-
-// import 'package:openhiit/main.dart';
-
-// Future changeTime(WidgetTester tester, int changeTime, String changeResult,
-//     String buttonKey) async {
-//   // Change time.
-//   for (var i = 0; i < changeTime; i++) {
-//     await tester.tap(find.byKey(Key(buttonKey)));
-//     await tester.pumpAndSettle();
-//   }
-
-//   // Time should be changed.
-//   expect(find.text(changeResult), findsOneWidget);
-// }
-
-// void main() {
-//   testWidgets('Add workout smoke test', (WidgetTester tester) async {
-//     String workoutName = "Test workout 1";
-
-//     // Build our app and trigger a frame.
-//     await tester.pumpWidget(const WorkoutTimer());
-
-//     // Tap the '+' icon and trigger the add Workout or Timer page.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pumpAndSettle();
-
-//     // Verify that the next page has loaded.
-//     expect(find.text('Interval Timer'), findsOneWidget);
-//     expect(find.text('Workout'), findsOneWidget);
-
-//     // Tap to add a Workout.
-//     await tester.tap(find.byIcon(Icons.fitness_center));
-//     await tester.pumpAndSettle();
-
-//     // Verify that the next page has loaded.
-//     expect(find.text('Enter a name:'), findsOneWidget);
-
-//     // Fill out the Workout name.
-//     expect(find.byKey(const Key('timer-name')), findsOneWidget);
-//     await tester.enterText(find.byKey(const Key('timer-name')), workoutName);
-
-//     // Verify the workout name was filled out.
-//     expect(find.text(workoutName), findsOneWidget);
-
-//     // Verify the exercise number defaults to 10.
-//     // expect(find.text('10'), findsOneWidget);
-
-//     //   for (var i = 0; i < 8; i++) {
-//     //     // Reduce the number of exercises by 1.
-//     //     await tester.tap(find.byIcon(Icons.remove));
-//     //     await tester.pumpAndSettle();
-//     //   }
-
-//     //   // Verify the exercise number is 2 as expected.
-//     //   expect(find.text('2'), findsOneWidget);
-
-//     //   await tester.dragUntilVisible(
-//     //     find.byType(InkWell), // what you want to find
-//     //     find.byType(SingleChildScrollView), // widget you want to scroll
-//     //     const Offset(-250, 0), // delta to move
-//     //   );
-
-//     //   // Tap to go to the next page.
-//     //   await tester.tap(find.byType(InkWell));
-//     //   await tester.pumpAndSettle();
-
-//     //   // Verify that the next page has loaded.
-//     //   expect(find.text('List Exercises'), findsOneWidget);
-
-//     //   for (var i = 1; i < 3; i++) {
-//     //     final exercise = find.ancestor(
-//     //       of: find.text('Exercise #$i'),
-//     //       matching: find.byType(TextFormField),
-//     //     );
-
-//     //     await tester.enterText(exercise, 'testing $i');
-
-//     //     expect(find.text('testing $i'), findsOneWidget);
-//     //   }
-
-//     //   // Tap to go to the next page.
-//     //   await tester.tap(find.byType(InkWell));
-//     //   await tester.pumpAndSettle();
-
-//     //   await changeTime(tester, 2, 'Working time: 18 seconds', 'work-decrement');
-//     //   await changeTime(tester, 3, 'Working time: 21 seconds', 'work-increment');
-//     //   await changeTime(tester, 2, 'Rest time: 8 seconds', 'rest-decrement');
-//     //   await changeTime(tester, 3, 'Rest time: 11 seconds', 'rest-increment');
-
-//     //   // Tap to go to the next page.
-//     //   await tester.tap(find.byType(InkWell));
-//     //   await tester.pumpAndSettle();
-
-//     //   // TODO: Test selecting different sounds.
-//     //   expect(find.widgetWithText(DropdownMenu<String>, "Short whistle"),
-//     //       findsNWidgets(5));
-
-//     //   await tester.dragUntilVisible(
-//     //     find.text("Submit"), // what you want to find
-//     //     find.byType(ListView), // widget you want to scroll
-//     //     const Offset(0, -250), // delta to move
-//     //   );
-
-//     //   // Tap to go to the next page.
-//     //   await tester.tap(
-//     //     find.text("Submit"),
-//     //   );
-//     //   await tester.pumpAndSettle();
-
-//     //   // expect(find.text(workoutName), findsOneWidget);
-//   });
-// }
