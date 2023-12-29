@@ -96,6 +96,9 @@ void main() {
     // Tap the dropdowns and select sound options
     await tester.tap(find.byKey(const Key('work-sound')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.descendant(
+        of: find.byKey(const Key('work-sound')),
+        matching: find.text('Long whistle')));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('work-sound')),
         matching: find.text('Long whistle')));
