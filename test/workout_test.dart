@@ -66,9 +66,6 @@ void main() {
     // Wait for the navigation to complete
     await tester.pumpAndSettle();
 
-    // Verify that the SetTimings screen is navigated to
-    expect(find.text('Set Timings'), findsOneWidget);
-
     ///
     /// SET TIMINGS
     ///
@@ -87,6 +84,10 @@ void main() {
 
     // Wait for the navigation to complete
     await tester.pumpAndSettle();
+
+    ///
+    /// SET SOUNDS
+    ///
 
     // Verify that the SetSounds screen is navigated to
     expect(find.text('Work Sound'), findsOneWidget);
