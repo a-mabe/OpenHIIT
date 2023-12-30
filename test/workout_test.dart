@@ -157,7 +157,7 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
 
     // Verify the ViewWorkout page has loaded
-    expect(find.text("Start"), findsOneWidget);
+    expect(find.byKey(Key('delete-workout')), findsOneWidget);
 
     // Find and tap the delete button
     await tester.tap(find.byKey(const Key('delete-workout')));
