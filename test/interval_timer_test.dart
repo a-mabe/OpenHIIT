@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
-const double PORTRAIT_WIDTH = 400.0;
-const double PORTRAIT_HEIGHT = 800.0;
-const double LANDSCAPE_WIDTH = PORTRAIT_HEIGHT;
-const double LANDSCAPE_HEIGHT = PORTRAIT_WIDTH;
+const double portraitWidth = 400.0;
+const double portraitHeight = 800.0;
+const double landscapeWidth = portraitHeight;
+const double landscapeHeight = portraitWidth;
 
 void main() {
   testWidgets('Test CreateInterval', (WidgetTester tester) async {
     final TestWidgetsFlutterBinding binding =
         TestWidgetsFlutterBinding.ensureInitialized();
 
-    await binding.setSurfaceSize(const Size(PORTRAIT_WIDTH, PORTRAIT_HEIGHT));
+    await binding.setSurfaceSize(const Size(portraitWidth, portraitHeight));
 
     String timerName = "Test interval timer 1";
 

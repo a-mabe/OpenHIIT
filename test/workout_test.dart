@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
+const double portraitWidth = 400.0;
+const double portraitHeight = 800.0;
+const double landscapeWidth = portraitHeight;
+const double landscapeHeight = portraitWidth;
+
 void main() {
   testWidgets('Test CreateWorkout', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding =
+        TestWidgetsFlutterBinding.ensureInitialized();
+
+    await binding.setSurfaceSize(const Size(portraitWidth, portraitHeight));
+
     String workoutName = "Test workout 1";
 
     // Build our app and trigger a frame.
