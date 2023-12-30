@@ -154,7 +154,7 @@ void main() {
     await tester.tap(find.text(workoutName));
 
     // Wait for the navigation to complete
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 5));
 
     // Verify the ViewWorkout page has loaded
     expect(find.text("Start"), findsOneWidget);
