@@ -18,6 +18,24 @@ class CreateTimerState extends State<CreateTimer> {
     /// from the previous view.
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
+    Workout workoutCopy = Workout(
+        workout.id,
+        workout.title,
+        workout.numExercises,
+        workout.exercises,
+        workout.exerciseTime,
+        workout.restTime,
+        workout.halfTime,
+        workout.halfwayMark,
+        workout.workSound,
+        workout.restSound,
+        workout.halfwaySound,
+        workout.completeSound,
+        workout.countdownSound,
+        workout.colorInt,
+        workout.workoutIndex,
+        workout.showMinutes);
+
     // Create a global key that uniquely identifies the Form widget
     // and allows validation of the form.
     //
@@ -62,9 +80,9 @@ class CreateTimerState extends State<CreateTimer> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitForm(workout);
+            submitForm(workoutCopy);
           },
         ),
-        body: CreateForm(workout: workout, formKey: formKey));
+        body: CreateForm(workout: workoutCopy, formKey: formKey));
   }
 }

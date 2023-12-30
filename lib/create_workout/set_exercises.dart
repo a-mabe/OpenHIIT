@@ -126,27 +126,9 @@ class _SetExercisesState extends State<SetExercises> {
     ///
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    Workout workoutCopy = Workout(
-        workout.id,
-        workout.title,
-        workout.numExercises,
-        workout.exercises,
-        workout.exerciseTime,
-        workout.restTime,
-        workout.halfTime,
-        workout.halfwayMark,
-        workout.workSound,
-        workout.restSound,
-        workout.halfwaySound,
-        workout.completeSound,
-        workout.countdownSound,
-        workout.colorInt,
-        workout.workoutIndex,
-        workout.showMinutes);
-
     /// Generate the text controllers.
     ///
-    generateTextControllers(workoutCopy);
+    generateTextControllers(workout);
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -157,7 +139,7 @@ class _SetExercisesState extends State<SetExercises> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitExercises(formKey, workoutCopy, exercises);
+            submitExercises(formKey, workout, exercises);
           },
         ),
         body: SizedBox(
@@ -168,7 +150,7 @@ class _SetExercisesState extends State<SetExercises> {
                     child: Form(
                       key: formKey,
                       child: Column(
-                        children: generateTextFormFields(workoutCopy),
+                        children: generateTextFormFields(workout),
                       ),
                     )))));
   }
