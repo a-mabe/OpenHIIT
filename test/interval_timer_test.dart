@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
-const double portraitWidth = 400.0;
-const double portraitHeight = 800.0;
+const double portraitWidth = 1242.0;
+const double portraitHeight = 2208.0;
 const double landscapeWidth = portraitHeight;
 const double landscapeHeight = portraitWidth;
 
