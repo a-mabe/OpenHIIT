@@ -154,8 +154,9 @@ void main() {
     // Find and tap the edit button
     await tester.tap(find.byKey(const Key('edit-workout')));
 
-    // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(); // allow the application to handle
+
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
     await createOrEditWorkout(tester, timerName, 2, "Ding", "Long whistle",
         "Horn", "None", "Quick beep sequence", "90", "20");
