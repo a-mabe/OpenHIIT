@@ -165,6 +165,8 @@ void main() {
     // Wait for the dialog to appear
     await tester.pump(const Duration(seconds: 1));
 
+    await tester.pumpAndSettle();
+
     // Verify that the dialog is displayed
     expect(find.text('Delete $workoutName'), findsOneWidget);
 
