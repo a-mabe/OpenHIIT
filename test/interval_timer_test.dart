@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
+const double PORTRAIT_WIDTH = 400.0;
+const double PORTRAIT_HEIGHT = 800.0;
+const double LANDSCAPE_WIDTH = PORTRAIT_HEIGHT;
+const double LANDSCAPE_HEIGHT = PORTRAIT_WIDTH;
+
 void main() {
   testWidgets('Test CreateInterval', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding =
+        TestWidgetsFlutterBinding.ensureInitialized();
+
+    await binding.setSurfaceSize(const Size(PORTRAIT_WIDTH, PORTRAIT_HEIGHT));
+
     String timerName = "Test interval timer 1";
 
     // Build our app and trigger a frame.
