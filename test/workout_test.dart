@@ -153,8 +153,9 @@ void main() {
     // Tap the workout to view details
     await tester.tap(find.text(workoutName));
 
-    // Wait for the navigation to complete
-    await tester.pump(const Duration(seconds: 10));
+    await tester.pump(); // allow the application to handle
+
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
     // Verify the ViewWorkout page has loaded
     expect(find.text("Start"), findsOneWidget);
