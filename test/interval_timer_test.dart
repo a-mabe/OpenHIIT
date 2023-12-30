@@ -111,6 +111,8 @@ void main() {
         of: find.byKey(const Key('end-sound')), matching: find.text('Horn')));
     await tester.pumpAndSettle();
 
+    await tester.pump(const Duration(seconds: 1));
+
     // Tap the Submit button
     await tester.tap(find.text('Submit'));
 
