@@ -95,37 +95,34 @@ void main() {
 
     // Tap the dropdowns and select sound options
     await tester.tap(find.byKey(const Key('work-sound')));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.descendant(
-        of: find.byKey(const Key('work-sound')),
-        matching: find.text('Long whistle')));
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('work-sound')),
         matching: find.text('Long whistle')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('rest-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('rest-sound')), matching: find.text("Ding")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('halfway-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('halfway-sound')),
         matching: find.text('Quick beep sequence')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('countdown-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('countdown-sound')),
         matching: find.text('Beep')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('end-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('end-sound')), matching: find.text('Horn')));
     await tester.pumpAndSettle();
@@ -147,7 +144,7 @@ void main() {
     await tester.tap(find.text(workoutName));
 
     // Wait for the navigation to complete
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
 
     // Verify the ViewWorkout page has loaded
     expect(find.text("Start"), findsOneWidget);
@@ -156,7 +153,7 @@ void main() {
     await tester.tap(find.byKey(const Key('delete-workout')));
 
     // Wait for the dialog to appear
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
 
     // Verify that the dialog is displayed
     expect(find.text('Delete $workoutName'), findsOneWidget);
@@ -168,6 +165,6 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the workout is no longer displayed
-    expect(find.text(workoutName), findsOneWidget);
+    expect(find.text(workoutName), findsNothing);
   });
 }

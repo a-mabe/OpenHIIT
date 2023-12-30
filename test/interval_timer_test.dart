@@ -79,34 +79,34 @@ void main() {
 
     // Tap the dropdowns and select sound options
     await tester.tap(find.byKey(const Key('work-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('work-sound')),
         matching: find.text('Long whistle')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('rest-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('rest-sound')), matching: find.text("Ding")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('halfway-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('halfway-sound')),
         matching: find.text('Quick beep sequence')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('countdown-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('countdown-sound')),
         matching: find.text('Beep')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('end-sound')));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     await tester.tap(find.descendant(
         of: find.byKey(const Key('end-sound')), matching: find.text('Horn')));
     await tester.pumpAndSettle();
