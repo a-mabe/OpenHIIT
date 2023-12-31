@@ -114,5 +114,15 @@ void main() {
 
     // Find the Nice job screen
     expect(find.text("Nice job!"), findsOne);
+
+    // Find and tap the restart button
+    await tester.tap(find.text("Restart"));
+
+    await tester.pump();
+
+    await tester.pump(const Duration(seconds: 2));
+
+    // Verify the timer has started
+    expect(find.text("Get ready"), findsOneWidget);
   });
 }
