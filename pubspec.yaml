@@ -104,7 +104,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audio/
-    - assets/google_fonts/
+    - google_fonts/
 
 
   # The following line ensures that the Material Icons font is

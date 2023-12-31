@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,10 +17,12 @@ import 'helper_widgets/timer_list_tile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   /// Monospaced font licensing.
   ///
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 

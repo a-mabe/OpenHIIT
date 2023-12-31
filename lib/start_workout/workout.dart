@@ -394,7 +394,9 @@ class CountDownTimerState extends State<CountDownTimer>
                               ),
                               const Spacer(),
                               Text(
-                                intervalInfo[0].intervalString(),
+                                intervalInfo.length > 0
+                                    ? intervalInfo[0].intervalString()
+                                    : "",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize:
@@ -473,6 +475,7 @@ class CountDownTimerState extends State<CountDownTimer>
                             maxFontSize: 20000,
                             // presetFontSizes: presetFontSizes,
                             style: GoogleFonts.dmMono(
+                              // 'DmMono',
                               fontSize: 20000,
                               height: .9,
                               color: Colors.white,

@@ -10,13 +10,13 @@ const double landscapeWidth = portraitHeight;
 const double landscapeHeight = portraitWidth;
 
 void main() {
-  testWidgets('Test CreateInterval', (WidgetTester tester) async {
+  testWidgets('Test CreateWorkout', (WidgetTester tester) async {
     final TestWidgetsFlutterBinding binding =
         TestWidgetsFlutterBinding.ensureInitialized();
 
     await binding.setSurfaceSize(const Size(portraitWidth, portraitHeight));
 
-    String timerName = "Test interval timer 1";
+    String workoutName = "Test workout 1";
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(const WorkoutTimer());
@@ -34,31 +34,31 @@ void main() {
     ///
 
     // Tap to add a Workout.
-    await tester.tap(find.byIcon(Icons.timer));
+    await tester.tap(find.byIcon(Icons.fitness_center));
     await tester.pumpAndSettle();
 
     // Verify that the next page has loaded.
     expect(find.text('Enter a name:'), findsOneWidget);
 
     // Enter a name
-    await tester.enterText(find.byKey(const Key('timer-name')), timerName);
+    await tester.enterText(find.byKey(const Key('timer-name')), workoutName);
 
     await createOrEditWorkout(
         tester,
-        timerName,
+        workoutName,
         3,
-        false,
-        false,
+        true,
+        true,
         "Long whistle",
         "Ding",
         "Quick beep sequence",
         "Beep",
         "Horn",
-        "60",
-        "30");
+        "10",
+        "5");
 
     // Tap the workout to view details
-    await tester.tap(find.text(timerName));
+    await tester.tap(find.text(workoutName));
 
     await tester.pump(); // allow the application to handle
 
@@ -68,41 +68,51 @@ void main() {
     expect(find.text("Start"), findsOneWidget);
 
     // Find and tap the edit button
-    await tester.tap(find.byKey(const Key('edit-workout')));
+    await tester.tap(find.text("Start"));
 
     await tester.pump(); // allow the application to handle
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    await createOrEditWorkout(tester, timerName, 2, false, false, "Ding",
-        "Long whistle", "Horn", "None", "Quick beep sequence", "90", "20");
+    // Verify the timer has started
+    expect(find.text("Get ready"), findsOneWidget);
 
-    // Tap the workout to view details
-    await tester.tap(find.text(timerName));
+    await tester.pump(const Duration(
+        seconds: 11)); // skip past the first portion of the timer
 
-    await tester.pump(); // allow the application to handle
+    // Should see text "1 of 3"
+    expect(find.text("1 of 3"), findsOneWidget);
 
-    await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    await tester.pump(const Duration(
+        seconds: 11)); // skip past the first work portion of the timer
 
-    // Verify the ViewWorkout page has loaded
-    expect(find.text("Start"), findsOneWidget);
+    // Should no longer see text "1 of 3"
+    expect(find.text("1 of 3"), findsNothing);
 
-    // Find and tap the delete button
-    await tester.tap(find.byKey(const Key('delete-workout')));
+    await tester.pump(const Duration(
+        seconds: 6)); // skip past the first rest portion of the timer
 
-    // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+    // Should no longer see text "1 of 3"
+    expect(find.text("2 of 3"), findsOne);
 
-    // Verify that the dialog is displayed
-    expect(find.text('Delete $timerName'), findsOneWidget);
+    await tester.pump(const Duration(
+        seconds: 11)); // skip past the second work portion of the timer
 
-    // Tap the Delete button in the dialog
-    await tester.tap(find.text('Delete'));
+    // Should no longer see text "1 of 3"
+    expect(find.text("2 of 3"), findsNothing);
 
-    // Wait for the dialog to close
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(
+        seconds: 6)); // skip past the second rest portion of the timer
 
-    // Verify that the workout is no longer displayed
-    expect(find.text(timerName), findsNothing);
+    // Should no longer see text "1 of 3"
+    expect(find.text("3 of 3"), findsOne);
+
+    await tester.pump(const Duration(
+        seconds: 11)); // skip past the third work portion of the timer
+
+    await tester.pump(const Duration(seconds: 2));
+
+    // Find the Nice job screen
+    expect(find.text("Nice job!"), findsOne);
   });
 }
