@@ -492,18 +492,22 @@ class CountDownTimerState extends State<CountDownTimer>
                               key: listKey,
                               initialItemCount: intervalInfo.length,
                               itemBuilder: (context, index, animation) {
-                                return CardItemAnimated(
-                                  animation: animation,
-                                  item: intervalInfo[index],
-                                  fontColor: index == 0
-                                      ? Colors.white
-                                      : const Color.fromARGB(
-                                          153, 255, 255, 255),
-                                  fontWeight: index == 0
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  backgroundColor: Colors.transparent,
-                                );
+                                if (index >= intervalInfo.length) {
+                                  return Container();
+                                } else {
+                                  return CardItemAnimated(
+                                    animation: animation,
+                                    item: intervalInfo[index],
+                                    fontColor: index == 0
+                                        ? Colors.white
+                                        : const Color.fromARGB(
+                                            153, 255, 255, 255),
+                                    fontWeight: index == 0
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    backgroundColor: Colors.transparent,
+                                  );
+                                }
                               },
                             )),
                       ),
