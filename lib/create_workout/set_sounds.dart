@@ -123,6 +123,7 @@ class _SetSoundsState extends State<SetSounds> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SoundDropdown(
+                            dropdownKey: Key("work-sound"),
                             title: "Work Sound",
                             initialSelection: workout.workSound,
                             pool: pool,
@@ -137,6 +138,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
+                            dropdownKey: Key("rest-sound"),
                             title: "Rest Sound",
                             initialSelection: workout.restSound,
                             pool: pool,
@@ -151,6 +153,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
+                            dropdownKey: Key("halfway-sound"),
                             title: "Halfway Sound",
                             initialSelection: workout.halfwaySound,
                             pool: pool,
@@ -165,6 +168,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
+                            dropdownKey: Key("countdown-sound"),
                             title: "Countdown Sound",
                             initialSelection: workout.countdownSound,
                             pool: pool,
@@ -179,6 +183,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
+                            dropdownKey: Key("end-sound"),
                             title: "Timer End Sound",
                             initialSelection: workout.completeSound,
                             pool: pool,

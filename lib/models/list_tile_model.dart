@@ -14,7 +14,7 @@ class ListTileModel<E> {
   int seconds;
 
   String intervalString() {
-    return interval == 0 ? "" : "$interval/$total";
+    return interval == 0 ? "" : "$interval of $total";
   }
 
   String timeString() {

@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../helper_functions/functions.dart';
+import '../helper_widgets/start_button.dart';
 import 'package:sqflite/sqflite.dart';
-import '../create_workout/create_timer.dart';
-import '../create_workout/create_workout.dart';
+import '../card_widgets/card_item_animated.dart';
 import '../database/database_manager.dart';
+import '../helper_widgets/view_workout_appbar.dart';
 import '../models/list_model.dart';
 import '../workout_data_type/workout_type.dart';
-import '../card_widgets/card_item.dart';
 import '../models/list_tile_model.dart';
 import 'workout.dart';
 
@@ -19,117 +19,40 @@ class ViewWorkout extends StatefulWidget {
 }
 
 class ViewWorkoutState extends State<ViewWorkout> {
-  late ListModel<ListTileModel> _intervalInfo;
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  /// GlobalKey for the AnimatedList.
+  ///
+  GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
-  void pushCreateWorkout(workout) {
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CreateWorkout(),
-          settings: RouteSettings(
-            arguments: workout,
-          ),
-        ),
-      );
-    });
-  }
+  /// List of objects including all relevant info for each interval.
+  /// Example: The String exercise for that interval, such as "Work"
+  /// or an entered exercise such as "Bicep Curls".
+  ///
+  late ListModel<ListTileModel> intervalInfo;
 
-  void pushCreateTimer(workout) {
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ChooseIntervals(),
-          settings: RouteSettings(
-            arguments: workout,
-          ),
-        ),
-      );
-    });
-  }
+  /// Asynchronously deletes a workout list from the database and updates the
+  /// workout indices of remaining lists accordingly.
+  ///
+  /// Parameters:
+  ///   - [workoutArgument]: The 'Workout' object representing the list to be deleted.
+  ///
+  /// Returns:
+  ///   - A Future representing the completion of the delete operation.
+  Future deleteList(workoutArgument) async {
+    // Initialize the database.
+    Future<Database> database = DatabaseManager().initDB();
 
-  List<ListTileModel> listItems(List exercises, Workout workoutArgument) {
-    List<ListTileModel> listItems = [];
-
-    for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-      if (i == 0) {
-        listItems.add(
-          ListTileModel(
-            action: "Prepare",
-            showMinutes: workoutArgument.showMinutes,
-            interval: 0,
-            total: workoutArgument.numExercises,
-            seconds: 10,
-          ),
-        );
-      } else {
-        if (exercises.length < workoutArgument.numExercises) {
-          listItems.add(
-            ListTileModel(
-              action: "Work",
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        } else {
-          listItems.add(
-            ListTileModel(
-              action: exercises[i - 1],
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        }
-      }
-    }
-
-    return listItems;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _intervalInfo = ListModel<ListTileModel>(
-      listKey: _listKey,
-      initialItems: <ListTileModel>[],
-    );
-  }
-
-  Future deleteList(workoutArgument, database) async {
+    // Delete the specified workout list from the database.
     await DatabaseManager()
         .deleteList(workoutArgument.id, database)
         .then((value) async {
+      // Retrieve the updated list of workouts from the database.
       List<Workout> workouts =
           await DatabaseManager().lists(DatabaseManager().initDB());
+
+      // Sort the workouts based on their workout indices.
       workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
+
+      // Update the workout indices of remaining lists after the deleted list.
       for (int i = workoutArgument.workoutIndex; i < workouts.length; i++) {
         workouts[i].workoutIndex = i;
         await DatabaseManager()
@@ -138,155 +61,139 @@ class ViewWorkoutState extends State<ViewWorkout> {
     });
   }
 
-  Color iconColor() {
-    final darkMode =
-        WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    if (darkMode == Brightness.dark) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
-        false;
+    /// Extracting the Workout object from the route arguments.
+    ///
+    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Theme.of(context).brightness,
-    ));
+    /// Parsing the exercises data from the Workout object.
+    ///
+    List<dynamic> exercises =
+        workout.exercises != "" ? jsonDecode(workout.exercises) : [];
 
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    /// Creating a ListModel to manage the list of ListTileModel items.
+    ///
+    intervalInfo = ListModel<ListTileModel>(
+      listKey: listKey, // Providing a key for the list.
+      initialItems:
+          listItems(exercises, workout), // Initializing the list with items.
+    );
 
-    List<dynamic> exercises = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
-    Future<Database> database = DatabaseManager().initDB();
-
-    Widget exerciseList() {
-      return ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: _intervalInfo.length,
-        itemBuilder: (BuildContext context, int index) {
-          return CardItem(item: _intervalInfo[index]);
-        },
-      );
-    }
-
-    if (_intervalInfo.length == 0) {
-      _intervalInfo = ListModel<ListTileModel>(
-        listKey: _listKey,
-        initialItems: listItems(exercises, workoutArgument),
-      );
-    }
+    /// Getting the height of the current screen using MediaQuery.
+    ///
+    double sizeHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(workoutArgument.colorInt),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete, color: iconColor()),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Delete ${workoutArgument.title}'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: <Widget>[
-                          Text(
-                              'Are you sure you would like to delete ${workoutArgument.title}?'),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Delete'),
-                        onPressed: () async {
-                          await deleteList(workoutArgument, database)
-                              .then((value) => Navigator.pop(context));
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.edit, color: iconColor()),
-            onPressed: () {
-              if (exercises.isEmpty) {
-                pushCreateTimer(workoutArgument);
-              } else {
-                pushCreateWorkout(workoutArgument);
-              }
-            },
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CountDownTimer(),
-                        settings: RouteSettings(
-                          arguments: workoutArgument,
-                        ),
-                      ),
-                    ).then((value) {
-                      WidgetsBinding.instance.renderViews.first
-                          .automaticSystemUiAdjustment = false;
-
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                        statusBarBrightness: Theme.of(context).brightness,
-                      ));
-                    });
-                  },
-                  child: Ink(
-                    height: 80.0,
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    color: Colors.green,
-                    child: const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
-                          ),
-                          Text("Start")
-                        ],
-                      ),
-                    ),
+      bottomNavigationBar: Container(
+          color: Color(workout.colorInt),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? MediaQuery.of(context).size.height / 8
+              : MediaQuery.of(context).size.height / 5,
+          child: StartButton(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CountDownTimer(),
+                  settings: RouteSettings(
+                    arguments: workout,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ).then((value) {
+                setStatusBarBrightness(context);
+              });
+            },
+          )),
+      appBar: ViewWorkoutAppBar(
+        workout: workout,
+        height: MediaQuery.of(context).orientation == Orientation.portrait
+            ? 40
+            : 80,
+        onDelete: () {
+          deleteList(workout).then((value) => Navigator.pop(context));
+          Navigator.of(context).pop();
+        },
+        onEdit: () {
+          if (exercises.isEmpty) {
+            pushCreateTimer(workout, context);
+          } else {
+            pushCreateWorkout(workout, context);
+          }
+        },
       ),
-      body: Center(
-        child: exerciseList(),
-      ),
+      body: Container(
+          color: Color(workout.colorInt),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Visibility(
+                visible:
+                    MediaQuery.of(context).orientation == Orientation.portrait
+                        ? true
+                        : false,
+                child: Expanded(
+                    flex: 4,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.timer,
+                              color: Colors.white,
+                              size: sizeHeight * .07,
+                            ),
+                            Text(
+                              "${calculateWorkoutTime(workout)} minutes",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: sizeHeight * .03),
+                            )
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.view_timeline,
+                              color: Colors.white,
+                              size: sizeHeight * .07,
+                            ),
+                            Text(
+                              "${workout.numExercises} intervals",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: sizeHeight * .03),
+                            )
+                          ],
+                        ),
+                        const Spacer(),
+                      ],
+                    ))),
+            Expanded(
+                flex: 10,
+                child: AnimatedList(
+                  key: listKey,
+                  initialItemCount: intervalInfo.length,
+                  itemBuilder: (context, index, animation) {
+                    return CardItemAnimated(
+                      animation: animation,
+                      item: intervalInfo[index],
+                      fontColor: Colors.white,
+                      fontWeight:
+                          index == 0 ? FontWeight.bold : FontWeight.normal,
+                      backgroundColor: Color(workout.colorInt),
+                    );
+                  },
+                ))
+          ])),
     );
   }
 }

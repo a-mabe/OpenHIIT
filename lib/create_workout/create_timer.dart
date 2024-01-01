@@ -4,26 +4,44 @@ import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
 import './helper_widgets/submit_button.dart';
 
-class ChooseIntervals extends StatefulWidget {
-  const ChooseIntervals({super.key});
+class CreateTimer extends StatefulWidget {
+  const CreateTimer({super.key});
 
   @override
-  ChooseIntervalsState createState() => ChooseIntervalsState();
+  CreateTimerState createState() => CreateTimerState();
 }
 
-class ChooseIntervalsState extends State<ChooseIntervals> {
+class CreateTimerState extends State<CreateTimer> {
   @override
   Widget build(BuildContext context) {
     /// Grab the [workout] that was passed to this view
     /// from the previous view.
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
+    Workout workoutCopy = Workout(
+        workout.id,
+        workout.title,
+        workout.numExercises,
+        workout.exercises,
+        workout.exerciseTime,
+        workout.restTime,
+        workout.halfTime,
+        workout.halfwayMark,
+        workout.workSound,
+        workout.restSound,
+        workout.halfwaySound,
+        workout.completeSound,
+        workout.countdownSound,
+        workout.colorInt,
+        workout.workoutIndex,
+        workout.showMinutes);
+
     // Create a global key that uniquely identifies the Form widget
     // and allows validation of the form.
     //
     // Note: This is a `GlobalKey<FormState>`,
     // not a GlobalKey<MyCustomFormState>.
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     /// Push to the SetTimings page.
     ///
@@ -46,7 +64,7 @@ class ChooseIntervalsState extends State<ChooseIntervals> {
     ///
     void submitForm(Workout workout) {
       // Validate returns true if the form is valid, or false otherwise.
-      final form = _formKey.currentState!;
+      final form = formKey.currentState!;
       if (form.validate()) {
         form.save();
         pushTimings(workout);
@@ -62,9 +80,9 @@ class ChooseIntervalsState extends State<ChooseIntervals> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitForm(workout);
+            submitForm(workoutCopy);
           },
         ),
-        body: CreateForm(workout: workout, formKey: _formKey));
+        body: CreateForm(workout: workoutCopy, formKey: formKey));
   }
 }

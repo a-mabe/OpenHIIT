@@ -58,27 +58,28 @@ dependencies:
   soundpool: ^2.4.1
   auto_size_text: ^3.0.0
   google_fonts: ^6.1.0
+  shimmer: ^3.0.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path_ios: "assets/icon/openhiit-icon-ios.png"
+  image_path_ios: "assets/icon/openhiit-icon-animated.png"
   image_path: "assets/icon/openhiit-icon-android.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   adaptive_icon_background: "#ffffff" # only available for Android 8.0 devices and above
   adaptive_icon_foreground: "assets/icon/openhiit-icon-android.png" # only available for Android 8.0 devices and above
   web:
     generate: true
-    image_path: "assets/icon/openhiit-icon.png"
+    image_path: "assets/icon/openhiit-icon-android.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/icon/openhiit-icon.png"
+    image_path: "assets/icon/openhiit-icon-android.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/icon/openhiit-icon.png"
+    image_path: "assets/icon/openhiit-icon-android.png"
 
 dev_dependencies:
   flutter_test:
@@ -103,7 +104,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audio/
-    - assets/google_fonts/
+    - google_fonts/
 
 
   # The following line ensures that the Material Icons font is

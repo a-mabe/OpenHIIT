@@ -1,13 +1,3 @@
-/// Copyright (C) 2021 Abigail Mabe - All Rights Reserved
-/// You may use, distribute and modify this code under the terms
-/// of the license.
-///
-/// You should have received a copy of the license with this file.
-/// If not, please email <mabe.abby.a@gmail.com>
-///
-/// Defines a sample widget class.
-///
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +15,10 @@ class SubmitButton extends StatefulWidget {
   final Function onTap;
 
   const SubmitButton(
-      {Key? key, required this.text, required this.color, required this.onTap})
-      : super(key: key);
+      {super.key,
+      required this.text,
+      required this.color,
+      required this.onTap});
 
   @override
   SubmitButtonState createState() => SubmitButtonState();
@@ -62,7 +54,7 @@ class SubmitButtonState extends State<SubmitButton> {
             width: MediaQuery.of(context).size.width,
             child: Center(
                 child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: AutoSizeText(
                       widget.text,
                       minFontSize: 18,

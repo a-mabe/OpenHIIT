@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../helper_functions/functions.dart';
 import '../workout_data_type/workout_type.dart';
 
 ///
@@ -17,11 +18,11 @@ class TimerListTile extends StatefulWidget {
   /// Simple countdown timer
   ///
   const TimerListTile({
-    Key? key,
+    super.key,
     required this.workout,
     required this.onTap,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   TimerListTileState createState() => TimerListTileState();
@@ -91,13 +92,5 @@ Total - ${calculateWorkoutTime(widget.workout)} minutes'''),
             child: const Icon(Icons.drag_handle),
           ),
         ));
-  }
-
-  int calculateWorkoutTime(Workout workout) {
-    return (((workout.exerciseTime * workout.numExercises) +
-                (workout.restTime * (workout.numExercises - 1)) +
-                (workout.halfTime * workout.numExercises)) /
-            60)
-        .round();
   }
 }

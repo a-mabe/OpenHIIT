@@ -10,6 +10,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
+import '../helper_functions/functions.dart';
 import '../workout_data_type/workout_type.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
@@ -87,6 +88,7 @@ class CountDownTimerState extends State<CountDownTimer>
       item: item,
       fontColor: const Color.fromARGB(153, 255, 255, 255),
       fontWeight: FontWeight.normal,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -134,70 +136,6 @@ class CountDownTimerState extends State<CountDownTimer>
       default:
         return "Rest";
     }
-  }
-
-  List<ListTileModel> listItems(List exercises, Workout workoutArgument) {
-    List<ListTileModel> listItems = [];
-
-    for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-      if (i == 0) {
-        listItems.add(
-          ListTileModel(
-            action: "Prepare",
-            showMinutes: workoutArgument.showMinutes,
-            interval: 0,
-            total: workoutArgument.numExercises,
-            seconds: 10,
-          ),
-        );
-      } else {
-        if (exercises.length < workoutArgument.numExercises) {
-          listItems.add(
-            ListTileModel(
-              action: "Work",
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        } else {
-          listItems.add(
-            ListTileModel(
-              action: exercises[i - 1],
-              showMinutes: workoutArgument.showMinutes,
-              interval: i,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.exerciseTime,
-            ),
-          );
-          if (i < workoutArgument.numExercises) {
-            listItems.add(
-              ListTileModel(
-                action: "Rest",
-                showMinutes: workoutArgument.showMinutes,
-                interval: 0,
-                total: workoutArgument.numExercises,
-                seconds: workoutArgument.restTime,
-              ),
-            );
-          }
-        }
-      }
-    }
-
-    return listItems;
   }
 
   bool shouldReset = true;
@@ -421,14 +359,15 @@ class CountDownTimerState extends State<CountDownTimer>
                       Expanded(
                           flex: 10,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(children: [
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
-                                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius:
@@ -454,6 +393,19 @@ class CountDownTimerState extends State<CountDownTimer>
                                     )),
                               ),
                               const Spacer(),
+                              Text(
+                                intervalInfo.length > 0
+                                    ? intervalInfo[0].intervalString()
+                                    : "",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).orientation ==
+                                                Orientation.portrait
+                                            ? 30
+                                            : 20),
+                              ),
+                              const Spacer(),
                               GestureDetector(
                                 onTap: () {
                                   if (!timerData.paused) {
@@ -463,7 +415,8 @@ class CountDownTimerState extends State<CountDownTimer>
                                   }
                                 },
                                 child: Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 15, 0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius:
@@ -495,7 +448,7 @@ class CountDownTimerState extends State<CountDownTimer>
                       Expanded(
                           flex: 8,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: FittedBox(
                               child: Text(
                                 timerScreenText(
@@ -519,10 +472,12 @@ class CountDownTimerState extends State<CountDownTimer>
                                 workoutArgument),
                             maxLines: 1,
                             minFontSize: 20,
+                            maxFontSize: 20000,
                             // presetFontSizes: presetFontSizes,
                             style: GoogleFonts.dmMono(
+                              // 'DmMono',
                               fontSize: 20000,
-                              height: 1.1,
+                              height: .9,
                               color: Colors.white,
                             ),
                             textAlign: TextAlign.center,
@@ -537,17 +492,22 @@ class CountDownTimerState extends State<CountDownTimer>
                               key: listKey,
                               initialItemCount: intervalInfo.length,
                               itemBuilder: (context, index, animation) {
-                                return CardItemAnimated(
-                                  animation: animation,
-                                  item: intervalInfo[index],
-                                  fontColor: index == 0
-                                      ? Colors.white
-                                      : const Color.fromARGB(
-                                          153, 255, 255, 255),
-                                  fontWeight: index == 0
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                );
+                                if (index >= intervalInfo.length) {
+                                  return Container();
+                                } else {
+                                  return CardItemAnimated(
+                                    animation: animation,
+                                    item: intervalInfo[index],
+                                    fontColor: index == 0
+                                        ? Colors.white
+                                        : const Color.fromARGB(
+                                            153, 255, 255, 255),
+                                    fontWeight: index == 0
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    backgroundColor: Colors.transparent,
+                                  );
+                                }
                               },
                             )),
                       ),

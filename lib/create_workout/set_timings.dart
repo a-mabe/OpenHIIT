@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_sounds.dart';
 import 'helper_widgets/number_input.dart';
@@ -78,6 +77,7 @@ class _SetTimingsState extends State<SetTimings> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
+                        numberInputKey: const Key('work-minutes'),
                         numberValue: workout.exerciseTime,
                         formatter: (value) {
                           int calculation = ((workout.exerciseTime -
@@ -107,6 +107,7 @@ class _SetTimingsState extends State<SetTimings> {
                         min: 1,
                         max: 99),
                     NumberInput(
+                        numberInputKey: const Key('work-seconds'),
                         numberValue: workout.exerciseTime,
                         formatter: (value) {
                           return workout.exerciseTime % 60;
@@ -144,6 +145,7 @@ class _SetTimingsState extends State<SetTimings> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
+                        numberInputKey: const Key('rest-minutes'),
                         numberValue: workout.restTime,
                         formatter: (value) {
                           int calculation =
@@ -169,6 +171,7 @@ class _SetTimingsState extends State<SetTimings> {
                         min: 1,
                         max: 99),
                     NumberInput(
+                        numberInputKey: const Key('rest-seconds'),
                         numberValue: workout.restTime,
                         formatter: (value) {
                           return workout.restTime % 60;
@@ -218,6 +221,7 @@ class _SetTimingsState extends State<SetTimings> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
+                        numberInputKey: const Key('work-seconds'),
                         numberValue: workout.exerciseTime,
                         formatter: (value) {
                           return workout.exerciseTime;
@@ -253,6 +257,7 @@ class _SetTimingsState extends State<SetTimings> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NumberInput(
+                        numberInputKey: const Key('rest-seconds'),
                         numberValue: workout.restTime,
                         formatter: (value) {
                           return workout.restTime;

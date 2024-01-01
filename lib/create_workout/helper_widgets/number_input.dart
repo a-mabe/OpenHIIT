@@ -1,12 +1,3 @@
-/// Copyright (C) 2021 Abigail Mabe - All Rights Reserved
-/// You may use, distribute and modify this code under the terms
-/// of the license.
-///
-/// You should have received a copy of the license with this file.
-/// If not, please email <mabe.abby.a@gmail.com>
-///
-///
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,6 +14,8 @@ class NumberInput extends StatefulWidget {
 
   final double max;
 
+  final Key numberInputKey;
+
   final Function formatter;
 
   final void Function(String?) onSaved;
@@ -30,15 +23,15 @@ class NumberInput extends StatefulWidget {
   final String? Function(String?) validator;
 
   const NumberInput(
-      {Key? key,
+      {super.key,
       required this.numberValue,
       required this.formatter,
       required this.onSaved,
       required this.validator,
       required this.unit,
       required this.min,
-      required this.max})
-      : super(key: key);
+      required this.max,
+      required this.numberInputKey});
 
   @override
   NumberInputState createState() => NumberInputState();
@@ -64,6 +57,7 @@ class NumberInputState extends State<NumberInput> {
         SizedBox(
             width: 80,
             child: TextFormField(
+              key: widget.numberInputKey,
               initialValue: widget.numberValue == 0
                   ? ""
                   : widget.formatter(widget.numberValue).toString(),

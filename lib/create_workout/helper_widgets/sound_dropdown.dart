@@ -15,6 +15,8 @@ class SoundDropdown extends StatefulWidget {
 
   final Soundpool pool;
 
+  final Key dropdownKey;
+
   final List<String> soundsList;
 
   final Function? onFinished;
@@ -23,16 +25,14 @@ class SoundDropdown extends StatefulWidget {
   /// Simple countdown timer
   ///
   const SoundDropdown({
-    Key? key,
+    super.key,
     required this.title,
-    // required this.description,
     required this.initialSelection,
     required this.pool,
+    required this.dropdownKey,
     required this.soundsList,
     required this.onFinished,
-    // required this.build,
-    // this.status = 'start',
-  }) : super(key: key);
+  });
 
   @override
   SoundDropdownState createState() => SoundDropdownState();
@@ -71,6 +71,7 @@ class SoundDropdownState extends State<SoundDropdown>
             ),
           ),
           DropdownMenu<String>(
+            key: widget.dropdownKey,
             width: 240,
             initialSelection: widget.initialSelection,
             onSelected: (String? value) {

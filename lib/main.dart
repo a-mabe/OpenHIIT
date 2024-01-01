@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'create_workout/select_timer.dart';
@@ -15,10 +17,12 @@ import 'helper_widgets/timer_list_tile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   /// Monospaced font licensing.
   ///
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
@@ -68,30 +72,43 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  /// What to do on reorder of the list of workouts, i.e. a workout
-  /// is dragged to a new position.
+  /// Callback function for handling the reordering of items in the list.
+  ///
+  /// Parameters:
+  ///   - [oldIndex]: The index of the item before reordering.
+  ///   - [newIndex]: The index where the item is moved to after reordering.
   ///
   void _onReorder(int oldIndex, int newIndex) async {
+    // Ensure newIndex does not exceed the length of the list.
     if (newIndex > reorderableWorkoutList.length) {
       newIndex = reorderableWorkoutList.length;
     }
+
+    // Adjust newIndex if oldIndex is less than newIndex.
     if (oldIndex < newIndex) newIndex -= 1;
 
+    // Extract the Workout item being reordered.
     final Workout item = reorderableWorkoutList[oldIndex];
+    // Remove the item from its old position.
     reorderableWorkoutList.removeAt(oldIndex);
 
+    // Update the workoutIndex of the item to the new position.
     item.workoutIndex = newIndex;
+    // Insert the item at the new position.
     reorderableWorkoutList.insert(newIndex, item);
 
+    // Update the workoutIndex for all items in the list.
     setState(() {
       for (var i = 0; i < reorderableWorkoutList.length; i++) {
         reorderableWorkoutList[i].workoutIndex = i;
       }
     });
 
+    // Initialize the database and update the workout order in the database.
     Database database = await DatabaseManager().initDB();
 
     for (var i = 0; i < reorderableWorkoutList.length; i++) {
+      // Update the workout order in the database.
       await DatabaseManager().updateList(reorderableWorkoutList[i], database);
     }
   }
@@ -125,24 +142,30 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  /// Return the UI to display [reorderableWorkoutList].
+  /// Widget for displaying a ReorderableListView of workout items.
   ///
+  /// Parameters:
+  ///   - [snapshot]: The data snapshot from the database containing workout information.
   Widget workoutListView(snapshot) {
     return ReorderableListView(
-        onReorder: _onReorder,
-        proxyDecorator: proxyDecorator,
-        children: [
-          /// For workout in the returned DB data snapshot.
-          ///
-          for (final workout in snapshot.data)
-            TimerListTile(
-                key: Key('${workout.workoutIndex}'),
-                workout: workout,
-                onTap: () {
-                  onWorkoutTap(workout);
-                },
-                index: workout.workoutIndex),
-        ]);
+      onReorder: _onReorder, // Callback for handling item reordering.
+      proxyDecorator: proxyDecorator, // Decorator for the dragged item.
+      children: [
+        /// For each workout in the returned DB data snapshot.
+        ///
+        for (final workout in snapshot.data)
+          TimerListTile(
+            key: Key(
+                '${workout.workoutIndex}'), // Unique key for each list item.
+            workout: workout, // Workout data for the list item.
+            onTap: () {
+              onWorkoutTap(workout); // Callback when a workout item is tapped.
+            },
+            index:
+                workout.workoutIndex, // Index of the workout item in the list.
+          ),
+      ],
+    );
   }
   // ---
 
@@ -267,12 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ///
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
-        false;
-
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Theme.of(context).brightness,
-    ));
+    setStatusBarBrightness(context);
 
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,

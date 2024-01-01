@@ -39,20 +39,21 @@ class _SetExercisesState extends State<SetExercises> {
     /// length so that the form fields can be prepopulated with
     /// the old exercises.
     ///
-    int currentNumExercises =
+    int currentNumWorkoutExercises =
         workout.exercises != "" ? jsonDecode(workout.exercises).length : 0;
 
-    List currentExercises = [];
+    List currentWorkoutExercises = [];
 
-    if (currentNumExercises > 0) {
-      currentExercises = jsonDecode(workout.exercises);
+    if (currentNumWorkoutExercises > 0) {
+      currentWorkoutExercises = jsonDecode(workout.exercises);
     }
 
     for (var i = 0; i < workout.numExercises; i++) {
       validators.add(false);
-      if (i < currentNumExercises) {
+      if (i < currentNumWorkoutExercises) {
         // If there might be a previously set exercise, use it!
-        controllers.add(TextEditingController(text: currentExercises[i]));
+        controllers
+            .add(TextEditingController(text: currentWorkoutExercises[i]));
       } else {
         // Otherwise, blank text controller.
         controllers.add(TextEditingController());
@@ -67,6 +68,7 @@ class _SetExercisesState extends State<SetExercises> {
       return Padding(
         padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
         child: TextFormField(
+          key: Key('exercise-$index'),
           textCapitalization: TextCapitalization.sentences,
           maxLength: 40,
 
