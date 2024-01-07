@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "7b875fd4a20b165a3084bd2d210439b22ebc653f21cea4842729c0c30c82596b"
+      sha256: "22600aa1e926be775fa5fe7e6894e7fb3df9efda8891c73f70fb3262399a432d"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.9"
+    version: "3.4.10"
   args:
     dependency: transitive
     description:
@@ -102,7 +102,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "93d40447ee1a9393aef4f3ce5a3df835a6421bb0"
+      resolved-ref: "41e5ecae17895fca385f32c40f7fcac508b871b8"
       url: "https://github.com/a-mabe/background_timer.git"
     source: git
     version: "0.0.1"
@@ -251,8 +251,8 @@ packages:
     dependency: transitive
     description:
       path: "packages/flutter_background_service"
-      ref: stop-on-app-close
-      resolved-ref: c16905a587edfa2f7bd74423d6762a9372c792c4
+      ref: prevent-autostart-on-boot
+      resolved-ref: f6b44310f2ae49102f8b360408e12a4b2f09e6cd
       url: "https://github.com/a-mabe/flutter_background_service.git"
     source: git
     version: "5.0.1"
@@ -260,8 +260,8 @@ packages:
     dependency: transitive
     description:
       path: "packages/flutter_background_service_android"
-      ref: stop-on-app-close
-      resolved-ref: c16905a587edfa2f7bd74423d6762a9372c792c4
+      ref: prevent-autostart-on-boot
+      resolved-ref: f6b44310f2ae49102f8b360408e12a4b2f09e6cd
       url: "https://github.com/a-mabe/flutter_background_service.git"
     source: git
     version: "6.0.1"
@@ -503,10 +503,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: e595b98692943b4881b219f0a9e3945118d3c16bd7e2813f98ec6e532d905f72
+      sha256: "477184d672607c0a3bf68fbbf601805f92ef79c82b64b4d6eb318cbca4c48668"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -551,18 +551,18 @@ packages:
     dependency: transitive
     description:
       name: platform
-      sha256: "0a279f0707af40c890e80b1e9df8bb761694c074ba7e1d4ab1bc4b728e200b59"
+      sha256: "12220bb4b65720483f8fa9450b4332347737cf8213dd2840d8b2c823e47243ec"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.3"
+    version: "3.1.4"
   plugin_platform_interface:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: f4f88d4a900933e7267e2b353594774fc0d07fb072b47eedcd5b54e1ea3269f8
+      sha256: "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.7"
+    version: "2.1.8"
   pointycastle:
     dependency: transitive
     description:
@@ -892,10 +892,10 @@ packages:
     dependency: transitive
     description:
       name: xdg_directories
-      sha256: "589ada45ba9e39405c198fe34eb0f607cddb2108527e658136120892beac46d2"
+      sha256: faea9dee56b520b55a566385b84f2e8de55e7496104adada9962e0bd11bcff1d
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   xml:
     dependency: transitive
     description:
