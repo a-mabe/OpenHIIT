@@ -77,7 +77,7 @@ class SubmitButtonState extends State<SubmitButton> {
                         width: MediaQuery.of(context).size.height / 14,
                         decoration: const BoxDecoration(
                           color: Color.fromARGB(255,32,132,231),
-                          borderRadius: BorderRadius.all(Radius.circular(35)),
+                          borderRadius: BorderRadius.all(Radius.circular(55)),
                         ),
                         child: const Icon(
                           Icons.arrow_forward,
