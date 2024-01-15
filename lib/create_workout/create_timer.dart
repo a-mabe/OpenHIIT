@@ -78,7 +78,7 @@ class CreateTimerState extends State<CreateTimer> {
         ),
         bottomSheet: SubmitButton(
           text: "Submit",
-          color: Colors.blue,
+          color: const Color.fromARGB(255,58,165,255),
           onTap: () {
             submitForm(workoutCopy);
           },
