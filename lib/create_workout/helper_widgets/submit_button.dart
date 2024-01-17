@@ -16,9 +16,9 @@ class SubmitButton extends StatefulWidget {
 
   const SubmitButton(
       {super.key,
-      required this.text,
-      required this.color,
-      required this.onTap});
+        required this.text,
+        required this.color,
+        required this.onTap});
 
   @override
   SubmitButtonState createState() => SubmitButtonState();
@@ -37,32 +37,61 @@ class SubmitButtonState extends State<SubmitButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            color: widget.color,
-            // border: Border.fromBorderSide(BorderSide.lerp(a, b, t))
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 12,
-        child: InkWell(
-          onTap: () {
-            widget.onTap();
-          },
-          child: Ink(
-            height: MediaQuery.of(context).size.height / 12,
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-                child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: AutoSizeText(
-                      widget.text,
-                      minFontSize: 18,
-                      // maxFontSize: 200,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 40),
-                    ))),
+    double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+          decoration: BoxDecoration(
+              color: widget.color,
+              // border: Border.fromBorderSide(BorderSide.lerp(a, b, t)),
+              borderRadius: BorderRadius.circular((sizeHeight * sizeWidth) * .0005),
           ),
-        ));
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 12,
+          child: InkWell(
+            onTap: () {
+              widget.onTap();
+            },
+            child: Ink(
+              height: MediaQuery.of(context).size.height / 12,
+              width: MediaQuery.of(context).size.width,
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    Center(
+
+                        child: AutoSizeText(
+                          widget.text,
+                          minFontSize: 18,
+                          // maxFontSize: 200,
+                          style: const TextStyle(
+                              fontSize: 25, color: Colors.white),
+                        )
+                    ),
+                    Positioned(
+                      right: 5,
+                      top: 5,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 14,
+                        width: MediaQuery.of(context).size.height / 14,
+                        decoration: const BoxDecoration(
+                          color: Color.fromARGB(255,32,132,231),
+                          borderRadius: BorderRadius.all(Radius.circular(55)),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+      ),
+    );
   }
 }

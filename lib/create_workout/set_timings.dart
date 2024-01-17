@@ -299,7 +299,7 @@ class _SetTimingsState extends State<SetTimings> {
         ),
         bottomSheet: SubmitButton(
           text: "Submit",
-          color: Colors.blue,
+          color: const Color.fromARGB(255,58,165,255),
           onTap: () {
             submitTimings(workout);
           },
