@@ -6,9 +6,10 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '**.yaml'
+    paths:
+      - VERSION
+    tags-ignore:
+      - "*"
 
 jobs:
 
@@ -153,7 +154,7 @@ jobs:
           rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
   CreateDraftRelease:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: [BuildAndroidRelease, BuildiOSRelease, GetVersionNumber]
     permissions:
       contents: write
