@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -154,15 +155,18 @@ class _MyHomePageState extends State<MyHomePage> {
         /// For each workout in the returned DB data snapshot.
         ///
         for (final workout in snapshot.data)
-          TimerListTile(
+          GestureDetector(
             key: Key(
                 '${workout.workoutIndex}'), // Unique key for each list item.
-            workout: workout, // Workout data for the list item.
-            onTap: () {
-              onWorkoutTap(workout); // Callback when a workout item is tapped.
-            },
-            index:
-                workout.workoutIndex, // Index of the workout item in the list.
+            onLongPress: (){log('long press and this is workout $workout');},
+            child: TimerListTile(
+              workout: workout, // Workout data for the list item.
+              onTap: () {
+                onWorkoutTap(workout); // Callback when a workout item is tapped.
+              },
+              index:
+                  workout.workoutIndex, // Index of the workout item in the list.
+            ),
           ),
       ],
     );
