@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:openhiit/duplicate_feature/duplicate_workout.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -141,6 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
+  Offset _tapPosition = Offset.zero;
+  void _getTapPosition(TapDownDetails details) {
+    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
+    setState(() {
+      _tapPosition = referenceBox.globalToLocal(details.globalPosition);
+    });
+  }
   // ---
 
   /// Widget for displaying a ReorderableListView of workout items.
@@ -157,8 +165,44 @@ class _MyHomePageState extends State<MyHomePage> {
         for (final workout in snapshot.data)
           GestureDetector(
             key: Key(
-                '${workout.workoutIndex}'), // Unique key for each list item.
-            onLongPress: (){log('long press and this is workout $workout');},
+                '${workout.workoutIndex}'),
+            onTapDown: (details) => _getTapPosition(details),// Unique key for each list item.
+            onLongPress: (){
+              log('long press and this is workout $workout');
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(_tapPosition.dx, _tapPosition.dy, 1000, 1000),
+                items: <PopupMenuEntry>[
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: Text('Delete'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'duplicate',
+                    child: Text('Duplicate'),
+                  ),
+                ],
+                elevation: 8.0,
+              ).then((value) {
+                if (value == 'edit') {
+                  pushCreateTimer(workout, context);
+                } else if (value == 'delete') {
+                  DatabaseManager().deleteList(workout.id, DatabaseManager().initDB());
+                  setState(() {
+                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+                  });
+                } else if (value == 'duplicate') {
+                  DuplicateWorkout().duplicateWorkout(workout, DatabaseManager().initDB());
+                  setState(() {
+                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+                  });
+                }
+              });
+              },
             child: TimerListTile(
               workout: workout, // Workout data for the list item.
               onTap: () {
