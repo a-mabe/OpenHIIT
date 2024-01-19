@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:openhiit/duplicate_feature/duplicate_workout.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -180,6 +181,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     value: 'delete',
                     child: Text('Delete'),
                   ),
+                  const PopupMenuItem(
+                    value: 'duplicate',
+                    child: Text('Duplicate'),
+                  ),
                 ],
                 elevation: 8.0,
               ).then((value) {
@@ -187,6 +192,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   pushCreateTimer(workout, context);
                 } else if (value == 'delete') {
                   DatabaseManager().deleteList(workout.id, DatabaseManager().initDB());
+                  setState(() {
+                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+                  });
+                } else if (value == 'duplicate') {
+                  DuplicateWorkout().duplicateWorkout(workout, DatabaseManager().initDB());
                   setState(() {
                     workouts = DatabaseManager().lists(DatabaseManager().initDB());
                   });
