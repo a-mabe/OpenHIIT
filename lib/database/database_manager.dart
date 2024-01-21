@@ -57,7 +57,6 @@ class DatabaseManager {
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            id TEXT,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
@@ -98,7 +97,6 @@ class DatabaseManager {
       onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            id TEXT,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
