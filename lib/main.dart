@@ -180,6 +180,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     value: 'delete',
                     child: Text('Delete'),
                   ),
+                  const PopupMenuItem(
+                    value: 'duplicate',
+                    child: Text('Duplicate'),
+                  ),
                 ],
                 elevation: 8.0,
               ).then((value) {
@@ -190,6 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     workouts = DatabaseManager().lists(DatabaseManager().initDB());
                   });
+                } else if (value == 'duplicate') {
+                  //TODO: duplicate workout
                 }
               });
               },
