@@ -142,10 +142,23 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
+  /// This variable holds the position of the tap event on the screen.
+  /// It is initialized to Offset.zero, which represents a point at the origin (0,0) in the Cartesian plane.
   Offset _tapPosition = Offset.zero;
+
+  /// This method is used to update the `_tapPosition` variable with the position of a tap event.
+  /// It takes a `TapDownDetails` object as a parameter, which provides details about the tap event.
   void _getTapPosition(TapDownDetails details) {
+    /// This line gets the `RenderBox` object that corresponds to the widget in which the tap event occurred.
+    /// The `RenderBox` object provides the layout and painting protocol for rendering an object onto the screen.
     final RenderBox referenceBox = context.findRenderObject() as RenderBox;
+
+    /// This is a call to the `setState` method, which tells the Flutter framework that the state of this object has changed.
+    /// This triggers a call to the `build` method, which causes the user interface to be updated.
     setState(() {
+      /// This line updates the `_tapPosition` variable with the position of the tap event.
+      /// The position is converted from the global coordinate system to the local coordinate system of the `RenderBox`.
+      /// The `globalToLocal` method takes a point in the global coordinate system and transforms it to the local coordinate system of the `RenderBox`.
       _tapPosition = referenceBox.globalToLocal(details.globalPosition);
     });
   }
@@ -163,10 +176,17 @@ class _MyHomePageState extends State<MyHomePage> {
         /// For each workout in the returned DB data snapshot.
         ///
         for (final workout in snapshot.data)
+          /// This is a GestureDetector widget that is used to handle different types of touch events.
           GestureDetector(
-            key: Key(
-                '${workout.workoutIndex}'),
-            onTapDown: (details) => _getTapPosition(details),// Unique key for each list item.
+            /// The key is used to control or manage the state for this specific widget.
+            key: Key('${workout.workoutIndex}'),
+
+            /// This event is triggered when the user taps down on the screen.
+            /// It calls the _getTapPosition method to update the position of the tap event.
+            onTapDown: (details) => _getTapPosition(details),
+
+            /// This event is triggered when the user presses and holds on the screen.
+            /// It opens a context menu with options to edit, delete, or duplicate the workout.
             onLongPress: (){
               log('long press and this is workout $workout');
               showMenu(
@@ -188,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
                 elevation: 8.0,
               ).then((value) async {
+                /// Depending on the selected option, perform the corresponding action.
                 if (value == 'edit') {
                   pushCreateTimer(workout, context);
                 } else if (value == 'delete') {
@@ -196,12 +217,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     workouts = DatabaseManager().lists(DatabaseManager().initDB());
                   });
                 } else if (value == 'duplicate') {
-                  //TODO: duplicate workout
+                  /// Duplicate the workout and update the list and the database.
                   for (Workout w in reorderableWorkoutList) {
                     w.workoutIndex++;
                   }
                   Workout duplicateWorkout = Workout(
-                    Uuid().v1(),
+                    const Uuid().v1(),
                     workout.title,
                     workout.numExercises,
                     workout.exercises,
@@ -229,14 +250,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }
               });
-              },
+            },
+
+            /// The child of this GestureDetector is a TimerListTile widget.
+            /// It displays the workout data and handles the tap event.
             child: TimerListTile(
-              workout: workout, // Workout data for the list item.
+              workout: workout,
               onTap: () {
-                onWorkoutTap(workout); // Callback when a workout item is tapped.
+                onWorkoutTap(workout);
               },
-              index:
-                  workout.workoutIndex, // Index of the workout item in the list.
+              index: workout.workoutIndex,
             ),
           ),
       ],
