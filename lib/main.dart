@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
@@ -186,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
                 elevation: 8.0,
-              ).then((value) {
+              ).then((value) async {
                 if (value == 'edit') {
                   pushCreateTimer(workout, context);
                 } else if (value == 'delete') {
@@ -196,6 +197,36 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 } else if (value == 'duplicate') {
                   //TODO: duplicate workout
+                  for (Workout w in reorderableWorkoutList) {
+                    w.workoutIndex++;
+                  }
+                  Workout duplicateWorkout = Workout(
+                    Uuid().v1(),
+                    workout.title,
+                    workout.numExercises,
+                    workout.exercises,
+                    workout.exerciseTime,
+                    workout.restTime,
+                    workout.halfTime,
+                    workout.halfwayMark,
+                    workout.workSound,
+                    workout.restSound,
+                    workout.halfwaySound,
+                    workout.completeSound,
+                    workout.countdownSound,
+                    workout.colorInt,
+                    0,
+                    workout.showMinutes,
+                  );
+                  reorderableWorkoutList.insert(0,duplicateWorkout);
+                  Database database = await DatabaseManager().initDB();
+                  await DatabaseManager().insertList(duplicateWorkout, database);
+                  for (Workout w in reorderableWorkoutList){
+                    await DatabaseManager().updateList(w, database);
+                  }
+                  setState(() {
+                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+                  });
                 }
               });
               },
