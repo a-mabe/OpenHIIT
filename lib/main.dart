@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -8,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
-
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
@@ -142,26 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
-  /// This variable holds the position of the tap event on the screen.
-  /// It is initialized to Offset.zero, which represents a point at the origin (0,0) in the Cartesian plane.
-  Offset _tapPosition = Offset.zero;
-
-  /// This method is used to update the `_tapPosition` variable with the position of a tap event.
-  /// It takes a `TapDownDetails` object as a parameter, which provides details about the tap event.
-  void _getTapPosition(TapDownDetails details) {
-    /// This line gets the `RenderBox` object that corresponds to the widget in which the tap event occurred.
-    /// The `RenderBox` object provides the layout and painting protocol for rendering an object onto the screen.
-    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
-
-    /// This is a call to the `setState` method, which tells the Flutter framework that the state of this object has changed.
-    /// This triggers a call to the `build` method, which causes the user interface to be updated.
-    setState(() {
-      /// This line updates the `_tapPosition` variable with the position of the tap event.
-      /// The position is converted from the global coordinate system to the local coordinate system of the `RenderBox`.
-      /// The `globalToLocal` method takes a point in the global coordinate system and transforms it to the local coordinate system of the `RenderBox`.
-      _tapPosition = referenceBox.globalToLocal(details.globalPosition);
-    });
-  }
   // ---
 
   /// Widget for displaying a ReorderableListView of workout items.
@@ -177,90 +154,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ///
         for (final workout in snapshot.data)
           /// This is a GestureDetector widget that is used to handle different types of touch events.
-          GestureDetector(
-            /// The key is used to control or manage the state for this specific widget.
+          TimerListTile(
             key: Key('${workout.workoutIndex}'),
-
-            /// This event is triggered when the user taps down on the screen.
-            /// It calls the _getTapPosition method to update the position of the tap event.
-            onTapDown: (details) => _getTapPosition(details),
-
-            /// This event is triggered when the user presses and holds on the screen.
-            /// It opens a context menu with options to edit, delete, or duplicate the workout.
-            onLongPress: (){
-              log('long press and this is workout $workout');
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(_tapPosition.dx, _tapPosition.dy, 1000, 1000),
-                items: <PopupMenuEntry>[
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Edit'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'delete',
-                    child: Text('Delete'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'duplicate',
-                    child: Text('Duplicate'),
-                  ),
-                ],
-                elevation: 8.0,
-              ).then((value) async {
-                /// Depending on the selected option, perform the corresponding action.
-                if (value == 'edit') {
-                  pushCreateTimer(workout, context);
-                } else if (value == 'delete') {
-                  DatabaseManager().deleteList(workout.id, DatabaseManager().initDB());
-                  setState(() {
-                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
-                  });
-                } else if (value == 'duplicate') {
-                  /// Duplicate the workout and update the list and the database.
-                  for (Workout w in reorderableWorkoutList) {
-                    w.workoutIndex++;
-                  }
-                  Workout duplicateWorkout = Workout(
-                    const Uuid().v1(),
-                    workout.title,
-                    workout.numExercises,
-                    workout.exercises,
-                    workout.exerciseTime,
-                    workout.restTime,
-                    workout.halfTime,
-                    workout.halfwayMark,
-                    workout.workSound,
-                    workout.restSound,
-                    workout.halfwaySound,
-                    workout.completeSound,
-                    workout.countdownSound,
-                    workout.colorInt,
-                    0,
-                    workout.showMinutes,
-                  );
-                  reorderableWorkoutList.insert(0,duplicateWorkout);
-                  Database database = await DatabaseManager().initDB();
-                  await DatabaseManager().insertList(duplicateWorkout, database);
-                  for (Workout w in reorderableWorkoutList){
-                    await DatabaseManager().updateList(w, database);
-                  }
-                  setState(() {
-                    workouts = DatabaseManager().lists(DatabaseManager().initDB());
-                  });
-                }
-              });
+            workout: workout,
+            onTap: () {
+              onWorkoutTap(workout);
             },
-
-            /// The child of this GestureDetector is a TimerListTile widget.
-            /// It displays the workout data and handles the tap event.
-            child: TimerListTile(
-              workout: workout,
-              onTap: () {
-                onWorkoutTap(workout);
-              },
-              index: workout.workoutIndex,
-            ),
+            index: workout.workoutIndex,
           ),
       ],
     );
