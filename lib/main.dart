@@ -153,9 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
         /// For each workout in the returned DB data snapshot.
         ///
         for (final workout in snapshot.data)
-          /// This is a GestureDetector widget that is used to handle different types of touch events.
           TimerListTile(
-            key: Key('${workout.workoutIndex}'),
+            key: Key(
+                '${workout.workoutIndex}'),// Unique key for each list item.
             workout: workout,
             onTap: () {
               onWorkoutTap(workout);
