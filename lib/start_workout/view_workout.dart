@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import '../helper_functions/functions.dart';
 import '../helper_widgets/start_button.dart';
@@ -121,6 +121,56 @@ class ViewWorkoutState extends State<ViewWorkout> {
           } else {
             pushCreateWorkout(workout, context);
           }
+        },
+        onCopy: () async {
+          /// This function is triggered when the "Copy" button is clicked.
+          /// It duplicates the current workout and updates the list and the database accordingly.
+
+          /// Fetch the list of workouts from the database.
+          List<Workout> workouts = await DatabaseManager().lists(DatabaseManager().initDB());
+
+          /// Increment the workoutIndex of each workout in the list.
+          for (Workout workout in workouts) {
+            workout.workoutIndex++;
+          }
+
+          /// Create a duplicate of the current workout with a new unique ID and a workoutIndex of 0.
+          Workout duplicateWorkout = Workout(
+            const Uuid().v1(),
+            workout.title,
+            workout.numExercises,
+            workout.exercises,
+            workout.exerciseTime,
+            workout.restTime,
+            workout.halfTime,
+            workout.halfwayMark,
+            workout.workSound,
+            workout.restSound,
+            workout.halfwaySound,
+            workout.completeSound,
+            workout.countdownSound,
+            workout.colorInt,
+            0,
+            workout.showMinutes,
+          );
+
+          /// Insert the duplicate workout at the beginning of the list.
+          workouts.insert(0, duplicateWorkout);
+
+          /// Initialize the database.
+          Database database = await DatabaseManager().initDB();
+
+          /// Insert the duplicate workout into the database.
+          await DatabaseManager().insertList(duplicateWorkout, database);
+
+          /// Update the workoutIndex of each workout in the database.
+          for (Workout workout in workouts) {
+            await DatabaseManager().updateList(workout, database);
+          }
+
+          /// Navigate back to the main screen to show that the workout has been copied.
+          /// The check for context.mounted ensures that the Navigator.pop() method is only called if the widget is still in the widget tree.
+          if (context.mounted) Navigator.of(context).pop();
         },
       ),
       body: Container(

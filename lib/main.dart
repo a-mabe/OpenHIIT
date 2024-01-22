@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/helper_functions/functions.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'create_workout/select_timer.dart';
 import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
@@ -156,13 +155,12 @@ class _MyHomePageState extends State<MyHomePage> {
         for (final workout in snapshot.data)
           TimerListTile(
             key: Key(
-                '${workout.workoutIndex}'), // Unique key for each list item.
-            workout: workout, // Workout data for the list item.
+                '${workout.workoutIndex}'),// Unique key for each list item.
+            workout: workout,
             onTap: () {
-              onWorkoutTap(workout); // Callback when a workout item is tapped.
+              onWorkoutTap(workout);
             },
-            index:
-                workout.workoutIndex, // Index of the workout item in the list.
+            index: workout.workoutIndex,
           ),
       ],
     );

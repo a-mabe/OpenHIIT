@@ -11,6 +11,10 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   final VoidCallback? onEdit;
 
+  /// Called on copy button tap.
+  ///
+  final VoidCallback? onCopy;
+
   /// Workout object - needed for values such as the workout
   /// title and colorInt.
   ///
@@ -24,6 +28,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
       {super.key,
       required this.onDelete,
       required this.onEdit,
+      required this.onCopy,
       required this.workout,
       required this.height});
 
@@ -81,6 +86,11 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
           key: const Key("edit-workout"),
           icon: const Icon(Icons.edit, color: Colors.white),
           onPressed: onEdit,
+        ),
+        IconButton(
+          key: const Key("copy-workout"),
+          icon: const Icon(Icons.copy, color: Colors.white),
+          onPressed: onCopy,
         ),
       ],
     );
