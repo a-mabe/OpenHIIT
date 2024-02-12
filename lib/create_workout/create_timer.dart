@@ -23,9 +23,14 @@ class CreateTimerState extends State<CreateTimer> {
         workout.title,
         workout.numExercises,
         workout.exercises,
-        workout.exerciseTime,
+        workout.getReadyTime,
+        workout.workTime,
         workout.restTime,
         workout.halfTime,
+        workout.breakTime,
+        workout.warmupTime,
+        workout.cooldownTime,
+        workout.iterations,
         workout.halfwayMark,
         workout.workSound,
         workout.restSound,
@@ -78,7 +83,7 @@ class CreateTimerState extends State<CreateTimer> {
         ),
         bottomSheet: SubmitButton(
           text: "Submit",
-          color: const Color.fromARGB(255,58,165,255),
+          color: const Color.fromARGB(255, 58, 165, 255),
           onTap: () {
             submitForm(workoutCopy);
           },

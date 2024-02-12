@@ -53,12 +53,13 @@ dependencies:
   background_timer:
     git:
       url: https://github.com/a-mabe/background_timer.git
-      ref: main # branch name
+      ref: cleanup # branch name
   just_audio: ^0.9.35
   soundpool: ^2.4.1
   auto_size_text: ^3.0.0
   google_fonts: ^6.1.0
   shimmer: ^3.0.0
+  logger: ^2.0.2+1
 
 flutter_launcher_icons:
   android: "launcher_icon"

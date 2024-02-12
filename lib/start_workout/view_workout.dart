@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import '../helper_functions/functions.dart';
+import '../utils/functions.dart';
 import '../helper_widgets/start_button.dart';
 import 'package:sqflite/sqflite.dart';
 import '../card_widgets/card_item_animated.dart';
@@ -127,7 +127,8 @@ class ViewWorkoutState extends State<ViewWorkout> {
           /// It duplicates the current workout and updates the list and the database accordingly.
 
           /// Fetch the list of workouts from the database.
-          List<Workout> workouts = await DatabaseManager().lists(DatabaseManager().initDB());
+          List<Workout> workouts =
+              await DatabaseManager().lists(DatabaseManager().initDB());
 
           /// Increment the workoutIndex of each workout in the list.
           for (Workout workout in workouts) {
@@ -140,9 +141,14 @@ class ViewWorkoutState extends State<ViewWorkout> {
             workout.title,
             workout.numExercises,
             workout.exercises,
-            workout.exerciseTime,
+            workout.getReadyTime,
+            workout.workTime,
             workout.restTime,
             workout.halfTime,
+            workout.breakTime,
+            workout.warmupTime,
+            workout.cooldownTime,
+            workout.iterations,
             workout.halfwayMark,
             workout.workSound,
             workout.restSound,

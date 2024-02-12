@@ -10,7 +10,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:background_timer/background_timer.dart';
 import 'package:background_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
-import '../helper_functions/functions.dart';
+import '../utils/functions.dart';
 import '../workout_data_type/workout_type.dart';
 import '../card_widgets/card_item_animated.dart';
 import '../models/list_model_animated.dart';
@@ -121,6 +121,8 @@ class CountDownTimerState extends State<CountDownTimer>
     switch (status) {
       case 'start':
         return "Get ready";
+      case 'warmup':
+        return "Warm-up";
       case 'work':
         String exercise = workoutArgument.numExercises == exercises.length
             ? exercises[interval]
@@ -133,6 +135,10 @@ class CountDownTimerState extends State<CountDownTimer>
           flipCurrentWorkInterval = false;
         }
         return "Rest";
+      case 'cooldown':
+        return "Cooldown";
+      case 'break':
+        return "Break";
       default:
         return "Rest";
     }
@@ -288,11 +294,16 @@ class CountDownTimerState extends State<CountDownTimer>
 
     return Countdown(
         controller: _workoutController,
-        workSeconds: workoutArgument.exerciseTime,
+        iterations: workoutArgument.iterations,
+        workSeconds: workoutArgument.workTime,
         restSeconds: workoutArgument.restTime,
+        breakSeconds: workoutArgument.breakTime,
+        getreadySeconds: workoutArgument.getReadyTime,
+        warmupSeconds: workoutArgument.warmupTime,
+        cooldownSeconds: workoutArgument.cooldownTime,
         workSound: workoutArgument.workSound,
         restSound: workoutArgument.restSound,
-        endSound: workoutArgument.completeSound,
+        completeSound: workoutArgument.completeSound,
         countdownSound: workoutArgument.countdownSound,
         halfwaySound: workoutArgument.halfwaySound,
         numberOfWorkIntervals: workoutArgument.numExercises,
@@ -337,7 +348,7 @@ class CountDownTimerState extends State<CountDownTimer>
             restart = true;
           }
 
-          while ((intervalInfo.length + timerData.numberOfIntervals) >
+          while ((intervalInfo.length + timerData.currentOverallInterval) >
               intervalTotal) {
             if (intervalInfo.length > 0 && doneVisible == false) {
               intervalInfo.removeAt(0);
@@ -353,9 +364,6 @@ class CountDownTimerState extends State<CountDownTimer>
                   color: backgroundColor(timerData.status),
                   child: Column(
                     children: [
-                      // Padding(
-                      //     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      //     child:
                       Expanded(
                           flex: 10,
                           child: Padding(
@@ -520,14 +528,21 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   Color backgroundColor(String status) {
-    if (status == "work") {
-      return Colors.green;
-    } else if (status == "rest") {
-      return Colors.red;
-    } else if (status == "start") {
-      return Colors.black;
-    } else {
-      return const Color.fromARGB(255, 0, 225, 255);
+    switch (status) {
+      case "work":
+        return Colors.green;
+      case "rest":
+        return Colors.red;
+      case "start":
+        return Colors.black;
+      case "break":
+        return Colors.teal;
+      case "warmup":
+        return Colors.orange;
+      case "cooldown":
+        return Colors.blue;
+      default:
+        return const Color.fromARGB(255, 0, 225, 255);
     }
   }
 

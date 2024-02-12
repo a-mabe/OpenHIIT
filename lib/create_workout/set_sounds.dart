@@ -8,7 +8,7 @@ import '../workout_data_type/workout_type.dart';
 import '../database/database_manager.dart';
 import './helper_widgets/sound_dropdown.dart';
 import './helper_widgets/submit_button.dart';
-import './data/sounds.dart';
+import 'constants/sounds.dart';
 
 List<String> allSounds = soundsList + countdownSounds;
 

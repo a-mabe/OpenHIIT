@@ -6,12 +6,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../workout_data_type/workout_type.dart';
 
 class DatabaseManager {
-  ///
-  /// -------------
-  /// FIELDS
-  /// -------------
-  ///
-
   /// The name of the database.
   ///
   /// e.g., "database.db"
@@ -23,18 +17,6 @@ class DatabaseManager {
   /// e.g., "workouts"
   ///
   static const String _workoutTableName = "WorkoutTable";
-
-  ///
-  /// -------------
-  /// END FIELDS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// FUNCTIONS
-  /// -------------
-  ///
 
   Future<Database> initDB() async {
     debugPrint("initDB executed");
@@ -60,9 +42,14 @@ class DatabaseManager {
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
-            exerciseTime INTEGER,
+            getReadyTime INTEGER,
+            workTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
+            breakTime INTEGER,
+            warmupTime INTEGER,
+            cooldownTime INTEGER,
+            iterations INTEGER,
             halfwayMark INTEGER,
             workSound TEXT,
             restSound TEXT,
@@ -84,9 +71,21 @@ class DatabaseManager {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
           }
-          if (oldVersion < newVersion) {
+          if (oldVersion == 3) {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
+          }
+          if (oldVersion < newVersion) {
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
           }
         },
       );
@@ -100,9 +99,14 @@ class DatabaseManager {
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
-            exerciseTime INTEGER,
+            getReadyTime INTEGER,
+            workTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
+            breakTime INTEGER,
+            warmupTime INTEGER,
+            cooldownTime INTEGER,
+            iterations INTEGER,
             halfwayMark INTEGER,
             workSound TEXT,
             restSound TEXT,
@@ -124,9 +128,21 @@ class DatabaseManager {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
         }
-        if (oldVersion < newVersion) {
+        if (oldVersion == 4) {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
+        }
+        if (oldVersion < newVersion) {
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
         }
       },
     );
@@ -198,9 +214,14 @@ class DatabaseManager {
           maps[i]['title'],
           maps[i]['numExercises'],
           maps[i]['exercises'],
-          maps[i]['exerciseTime'],
+          maps[i]['getReadyTime'] ?? 0,
+          maps[i]['workTime'],
           maps[i]['restTime'],
           maps[i]['halfTime'],
+          maps[i]['breakTime'] ?? 0,
+          maps[i]['warmupTime'] ?? 0,
+          maps[i]['cooldownTime'] ?? 0,
+          maps[i]['iterations'] ?? 0,
           maps[i]['halfwayMark'],
           maps[i]['workSound'],
           maps[i]['restSound'],

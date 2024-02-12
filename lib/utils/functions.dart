@@ -54,7 +54,7 @@ void pushCreateTimer(Workout workout, BuildContext context) {
 ///   - An integer representing the total workout time rounded to the nearest minute.
 ///
 int calculateWorkoutTime(Workout workout) {
-  return (((workout.exerciseTime * workout.numExercises) +
+  return (((workout.workTime * workout.numExercises) +
               (workout.restTime * (workout.numExercises - 1)) +
               (workout.halfTime * workout.numExercises)) /
           60)
@@ -87,65 +87,92 @@ void setStatusBarBrightness(BuildContext context) {
 /// Returns:
 ///   - A list of [ListTileModel] objects representing each interval in the workout.
 ///
-List<ListTileModel> listItems(List exercises, Workout workoutArgument) {
+List<ListTileModel> listItems(List exercises, Workout workoutArg) {
   List<ListTileModel> listItems = [];
 
-  for (var i = 0; i < workoutArgument.numExercises + 1; i++) {
-    if (i == 0) {
-      listItems.add(
-        ListTileModel(
-          action: "Prepare",
-          showMinutes: workoutArgument.showMinutes,
-          interval: 0,
-          total: workoutArgument.numExercises,
-          seconds: 10,
-        ),
-      );
-    } else {
-      if (exercises.length < workoutArgument.numExercises) {
+  if (workoutArg.getReadyTime > 0) {
+    listItems.add(
+      ListTileModel(
+        action: "Get ready",
+        showMinutes: workoutArg.showMinutes,
+        interval: 0,
+        total: workoutArg.numExercises,
+        seconds: workoutArg.getReadyTime,
+      ),
+    );
+  }
+  if (workoutArg.warmupTime > 0) {
+    listItems.add(
+      ListTileModel(
+        action: "Warmup",
+        showMinutes: workoutArg.showMinutes,
+        interval: 0,
+        total: workoutArg.numExercises,
+        seconds: workoutArg.warmupTime,
+      ),
+    );
+    listItems.add(
+      ListTileModel(
+        action: "Rest",
+        showMinutes: workoutArg.showMinutes,
+        interval: 0,
+        total: workoutArg.numExercises,
+        seconds: workoutArg.restTime,
+      ),
+    );
+  }
+
+  for (var iteration = 0; iteration <= workoutArg.iterations; iteration++) {
+    for (var interval = 1; interval <= workoutArg.numExercises; interval++) {
+      if (workoutArg.workTime > 0) {
         listItems.add(
           ListTileModel(
             action: "Work",
-            showMinutes: workoutArgument.showMinutes,
-            interval: i,
-            total: workoutArgument.numExercises,
-            seconds: workoutArgument.exerciseTime,
+            showMinutes: workoutArg.showMinutes,
+            interval: interval,
+            total: workoutArg.numExercises,
+            seconds: workoutArg.workTime,
           ),
         );
-        if (i < workoutArgument.numExercises) {
-          listItems.add(
-            ListTileModel(
-              action: "Rest",
-              showMinutes: workoutArgument.showMinutes,
-              interval: 0,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.restTime,
-            ),
-          );
-        }
-      } else {
+      }
+
+      if (workoutArg.restTime > 0 && interval != workoutArg.numExercises) {
         listItems.add(
           ListTileModel(
-            action: exercises[i - 1],
-            showMinutes: workoutArgument.showMinutes,
-            interval: i,
-            total: workoutArgument.numExercises,
-            seconds: workoutArgument.exerciseTime,
+            action: "Rest",
+            showMinutes: workoutArg.showMinutes,
+            interval: 0,
+            total: workoutArg.numExercises,
+            seconds: workoutArg.restTime,
           ),
         );
-        if (i < workoutArgument.numExercises) {
-          listItems.add(
-            ListTileModel(
-              action: "Rest",
-              showMinutes: workoutArgument.showMinutes,
-              interval: 0,
-              total: workoutArgument.numExercises,
-              seconds: workoutArgument.restTime,
-            ),
-          );
-        }
+      } else if (interval == workoutArg.numExercises &&
+          workoutArg.iterations > 0 &&
+          iteration < workoutArg.iterations &&
+          workoutArg.breakTime > 0) {
+        listItems.add(
+          ListTileModel(
+            action: "Break",
+            showMinutes: workoutArg.showMinutes,
+            interval: 0,
+            total: workoutArg.numExercises,
+            seconds: workoutArg.breakTime,
+          ),
+        );
       }
     }
+  }
+
+  if (workoutArg.cooldownTime > 0) {
+    listItems.add(
+      ListTileModel(
+        action: "Cooldown",
+        showMinutes: workoutArg.showMinutes,
+        interval: 0,
+        total: workoutArg.numExercises,
+        seconds: workoutArg.cooldownTime,
+      ),
+    );
   }
 
   return listItems;

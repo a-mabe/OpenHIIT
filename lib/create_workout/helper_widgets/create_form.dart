@@ -151,24 +151,31 @@ class CreateFormState extends State<CreateForm> {
                                   fontSize: 30)),
                         ),
                       ),
-                      NumberInput(
-                          numberInputKey: const Key('interval-input'),
-                          numberValue: widget.workout.numExercises,
-                          formatter: (value) {
-                            return value;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter intervals';
-                            }
-                            return null;
-                          },
-                          onSaved: (String? val) {
-                            widget.workout.numExercises = int.parse(val!);
-                          },
-                          unit: "intervals",
-                          min: 1,
-                          max: 999),
+                      Align(
+                        alignment: Alignment.center,
+                        child: NumberInput(
+                            widgetWidth: 140,
+                            numberInputKey: const Key('interval-input'),
+                            numberValue: widget.workout.numExercises == 0
+                                ? -1
+                                : widget.workout.numExercises,
+                            formatter: (value) {
+                              return value;
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Enter intervals';
+                              }
+                              return null;
+                            },
+                            onSaved: (String? val) {
+                              widget.workout.numExercises = int.parse(val!);
+                            },
+                            onChanged: (text) {},
+                            unit: "intervals",
+                            min: 1,
+                            max: 999),
+                      ),
 
                       /// Workout/timer timer display
                       ///
