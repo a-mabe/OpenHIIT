@@ -62,7 +62,7 @@ class NumberInputState extends State<NumberInput> {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
             width: widget.widgetWidth,

@@ -68,9 +68,9 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Visibility(
-              visible: widget.showMinutes == 1,
+              visible: (widget.showMinutes == 1 && widget.unit != "time(s)"),
               child: NumberInput(
-                  widgetWidth: widget.widgetWidth,
+                  widgetWidth: 50,
                   numberValue: widget.timeInSeconds,
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,
@@ -82,7 +82,7 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
                   numberInputKey: Key(widget.minutesKey))),
           NumberInput(
               title: widget.title,
-              widgetWidth: widget.unit == "time(s)" ? 120 : 70,
+              widgetWidth: 50,
               numberValue: widget.timeInSeconds,
               formatter: widget.showMinutes == 1
                   ? secondsRemainderFormatter

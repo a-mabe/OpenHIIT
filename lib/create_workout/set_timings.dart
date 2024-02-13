@@ -153,7 +153,10 @@ class _SetTimingsState extends State<SetTimings> {
                     child: TimeInputTrailing(
                       title: titleList[index],
                       unit: titleList[index] == repeatTitle ? "time(s)" : "s",
-                      widgetWidth: workoutArg.showMinutes == 1 ? 160 : 120,
+                      widgetWidth: (workoutArg.showMinutes == 1 ||
+                              titleList[index] == repeatTitle)
+                          ? 150
+                          : 80,
                       showMinutes: workoutArg.showMinutes,
                       timeInSeconds: time,
                       minutesValidator: (value) {
