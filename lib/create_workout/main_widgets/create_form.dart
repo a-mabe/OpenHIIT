@@ -154,9 +154,9 @@ class CreateFormState extends State<CreateForm> {
                       Align(
                           alignment: Alignment.center,
                           child: SizedBox(
-                            width: 250,
+                            width: 150,
                             child: NumberInput(
-                                widgetWidth: 140,
+                                widgetWidth: 60,
                                 numberInputKey: const Key('interval-input'),
                                 numberValue: widget.workout.numExercises == 0
                                     ? -1

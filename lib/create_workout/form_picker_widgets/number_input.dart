@@ -65,7 +65,7 @@ class NumberInputState extends State<NumberInput> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         SizedBox(
-            width: 50,
+            width: widget.widgetWidth,
             child: TextFormField(
               key: widget.numberInputKey,
               initialValue: widget.numberValue == -1
