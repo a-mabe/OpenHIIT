@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:openhiit/create_workout/helper_widgets/clock_picker.dart';
-import 'package:openhiit/create_workout/helper_widgets/number_input.dart';
+import '../form_picker_widgets/clock_picker.dart';
+import '../form_picker_widgets/number_input.dart';
 import '../../workout_data_type/workout_type.dart';
-import './color_picker.dart';
+import '../form_picker_widgets/color_picker.dart';
 
 class CreateForm extends StatefulWidget {
   /// Vars

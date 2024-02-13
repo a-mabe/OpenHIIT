@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/create_workout/utils/set_timings_utils.dart';
+import 'package:openhiit/create_workout/set_timings_utils/set_timings_utils.dart';
 
 import 'number_input.dart';
 
@@ -70,7 +70,7 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
           Visibility(
               visible: widget.showMinutes == 1,
               child: NumberInput(
-                  widgetWidth: 80,
+                  widgetWidth: widget.widgetWidth,
                   numberValue: widget.timeInSeconds,
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,

@@ -6,7 +6,7 @@ const String additionalConfigTitle = "Additional configuration";
 const String getReadyTitle = "Get ready";
 const String warmUpTitle = "Warm-up";
 const String coolDownTitle = "Cool down";
-const String repeatTitle = "Repeat";
+const String repeatTitle = "Restart";
 const String breakTitle = "Break";
 
 const String workMinutesKey = "work-minutes";

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
-import 'helper_widgets/submit_button.dart';
+import 'main_widgets/submit_button.dart';
 
 class SetExercises extends StatefulWidget {
   const SetExercises({super.key});

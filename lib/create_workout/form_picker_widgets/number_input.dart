@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/create_workout/constants/set_timings_constants.dart';
 
 import 'numerical_input_formatter.dart';
 
@@ -63,7 +62,6 @@ class NumberInputState extends State<NumberInput> {
   Widget build(BuildContext context) {
     return SizedBox(
         width: widget.widgetWidth,
-        // color: Colors.red,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,

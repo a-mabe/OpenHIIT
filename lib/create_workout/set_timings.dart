@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/create_workout/constants/set_timings_constants.dart';
-import 'package:openhiit/create_workout/helper_widgets/time_input_trailing.dart';
+import './form_picker_widgets/time_input_trailing.dart';
 import '../workout_data_type/workout_type.dart';
-import 'helper_widgets/submit_button.dart';
-import 'helper_widgets/time_list_item.dart';
+import 'main_widgets/submit_button.dart';
+import './form_picker_widgets/time_list_item.dart';
 import 'set_sounds.dart';
 
 var logger = Logger(

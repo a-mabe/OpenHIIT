@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/functions.dart';
 import '../workout_data_type/workout_type.dart';
-import './helper_widgets/timer_option_card.dart';
+import 'main_widgets/timer_option_card.dart';
 
 class SelectTimer extends StatefulWidget {
   const SelectTimer({super.key});

@@ -54,11 +54,28 @@ void pushCreateTimer(Workout workout, BuildContext context) {
 ///   - An integer representing the total workout time rounded to the nearest minute.
 ///
 int calculateWorkoutTime(Workout workout) {
-  return (((workout.workTime * workout.numExercises) +
-              (workout.restTime * (workout.numExercises - 1)) +
-              (workout.halfTime * workout.numExercises)) /
-          60)
-      .round();
+  if (workout.iterations > 0) {
+    return (((workout.workTime *
+                    workout.numExercises *
+                    (workout.iterations + 1)) +
+                (workout.restTime *
+                    (workout.numExercises - 1) *
+                    workout.iterations) +
+                (workout.halfTime * workout.numExercises) +
+                (workout.breakTime * (workout.iterations + 1)) +
+                workout.warmupTime +
+                workout.cooldownTime) /
+            60)
+        .ceil();
+  } else {
+    return (((workout.workTime * workout.numExercises) +
+                (workout.restTime * (workout.numExercises - 1)) +
+                (workout.halfTime * workout.numExercises) +
+                workout.warmupTime +
+                workout.cooldownTime) /
+            60)
+        .ceil();
+  }
 }
 
 /// Sets the status bar brightness based on the brightness theme of the provided
