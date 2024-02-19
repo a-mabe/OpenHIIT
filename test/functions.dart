@@ -43,6 +43,7 @@ Future<void> createOrEditWorkout(
   // Submit the form
   await tester.tap(find.text(
       'Submit')); // Replace 'Submit' with the actual text of your submit button
+  await tester.pump(const Duration(seconds: 1));
   await tester.pumpAndSettle();
 
   ///
@@ -62,6 +63,7 @@ Future<void> createOrEditWorkout(
     await tester.tap(find.text('Submit'));
 
     // Wait for the navigation to complete
+    await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle();
   }
 
