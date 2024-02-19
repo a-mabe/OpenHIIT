@@ -179,7 +179,7 @@ class Workout {
       'numExercises': numExercises,
       'exercises': exercises,
       'getReadyTime': getReadyTime,
-      'workTime': workTime,
+      'exerciseTime': workTime,
       'restTime': restTime,
       'halfTime': halfTime,
       'breakTime': breakTime,

@@ -44,7 +44,17 @@ class _SetTimingsState extends State<SetTimings> {
 
     final formKey = GlobalKey<FormState>();
 
-    ValueNotifier<int> iterationsNotifier = ValueNotifier(workout.iterations);
+    // ValueNotifier<int> iterationsNotifier = ValueNotifier(workout.iterations);
+
+    Map<String, ValueNotifier<int>> notifierMap = {
+      "Work": ValueNotifier(workout.workTime),
+      "Rest": ValueNotifier(workout.restTime),
+      "Warm-up": ValueNotifier(workout.warmupTime),
+      "Cool down": ValueNotifier(workout.cooldownTime),
+      // "Restart": ValueNotifier(workout.iterations),
+      "Break": ValueNotifier(workout.iterations),
+      "Get ready": ValueNotifier(workout.getReadyTime)
+    };
 
     return Scaffold(
         appBar: AppBar(
@@ -64,7 +74,7 @@ class _SetTimingsState extends State<SetTimings> {
                 child: ListView.builder(
                     itemCount: timeTitles.length,
                     itemBuilder: (context, index) {
-                      return determineTile(workout, index, iterationsNotifier);
+                      return determineTile(workout, index, notifierMap);
                     }))));
   }
 
@@ -103,8 +113,8 @@ class _SetTimingsState extends State<SetTimings> {
     }
   }
 
-  Widget determineTile(
-      Workout workoutArg, int index, ValueNotifier<int> iterationsNotifier) {
+  Widget determineTile(Workout workoutArg, int index,
+      Map<String, ValueNotifier<int>> notifierMap) {
     switch (index) {
       case 0:
       case 1:
@@ -117,9 +127,9 @@ class _SetTimingsState extends State<SetTimings> {
             timeLeadingIcons,
             timeMinutesKeys[index],
             timeSecondsKeys[index],
-            iterationsNotifier);
+            notifierMap);
       case 2:
-        return returnExpansionTile(workoutArg, index, iterationsNotifier);
+        return returnExpansionTile(workoutArg, index, notifierMap);
       default:
         return const Text("");
     }
@@ -134,21 +144,24 @@ class _SetTimingsState extends State<SetTimings> {
       List<Widget> iconList,
       String minutesKey,
       String secondsKey,
-      ValueNotifier<int> iterationsNotifier) {
+      Map<String, ValueNotifier<int>> notifierMap) {
     return ValueListenableBuilder(
-        valueListenable: iterationsNotifier,
+        valueListenable:
+            (titleList[index] == breakTitle || titleList[index] == repeatTitle)
+                ? notifierMap[breakTitle]!
+                : notifierMap[titleList[index]]!,
         builder: (BuildContext context, int val, Widget? child) {
           return TimeListItem(
             titleText: titleList[index],
             subtitleText: subtitleList[index],
             enabled: titleList[index] == breakTitle
-                ? (iterationsNotifier.value > 0 ? true : false)
+                ? (notifierMap[breakTitle]!.value > 0 ? true : false)
                 : true,
             leadingWidget: iconList[index],
             trailingWidget: titleList[index] != additionalConfigTitle
                 ? Visibility(
                     visible: titleList[index] == breakTitle
-                        ? (iterationsNotifier.value > 0 ? true : false)
+                        ? (notifierMap[breakTitle]!.value > 0 ? true : false)
                         : true,
                     child: TimeInputTrailing(
                       title: titleList[index],
@@ -205,7 +218,7 @@ class _SetTimingsState extends State<SetTimings> {
                       secondsOnChanged: (text) {
                         if (titleList[index] == repeatTitle) {
                           if (text! != "") {
-                            iterationsNotifier.value = int.parse(text);
+                            notifierMap[breakTitle]!.value = int.parse(text);
                           }
                         }
                       },
@@ -217,18 +230,18 @@ class _SetTimingsState extends State<SetTimings> {
         });
   }
 
-  Widget returnExpansionTile(
-      Workout workoutArg, int index, ValueNotifier<int> iterationsNotifier) {
+  Widget returnExpansionTile(Workout workoutArg, int index,
+      Map<String, ValueNotifier<int>> notifierMap) {
     return ExpansionTile(
       title: Text(timeTitles[index]),
       subtitle: Text(timeSubTitles[index]),
       leading: timeLeadingIcons[index],
-      children: returnAdditionalTiles(workoutArg, index, iterationsNotifier),
+      children: returnAdditionalTiles(workoutArg, index, notifierMap),
     );
   }
 
-  List<Widget> returnAdditionalTiles(
-      Workout workoutArg, int index, ValueNotifier<int> iterationsNotifier) {
+  List<Widget> returnAdditionalTiles(Workout workoutArg, int index,
+      Map<String, ValueNotifier<int>> notifierMap) {
     List<Widget> tileList = [];
     for (int i = 0; i < additionalTimeTitles.length; i++) {
       tileList.add(returnTile(
@@ -240,10 +253,7 @@ class _SetTimingsState extends State<SetTimings> {
           additionalTimeLeadingIcons,
           additionalMinutesKeys[index],
           additionalSecondsKeys[index],
-          additionalTimeTitles[i] == repeatTitle ||
-                  additionalTimeTitles[i] == breakTitle
-              ? iterationsNotifier
-              : ValueNotifier(0)));
+          notifierMap));
     }
     return tileList;
   }
