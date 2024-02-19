@@ -35,7 +35,7 @@ class DatabaseManager {
     if (Platform.isWindows || Platform.isLinux) {
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 5,
+        version: 4,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -43,7 +43,7 @@ class DatabaseManager {
             numExercises INTEGER,
             exercises TEXT,
             getReadyTime INTEGER,
-            exerciseTime INTEGER,
+            workTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
             breakTime INTEGER,
@@ -76,7 +76,6 @@ class DatabaseManager {
                 "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
           }
           if (oldVersion < newVersion) {
-            print("Add columns");
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
             await db.execute(
@@ -93,7 +92,7 @@ class DatabaseManager {
     }
     return await openDatabase(
       path,
-      version: 6,
+      version: 5,
       onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
@@ -101,7 +100,7 @@ class DatabaseManager {
             numExercises INTEGER,
             exercises TEXT,
             getReadyTime INTEGER,
-            exerciseTime INTEGER,
+            workTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
             breakTime INTEGER,
@@ -134,7 +133,6 @@ class DatabaseManager {
               "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
         }
         if (oldVersion < newVersion) {
-          print("Add columns");
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
           await db.execute(
@@ -217,7 +215,7 @@ class DatabaseManager {
           maps[i]['numExercises'],
           maps[i]['exercises'],
           maps[i]['getReadyTime'] ?? 0,
-          maps[i]['exerciseTime'],
+          maps[i]['workTime'],
           maps[i]['restTime'],
           maps[i]['halfTime'],
           maps[i]['breakTime'] ?? 0,
