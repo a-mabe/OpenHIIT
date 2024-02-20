@@ -116,10 +116,12 @@ class ViewWorkoutState extends State<ViewWorkout> {
           Navigator.of(context).pop();
         },
         onEdit: () {
+          Workout workoutCopy = workout.copy();
+
           if (exercises.isEmpty) {
-            pushCreateTimer(workout, context);
+            pushCreateTimer(workoutCopy, context);
           } else {
-            pushCreateWorkout(workout, context, (value) {
+            pushCreateWorkout(workoutCopy, context, (value) {
               /// When we come back, reload the workout arg.
               ///
               setState(() {

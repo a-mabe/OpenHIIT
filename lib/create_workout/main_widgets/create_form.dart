@@ -173,7 +173,9 @@ class CreateFormState extends State<CreateForm> {
                             widget.workout.numExercises = int.parse(val!);
                           },
                           onChanged: (String? val) {
-                            widget.workout.numExercises = int.parse(val!);
+                            if (val!.isNotEmpty) {
+                              widget.workout.numExercises = int.parse(val);
+                            }
                           },
                           unit: "intervals",
                           min: 1,
