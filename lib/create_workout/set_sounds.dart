@@ -123,7 +123,7 @@ class _SetSoundsState extends State<SetSounds> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SoundDropdown(
-                            dropdownKey: Key("work-sound"),
+                            dropdownKey: const Key("work-sound"),
                             title: "Work Sound",
                             initialSelection: workout.workSound,
                             pool: pool,
@@ -138,7 +138,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
-                            dropdownKey: Key("rest-sound"),
+                            dropdownKey: const Key("rest-sound"),
                             title: "Rest Sound",
                             initialSelection: workout.restSound,
                             pool: pool,

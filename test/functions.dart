@@ -4,10 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
   await tester.tap(find.byKey(key));
   await tester.pump(const Duration(seconds: 1));
-  await tester.tap(find.descendant(
-    of: find.byKey(key),
-    matching: find.text(soundName),
-  ));
+  await tester.tap(find
+      .descendant(
+        of: find.byKey(key),
+        matching: find.text(soundName),
+      )
+      .last);
   await tester.pumpAndSettle();
 }
 

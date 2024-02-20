@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,7 +15,9 @@ import '../workout_data_type/workout_type.dart';
 ///   - [workout]: The 'Workout' object to be passed to the 'CreateWorkout' screen.
 ///   - [context]: The BuildContext required for navigation within the Flutter app.
 ///
-void pushCreateWorkout(Workout workout, BuildContext context) {
+
+void pushCreateWorkout(Workout workout, BuildContext context,
+    FutureOr<dynamic> Function(dynamic) then) {
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -22,7 +26,7 @@ void pushCreateWorkout(Workout workout, BuildContext context) {
         arguments: workout,
       ),
     ),
-  );
+  ).then(then);
 }
 
 /// Navigates to the 'CreateTimer' screen while passing the provided 'Workout' object
