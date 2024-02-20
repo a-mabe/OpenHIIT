@@ -58,14 +58,14 @@ void main() {
         "30");
 
     // Tap the workout to view details
-    // await tester.tap(find.text(workoutName));
+    await tester.tap(find.text(workoutName));
 
-    // await tester.pump(); // allow the application to handle
+    await tester.pump(); // allow the application to handle
 
-    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
     // // Verify the ViewWorkout page has loaded
-    // expect(find.text("Start"), findsOneWidget);
+    expect(find.text("Start"), findsOneWidget);
 
     // // Find and tap the edit button
     // await tester.tap(find.byKey(const Key('edit-workout')));
