@@ -77,31 +77,29 @@ void main() {
     await createOrEditWorkout(tester, workoutName, 2, false, true, "Ding",
         "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
 
-    // await tester.takeException();
-
     // Tap the workout to view details
-    // await tester.tap(find.text(workoutName));
+    await tester.tap(find.text(workoutName));
 
-    // await tester.pump(); // allow the application to handle
+    await tester.pump(); // allow the application to handle
 
-    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
     // Find and tap the delete button
-    // await tester.tap(find.byKey(const Key('delete-workout')));
+    await tester.tap(find.byKey(const Key('delete-workout')));
 
     // Wait for the dialog to appear
-    // await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
 
     // Verify that the dialog is displayed
-    // expect(find.text('Delete $workoutName'), findsOneWidget);
+    expect(find.text('Delete $workoutName'), findsOneWidget);
 
     // Tap the Delete button in the dialog
-    // await tester.tap(find.text('Delete'));
+    await tester.tap(find.text('Delete'));
 
-    // // Wait for the dialog to close
-    // await tester.pumpAndSettle();
+    // Wait for the dialog to close
+    await tester.pumpAndSettle();
 
-    // // Verify that the workout is no longer displayed
-    // expect(find.text(workoutName), findsNothing);
+    // Verify that the workout is no longer displayed
+    expect(find.text(workoutName), findsNothing);
   });
 }
