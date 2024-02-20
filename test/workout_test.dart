@@ -64,18 +64,18 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    // // Verify the ViewWorkout page has loaded
+    // Verify the ViewWorkout page has loaded
     expect(find.text("Start"), findsOneWidget);
 
-    // // Find and tap the edit button
-    // await tester.tap(find.byKey(const Key('edit-workout')));
+    // Find and tap the edit button
+    await tester.tap(find.byKey(const Key('edit-workout')));
 
-    // await tester.pump(); // allow the application to handle
+    await tester.pump(); // allow the application to handle
 
-    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    // await createOrEditWorkout(tester, workoutName, 2, false, true, "Ding",
-    //     "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
+    await createOrEditWorkout(tester, workoutName, 2, false, true, "Ding",
+        "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
 
     // await tester.takeException();
 
