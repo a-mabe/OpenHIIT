@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:openhiit/create_workout/main_widgets/create_form.dart';
 import '../workout_data_type/workout_type.dart';
 import 'main_widgets/submit_button.dart';
 import 'set_exercises.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
 
 class CreateWorkout extends StatefulWidget {
   const CreateWorkout({super.key});
@@ -18,29 +23,6 @@ class CreateWorkoutState extends State<CreateWorkout> {
     /// from the previous view.
     ///
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    Workout workoutCopy = Workout(
-        workout.id,
-        workout.title,
-        workout.numExercises,
-        workout.exercises,
-        workout.getReadyTime,
-        workout.workTime,
-        workout.restTime,
-        workout.halfTime,
-        workout.breakTime,
-        workout.warmupTime,
-        workout.cooldownTime,
-        workout.iterations,
-        workout.halfwayMark,
-        workout.workSound,
-        workout.restSound,
-        workout.halfwaySound,
-        workout.completeSound,
-        workout.countdownSound,
-        workout.colorInt,
-        workout.workoutIndex,
-        workout.showMinutes);
 
     /// Create a global key that uniquely identifies the Form widget
     /// and allows validation of the form.
@@ -72,6 +54,10 @@ class CreateWorkoutState extends State<CreateWorkout> {
       final form = formKey.currentState!;
       if (form.validate()) {
         form.save();
+
+        logger.i(
+            "Title: ${workout.title}, Color: ${workout.colorInt}, Intervals: ${workout.numExercises}");
+
         pushExercises(workout);
       }
     }
@@ -85,9 +71,9 @@ class CreateWorkoutState extends State<CreateWorkout> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitForm(workoutCopy);
+            submitForm(workout);
           },
         ),
-        body: CreateForm(workout: workoutCopy, formKey: formKey));
+        body: CreateForm(workout: workout, formKey: formKey));
   }
 }

@@ -111,6 +111,9 @@ class CreateFormState extends State<CreateForm> {
                         onSaved: (String? val) {
                           widget.workout.title = val!;
                         },
+                        onChanged: (String? val) {
+                          widget.workout.title = val!;
+                        },
                         style: const TextStyle(fontSize: 18),
                       ),
 
@@ -169,7 +172,11 @@ class CreateFormState extends State<CreateForm> {
                           onSaved: (String? val) {
                             widget.workout.numExercises = int.parse(val!);
                           },
-                          onChanged: (text) {},
+                          onChanged: (String? val) {
+                            if (val!.isNotEmpty) {
+                              widget.workout.numExercises = int.parse(val);
+                            }
+                          },
                           unit: "intervals",
                           min: 1,
                           max: 999),

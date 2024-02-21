@@ -39,7 +39,7 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                   onTap: () {
-                    pushCreateWorkout(workout, context);
+                    pushCreateWorkout(workout, context, (value) {});
                   },
                   optionIcon: Icons.fitness_center,
                   optionTitle: "Workout",

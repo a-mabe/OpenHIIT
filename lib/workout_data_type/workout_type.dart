@@ -198,6 +198,32 @@ class Workout {
     };
   }
 
+  Workout copy() {
+    return Workout(
+      id,
+      title,
+      numExercises,
+      exercises,
+      getReadyTime,
+      workTime,
+      restTime,
+      halfTime,
+      breakTime,
+      warmupTime,
+      cooldownTime,
+      iterations,
+      halfwayMark,
+      workSound,
+      restSound,
+      halfwaySound,
+      completeSound,
+      countdownSound,
+      colorInt,
+      workoutIndex,
+      showMinutes,
+    );
+  }
+
   /// Implement toString to print information about
   /// each Workout more easily.
   ///
