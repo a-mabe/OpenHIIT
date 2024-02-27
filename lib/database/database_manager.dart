@@ -216,7 +216,7 @@ class DatabaseManager {
           maps[i]['title'],
           maps[i]['numExercises'],
           maps[i]['exercises'],
-          maps[i]['getReadyTime'] ?? 0,
+          maps[i]['getReadyTime'] ?? 10,
           maps[i]['exerciseTime'],
           maps[i]['restTime'],
           maps[i]['halfTime'],

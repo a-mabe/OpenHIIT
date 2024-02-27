@@ -38,13 +38,13 @@ class _SetTimingsState extends State<SetTimings> {
 
   int repeat = 0;
 
+  bool hasExpanded = false;
+
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    final formKey = GlobalKey<FormState>();
-
-    // ValueNotifier<int> iterationsNotifier = ValueNotifier(workout.iterations);
 
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(workout.workTime),
@@ -88,15 +88,18 @@ class _SetTimingsState extends State<SetTimings> {
           timeMap["$workTitle-seconds"]!;
       workoutArg.restTime = (timeMap["$restTitle-minutes"]! * 60) +
           timeMap["$restTitle-seconds"]!;
-      workoutArg.getReadyTime = (timeMap["$getReadyTitle-minutes"]! * 60) +
-          timeMap["$getReadyTitle-seconds"]!;
-      workoutArg.warmupTime = (timeMap["$warmUpTitle-minutes"]! * 60) +
-          timeMap["$warmUpTitle-seconds"]!;
-      workoutArg.cooldownTime = (timeMap["$coolDownTitle-minutes"]! * 60) +
-          timeMap["$coolDownTitle-seconds"]!;
-      workoutArg.breakTime = (timeMap["$breakTitle-minutes"]! * 60) +
-          timeMap["$breakTitle-seconds"]!;
-      workoutArg.iterations = repeat;
+
+      if (hasExpanded) {
+        workoutArg.getReadyTime = (timeMap["$getReadyTitle-minutes"]! * 60) +
+            timeMap["$getReadyTitle-seconds"]!;
+        workoutArg.warmupTime = (timeMap["$warmUpTitle-minutes"]! * 60) +
+            timeMap["$warmUpTitle-seconds"]!;
+        workoutArg.cooldownTime = (timeMap["$coolDownTitle-minutes"]! * 60) +
+            timeMap["$coolDownTitle-seconds"]!;
+        workoutArg.breakTime = (timeMap["$breakTitle-minutes"]! * 60) +
+            timeMap["$breakTitle-seconds"]!;
+        workoutArg.iterations = repeat;
+      }
 
       logger.i("Saving workout: ${workoutArg.toString()}");
       logger.i(repeat);
@@ -237,6 +240,9 @@ class _SetTimingsState extends State<SetTimings> {
       subtitle: Text(timeSubTitles[index]),
       leading: timeLeadingIcons[index],
       children: returnAdditionalTiles(workoutArg, index, notifierMap),
+      onExpansionChanged: (expanded) {
+        hasExpanded = true;
+      },
     );
   }
 
