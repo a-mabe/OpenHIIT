@@ -19,7 +19,7 @@ void main() {
     String workoutName = "Test workout 1";
 
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const workoutTimerTest());
+    await tester.pumpWidget(const workouttimer());
 
     // Tap the '+' icon and trigger the add Workout or Timer page.
     await tester.tap(find.byIcon(Icons.add));
