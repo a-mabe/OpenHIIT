@@ -157,6 +157,7 @@ class CreateFormState extends State<CreateForm> {
                       NumberInput(
                           widgetWidth: 60,
                           numberInputKey: const Key('interval-input'),
+                          controller: TextEditingController(),
                           numberValue: widget.workout.numExercises == 0
                               ? -1
                               : widget.workout.numExercises,

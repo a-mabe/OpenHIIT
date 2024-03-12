@@ -168,6 +168,8 @@ class _SetTimingsState extends State<SetTimings> {
                         : true,
                     child: TimeInputTrailing(
                       title: titleList[index],
+                      minutesController: TextEditingController(),
+                      secondsController: TextEditingController(),
                       unit: titleList[index] == repeatTitle ? "time(s)" : "s",
                       widgetWidth: (workoutArg.showMinutes == 1 ||
                               titleList[index] == repeatTitle)

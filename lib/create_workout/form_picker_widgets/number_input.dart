@@ -18,6 +18,8 @@ class NumberInput extends StatefulWidget {
 
   final String title;
 
+  final TextEditingController controller;
+
   final Key numberInputKey;
 
   final Function formatter;
@@ -40,6 +42,7 @@ class NumberInput extends StatefulWidget {
     required this.min,
     required this.max,
     required this.numberInputKey,
+    required this.controller,
     this.title = "",
   });
 
@@ -60,6 +63,10 @@ class NumberInputState extends State<NumberInput> {
 
   @override
   Widget build(BuildContext context) {
+    widget.controller.text = widget.numberValue == -1
+        ? ""
+        : widget.formatter(widget.numberValue).toString();
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -68,9 +75,7 @@ class NumberInputState extends State<NumberInput> {
             width: widget.widgetWidth,
             child: TextFormField(
               key: widget.numberInputKey,
-              initialValue: widget.numberValue == -1
-                  ? ""
-                  : widget.formatter(widget.numberValue).toString(),
+              controller: widget.controller,
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
