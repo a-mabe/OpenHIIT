@@ -25,11 +25,11 @@ void main() async {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
-  runApp(const workouttimer());
+  runApp(const workoutTimer());
 }
 
-class workouttimer extends StatelessWidget {
-  const workouttimer({super.key});
+class workoutTimer extends StatelessWidget {
+  const workoutTimer({super.key});
 
   /// Application root.
   @override
