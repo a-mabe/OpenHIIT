@@ -25,17 +25,17 @@ void main() async {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
-  runApp(const workoutTimer());
+  runApp(const WorkoutTimer());
 }
 
-class workoutTimer extends StatelessWidget {
-  const workoutTimer({super.key});
+class WorkoutTimer extends StatelessWidget {
+  const WorkoutTimer({super.key});
 
   /// Application root.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'openhiit',
+      title: 'OpenHIIT',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
       darkTheme: ThemeData.dark(), // standard dark theme
