@@ -169,17 +169,28 @@ List<ListTileModel> listItems(List exercises, Workout workoutArg) {
         );
       } else if (interval == workoutArg.numExercises &&
           workoutArg.iterations > 0 &&
-          iteration < workoutArg.iterations &&
-          workoutArg.breakTime > 0) {
-        listItems.add(
-          ListTileModel(
-            action: "Break",
-            showMinutes: workoutArg.showMinutes,
-            interval: 0,
-            total: workoutArg.numExercises,
-            seconds: workoutArg.breakTime,
-          ),
-        );
+          iteration < workoutArg.iterations) {
+        if (workoutArg.breakTime > 0) {
+          listItems.add(
+            ListTileModel(
+              action: "Break",
+              showMinutes: workoutArg.showMinutes,
+              interval: 0,
+              total: workoutArg.numExercises,
+              seconds: workoutArg.breakTime,
+            ),
+          );
+        } else {
+          listItems.add(
+            ListTileModel(
+              action: "Get ready",
+              showMinutes: workoutArg.showMinutes,
+              interval: 0,
+              total: workoutArg.numExercises,
+              seconds: workoutArg.getReadyTime,
+            ),
+          );
+        }
       }
     }
   }

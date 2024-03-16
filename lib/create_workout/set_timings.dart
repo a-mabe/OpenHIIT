@@ -51,7 +51,7 @@ class _SetTimingsState extends State<SetTimings> {
       "Rest": ValueNotifier(workout.restTime),
       "Warm-up": ValueNotifier(workout.warmupTime),
       "Cool down": ValueNotifier(workout.cooldownTime),
-      // "Restart": ValueNotifier(workout.iterations),
+      "Restart": ValueNotifier(workout.iterations),
       "Break": ValueNotifier(workout.iterations),
       "Get ready": ValueNotifier(workout.getReadyTime)
     };
@@ -71,11 +71,13 @@ class _SetTimingsState extends State<SetTimings> {
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 120),
             child: Form(
                 key: formKey,
-                child: ListView.builder(
-                    itemCount: timeTitles.length,
-                    itemBuilder: (context, index) {
-                      return determineTile(workout, index, notifierMap);
-                    }))));
+                child: SingleChildScrollView(
+                  child: Column(
+                      children: List<Widget>.generate(
+                          timeTitles.length,
+                          (int index) =>
+                              determineTile(workout, index, notifierMap))),
+                ))));
   }
 
   void submitTimings(Workout workoutArg, GlobalKey<FormState> formKey) {
@@ -149,10 +151,9 @@ class _SetTimingsState extends State<SetTimings> {
       String secondsKey,
       Map<String, ValueNotifier<int>> notifierMap) {
     return ValueListenableBuilder(
-        valueListenable:
-            (titleList[index] == breakTitle || titleList[index] == repeatTitle)
-                ? notifierMap[breakTitle]!
-                : notifierMap[titleList[index]]!,
+        valueListenable: (titleList[index] == breakTitle)
+            ? notifierMap[breakTitle]!
+            : notifierMap[titleList[index]]!,
         builder: (BuildContext context, int val, Widget? child) {
           return TimeListItem(
             titleText: titleList[index],
@@ -168,6 +169,8 @@ class _SetTimingsState extends State<SetTimings> {
                         : true,
                     child: TimeInputTrailing(
                       title: titleList[index],
+                      minutesController: TextEditingController(),
+                      secondsController: TextEditingController(),
                       unit: titleList[index] == repeatTitle ? "time(s)" : "s",
                       widgetWidth: (workoutArg.showMinutes == 1 ||
                               titleList[index] == repeatTitle)

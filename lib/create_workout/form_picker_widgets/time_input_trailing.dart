@@ -14,12 +14,12 @@ class TimeInputTrailing extends StatefulWidget {
   final String minutesKey;
   final String secondsKey;
 
+  final TextEditingController? minutesController;
+  final TextEditingController? secondsController;
+
   final String unit;
 
   final String title;
-
-  // final Function? minutesFormatter;
-  // final Function? secondsFormatter;
 
   final Function(String?)? minutesOnSaved;
   final Function(String?)? secondsOnSaved;
@@ -39,6 +39,8 @@ class TimeInputTrailing extends StatefulWidget {
     this.title = "",
     this.minutesOnSaved,
     this.secondsOnSaved,
+    required this.minutesController,
+    required this.secondsController,
     this.minutesValidator,
     this.secondsValidator,
     required this.secondsOnChanged,
@@ -72,6 +74,7 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
               child: NumberInput(
                   widgetWidth: 50,
                   numberValue: widget.timeInSeconds,
+                  controller: widget.minutesController!,
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,
                   onChanged: (text) {},
@@ -84,6 +87,7 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
               title: widget.title,
               widgetWidth: 50,
               numberValue: widget.timeInSeconds,
+              controller: widget.secondsController!,
               formatter: widget.showMinutes == 1
                   ? secondsRemainderFormatter
                   : secondsFormatter,
