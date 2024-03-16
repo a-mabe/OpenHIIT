@@ -330,7 +330,8 @@ class CountDownTimerState extends State<CountDownTimer>
 
           if (timerData.status == "complete" && restart == false) {
             done = true;
-          } else if (timerData.status == "start") {
+          } else if (timerData.status == "start" &&
+              timerData.iterations == workoutArgument.iterations) {
             currentWorkInterval = 0;
             ListModel<ListTileModel> intervalList = ListModel<ListTileModel>(
               listKey: listKey,
