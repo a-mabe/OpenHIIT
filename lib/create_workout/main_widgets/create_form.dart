@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:openhiit/create_workout/helper_widgets/clock_picker.dart';
-import 'package:openhiit/create_workout/helper_widgets/number_input.dart';
+import '../form_picker_widgets/clock_picker.dart';
+import '../form_picker_widgets/number_input.dart';
 import '../../workout_data_type/workout_type.dart';
-import './color_picker.dart';
+import '../form_picker_widgets/color_picker.dart';
 
 class CreateForm extends StatefulWidget {
   /// Vars
@@ -111,6 +111,9 @@ class CreateFormState extends State<CreateForm> {
                         onSaved: (String? val) {
                           widget.workout.title = val!;
                         },
+                        onChanged: (String? val) {
+                          widget.workout.title = val!;
+                        },
                         style: const TextStyle(fontSize: 18),
                       ),
 
@@ -152,8 +155,12 @@ class CreateFormState extends State<CreateForm> {
                         ),
                       ),
                       NumberInput(
+                          widgetWidth: 60,
                           numberInputKey: const Key('interval-input'),
-                          numberValue: widget.workout.numExercises,
+                          controller: TextEditingController(),
+                          numberValue: widget.workout.numExercises == 0
+                              ? -1
+                              : widget.workout.numExercises,
                           formatter: (value) {
                             return value;
                           },
@@ -165,6 +172,11 @@ class CreateFormState extends State<CreateForm> {
                           },
                           onSaved: (String? val) {
                             widget.workout.numExercises = int.parse(val!);
+                          },
+                          onChanged: (String? val) {
+                            if (val!.isNotEmpty) {
+                              widget.workout.numExercises = int.parse(val);
+                            }
                           },
                           unit: "intervals",
                           min: 1,

@@ -6,9 +6,9 @@ import 'package:uuid/uuid.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
 import '../database/database_manager.dart';
-import './helper_widgets/sound_dropdown.dart';
-import './helper_widgets/submit_button.dart';
-import './data/sounds.dart';
+import 'form_picker_widgets/sound_dropdown.dart';
+import 'main_widgets/submit_button.dart';
+import 'constants/sounds.dart';
 
 List<String> allSounds = soundsList + countdownSounds;
 
@@ -123,7 +123,7 @@ class _SetSoundsState extends State<SetSounds> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SoundDropdown(
-                            dropdownKey: Key("work-sound"),
+                            dropdownKey: const Key("work-sound"),
                             title: "Work Sound",
                             initialSelection: workout.workSound,
                             pool: pool,
@@ -138,7 +138,7 @@ class _SetSoundsState extends State<SetSounds> {
                               });
                             }),
                         SoundDropdown(
-                            dropdownKey: Key("rest-sound"),
+                            dropdownKey: const Key("rest-sound"),
                             title: "Rest Sound",
                             initialSelection: workout.restSound,
                             pool: pool,

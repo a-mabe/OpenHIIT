@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../helper_functions/functions.dart';
+import '../utils/functions.dart';
 import '../workout_data_type/workout_type.dart';
 
 ///
@@ -77,7 +77,7 @@ class TimerListTileState extends State<TimerListTile>
           // Workout metadata.
           subtitle: Text(
               '''${widget.workout.exercises != "" ? 'Exercises - ${jsonDecode(widget.workout.exercises).length}' : 'Intervals - ${widget.workout.numExercises}'}
-Exercise time - ${timeString(widget.workout.showMinutes, widget.workout.exerciseTime)}
+Exercise time - ${timeString(widget.workout.showMinutes, widget.workout.workTime)}
 Rest time - ${timeString(widget.workout.showMinutes, widget.workout.restTime)}
 Total - ${calculateWorkoutTime(widget.workout)} minutes'''),
           subtitleTextStyle: const TextStyle(

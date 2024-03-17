@@ -1,12 +1,6 @@
 import 'dart:core';
 
 class Workout {
-  ///
-  /// -------------
-  /// FIELDS
-  /// -------------
-  ///
-
   /// The workout ID.
   ///
   late String id;
@@ -23,17 +17,23 @@ class Workout {
   ///
   late int numExercises;
 
-  /// List of the exercises.
+  /// List of the exercises, JSON encoded string.
   ///
   /// e.g., ["Burpee", "Push-ups", "Rows"]
   ///
   late String exercises;
 
+  /// Amount of time to count down to the timer start, in seconds.
+  ///
+  /// e.g., 10
+  ///
+  late int getReadyTime;
+
   /// Amount of time for an exercise, in seconds.
   ///
   /// e.g., 30
   ///
-  late int exerciseTime;
+  late int workTime;
 
   /// Amount of time between exercises, in seconds. (Rest time)
   ///
@@ -47,16 +47,64 @@ class Workout {
   ///
   late int halfTime;
 
+  /// Amount of time for breaks between exercise cycles, in seconds.
+  ///
+  /// e.g., 60
+  ///
+  late int breakTime;
+
+  /// Amount of time dedicated to warm-up before the exercise routine starts, in seconds.
+  ///
+  /// e.g., 120
+  ///
+  late int warmupTime;
+
+  /// Amount of time dedicated to cooldown after completing the exercise routine, in seconds.
+  ///
+  /// e.g., 90
+  ///
+  late int cooldownTime;
+
+  /// The total number of exercise cycles or iterations in the routine.
+  ///
+  /// e.g., 5
+  ///
+  late int iterations;
+
+  /// The time mark, in seconds, at which the exercise routine is considered halfway completed.
+  ///
+  /// e.g., 300
+  ///
   late int halfwayMark;
 
+  /// The sound file associated with the work phase of the exercise routine.
+  ///
+  /// e.g., "work_sound.mp3"
+  ///
   late String workSound;
 
+  /// The sound file associated with the rest phase of the exercise routine.
+  ///
+  /// e.g., "rest_sound.mp3"
+  ///
   late String restSound;
 
+  /// The sound file played at the halfway mark of the exercise routine.
+  ///
+  /// e.g., "halfway_sound.mp3"
+  ///
   late String halfwaySound;
 
+  /// The sound file played upon completing the entire exercise routine.
+  ///
+  /// e.g., "complete_sound.mp3"
+  ///
   late String completeSound;
 
+  /// The sound file played during countdowns or preparations.
+  ///
+  /// e.g., "countdown_sound.mp3"
+  ///
   late String countdownSound;
 
   /// Color selected for the background of the workout
@@ -77,33 +125,19 @@ class Workout {
   ///
   late int showMinutes;
 
-  ///
-  /// -------------
-  /// END FIELDS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// CONSTRUCTORS
-  /// -------------
-  ///
-  // Workout(
-  //     {required this.title,
-  //     required this.numExercises,
-  //     required this.exercises,
-  //     required this.exerciseTime,
-  //     required this.restTime,
-  //     required this.halfTime});
-
   Workout(
       this.id,
       this.title,
       this.numExercises,
       this.exercises,
-      this.exerciseTime,
+      this.getReadyTime,
+      this.workTime,
       this.restTime,
       this.halfTime,
+      this.breakTime,
+      this.warmupTime,
+      this.cooldownTime,
+      this.iterations,
       this.halfwayMark,
       this.workSound,
       this.restSound,
@@ -119,9 +153,14 @@ class Workout {
     title = "";
     numExercises = 0;
     exercises = "";
-    exerciseTime = 0;
+    getReadyTime = 0;
+    workTime = 0;
     restTime = 0;
     halfTime = 0;
+    breakTime = 0;
+    warmupTime = 0;
+    cooldownTime = 0;
+    iterations = 0;
     halfwayMark = 0;
     workSound = "short-whistle";
     restSound = "short-rest-beep";
@@ -133,25 +172,20 @@ class Workout {
     showMinutes = 0;
   }
 
-  ///
-  /// -------------
-  /// END CONSTRUCTORS
-  /// -------------
-  ///
-  ///
-  /// -------------
-  /// FUNCTIONS
-  /// -------------
-  ///
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'numExercises': numExercises,
       'exercises': exercises,
-      'exerciseTime': exerciseTime,
+      'getReadyTime': getReadyTime,
+      'exerciseTime': workTime,
       'restTime': restTime,
       'halfTime': halfTime,
+      'breakTime': breakTime,
+      'warmupTime': warmupTime,
+      'cooldownTime': cooldownTime,
+      'iterations': iterations,
       'halfwayMark': halfwayMark,
       'workSound': workSound,
       'restSound': restSound,
@@ -164,12 +198,38 @@ class Workout {
     };
   }
 
+  Workout copy() {
+    return Workout(
+      id,
+      title,
+      numExercises,
+      exercises,
+      getReadyTime,
+      workTime,
+      restTime,
+      halfTime,
+      breakTime,
+      warmupTime,
+      cooldownTime,
+      iterations,
+      halfwayMark,
+      workSound,
+      restSound,
+      halfwaySound,
+      completeSound,
+      countdownSound,
+      colorInt,
+      workoutIndex,
+      showMinutes,
+    );
+  }
+
   /// Implement toString to print information about
   /// each Workout more easily.
   ///
   @override
   String toString() {
-    return 'Workout{id: $id,title: $title, numExercises: $numExercises, exercises: $exercises, exerciseTime: $exerciseTime, restTime: $restTime, halfTime: $halfTime, halfwayMark: $halfwayMark, colorInt: $colorInt, index: $workoutIndex}';
+    return 'Workout{id: $id, title: $title, numExercises: $numExercises, exercises: $exercises, getReadyTime: $getReadyTime, workTime: $workTime, restTime: $restTime, halfTime: $halfTime, halfwayMark: $halfwayMark, colorInt: $colorInt, index: $workoutIndex, warmupTime: $warmupTime, cooldownTime: $cooldownTime, breakTime: $breakTime, iterations: $iterations}';
   }
 
   ///

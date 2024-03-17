@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../helper_functions/functions.dart';
+import '../utils/functions.dart';
 import '../workout_data_type/workout_type.dart';
-import './helper_widgets/timer_option_card.dart';
+import 'main_widgets/timer_option_card.dart';
 
 class SelectTimer extends StatefulWidget {
   const SelectTimer({super.key});
@@ -39,7 +39,7 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                   onTap: () {
-                    pushCreateWorkout(workout, context);
+                    pushCreateWorkout(workout, context, (value) {});
                   },
                   optionIcon: Icons.fitness_center,
                   optionTitle: "Workout",

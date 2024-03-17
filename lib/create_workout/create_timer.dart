@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/create_workout/helper_widgets/create_form.dart';
+import 'package:openhiit/create_workout/main_widgets/create_form.dart';
 import '../workout_data_type/workout_type.dart';
 import './set_timings.dart';
-import './helper_widgets/submit_button.dart';
+import 'main_widgets/submit_button.dart';
 
 class CreateTimer extends StatefulWidget {
   const CreateTimer({super.key});
@@ -17,24 +17,6 @@ class CreateTimerState extends State<CreateTimer> {
     /// Grab the [workout] that was passed to this view
     /// from the previous view.
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    Workout workoutCopy = Workout(
-        workout.id,
-        workout.title,
-        workout.numExercises,
-        workout.exercises,
-        workout.exerciseTime,
-        workout.restTime,
-        workout.halfTime,
-        workout.halfwayMark,
-        workout.workSound,
-        workout.restSound,
-        workout.halfwaySound,
-        workout.completeSound,
-        workout.countdownSound,
-        workout.colorInt,
-        workout.workoutIndex,
-        workout.showMinutes);
 
     // Create a global key that uniquely identifies the Form widget
     // and allows validation of the form.
@@ -78,11 +60,11 @@ class CreateTimerState extends State<CreateTimer> {
         ),
         bottomSheet: SubmitButton(
           text: "Submit",
-          color: const Color.fromARGB(255,58,165,255),
+          color: const Color.fromARGB(255, 58, 165, 255),
           onTap: () {
-            submitForm(workoutCopy);
+            submitForm(workout);
           },
         ),
-        body: CreateForm(workout: workoutCopy, formKey: formKey));
+        body: CreateForm(workout: workout, formKey: formKey));
   }
 }

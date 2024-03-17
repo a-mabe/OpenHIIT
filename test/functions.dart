@@ -4,10 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
   await tester.tap(find.byKey(key));
   await tester.pump(const Duration(seconds: 1));
-  await tester.tap(find.descendant(
-    of: find.byKey(key),
-    matching: find.text(soundName),
-  ));
+  await tester.tap(find
+      .descendant(
+        of: find.byKey(key),
+        matching: find.text(soundName),
+      )
+      .last);
   await tester.pumpAndSettle();
 }
 
@@ -43,6 +45,7 @@ Future<void> createOrEditWorkout(
   // Submit the form
   await tester.tap(find.text(
       'Submit')); // Replace 'Submit' with the actual text of your submit button
+  await tester.pump(const Duration(seconds: 1));
   await tester.pumpAndSettle();
 
   ///
@@ -62,6 +65,7 @@ Future<void> createOrEditWorkout(
     await tester.tap(find.text('Submit'));
 
     // Wait for the navigation to complete
+    await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle();
   }
 

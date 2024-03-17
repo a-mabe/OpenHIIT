@@ -6,12 +6,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../workout_data_type/workout_type.dart';
 
 class DatabaseManager {
-  ///
-  /// -------------
-  /// FIELDS
-  /// -------------
-  ///
-
   /// The name of the database.
   ///
   /// e.g., "database.db"
@@ -23,18 +17,6 @@ class DatabaseManager {
   /// e.g., "workouts"
   ///
   static const String _workoutTableName = "WorkoutTable";
-
-  ///
-  /// -------------
-  /// END FIELDS
-  /// -------------
-  ///
-
-  ///
-  /// -------------
-  /// FUNCTIONS
-  /// -------------
-  ///
 
   Future<Database> initDB() async {
     debugPrint("initDB executed");
@@ -53,16 +35,21 @@ class DatabaseManager {
     if (Platform.isWindows || Platform.isLinux) {
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 4,
+        version: 5,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
+            getReadyTime INTEGER,
             exerciseTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
+            breakTime INTEGER,
+            warmupTime INTEGER,
+            cooldownTime INTEGER,
+            iterations INTEGER,
             halfwayMark INTEGER,
             workSound TEXT,
             restSound TEXT,
@@ -84,25 +71,43 @@ class DatabaseManager {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
           }
-          if (oldVersion < newVersion) {
+          if (oldVersion == 3) {
             await db.execute(
                 "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
+          }
+          if (oldVersion < newVersion) {
+            print("Add columns");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
+            await db.execute(
+                "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
           }
         },
       );
     }
     return await openDatabase(
       path,
-      version: 5,
+      version: 6,
       onCreate: (Database db, int version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
             numExercises INTEGER,
             exercises TEXT,
+            getReadyTime INTEGER,
             exerciseTime INTEGER,
             restTime INTEGER,
             halfTime INTEGER,
+            breakTime INTEGER,
+            warmupTime INTEGER,
+            cooldownTime INTEGER,
+            iterations INTEGER,
             halfwayMark INTEGER,
             workSound TEXT,
             restSound TEXT,
@@ -124,9 +129,22 @@ class DatabaseManager {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
         }
-        if (oldVersion < newVersion) {
+        if (oldVersion == 4) {
           await db.execute(
               "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
+        }
+        if (oldVersion < newVersion) {
+          print("Add columns");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
+          await db.execute(
+              "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
         }
       },
     );
@@ -198,9 +216,14 @@ class DatabaseManager {
           maps[i]['title'],
           maps[i]['numExercises'],
           maps[i]['exercises'],
+          maps[i]['getReadyTime'] ?? 10,
           maps[i]['exerciseTime'],
           maps[i]['restTime'],
           maps[i]['halfTime'],
+          maps[i]['breakTime'] ?? 0,
+          maps[i]['warmupTime'] ?? 0,
+          maps[i]['cooldownTime'] ?? 0,
+          maps[i]['iterations'] ?? 0,
           maps[i]['halfwayMark'],
           maps[i]['workSound'],
           maps[i]['restSound'],
