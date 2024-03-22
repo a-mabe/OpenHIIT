@@ -124,9 +124,7 @@ class CountDownTimerState extends State<CountDownTimer>
       case 'warmup':
         return "Warm-up";
       case 'work':
-        String exercise = workoutArgument.numExercises == exercises.length
-            ? exercises[interval]
-            : "Work";
+        String exercise = exercises.isNotEmpty ? exercises[interval] : "Work";
         flipCurrentWorkInterval = true;
         return exercise;
       case 'rest':
