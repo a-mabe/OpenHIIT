@@ -22,18 +22,35 @@ class SetTimings extends StatefulWidget {
 // This class holds the data related to the Form.
 class _SetTimingsState extends State<SetTimings> {
   Map<String, int> timeMap = {
-    "Work-minutes": 0,
-    "Work-seconds": 0,
-    "Rest-minutes": 0,
-    "Rest-seconds": 0,
-    "Warm-up-minutes": 0,
-    "Warm-up-seconds": 0,
-    "Cool down-minutes": 0,
-    "Cool down-seconds": 0,
-    "Break-minutes": 0,
-    "Break-seconds": 0,
-    "Get ready-minutes": 0,
-    "Get ready-seconds": 0,
+    "$workTitle-minutes": 0,
+    "$workTitle-seconds": 0,
+    "$restTitle-minutes": 0,
+    "$restTitle-seconds": 0,
+    "$warmUpTitle-minutes": 0,
+    "$warmUpTitle-seconds": 0,
+    "$coolDownTitle-minutes": 0,
+    "$coolDownTitle down-seconds": 0,
+    "$breakTitle-minutes": 0,
+    "$breakTitle-seconds": 0,
+    "$getReadyTitle-minutes": 0,
+    "$getReadyTitle-seconds": 0,
+  };
+
+  Map<String, FocusNode> focusMap = {
+    "$workTitle-minute": FocusNode(),
+    "$workTitle-second": FocusNode(),
+    "$restTitle-minute": FocusNode(),
+    "$restTitle-second": FocusNode(),
+    "$warmUpTitle-minute": FocusNode(),
+    "$warmUpTitle-second": FocusNode(),
+    "$coolDownTitle-minute": FocusNode(),
+    "$coolDownTitle-second": FocusNode(),
+    "$breakTitle-minute": FocusNode(),
+    "$breakTitle-second": FocusNode(),
+    "$getReadyTitle-minute": FocusNode(),
+    "$getReadyTitle-second": FocusNode(),
+    "$repeatTitle-minute": FocusNode(),
+    "$repeatTitle-second": FocusNode(),
   };
 
   int repeat = 0;
@@ -155,84 +172,104 @@ class _SetTimingsState extends State<SetTimings> {
             ? notifierMap[breakTitle]!
             : notifierMap[titleList[index]]!,
         builder: (BuildContext context, int val, Widget? child) {
-          return TimeListItem(
-            titleText: titleList[index],
-            subtitleText: subtitleList[index],
-            enabled: titleList[index] == breakTitle
-                ? (notifierMap[breakTitle]!.value > 0 ? true : false)
-                : true,
-            leadingWidget: iconList[index],
-            trailingWidget: titleList[index] != additionalConfigTitle
-                ? Visibility(
-                    visible: titleList[index] == breakTitle
-                        ? (notifierMap[breakTitle]!.value > 0 ? true : false)
-                        : true,
-                    child: TimeInputTrailing(
-                      title: titleList[index],
-                      minutesController: TextEditingController(),
-                      secondsController: TextEditingController(),
-                      unit: titleList[index] == repeatTitle ? "time(s)" : "s",
-                      widgetWidth: (workoutArg.showMinutes == 1 ||
-                              titleList[index] == repeatTitle)
-                          ? 150
-                          : 80,
-                      showMinutes: workoutArg.showMinutes,
-                      timeInSeconds: time,
-                      minutesValidator: (value) {
-                        return null;
-                      },
-                      minutesOnSaved: (value) {
-                        if (value != "") {
-                          setState(() =>
-                              timeMap["${titleList[index]}-minutes"] = value!
-                                      .contains(".")
-                                  ? int.parse(
-                                      value.substring(0, value.indexOf(".")))
-                                  : int.parse(value));
-                        } else {
-                          setState(
-                              () => timeMap["${titleList[index]}-minutes"] = 0);
-                        }
-                      },
-                      secondsValidator: (value) {
-                        return null;
-                      },
-                      secondsOnSaved: (value) {
-                        if (titleList[index] == repeatTitle) {
-                          if (value != "") {
-                            setState(() => repeat = value!.contains(".")
-                                ? int.parse(
-                                    value.substring(0, value.indexOf(".")))
-                                : int.parse(value));
-                          } else {
-                            setState(() => repeat = 0);
-                          }
-                        } else {
-                          if (value != "") {
-                            setState(() =>
-                                timeMap["${titleList[index]}-seconds"] = value!
-                                        .contains(".")
+          return GestureDetector(
+              onTap: () {
+                if (workoutArg.showMinutes == 1) {
+                  if (focusMap["${titleList[index]}-minute"]!.hasFocus) {
+                    focusMap["${titleList[index]}-second"]!.requestFocus();
+                  } else {
+                    focusMap["${titleList[index]}-minute"]!.requestFocus();
+                  }
+                } else {
+                  focusMap["${titleList[index]}-second"]!.requestFocus();
+                }
+              },
+              child: TimeListItem(
+                titleText: titleList[index],
+                subtitleText: subtitleList[index],
+                enabled: titleList[index] == breakTitle
+                    ? (notifierMap[breakTitle]!.value > 0 ? true : false)
+                    : true,
+                leadingWidget: iconList[index],
+                trailingWidget: titleList[index] != additionalConfigTitle
+                    ? Visibility(
+                        visible: titleList[index] == breakTitle
+                            ? (notifierMap[breakTitle]!.value > 0
+                                ? true
+                                : false)
+                            : true,
+                        child: TimeInputTrailing(
+                          title: titleList[index],
+                          minuteFocusNode:
+                              focusMap["${titleList[index]}-minute"],
+                          secondFocusNode:
+                              focusMap["${titleList[index]}-second"],
+                          minutesController: TextEditingController(),
+                          secondsController: TextEditingController(),
+                          unit:
+                              titleList[index] == repeatTitle ? "time(s)" : "s",
+                          widgetWidth: (workoutArg.showMinutes == 1 ||
+                                  titleList[index] == repeatTitle)
+                              ? 150
+                              : 80,
+                          showMinutes: workoutArg.showMinutes,
+                          timeInSeconds: time,
+                          minutesValidator: (value) {
+                            return null;
+                          },
+                          minutesOnSaved: (value) {
+                            if (value != "") {
+                              setState(() =>
+                                  timeMap["${titleList[index]}-minutes"] =
+                                      value!.contains(".")
+                                          ? int.parse(value.substring(
+                                              0, value.indexOf(".")))
+                                          : int.parse(value));
+                            } else {
+                              setState(() =>
+                                  timeMap["${titleList[index]}-minutes"] = 0);
+                            }
+                          },
+                          secondsValidator: (value) {
+                            return null;
+                          },
+                          secondsOnSaved: (value) {
+                            if (titleList[index] == repeatTitle) {
+                              if (value != "") {
+                                setState(() => repeat = value!.contains(".")
                                     ? int.parse(
                                         value.substring(0, value.indexOf(".")))
                                     : int.parse(value));
-                          } else {
-                            setState(() =>
-                                timeMap["${titleList[index]}-seconds"] = 0);
-                          }
-                        }
-                      },
-                      secondsOnChanged: (text) {
-                        if (titleList[index] == repeatTitle) {
-                          if (text! != "") {
-                            notifierMap[breakTitle]!.value = int.parse(text);
-                          }
-                        }
-                      },
-                      minutesKey: minutesKey,
-                      secondsKey: secondsKey,
-                    ))
-                : const Text(""),
-          );
+                              } else {
+                                setState(() => repeat = 0);
+                              }
+                            } else {
+                              if (value != "") {
+                                setState(() =>
+                                    timeMap["${titleList[index]}-seconds"] =
+                                        value!.contains(".")
+                                            ? int.parse(value.substring(
+                                                0, value.indexOf(".")))
+                                            : int.parse(value));
+                              } else {
+                                setState(() =>
+                                    timeMap["${titleList[index]}-seconds"] = 0);
+                              }
+                            }
+                          },
+                          secondsOnChanged: (text) {
+                            if (titleList[index] == repeatTitle) {
+                              if (text! != "") {
+                                notifierMap[breakTitle]!.value =
+                                    int.parse(text);
+                              }
+                            }
+                          },
+                          minutesKey: minutesKey,
+                          secondsKey: secondsKey,
+                        ))
+                    : const Text(""),
+              ));
         });
   }
 
