@@ -171,7 +171,7 @@ List<ListTileModel> listItems(List exercises, Workout workoutArg) {
       if (workoutArg.workTime > 0) {
         listItems.add(
           ListTileModel(
-            action: "Work",
+            action: exercises.isNotEmpty ? exercises[interval - 1] : "Work",
             showMinutes: workoutArg.showMinutes,
             interval: interval,
             total: workoutArg.numExercises,

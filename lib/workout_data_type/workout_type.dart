@@ -153,7 +153,7 @@ class Workout {
     title = "";
     numExercises = 0;
     exercises = "";
-    getReadyTime = 0;
+    getReadyTime = 10;
     workTime = 0;
     restTime = 0;
     halfTime = 0;
