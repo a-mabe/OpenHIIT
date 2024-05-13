@@ -63,6 +63,8 @@ const List<String> additionalTimeTitles = [
   breakTitle
 ];
 
+List<String> allTitles = timeTitles + additionalTimeTitles;
+
 const List<String> timeSubTitles = [
   "Required",
   "Required",

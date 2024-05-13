@@ -30,6 +30,8 @@ class NumberInput extends StatefulWidget {
 
   final void Function(String?) onChanged;
 
+  final FocusNode? focusNode;
+
   const NumberInput({
     super.key,
     required this.numberValue,
@@ -43,6 +45,7 @@ class NumberInput extends StatefulWidget {
     required this.max,
     required this.numberInputKey,
     required this.controller,
+    this.focusNode,
     this.title = "",
   });
 
@@ -74,6 +77,7 @@ class NumberInputState extends State<NumberInput> {
         SizedBox(
             width: widget.widgetWidth,
             child: TextFormField(
+              focusNode: widget.focusNode,
               key: widget.numberInputKey,
               controller: widget.controller,
               keyboardType: TextInputType.number,
