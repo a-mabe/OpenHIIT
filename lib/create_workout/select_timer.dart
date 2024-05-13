@@ -28,7 +28,7 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                     onTap: () {
-                      pushCreateTimer(workout, context);
+                      pushCreateTimer(workout, context, false, (value) {});
                     },
                     optionIcon: Icons.timer,
                     optionTitle: "Interval Timer",
@@ -39,12 +39,23 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                   onTap: () {
-                    pushCreateWorkout(workout, context, (value) {});
+                    pushCreateWorkout(workout, context, false, (value) {});
                   },
                   optionIcon: Icons.fitness_center,
                   optionTitle: "Workout",
                   optionDescription:
                       "A workout is a planned set of exercises combined with an interval timer.",
+                ),
+
+                /// Card for the import option.
+                ///
+                TimerOptionCard(
+                  onTap: () {
+                    pushImportWorkout(workout, context, (value) {});
+                  },
+                  optionIcon: Icons.upload_file,
+                  optionTitle: "Import",
+                  optionDescription: "Import a workout or timer from file.",
                 ),
               ],
             )));

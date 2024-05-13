@@ -119,9 +119,15 @@ class ViewWorkoutState extends State<ViewWorkout> {
           Workout workoutCopy = workout.copy();
 
           if (exercises.isEmpty) {
-            pushCreateTimer(workoutCopy, context);
+            pushCreateTimer(workoutCopy, context, false, (value) {
+              /// When we come back, reload the workout arg.
+              ///
+              setState(() {
+                workout = ModalRoute.of(context)!.settings.arguments as Workout;
+              });
+            });
           } else {
-            pushCreateWorkout(workoutCopy, context, (value) {
+            pushCreateWorkout(workoutCopy, context, false, (value) {
               /// When we come back, reload the workout arg.
               ///
               setState(() {

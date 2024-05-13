@@ -2,11 +2,33 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:openhiit/create_workout/import_workout.dart';
 
 import '../create_workout/create_timer.dart';
 import '../create_workout/create_workout.dart';
 import '../models/list_tile_model.dart';
 import '../workout_data_type/workout_type.dart';
+
+/// Navigates to the 'ImportWorkout' screen while passing the provided 'Workout' object
+/// as an argument.
+///
+/// Parameters:
+///   - [workout]: The 'Workout' object to be passed to the 'ImportWorkout' screen.
+///   - [context]: The BuildContext required for navigation within the Flutter app.
+///
+
+void pushImportWorkout(Workout workout, BuildContext context,
+    FutureOr<dynamic> Function(dynamic) then) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const ImportWorkout(),
+      settings: RouteSettings(
+        arguments: workout,
+      ),
+    ),
+  ).then(then);
+}
 
 /// Navigates to the 'CreateWorkout' screen while passing the provided 'Workout' object
 /// as an argument.
@@ -16,7 +38,7 @@ import '../workout_data_type/workout_type.dart';
 ///   - [context]: The BuildContext required for navigation within the Flutter app.
 ///
 
-void pushCreateWorkout(Workout workout, BuildContext context,
+void pushCreateWorkout(Workout workout, BuildContext context, bool imported,
     FutureOr<dynamic> Function(dynamic) then) {
   Navigator.push(
     context,
@@ -36,7 +58,8 @@ void pushCreateWorkout(Workout workout, BuildContext context,
 ///   - [workout]: The 'Workout' object to be passed to the 'CreateTimer' screen.
 ///   - [context]: The BuildContext required for navigation within the Flutter app.
 ///
-void pushCreateTimer(Workout workout, BuildContext context) {
+void pushCreateTimer(Workout workout, BuildContext context, bool imported,
+    FutureOr<dynamic> Function(dynamic) then) {
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -45,7 +68,7 @@ void pushCreateTimer(Workout workout, BuildContext context) {
         arguments: workout,
       ),
     ),
-  );
+  ).then(then);
 }
 
 /// Calculates the total duration, in minutes, for a given workout based on its

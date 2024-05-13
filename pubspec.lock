@@ -97,15 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  background_timer:
+  background_hiit_timer:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: cefc9163c47ceda7c77a77b885ab48c7f6bbd3c0
-      url: "https://github.com/a-mabe/background_timer.git"
-    source: git
-    version: "0.0.1"
+      name: background_hiit_timer
+      sha256: "99798d4782044be384d8f28b17c005d2b77435a3e29f1b12227004e9217e5740"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -178,6 +177,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.2"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      sha256: "55d7b444feb71301ef6b8838dbc1ae02e63dd48c8773f3810ff53bb1e2945b32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4+1"
   crypto:
     dependency: transitive
     description:
@@ -242,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: b85eb92b175767fdaa0c543bf3b0d1f610fe966412ea72845fe5ba7801e763ff
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.10"
   fixnum:
     dependency: transitive
     description:
@@ -255,40 +270,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_background_service:
-    dependency: transitive
-    description:
-      path: "packages/flutter_background_service"
-      ref: prevent-autostart-on-boot
-      resolved-ref: f6b44310f2ae49102f8b360408e12a4b2f09e6cd
-      url: "https://github.com/a-mabe/flutter_background_service.git"
-    source: git
-    version: "5.0.1"
-  flutter_background_service_android:
-    dependency: transitive
-    description:
-      path: "packages/flutter_background_service_android"
-      ref: prevent-autostart-on-boot
-      resolved-ref: f6b44310f2ae49102f8b360408e12a4b2f09e6cd
-      url: "https://github.com/a-mabe/flutter_background_service.git"
-    source: git
-    version: "6.0.1"
-  flutter_background_service_ios:
-    dependency: transitive
-    description:
-      name: flutter_background_service_ios
-      sha256: ab73657535876e16abc89e40f924df3e92ad3dee83f64d187081417e824709ed
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  flutter_background_service_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_background_service_platform_interface
-      sha256: cd5720ff5b051d551a4734fae16683aace779bd0425e8d3f15d84a0cdcc2d8d9
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
   flutter_fgbg:
     dependency: transitive
     description:
@@ -345,6 +326,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: "8cf40eebf5dec866a6d1956ad7b4f7016e6c0cc69847ab946833b7d43743809f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.19"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -355,6 +344,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: "direct main"
+    description:
+      name: fluttertoast
+      sha256: "81b68579e23fcbcada2db3d50302813d2371664afe6165bc78148050ab94bf66"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.2.5"
   google_fonts:
     dependency: "direct main"
     description:
@@ -507,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   numberpicker:
     dependency: "direct main"
     description:
@@ -515,6 +520,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  openhiit_background_service:
+    dependency: transitive
+    description:
+      name: openhiit_background_service
+      sha256: a9e24e1d725c94c4d7dec3a716de04cc4f026a6a36f3400f1480823bdfe8052b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.1"
+  openhiit_background_service_android:
+    dependency: transitive
+    description:
+      name: openhiit_background_service_android
+      sha256: d485e1ff87b057fde21caaec0e4a538db3453e028eee1ca310dafe7d4e202436
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.1"
+  openhiit_background_service_ios:
+    dependency: transitive
+    description:
+      name: openhiit_background_service_ios
+      sha256: "262f1ead508ee006a3b345ab9f35d73b1632f1c82f520e4e1ce70ced56145700"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.1"
+  openhiit_background_service_platform_interface:
+    dependency: transitive
+    description:
+      name: openhiit_background_service_platform_interface
+      sha256: "3b04763f7392506c786f462effd4014079fdb28e5275ee872e9881fa3ba32af8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.1"
   package_config:
     dependency: transitive
     description:
@@ -532,13 +569,13 @@ packages:
     source: hosted
     version: "1.9.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
-      sha256: b27217933eeeba8ff24845c34003b003b2b22151de3c908d0e679e8fe1aa078b
+      sha256: c9e7d3a4cd1410877472158bee69963a4579f78b68c65a2b7d40d1a7a88bb161
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   path_provider_android:
     dependency: transitive
     description:
@@ -619,6 +656,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  share_plus:
+    dependency: "direct main"
+    description:
+      name: share_plus
+      sha256: b1f15232d41e9701ab2f04181f21610c36c83a12ae426b79b4bd011c567934b1
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.4"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      sha256: "251eb156a8b5fa9ce033747d73535bf53911071f8d3b6f4f0b578505ce0d4496"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.0"
   shared_preferences:
     dependency: transitive
     description:
@@ -848,6 +901,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  url_launcher_linux:
+    dependency: transitive
+    description:
+      name: url_launcher_linux
+      sha256: ab360eb661f8879369acac07b6bb3ff09d9471155357da8443fd5d3cf7363811
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      sha256: "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
+  url_launcher_web:
+    dependency: transitive
+    description:
+      name: url_launcher_web
+      sha256: "8d9e750d8c9338601e709cd0885f95825086bd8b642547f26bda435aade95d8a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
+  url_launcher_windows:
+    dependency: transitive
+    description:
+      name: url_launcher_windows
+      sha256: ecf9725510600aa2bb6d7ddabe16357691b6d2805f66216a97d1b881e21beff7
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   uuid:
     dependency: "direct main"
     description:
