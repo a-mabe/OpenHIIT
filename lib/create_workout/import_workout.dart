@@ -1,17 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:openhiit/create_workout/constants/snackbars.dart';
 import 'package:openhiit/database/database_manager.dart';
-import 'package:openhiit/import_export/local_file_util.dart';
-import 'package:openhiit/utils/functions.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
+import 'package:openhiit/helper_widgets/loader.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
-import 'main_widgets/submit_button.dart';
 import 'package:file_picker/file_picker.dart';
-import 'set_exercises.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(methodCount: 0),
@@ -25,72 +23,31 @@ class ImportWorkout extends StatefulWidget {
 }
 
 class ImportWorkoutState extends State<ImportWorkout> {
+  String errorText = "";
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    /// Grab the [workout] that was passed to this view
-    /// from the previous view.
-    ///
-    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    /// Create a global key that uniquely identifies the Form widget
-    /// and allows validation of the form.
-    ///
-    /// Note: This is a `GlobalKey<FormState>`,
-    /// not a GlobalKey<MyCustomFormState>.
-    ///
-    final formKey = GlobalKey<FormState>();
-
-    /// Push to the SetExercises page.
-    ///
-    void pushExercises(workout) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SetExercises(),
-          settings: RouteSettings(
-            arguments: workout,
-          ),
-        ),
-      );
-    }
-
-    /// Submit and form, save the workout values, and move
-    /// to the next view.
-    ///
-    // void submitForm(Workout workout) {
-    //   // Validate returns true if the form is valid, or false otherwise.
-    //   final form = formKey.currentState!;
-    //   if (form.validate()) {
-    //     form.save();
-
-    //     logger.i(
-    //         "Title: ${workout.title}, Color: ${workout.colorInt}, Intervals: ${workout.numExercises}");
-
-    //     pushExercises(workout);
-    //   }
-    // }
-    // ---
-
     /// Update the database with the workout. If this is a brand new workout,
     /// make its index the first in the list of workouts and push down the
     /// rest of the workouts. This ensures the new workout appears at the top
     /// of the list of workouts on the home page. If this is an existing workout
     /// that was edited, keep its index where it is.
     ///
-    Future updateDatabase(database, Workout workoutArgument) async {
-      /// If the workout does not have an ID, that means this is a brand new
-      /// workout. Grab the list of existing workouts so we can bump down the
+    Future updateDatabase(Database database, Workout workoutArgument) async {
+      /// Grab the list of existing workouts so we can bump down the
       /// index of each in order to make room for this new workout to be at
       /// the top of the list.
       ///
 
-      print("UPdate database");
+      logger.i(
+          "Adding imported workout to database: ${workoutArgument.toString()}");
 
       List<Workout> workouts =
           await DatabaseManager().lists(DatabaseManager().initDB());
 
-      // Give the new workout an ID
-      // workoutArgument.id = const Uuid().v1();
+      logger.i("Grabbed existing workouts: ${workouts.length}");
 
       // Insert the new workout into the top (beginning) of the list
       workouts.insert(0, workoutArgument);
@@ -98,6 +55,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
       // Increase the index of all old workouts by 1.
       for (var i = 0; i < workouts.length; i++) {
         if (i == 0) {
+          workouts[i].workoutIndex = 0;
           await DatabaseManager().insertList(workouts[i], database);
         } else {
           workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
@@ -105,109 +63,176 @@ class ImportWorkoutState extends State<ImportWorkout> {
         }
       }
 
-      print("Adding workout");
-    }
-
-    void pushHome() {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const MyHomePage()),
-          (route) => false);
+      logger.i("Workout added and index of existing workouts updated.");
     }
 
     return Scaffold(
         appBar: AppBar(
           title: const Text("Import Workout"),
         ),
-        // bottomSheet: SubmitButton(
-        //   text: "Submit",
-        //   color: Colors.blue,
-        //   onTap: () {
-        //     submitForm(workout);
-        //   },
-        // ),
         body: Center(
-            child: Container(
-                height: 100,
-                width: 140,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // backgroundColor: Colors.red,
-                    elevation: 8,
-                  ),
-                  onPressed: () async {
-                    FilePickerResult? result = await FilePicker.platform
-                        .pickFiles(
-                            type: FileType.custom, allowedExtensions: ['json']);
+            child: Stack(
+          children: [
+            Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                    height: 120,
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8,
+                      ),
+                      onPressed: () async {
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(
+                                allowMultiple: true,
+                                type: FileType.custom,
+                                allowedExtensions: ['json']);
 
-                    if (result != null) {
-                      PlatformFile file = result.files.first;
+                        if (result != null) {
+                          loading = true;
 
-                      print(file.name);
-                      print(file.bytes);
-                      print(file.size);
-                      print(file.extension);
-                      print(file.path);
+                          List<File> files =
+                              result.paths.map((path) => File(path!)).toList();
 
-                      String contents = await LocalFileUtil().readFile(file);
-                      print(contents);
+                          for (File file in files) {
+                            String contents =
+                                await File(file.path).readAsString();
 
-                      final Map<String, dynamic> parsed = jsonDecode(contents);
-                      final workout = Workout.fromJson(parsed);
-                      print(workout);
+                            logger.i("Grabbed file with contents: $contents");
 
-                      /// Parsing the exercises data from the Workout object.
-                      ///
-                      List<dynamic> exercises = workout.exercises != ""
-                          ? jsonDecode(workout.exercises)
-                          : [];
+                            logger.i("Parsing file contents and saving timer.");
 
-                      workout.id = "";
+                            Workout workout = Workout.empty();
 
-                      if (context.mounted) {
-                        if (exercises.isEmpty) {
-                          pushCreateTimer(workout, context, true, (value) {});
-                        } else {
-                          pushCreateWorkout(workout, context, true, (value) {});
+                            /// Attempt to parse the file contents, catch the error if
+                            /// the file contains invalid JSON.
+                            try {
+                              final Map<String, dynamic> parsed =
+                                  await jsonDecode(contents);
+
+                              /// Attempt to create the Workout object from the parsed
+                              /// JSON if the JSON was valid.
+                              try {
+                                workout = Workout.fromJson(parsed);
+                              } catch (e) {
+                                // Invalid workout config.
+                                if (context.mounted) {
+                                  if (files.length < 2) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(invalidConfigSnackBar);
+                                    setState(() {
+                                      errorText =
+                                          'Selected file contains invalid workout configuration, please select another file.';
+                                    });
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        invalidConfigMultipleSnackBar);
+                                    setState(() {
+                                      errorText =
+                                          'Import incomplete, a file contains invalid configuration.';
+                                    });
+                                  }
+                                }
+                              }
+                            } on FormatException catch (e) {
+                              // Invalid JSON.
+                              logger.e(
+                                  "The provided file does not contain valid JSON: $e");
+                              if (context.mounted) {
+                                if (files.length < 2) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(invalidJsonSnackBar);
+                                  setState(() {
+                                    errorText =
+                                        'Selected file contains invalid JSON, please select another file.';
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      invalidJsonMultipleSnackBar);
+                                  setState(() {
+                                    errorText =
+                                        'Import incomplete, ${file.path} contains invalid JSON.';
+                                  });
+                                }
+                              }
+                            }
+
+                            /// If the Workout object was successfully created from the
+                            /// parsed JSON, save it to the DB.
+                            if (workout.title.isNotEmpty) {
+                              try {
+                                Database database =
+                                    await DatabaseManager().initDB();
+
+                                await updateDatabase(database, workout)
+                                    .then((value) {
+                                  logger.i(
+                                      "Successfully imported ${workout.title}");
+                                });
+                              } on Exception catch (e) {
+                                logger.e(
+                                    "Encountered error while importing file: $e");
+                              }
+                            } else {
+                              // User canceled the file picker
+                            }
+                          }
+
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(successfulImportSnackBar);
+
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const MyHomePage()),
+                                (route) => false);
+                          }
                         }
-                      }
-                    } else {
-                      // User canceled the picker
-                    }
-                  },
-                  child: const Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
+                      },
+                      child: const Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Icon(
+                            Icons.file_open,
+                            size: 30,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            "Browse files",
+                            style: TextStyle(fontSize: 20),
+                          )
+                        ],
                       ),
-                      Icon(Icons.file_open),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text("Select file")
-                    ],
+                    )),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  "Select .json files to import",
+                  style: TextStyle(fontSize: 16),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                  child: Text(
+                    errorText,
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
-                ))));
-
-    // TextButton(
-    //   child: Text("Select file"),
-    //   onPressed: () async {
-    //     FilePickerResult? result = await FilePicker.platform.pickFiles(
-    //         type: FileType.custom,
-    //         allowedExtensions: ['json']);
-
-    //     if (result != null) {
-    //       PlatformFile file = result.files.first;
-
-    //       print(file.name);
-    //       print(file.bytes);
-    //       print(file.size);
-    //       print(file.extension);
-    //       print(file.path);
-    //     } else {
-    //       // User canceled the picker
-    //     }
-    //   },
-    // ));
+                ),
+              ],
+            )),
+            LoaderTransparent(
+              loadingMessage: "Importing selected file(s)",
+              visibile: loading,
+            )
+          ],
+        )));
   }
 }

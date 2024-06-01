@@ -63,8 +63,8 @@ class _SetTimingsState extends State<SetTimings> {
   Widget build(BuildContext context) {
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
-    print("here it is");
-    print(workout);
+    logger.i(
+        "Loading for workout object for creation/editing: ${workout.toString()}");
 
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(workout.workTime),
@@ -106,6 +106,8 @@ class _SetTimingsState extends State<SetTimings> {
     if (form.validate()) {
       form.save();
 
+      logger.i("Form submitted.");
+
       workoutArg.workTime = (timeMap["$workTitle-minutes"]! * 60) +
           timeMap["$workTitle-seconds"]!;
       workoutArg.restTime = (timeMap["$restTitle-minutes"]! * 60) +
@@ -124,7 +126,6 @@ class _SetTimingsState extends State<SetTimings> {
       }
 
       logger.i("Saving workout: ${workoutArg.toString()}");
-      logger.i(repeat);
 
       Navigator.push(
         context,

@@ -78,10 +78,10 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  void exportWorkout(Workout workout, BuildContext context) {
+  void exportWorkout(Workout workout, BuildContext context) async {
     LocalFileUtil fileUtil = LocalFileUtil();
 
-    fileUtil.writeFile(workout);
+    await fileUtil.writeFile(workout);
 
     // FToast fToast = FToast();
 
@@ -92,7 +92,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
     // fToast.showToast(
     //     child: Text("beeeeeeeeeeee"), toastDuration: Duration(seconds: 5));
 
-    fileUtil.shareFile(workout);
+    await fileUtil.shareFile(workout);
 
     // Fluttertoast.showToast(
     //     msg: "Exported to openhiit_timer_${workout.id}.json",

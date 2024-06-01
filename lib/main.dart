@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'create_workout/select_timer.dart';
@@ -12,6 +13,10 @@ import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
 import 'start_workout/view_workout.dart';
 import 'helper_widgets/timer_list_tile.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
