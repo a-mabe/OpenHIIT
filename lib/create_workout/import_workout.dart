@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:openhiit/create_workout/constants/snackbars.dart';
+import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/database/database_manager.dart';
 import 'package:openhiit/helper_widgets/loader.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -86,10 +86,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                       ),
                       onPressed: () async {
                         FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(
-                                allowMultiple: true,
-                                type: FileType.custom,
-                                allowedExtensions: ['json']);
+                            .pickFiles(allowMultiple: true, type: FileType.any);
 
                         if (result != null) {
                           loading = true;

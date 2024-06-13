@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:openhiit/helper_widgets/export_bottom_sheet.dart';
 import 'package:openhiit/import_export/local_file_util.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -79,30 +80,15 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void exportWorkout(Workout workout, BuildContext context) async {
-    LocalFileUtil fileUtil = LocalFileUtil();
-
-    await fileUtil.writeFile(workout);
-
-    // FToast fToast = FToast();
-
-    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //   content: Text("Exported to openhiit_timer_${workout.id}.json"),
-    // ));
-
-    // fToast.showToast(
-    //     child: Text("beeeeeeeeeeee"), toastDuration: Duration(seconds: 5));
-
-    await fileUtil.shareFile(workout);
-
-    // Fluttertoast.showToast(
-    //     msg: "Exported to openhiit_timer_${workout.id}.json",
-    //     toastLength: Toast.LENGTH_LONG,
-    //     gravity: ToastGravity.CENTER,
-    //     // toastDuration: Duration(seconds: 2),
-    //     timeInSecForIosWeb: 4,
-    //     // backgroundColor: Colors.red,
-    //     // textColor: Colors.white,
-    //     fontSize: 16.0);
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      context: context,
+      builder: (BuildContext context) {
+        return ExportBottomSheet(
+          workout: workout,
+        );
+      },
+    );
   }
 
   IconData determineIcon(String value) {

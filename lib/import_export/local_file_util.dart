@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:openhiit/workout_data_type/workout_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
 
 class LocalFileUtil {
   Future<String> get _localPath async {
@@ -42,17 +47,32 @@ class LocalFileUtil {
     try {
       final file = await localFilePath(workout);
 
-      final result =
-          await Share.shareXFiles([XFile(file.path)], text: 'Export');
-
-      if (result.status == ShareResultStatus.success) {
-        print('Thank you for sharing the picture!');
-      }
+      await Share.shareXFiles([XFile(file.path)], text: 'Export');
 
       return 1;
     } catch (e) {
       // If encountering an error, return 0
       return 0;
     }
+  }
+
+  Future<bool> saveFileToDevice(Workout workout) async {
+    try {
+      String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: "Select folder to save exported file",
+        fileName: "openhiit_timer_${workout.id}.json",
+        allowedExtensions: ["json"],
+        type: FileType.custom,
+        bytes: utf8.encode(jsonEncode(workout)),
+      );
+
+      if (Platform.isIOS) {
+        File(outputFile!).writeAsBytes(utf8.encode(jsonEncode(workout)));
+      }
+    } on Exception catch (e) {
+      logger.e("Error saving file to device: $e");
+    }
+
+    return false;
   }
 }

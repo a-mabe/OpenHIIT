@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
+import 'package:openhiit/helper_widgets/fab_column.dart';
+import 'package:openhiit/import_export/local_file_util.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'create_workout/select_timer.dart';
@@ -268,6 +270,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  // void bulkExport() async {
+  //   for (Workout workout in await workouts) {
+
+  //   }
+  // }
+
   /// The widget to return for a workout tile as it's being dragged.
   /// This AnimatedBuilder will slightly increase the elevation of the dragged
   /// workout without changing other UI elements.
@@ -289,6 +297,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  void exportWorkout(Workout workout, BuildContext context) async {
+    LocalFileUtil fileUtil = LocalFileUtil();
+
+    await fileUtil.writeFile(workout);
+
+    await fileUtil.shareFile(workout);
+  }
+
   /// Build the home screen UI.
   ///
   @override
@@ -301,11 +317,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Scaffold(
 
               /// Pushes to [SelectTimer()]
-              floatingActionButton: FloatingActionButton(
-                onPressed: pushSelectTimerPage,
-                tooltip: 'Create a new timer',
-                child: const Icon(Icons.add),
-              ),
+              floatingActionButton:
+                  FABColumn(bulk: () {}, create: pushSelectTimerPage),
               body: Container(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
