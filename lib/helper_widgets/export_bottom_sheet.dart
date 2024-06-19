@@ -4,10 +4,23 @@ import '../constants/snackbars.dart';
 import '../import_export/local_file_util.dart';
 import '../workout_data_type/workout_type.dart';
 
+/// A bottom sheet widget used for exporting workout data.
+///
+/// This widget provides options for saving and sharing workout data.
 class ExportBottomSheet extends StatelessWidget {
-  final Workout workout;
+  /// The workout to be exported.
+  ///
+  final Workout? workout;
 
-  const ExportBottomSheet({super.key, required this.workout});
+  /// Callback function to save the workout data.
+  ///
+  final void Function()? save;
+
+  /// Callback function to share the workout data.
+  ///
+  final void Function()? share;
+
+  const ExportBottomSheet({super.key, this.workout, this.save, this.share});
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +32,21 @@ class ExportBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             InkWell(
-              onTap: () async {
-                LocalFileUtil fileUtil = LocalFileUtil();
+              onTap: workout != null
+                  ? () async {
+                      LocalFileUtil fileUtil = LocalFileUtil();
 
-                await fileUtil.saveFileToDevice(workout);
+                      List<Workout> workoutsToExport = [workout!];
 
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(successfulSaveToDeviceSnackBar);
-                }
-              },
+                      await fileUtil.saveFileToDevice(workoutsToExport);
+
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(successfulSaveToDeviceSnackBar);
+                      }
+                    }
+                  : save,
               child: const Padding(
                 padding: EdgeInsets.fromLTRB(25, 15, 15, 15),
                 child: Row(
@@ -49,17 +66,19 @@ class ExportBottomSheet extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: () async {
-                LocalFileUtil fileUtil = LocalFileUtil();
+              onTap: workout != null
+                  ? () async {
+                      LocalFileUtil fileUtil = LocalFileUtil();
 
-                await fileUtil.writeFile(workout);
+                      await fileUtil.writeFile([workout!]);
 
-                await fileUtil.shareFile(workout).then((value) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(successfulShareSnackBar);
-                });
-              },
+                      await fileUtil.shareFile([workout!]).then((value) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(successfulShareSnackBar);
+                      });
+                    }
+                  : share,
               child: const Padding(
                 padding: EdgeInsets.fromLTRB(25, 15, 15, 15),
                 child: Row(

@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/database/database_manager.dart';
+import 'package:openhiit/helper_widgets/file_error.dart';
 import 'package:openhiit/helper_widgets/loader.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:uuid/uuid.dart';
+import '../helper_widgets/copy_or_skip.dart';
 import '../main.dart';
 import '../workout_data_type/workout_type.dart';
 import 'package:file_picker/file_picker.dart';
@@ -35,7 +37,8 @@ class ImportWorkoutState extends State<ImportWorkout> {
     /// of the list of workouts on the home page. If this is an existing workout
     /// that was edited, keep its index where it is.
     ///
-    Future updateDatabase(Database database, Workout workoutArgument) async {
+    Future<bool> importWorkoutUpdateDatabase(
+        Database database, Workout workoutArgument) async {
       /// Grab the list of existing workouts so we can bump down the
       /// index of each in order to make room for this new workout to be at
       /// the top of the list.
@@ -64,6 +67,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
       }
 
       logger.i("Workout added and index of existing workouts updated.");
+      return true;
     }
 
     return Scaffold(
@@ -85,103 +89,165 @@ class ImportWorkoutState extends State<ImportWorkout> {
                         elevation: 8,
                       ),
                       onPressed: () async {
+                        // User picks file(s) for import.
                         FilePickerResult? result = await FilePicker.platform
                             .pickFiles(allowMultiple: true, type: FileType.any);
 
+                        // If grabbing file(s) successful...
                         if (result != null) {
-                          loading = true;
+                          // Show loader.
+                          setState(() {
+                            loading = true;
+                          });
 
+                          // Get files.
                           List<File> files =
                               result.paths.map((path) => File(path!)).toList();
 
                           for (File file in files) {
-                            String contents =
-                                await File(file.path).readAsString();
+                            String contents = "";
+
+                            try {
+                              contents = await File(file.path).readAsString();
+                            } on Exception catch (e) {
+                              logger.e("Error reading file: $e");
+
+                              if (context.mounted) {
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ErrorMessageAlert(
+                                      title: "Error reading file",
+                                      message:
+                                          "${file.path.split("/").last} invalid format, skipping import.",
+                                    );
+                                  },
+                                );
+                              }
+                              break;
+                            }
 
                             logger.i("Grabbed file with contents: $contents");
 
                             logger.i("Parsing file contents and saving timer.");
 
-                            Workout workout = Workout.empty();
-
-                            /// Attempt to parse the file contents, catch the error if
-                            /// the file contains invalid JSON.
                             try {
-                              final Map<String, dynamic> parsed =
+                              if (contents.characters.first != "[") {
+                                throw Exception("Invalid JSON list.");
+                              }
+
+                              final List<dynamic> parsedList =
                                   await jsonDecode(contents);
 
-                              /// Attempt to create the Workout object from the parsed
-                              /// JSON if the JSON was valid.
-                              try {
-                                workout = Workout.fromJson(parsed);
-                              } catch (e) {
-                                // Invalid workout config.
-                                if (context.mounted) {
-                                  if (files.length < 2) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(invalidConfigSnackBar);
-                                    setState(() {
-                                      errorText =
-                                          'Selected file contains invalid workout configuration, please select another file.';
-                                    });
+                              for (Map<String, dynamic> parsedWorkout
+                                  in parsedList) {
+                                try {
+                                  Workout workout =
+                                      Workout.fromJson(parsedWorkout);
+
+                                  if (workout.title.isNotEmpty) {
+                                    bool importStatus = true;
+                                    do {
+                                      logger.i(
+                                          "Attempting to import ${workout.title}");
+
+                                      try {
+                                        Database database =
+                                            await DatabaseManager().initDB();
+
+                                        importStatus =
+                                            await importWorkoutUpdateDatabase(
+                                                database, workout);
+                                      } on Exception catch (e) {
+                                        logger.e(
+                                            "Database conflict on import: $e");
+                                        logger.i(
+                                            "Prompting user to import copy or skip.");
+
+                                        if (context.mounted) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return CopyOrSkipDialog(
+                                                workout: workout,
+                                                onSkip: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onImportCopy: () {
+                                                  importStatus = false;
+                                                  Navigator.of(context).pop();
+                                                },
+                                              );
+                                            },
+                                          );
+                                          if (!importStatus &&
+                                              context.mounted) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Importing copy of ${workout.title}'),
+                                                behavior:
+                                                    SnackBarBehavior.fixed,
+                                                duration:
+                                                    const Duration(seconds: 3),
+                                                showCloseIcon: true,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      if (!importStatus) {
+                                        workout.title = "${workout.title}_copy";
+                                        workout.id = const Uuid().v1();
+                                      }
+                                    } while (!importStatus);
+                                    logger.i(
+                                        "Successfully imported ${workout.title}");
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        invalidConfigMultipleSnackBar);
-                                    setState(() {
-                                      errorText =
-                                          'Import incomplete, a file contains invalid configuration.';
-                                    });
+                                    // User canceled the file picker
+                                  }
+                                } catch (e) {
+                                  logger.e(
+                                      "The provided file does not contain a valid workout configuration: $e");
+
+                                  if (context.mounted) {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ErrorMessageAlert(
+                                          title:
+                                              "Error reading ${file.path.split('/').last}",
+                                          message:
+                                              "File contains invalid timer configuration, skipping import.",
+                                        );
+                                      },
+                                    );
                                   }
                                 }
                               }
-                            } on FormatException catch (e) {
-                              // Invalid JSON.
+                            } on Exception catch (e) {
                               logger.e(
-                                  "The provided file does not contain valid JSON: $e");
+                                  "The provided file does not contain valid exported timer JSON: $e");
+
                               if (context.mounted) {
-                                if (files.length < 2) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(invalidJsonSnackBar);
-                                  setState(() {
-                                    errorText =
-                                        'Selected file contains invalid JSON, please select another file.';
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      invalidJsonMultipleSnackBar);
-                                  setState(() {
-                                    errorText =
-                                        'Import incomplete, ${file.path} contains invalid JSON.';
-                                  });
-                                }
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ErrorMessageAlert(
+                                      title:
+                                          "Error reading ${file.path.split('/').last}",
+                                      message:
+                                          "File contains invalid exported timer format, skipping import.",
+                                    );
+                                  },
+                                );
                               }
-                            }
-
-                            /// If the Workout object was successfully created from the
-                            /// parsed JSON, save it to the DB.
-                            if (workout.title.isNotEmpty) {
-                              try {
-                                Database database =
-                                    await DatabaseManager().initDB();
-
-                                await updateDatabase(database, workout)
-                                    .then((value) {
-                                  logger.i(
-                                      "Successfully imported ${workout.title}");
-                                });
-                              } on Exception catch (e) {
-                                logger.e(
-                                    "Encountered error while importing file: $e");
-                              }
-                            } else {
-                              // User canceled the file picker
                             }
                           }
 
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(successfulImportSnackBar);
-
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

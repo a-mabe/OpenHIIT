@@ -17,16 +17,23 @@ class LocalFileUtil {
     return directory.path;
   }
 
-  Future<File> localFilePath(Workout workout) async {
+  Future<File> localFilePath(List<Workout> workouts) async {
+    String fileTitle = "";
+    if (workouts.length == 1) {
+      fileTitle = "exported_openhiit_timer_${workouts[0].title}.json";
+    } else {
+      fileTitle = "exported_openhiit_timers.json";
+    }
+
     final path = await _localPath;
-    return File('$path/openhiit_timer_${workout.id}.json');
+    return File('$path/$fileTitle');
   }
 
-  Future<File> writeFile(Workout workout) async {
-    final file = await localFilePath(workout);
+  Future<File> writeFile(List<Workout> workouts) async {
+    final file = await localFilePath(workouts);
 
     // Write the file
-    return file.writeAsString(jsonEncode(workout));
+    return file.writeAsString(jsonEncode(workouts));
   }
 
   Future<String> readFile(PlatformFile platformFile) async {
@@ -43,9 +50,15 @@ class LocalFileUtil {
     }
   }
 
-  Future<int> shareFile(Workout workout) async {
+  /// Shares the local file of the given [workout] using the Share plugin.
+  ///
+  /// The [workout] parameter represents the workout to be shared.
+  ///
+  /// Returns an integer value indicating the success of the file sharing operation.
+  /// If the file sharing is successful, it returns 1. If an error occurs, it returns 0.
+  Future<int> shareFile(List<Workout> workouts) async {
     try {
-      final file = await localFilePath(workout);
+      final file = await localFilePath(workouts);
 
       await Share.shareXFiles([XFile(file.path)], text: 'Export');
 
@@ -56,18 +69,39 @@ class LocalFileUtil {
     }
   }
 
-  Future<bool> saveFileToDevice(Workout workout) async {
+  Future<int> shareMultipleFiles(List<Workout> workouts) async {
+    try {
+      List<XFile> files = [];
+
+      files.add(XFile((await localFilePath(workouts)).path));
+
+      await Share.shareXFiles(files, text: 'Export');
+      return 1;
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
+
+  Future<bool> saveFileToDevice(List<Workout> workoutsToExport) async {
+    String fileTitle = "";
+    if (workoutsToExport.length == 1) {
+      fileTitle = "exported_openhiit_timer_${workoutsToExport[0].title}.json";
+    } else {
+      fileTitle = "exported_openhiit_timers.json";
+    }
+
     try {
       String? outputFile = await FilePicker.platform.saveFile(
-        dialogTitle: "Select folder to save exported file",
-        fileName: "openhiit_timer_${workout.id}.json",
+        fileName: fileTitle,
         allowedExtensions: ["json"],
         type: FileType.custom,
-        bytes: utf8.encode(jsonEncode(workout)),
+        bytes: utf8.encode(jsonEncode(workoutsToExport)),
       );
 
       if (Platform.isIOS) {
-        File(outputFile!).writeAsBytes(utf8.encode(jsonEncode(workout)));
+        File(outputFile!)
+            .writeAsBytes(utf8.encode(jsonEncode(workoutsToExport)));
       }
     } on Exception catch (e) {
       logger.e("Error saving file to device: $e");
