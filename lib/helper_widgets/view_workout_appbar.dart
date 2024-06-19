@@ -119,12 +119,14 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: onEdit,
         ),
         PopupMenuButton<String>(
+          key: const Key("popup-menu"),
           onSelected: (String item) {
             handleMenuSelection(item, context);
           },
           itemBuilder: (BuildContext context) {
             return {'Copy', 'Export', 'Delete'}.map((String selection) {
               return PopupMenuItem<String>(
+                  key: Key(selection),
                   value: selection,
                   child: Row(children: [
                     Icon(determineIcon(selection)),
@@ -138,63 +140,5 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
     );
-
-    // AppBar(
-    //   title: Text(
-    //     workout.title,
-    //     style: const TextStyle(color: Colors.white),
-    //   ),
-    //   backgroundColor: Color(workout.colorInt),
-    //   iconTheme: const IconThemeData(color: Colors.white),
-    //   actions: <Widget>[
-    //     // Defines the delete button.
-    //     IconButton(
-    //       key: const Key("delete-workout"),
-    //       icon: const Icon(Icons.delete, color: Colors.white),
-    //       tooltip: 'Delete timer',
-    //       onPressed: () {
-    //         showDialog(
-    //           context: context,
-    //           builder: (BuildContext context) {
-    //             return AlertDialog(
-    //               title: Text('Delete ${workout.title}'),
-    //               content: SingleChildScrollView(
-    //                 child: ListBody(
-    //                   children: <Widget>[
-    //                     Text(
-    //                         'Are you sure you would like to delete ${workout.title}?'),
-    //                   ],
-    //                 ),
-    //               ),
-    //               actions: <Widget>[
-    //                 TextButton(
-    //                   child: const Text('Cancel'),
-    //                   onPressed: () {
-    //                     Navigator.of(context).pop();
-    //                   },
-    //                 ),
-    //                 TextButton(
-    //                   onPressed: onDelete,
-    //                   child: const Text('Delete'),
-    //                 ),
-    //               ],
-    //             );
-    //           },
-    //         );
-    //       },
-    //     ),
-    //     // Defines the edit button.
-    //     IconButton(
-    //       key: const Key("edit-workout"),
-    //       icon: const Icon(Icons.edit, color: Colors.white),
-    //       onPressed: onEdit,
-    //     ),
-    //     IconButton(
-    //       key: const Key("copy-workout"),
-    //       icon: const Icon(Icons.copy, color: Colors.white),
-    //       onPressed: onCopy,
-    //     ),
-    //   ],
-    // );
   }
 }
