@@ -63,6 +63,9 @@ class _SetTimingsState extends State<SetTimings> {
   Widget build(BuildContext context) {
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
 
+    logger.i(
+        "Loading for workout object for creation/editing: ${workout.toString()}");
+
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(workout.workTime),
       "Rest": ValueNotifier(workout.restTime),
@@ -103,6 +106,8 @@ class _SetTimingsState extends State<SetTimings> {
     if (form.validate()) {
       form.save();
 
+      logger.i("Form submitted.");
+
       workoutArg.workTime = (timeMap["$workTitle-minutes"]! * 60) +
           timeMap["$workTitle-seconds"]!;
       workoutArg.restTime = (timeMap["$restTitle-minutes"]! * 60) +
@@ -121,7 +126,6 @@ class _SetTimingsState extends State<SetTimings> {
       }
 
       logger.i("Saving workout: ${workoutArg.toString()}");
-      logger.i(repeat);
 
       Navigator.push(
         context,
@@ -307,19 +311,19 @@ class _SetTimingsState extends State<SetTimings> {
   int determinePrefilledTime(Workout workoutArg, String title) {
     switch (title) {
       case workTitle:
-        return workoutArg.id != "" ? workoutArg.workTime : -1;
+        return workoutArg.workTime != 0 ? workoutArg.workTime : -1;
       case restTitle:
-        return workoutArg.id != "" ? workoutArg.restTime : -1;
+        return workoutArg.restTime != 0 ? workoutArg.restTime : -1;
       case getReadyTitle:
-        return workoutArg.id != "" ? workoutArg.getReadyTime : 10;
+        return workoutArg.getReadyTime != 10 ? workoutArg.getReadyTime : 10;
       case warmUpTitle:
-        return workoutArg.id != "" ? workoutArg.warmupTime : 0;
+        return workoutArg.warmupTime != 0 ? workoutArg.warmupTime : 0;
       case coolDownTitle:
-        return workoutArg.id != "" ? workoutArg.cooldownTime : 0;
+        return workoutArg.cooldownTime != 0 ? workoutArg.cooldownTime : 0;
       case repeatTitle:
         return workoutArg.iterations;
       case breakTitle:
-        return workoutArg.id != "" ? workoutArg.breakTime : 0;
+        return workoutArg.breakTime != 0 ? workoutArg.breakTime : 0;
       default:
         return 9;
     }

@@ -84,8 +84,13 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
+    // Find and tap the three dots
+    await tester.tap(find.byKey(const Key('popup-menu')));
+
+    await tester.pump(const Duration(seconds: 1)); // skip past the animation
+
     // Find and tap the delete button
-    await tester.tap(find.byKey(const Key('delete-workout')));
+    await tester.tap(find.text('Delete'));
 
     // Wait for the dialog to appear
     await tester.pump(const Duration(seconds: 1));

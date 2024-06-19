@@ -208,7 +208,7 @@ class _SetSoundsState extends State<SetSounds> {
   static Future<int> loadSound(String sound, Soundpool pool) async {
     if (sound != "none") {
       return await rootBundle
-          .load("packages/background_timer/lib/assets/audio/$sound.mp3")
+          .load("packages/background_hiit_timer/lib/assets/audio/$sound.mp3")
           .then((ByteData soundData) {
         return pool.load(soundData);
       });

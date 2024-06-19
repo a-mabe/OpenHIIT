@@ -198,6 +198,56 @@ class Workout {
     };
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'numExercises': numExercises,
+      'exercises': exercises,
+      'getReadyTime': getReadyTime,
+      'exerciseTime': workTime,
+      'restTime': restTime,
+      'halfTime': halfTime,
+      'breakTime': breakTime,
+      'warmupTime': warmupTime,
+      'cooldownTime': cooldownTime,
+      'iterations': iterations,
+      'halfwayMark': halfwayMark,
+      'workSound': workSound,
+      'restSound': restSound,
+      'halfwaySound': halfwaySound,
+      'completeSound': completeSound,
+      'countdownSound': countdownSound,
+      'colorInt': colorInt,
+      'workoutIndex': workoutIndex,
+      'showMinutes': showMinutes,
+    };
+  }
+
+  Workout.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    numExercises = json['numExercises'];
+    exercises = json['exercises'];
+    getReadyTime = json['getReadyTime'];
+    workTime = json['exerciseTime'];
+    restTime = json['restTime'];
+    halfTime = json['halfTime'];
+    breakTime = json['breakTime'];
+    warmupTime = json['warmupTime'];
+    cooldownTime = json['cooldownTime'];
+    iterations = json['iterations'];
+    halfwayMark = json['halfwayMark'];
+    workSound = json['workSound'];
+    restSound = json['restSound'];
+    halfwaySound = json['halfwaySound'];
+    completeSound = json['completeSound'];
+    countdownSound = json['countdownSound'];
+    colorInt = json['colorInt'];
+    workoutIndex = json['workoutIndex'];
+    showMinutes = json['showMinutes'];
+  }
+
   Workout copy() {
     return Workout(
       id,

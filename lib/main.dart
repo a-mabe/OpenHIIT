@@ -5,13 +5,27 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
+import 'package:openhiit/helper_widgets/fab_column.dart';
+import 'package:openhiit/import_export/local_file_util.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:sqflite/sqflite.dart';
+import 'constants/snackbars.dart';
 import 'create_workout/select_timer.dart';
+import 'helper_widgets/export_bottom_sheet.dart';
+import 'helper_widgets/loader.dart';
 import 'workout_data_type/workout_type.dart';
 import 'database/database_manager.dart';
 import 'start_workout/view_workout.dart';
 import 'helper_widgets/timer_list_tile.dart';
+
+// Global logger instance for logging messages
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
+
+// Global flag to indicate if exporting is in progress
+bool exporting = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -263,6 +277,90 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
+  /// Saves the workouts to the device.
+  ///
+  /// This function exports the workouts to the device by saving them to a file.
+  /// It sets the [exporting] flag to true to indicate that the export is in progress.
+  /// It then retrieves the loaded workouts using the [workouts] variable.
+  /// The workouts are saved to the device using the [LocalFileUtil] class.
+  /// After the export is complete, the [exporting] flag is set to false.
+  /// If the context is still mounted, a snackbar is shown to indicate that the workouts have been exported.
+  /// Finally, the function logs the completion of the export.
+  void saveWorkouts() async {
+    // Export workouts to device
+    logger.i("Exporting workouts to device...");
+
+    setState(() {
+      exporting = true;
+    });
+
+    List<Workout> loadedWorkouts = await workouts;
+
+    LocalFileUtil fileUtil = LocalFileUtil();
+
+    await fileUtil.saveFileToDevice(loadedWorkouts).then((value) {
+      setState(() {
+        logger.i("Exporting complete.");
+        exporting = false;
+      });
+
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(successfulSaveMultipleToDeviceSnackBar);
+    });
+  }
+
+  /// Exports and shares the workouts.
+  ///
+  /// This function exports the workouts and shares them with other applications.
+  /// It sets the [exporting] flag to true to indicate that the export process is in progress.
+  /// It uses the [LocalFileUtil] class to write each workout to a file.
+  /// After exporting and sharing the workouts, it sets the [exporting] flag to false.
+  /// It also shows a success message using a snackbar.
+  void shareWorkouts() async {
+    // Export and share workouts
+    logger.i("Exporting and sharing workouts...");
+    setState(() {
+      exporting = true;
+    });
+    List<Workout> loadedWorkouts = await workouts;
+
+    LocalFileUtil fileUtil = LocalFileUtil();
+
+    await fileUtil.writeFile(loadedWorkouts);
+
+    await fileUtil.shareMultipleFiles(loadedWorkouts).then((value) {
+      setState(() {
+        logger.i("Exporting and sharing complete.");
+        exporting = false;
+      });
+
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(successfulShareMultipleSnackBar);
+    });
+  }
+
+  /// Function to handle bulk export of workouts.
+  /// This function displays a modal bottom sheet and provides options to save or share workouts.
+  /// When the save option is selected, the function exports the workouts to the device.
+  /// When the share option is selected, the function exports the workouts to the device and then shares them.
+  void bulkExport() async {
+    // Display modal bottom sheet
+    showModalBottomSheet<void>(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      context: context,
+      builder: (BuildContext context) {
+        return ExportBottomSheet(
+          workout: null,
+          save: saveWorkouts,
+          share: shareWorkouts,
+        );
+      },
+    );
+  }
+  // ---
+
   /// The widget to return for a workout tile as it's being dragged.
   /// This AnimatedBuilder will slightly increase the elevation of the dragged
   /// workout without changing other UI elements.
@@ -296,40 +394,45 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Scaffold(
 
               /// Pushes to [SelectTimer()]
-              floatingActionButton: FloatingActionButton(
-                onPressed: pushSelectTimerPage,
-                tooltip: 'Create a new timer',
-                child: const Icon(Icons.add),
+              floatingActionButton: Visibility(
+                visible: !exporting,
+                child: FABColumn(bulk: bulkExport, create: pushSelectTimerPage),
               ),
-              body: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                      child: FutureBuilder(
-                          future: workouts,
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            /// When [workouts] has successfully loaded.
-                            if (snapshot.hasData) {
-                              if (snapshot.data!.isEmpty) {
-                                return workoutEmpty();
-                              } else {
-                                reorderableWorkoutList = snapshot.data;
-                                reorderableWorkoutList.sort((a, b) =>
-                                    a.workoutIndex.compareTo(b.workoutIndex));
-                                return workoutListView(snapshot);
+              body: Stack(children: [
+                Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        child: FutureBuilder(
+                            future: workouts,
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              /// When [workouts] has successfully loaded.
+                              if (snapshot.hasData) {
+                                if (snapshot.data!.isEmpty) {
+                                  return workoutEmpty();
+                                } else {
+                                  reorderableWorkoutList = snapshot.data;
+                                  reorderableWorkoutList.sort((a, b) =>
+                                      a.workoutIndex.compareTo(b.workoutIndex));
+                                  return workoutListView(snapshot);
+                                }
                               }
-                            }
 
-                            /// When there was an error loading [workouts].
-                            else if (snapshot.hasError) {
-                              return workoutFetchError(snapshot);
-                            }
+                              /// When there was an error loading [workouts].
+                              else if (snapshot.hasError) {
+                                return workoutFetchError(snapshot);
+                              }
 
-                            /// While still waiting to load [workouts].
-                            else {
-                              return workoutLoading();
-                            }
-                          })))),
+                              /// While still waiting to load [workouts].
+                              else {
+                                return workoutLoading();
+                              }
+                            }))),
+                LoaderTransparent(
+                  loadingMessage: "Exporting file(s)",
+                  visibile: exporting,
+                )
+              ])),
         ));
   }
   // ---

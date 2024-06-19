@@ -4,11 +4,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wakelock/wakelock.dart';
-import 'package:background_timer/background_timer_controller.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:background_hiit_timer/background_timer_controller.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:background_timer/background_timer.dart';
-import 'package:background_timer/background_timer_data.dart';
+import 'package:background_hiit_timer/background_timer.dart';
+import 'package:background_hiit_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
 import '../utils/functions.dart';
 import '../workout_data_type/workout_type.dart';
@@ -66,7 +66,7 @@ class CountDownTimerState extends State<CountDownTimer>
     );
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
-    Wakelock.enable();
+    WakelockPlus.enable();
     init();
   }
 
@@ -271,7 +271,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                           doneVisible = false;
                                           restart = true;
                                           done = false;
-                                          Wakelock.enable();
+                                          WakelockPlus.enable();
                                         });
                                       },
                                       icon: const Icon(Icons.restart_alt,
