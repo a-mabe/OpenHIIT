@@ -92,6 +92,8 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
+    await tester.pump();
+
     // Find and tap the delete button
     await tester.tap(find.text('Delete'));
 
