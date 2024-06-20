@@ -98,16 +98,18 @@ void main() {
     // Wait for the dialog to appear
     await tester.pump(const Duration(seconds: 1));
 
-    // // Verify that the dialog is displayed
-    // expect(find.text('Delete $timerName'), findsOneWidget);
+    // Verify that the dialog is displayed
+    await tester.pumpAndSettle();
 
-    // // Tap the Delete button in the dialog
-    // await tester.tap(find.text('Delete'));
+    expect(find.text('Delete $timerName'), findsOneWidget);
 
-    // // Wait for the dialog to close
-    // await tester.pumpAndSettle();
+    // Tap the Delete button in the dialog
+    await tester.tap(find.text('Delete'));
 
-    // // Verify that the workout is no longer displayed
-    // expect(find.text(timerName), findsNothing);
+    // Wait for the dialog to close
+    await tester.pumpAndSettle();
+
+    // Verify that the workout is no longer displayed
+    expect(find.text(timerName), findsNothing);
   });
 }
