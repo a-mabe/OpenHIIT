@@ -96,10 +96,12 @@ void main() {
       await tester.tap(find.text('Delete'));
       await Future.delayed(const Duration(seconds: 2));
 
-      await tester.pumpAndSettle();
+      // await tester.pumpAndSettle();
     });
 
-    await tester.pumpAndSettle(const Duration(seconds: 2));
+    // await tester.pumpAndSettle(const Duration(seconds: 2));
+
+    await tester.pump();
 
     expect(find.text("Delete $timerName"), findsOneWidget);
 
