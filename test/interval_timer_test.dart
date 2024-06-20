@@ -92,16 +92,27 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    // Find and tap the delete button
-    await tester.tap(find.text('Delete'));
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Delete'));
+      await Future.delayed(const Duration(seconds: 2));
 
-    // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+    });
 
-    await tester.pump();
+    await tester.pumpAndSettle(const Duration(seconds: 2));
 
-    // Verify that the dialog is displayed
-    expect(find.text('Delete $timerName'), findsOneWidget);
+    expect(find.text("Delete $timerName"), findsOneWidget);
+
+    // // Find and tap the delete button
+    // await tester.tap(find.text('Delete'));
+
+    // // Wait for the dialog to appear
+    // await tester.pump(const Duration(seconds: 1));
+
+    // await tester.pump();
+
+    // // Verify that the dialog is displayed
+    // expect(find.text('Delete $timerName'), findsOneWidget);
 
     // Tap the Delete button in the dialog
     await tester.tap(find.text('Delete'));
