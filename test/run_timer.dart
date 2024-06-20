@@ -82,6 +82,8 @@ void main() {
 
     // Should see text "1 of 3"
     expect(find.text("1 of 3"), findsOneWidget);
+    // Verify the exercise name
+    expect(find.textContaining("Push-ups"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the first work portion of the timer
@@ -94,6 +96,8 @@ void main() {
 
     // Should no longer see text "1 of 3"
     expect(find.text("2 of 3"), findsOne);
+    // Verify the exercise name
+    expect(find.textContaining("Sit-ups"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the second work portion of the timer
@@ -106,6 +110,8 @@ void main() {
 
     // Should no longer see text "1 of 3"
     expect(find.text("3 of 3"), findsOne);
+    // Verify the exercise name
+    expect(find.textContaining("Jumping Jacks"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the third work portion of the timer
