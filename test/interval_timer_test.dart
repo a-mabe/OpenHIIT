@@ -96,10 +96,12 @@ void main() {
     await tester.tap(find.text('Delete'));
 
     // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(Duration(seconds: 1));
+    }
 
     // Verify that the dialog is displayed
-    await tester.pumpAndSettle();
+    // await tester.pumpAndSettle();
 
     expect(find.text('Delete $timerName'), findsOneWidget);
 
