@@ -87,13 +87,18 @@ void main() {
     // Find and tap the three dots
     await tester.tap(find.byKey(const Key('popup-menu')));
 
-    await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    // Wait for the menu to appear
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
     // Find and tap the delete button
     await tester.tap(find.text('Delete'));
 
     // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
     // Verify that the dialog is displayed
     expect(find.text('Delete $workoutName'), findsOneWidget);
