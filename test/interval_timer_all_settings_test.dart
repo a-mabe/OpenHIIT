@@ -4,7 +4,7 @@ import 'package:openhiit/main.dart';
 
 import 'functions.dart';
 
-const double portraitWidth = 1242.0;
+const double portraitWidth = 2208.0;
 const double portraitHeight = 2208.0;
 const double landscapeWidth = portraitHeight;
 const double landscapeHeight = portraitWidth;
