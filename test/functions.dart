@@ -19,6 +19,7 @@ Future<void> createOrEditWorkout(
     int numIntervals,
     bool addExercises,
     bool isWorkout,
+    bool fullWorkout,
     String workSound,
     String restSound,
     String halfwaySound,
@@ -81,6 +82,58 @@ Future<void> createOrEditWorkout(
 
   // Enter rest time
   await tester.enterText(find.byKey(const Key('rest-seconds')), restTime);
+
+  if (fullWorkout) {
+    // Set additional timings
+    String getReadyTime = '40';
+    String coolDownTime = '30';
+    String warmupTime = '20';
+    String breakTime = '90';
+    String restart = '2';
+
+    // Tap the Open Expansion Tile button
+    await tester.tap(find.byType(ExpansionTile).first);
+
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
+
+    await tester.pumpAndSettle();
+
+    // Enter get ready time
+    await tester.enterText(
+      find.byKey(const Key('get-ready-seconds')),
+      getReadyTime,
+    );
+
+    // Enter cool down time
+    await tester.enterText(
+      find.byKey(const Key('cooldown-seconds')),
+      coolDownTime,
+    );
+
+    // Enter warmup time
+    await tester.enterText(
+      find.byKey(const Key('warmup-seconds')),
+      warmupTime,
+    );
+
+    // Enter restart amount
+    await tester.enterText(
+      find.byKey(const Key('iterations')),
+      restart,
+    );
+
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
+
+    // Enter break time
+    await tester.enterText(
+      find.byKey(const Key('break-seconds')),
+      breakTime,
+    );
+  }
 
   // Tap the Submit button
   await tester.tap(find.text('Submit'));

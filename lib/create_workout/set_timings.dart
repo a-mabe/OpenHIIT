@@ -29,12 +29,35 @@ class _SetTimingsState extends State<SetTimings> {
     "$warmUpTitle-minutes": 0,
     "$warmUpTitle-seconds": 0,
     "$coolDownTitle-minutes": 0,
-    "$coolDownTitle down-seconds": 0,
+    "$coolDownTitle-seconds": 0,
     "$breakTitle-minutes": 0,
     "$breakTitle-seconds": 0,
     "$getReadyTitle-minutes": 0,
     "$getReadyTitle-seconds": 0,
   };
+
+  Map<String, TextEditingController> controllerMap = {
+    "$workTitle-minutes": TextEditingController(),
+    "$workTitle-seconds": TextEditingController(),
+    "$restTitle-minutes": TextEditingController(),
+    "$restTitle-seconds": TextEditingController(),
+    "$warmUpTitle-minutes": TextEditingController(),
+    "$warmUpTitle-seconds": TextEditingController(),
+    "$coolDownTitle-minutes": TextEditingController(),
+    "$coolDownTitle-seconds": TextEditingController(),
+    "$breakTitle-minutes": TextEditingController(),
+    "$breakTitle-seconds": TextEditingController(),
+    "$getReadyTitle-minutes": TextEditingController(),
+    "$getReadyTitle-seconds": TextEditingController(),
+  };
+
+  void addListeners() {
+    for (String key in controllerMap.keys) {
+      controllerMap[key]!.addListener(() {
+        controllerListener(key, controllerMap[key]!);
+      });
+    }
+  }
 
   Map<String, FocusNode> focusMap = {
     "$workTitle-minute": FocusNode(),
@@ -62,6 +85,8 @@ class _SetTimingsState extends State<SetTimings> {
   @override
   Widget build(BuildContext context) {
     Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
+
+    addListeners();
 
     logger.i(
         "Loading for workout object for creation/editing: ${workout.toString()}");
@@ -98,6 +123,16 @@ class _SetTimingsState extends State<SetTimings> {
                           (int index) =>
                               determineTile(workout, index, notifierMap))),
                 ))));
+  }
+
+  void controllerListener(String title, TextEditingController controller) {
+    controller.addListener(() {
+      if (controller.text != "") {
+        timeMap[title] = int.parse(controller.text);
+      } else {
+        timeMap[title] = 0;
+      }
+    });
   }
 
   void submitTimings(Workout workoutArg, GlobalKey<FormState> formKey) {
@@ -208,8 +243,10 @@ class _SetTimingsState extends State<SetTimings> {
                               focusMap["${titleList[index]}-minute"],
                           secondFocusNode:
                               focusMap["${titleList[index]}-second"],
-                          minutesController: TextEditingController(),
-                          secondsController: TextEditingController(),
+                          minutesController:
+                              controllerMap["${titleList[index]}-minutes"],
+                          secondsController:
+                              controllerMap["${titleList[index]}-seconds"],
                           unit:
                               titleList[index] == repeatTitle ? "time(s)" : "s",
                           widgetWidth: (workoutArg.showMinutes == 1 ||
@@ -280,6 +317,7 @@ class _SetTimingsState extends State<SetTimings> {
   Widget returnExpansionTile(Workout workoutArg, int index,
       Map<String, ValueNotifier<int>> notifierMap) {
     return ExpansionTile(
+      maintainState: true,
       title: Text(timeTitles[index]),
       subtitle: Text(timeSubTitles[index]),
       leading: timeLeadingIcons[index],
@@ -301,10 +339,11 @@ class _SetTimingsState extends State<SetTimings> {
           additionalTimeTitles,
           additionalTimeSubTitles,
           additionalTimeLeadingIcons,
-          additionalMinutesKeys[index],
-          additionalSecondsKeys[index],
+          additionalMinutesKeys[i],
+          additionalSecondsKeys[i],
           notifierMap));
     }
+
     return tileList;
   }
 

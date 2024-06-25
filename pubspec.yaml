@@ -50,7 +50,7 @@ dependencies:
   audio_session: ^0.1.16
   flutter_material_color_picker: ^1.2.0
 
-  background_hiit_timer: 1.0.0-dev.2
+  background_hiit_timer: 1.0.0-dev.3
   just_audio: ^0.9.35
   soundpool: ^2.4.1
   auto_size_text: ^3.0.0

@@ -80,7 +80,8 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
                   focusNode: widget.minuteFocusNode,
                   widgetWidth: 50,
                   numberValue: widget.timeInSeconds,
-                  controller: widget.minutesController!,
+                  controller:
+                      widget.minutesController ?? TextEditingController(),
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,
                   onChanged: (text) {},
@@ -94,7 +95,7 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
               title: widget.title,
               widgetWidth: 50,
               numberValue: widget.timeInSeconds,
-              controller: widget.secondsController!,
+              controller: widget.secondsController ?? TextEditingController(),
               formatter: widget.showMinutes == 1
                   ? secondsRemainderFormatter
                   : secondsFormatter,

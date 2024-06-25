@@ -49,6 +49,7 @@ void main() {
         3,
         true,
         true,
+        false,
         "Harsh beep sequence",
         "Ding",
         "Quick beep sequence",
@@ -74,8 +75,8 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    await createOrEditWorkout(tester, workoutName, 2, false, true, "Ding",
-        "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
+    await createOrEditWorkout(tester, workoutName, 2, false, true, false,
+        "Ding", "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
 
     // Tap the workout to view details
     await tester.tap(find.text(workoutName));
