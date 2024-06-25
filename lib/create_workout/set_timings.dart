@@ -251,7 +251,7 @@ class _SetTimingsState extends State<SetTimings> {
                               titleList[index] == repeatTitle ? "time(s)" : "s",
                           widgetWidth: (workoutArg.showMinutes == 1 ||
                                   titleList[index] == repeatTitle)
-                              ? 150
+                              ? 185
                               : 80,
                           showMinutes: workoutArg.showMinutes,
                           timeInSeconds: time,
