@@ -80,3 +80,19 @@ const errorMultipleTimerExists = SnackBar(
   duration: Duration(seconds: 4),
   showCloseIcon: true,
 );
+
+const errorShareMultipleSnackBar = SnackBar(
+  content: Text('Share not completed', style: TextStyle(color: Colors.white)),
+  backgroundColor: Color.fromARGB(255, 132, 19, 11),
+  behavior: SnackBarBehavior.fixed,
+  duration: Duration(seconds: 4),
+  showCloseIcon: true,
+);
+
+const errorSaveMultipleSnackBar = SnackBar(
+  content: Text('Save not completed', style: TextStyle(color: Colors.white)),
+  backgroundColor: Color.fromARGB(255, 132, 19, 11),
+  behavior: SnackBarBehavior.fixed,
+  duration: Duration(seconds: 4),
+  showCloseIcon: true,
+);

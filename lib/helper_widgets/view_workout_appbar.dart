@@ -129,7 +129,13 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
                   key: Key(selection),
                   value: selection,
                   child: Row(children: [
-                    Icon(determineIcon(selection)),
+                    Icon(
+                      determineIcon(selection),
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text(selection),

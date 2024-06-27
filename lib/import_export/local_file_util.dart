@@ -69,17 +69,17 @@ class LocalFileUtil {
     }
   }
 
-  Future<int> shareMultipleFiles(List<Workout> workouts) async {
+  Future<ShareResult?> shareMultipleFiles(List<Workout> workouts) async {
     try {
       List<XFile> files = [];
 
       files.add(XFile((await localFilePath(workouts)).path));
 
-      await Share.shareXFiles(files, text: 'Export');
-      return 1;
+      ShareResult result = await Share.shareXFiles(files, text: 'Export');
+      return result;
     } catch (e) {
       // If encountering an error, return 0
-      return 0;
+      return null;
     }
   }
 
@@ -99,8 +99,12 @@ class LocalFileUtil {
         bytes: utf8.encode(jsonEncode(workoutsToExport)),
       );
 
+      if (outputFile == null) {
+        return false;
+      }
+
       if (Platform.isIOS) {
-        File(outputFile!)
+        File(outputFile)
             .writeAsBytes(utf8.encode(jsonEncode(workoutsToExport)));
       }
     } on Exception catch (e) {

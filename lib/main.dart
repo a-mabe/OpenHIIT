@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:openhiit/helper_widgets/fab_column.dart';
 import 'package:openhiit/import_export/local_file_util.dart';
 import 'package:openhiit/utils/functions.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 import 'constants/snackbars.dart';
 import 'create_workout/select_timer.dart';
@@ -298,16 +299,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
     LocalFileUtil fileUtil = LocalFileUtil();
 
-    await fileUtil.saveFileToDevice(loadedWorkouts).then((value) {
+    bool result = await fileUtil.saveFileToDevice(loadedWorkouts);
+
+    if (result) {
       setState(() {
         logger.i("Exporting complete.");
         exporting = false;
       });
 
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(successfulSaveMultipleToDeviceSnackBar);
-    });
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(successfulSaveMultipleToDeviceSnackBar);
+      }
+    } else {
+      setState(() {
+        logger.e("Export not completed.");
+        exporting = false;
+      });
+
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(errorSaveMultipleSnackBar);
+      }
+    }
   }
 
   /// Exports and shares the workouts.
@@ -329,16 +344,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await fileUtil.writeFile(loadedWorkouts);
 
-    await fileUtil.shareMultipleFiles(loadedWorkouts).then((value) {
-      setState(() {
-        logger.i("Exporting and sharing complete.");
-        exporting = false;
-      });
+    ShareResult? result = await fileUtil.shareMultipleFiles(loadedWorkouts);
 
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(successfulShareMultipleSnackBar);
-    });
+    if (result != null) {
+      if (result.status == ShareResultStatus.dismissed ||
+          result.status == ShareResultStatus.unavailable) {
+        setState(() {
+          logger.e("Share not completed.");
+          exporting = false;
+        });
+
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(errorShareMultipleSnackBar);
+        }
+      } else {
+        setState(() {
+          logger.i("Export and share complete.");
+          exporting = false;
+        });
+
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(successfulShareMultipleSnackBar);
+        }
+      }
+    }
   }
 
   /// Function to handle bulk export of workouts.
