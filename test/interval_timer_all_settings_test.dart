@@ -85,52 +85,5 @@ void main() {
 
     // Verify the break time is correct
     expect(find.textContaining(breakTime), findsAtLeast(1));
-
-    // // Find and tap the edit button
-    // await tester.tap(find.byKey(const Key('edit-workout')));
-
-    // await tester.pump(); // allow the application to handle
-
-    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
-
-    // await createOrEditWorkout(tester, timerName, 2, false, false, true, "Ding",
-    //     "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
-
-    // // Tap the workout to view details
-    // await tester.tap(find.text(timerName));
-
-    // await tester.pump(); // allow the application to handle
-
-    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
-
-    // // Verify the ViewWorkout page has loaded
-    // expect(find.text("Start"), findsOneWidget);
-
-    //   // Find and tap the three dots
-    //   await tester.tap(find.byKey(const Key('popup-menu')));
-
-    //   // Wait for the menu to appear
-    //   for (int i = 0; i < 5; i++) {
-    //     await tester.pump(const Duration(seconds: 1));
-    //   }
-
-    //   // Find and tap the delete button
-    //   await tester.tap(find.text('Delete'));
-
-    //   // Wait for the dialog to appear
-    //   for (int i = 0; i < 5; i++) {
-    //     await tester.pump(const Duration(seconds: 1));
-    //   }
-
-    //   expect(find.text('Delete $timerName'), findsOneWidget);
-
-    //   // Tap the Delete button in the dialog
-    //   await tester.tap(find.text('Delete'));
-
-    //   // Wait for the dialog to close
-    //   await tester.pumpAndSettle();
-
-    //   // Verify that the workout is no longer displayed
-    //   expect(find.text(timerName), findsNothing);
   });
 }

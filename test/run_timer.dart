@@ -71,9 +71,14 @@ void main() {
     // Find and tap the edit button
     await tester.tap(find.text("Start"));
 
-    await tester.pump(); // allow the application to handle
+    // await tester.pump(); // allow the application to handle
 
-    await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
+
+    // Wait for the dialog to appear
+    for (int i = 0; i < 2; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
     // Verify the timer has started
     expect(find.text("Get ready"), findsOneWidget);
@@ -125,11 +130,20 @@ void main() {
     // Find and tap the restart button
     await tester.tap(find.text("Restart"));
 
-    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
-    await tester.pump(const Duration(seconds: 2));
+    // await tester.pumpAndSettle();
+
+    // await tester.pump();
+
+    // await tester.pump(const Duration(seconds: 2));
 
     // Verify the timer has started
     expect(find.text("Get ready"), findsOneWidget);
+    expect(find.textContaining("Push-ups"), findsOneWidget);
+    expect(find.textContaining("Sit-ups"), findsOneWidget);
+    expect(find.textContaining("Jumping Jacks"), findsOneWidget);
   });
 }
