@@ -29,6 +29,9 @@ class TimeInputTrailing extends StatefulWidget {
 
   final void Function(String?)? secondsOnChanged;
 
+  final FocusNode? minuteFocusNode;
+  final FocusNode? secondFocusNode;
+
   const TimeInputTrailing({
     this.showMinutes = 0,
     this.timeInSeconds = 0,
@@ -39,6 +42,8 @@ class TimeInputTrailing extends StatefulWidget {
     this.title = "",
     this.minutesOnSaved,
     this.secondsOnSaved,
+    this.minuteFocusNode,
+    this.secondFocusNode,
     required this.minutesController,
     required this.secondsController,
     this.minutesValidator,
@@ -72,9 +77,11 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
           Visibility(
               visible: (widget.showMinutes == 1 && widget.unit != "time(s)"),
               child: NumberInput(
+                  focusNode: widget.minuteFocusNode,
                   widgetWidth: 50,
                   numberValue: widget.timeInSeconds,
-                  controller: widget.minutesController!,
+                  controller:
+                      widget.minutesController ?? TextEditingController(),
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,
                   onChanged: (text) {},
@@ -84,10 +91,11 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
                   max: 99,
                   numberInputKey: Key(widget.minutesKey))),
           NumberInput(
+              focusNode: widget.secondFocusNode,
               title: widget.title,
               widgetWidth: 50,
               numberValue: widget.timeInSeconds,
-              controller: widget.secondsController!,
+              controller: widget.secondsController ?? TextEditingController(),
               formatter: widget.showMinutes == 1
                   ? secondsRemainderFormatter
                   : secondsFormatter,

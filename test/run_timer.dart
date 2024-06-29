@@ -49,6 +49,7 @@ void main() {
         3,
         true,
         true,
+        false,
         "Long whistle",
         "Ding",
         "Quick beep sequence",
@@ -70,9 +71,14 @@ void main() {
     // Find and tap the edit button
     await tester.tap(find.text("Start"));
 
-    await tester.pump(); // allow the application to handle
+    // await tester.pump(); // allow the application to handle
 
-    await tester.pump(const Duration(seconds: 1)); // skip past the animation
+    // await tester.pump(const Duration(seconds: 1)); // skip past the animation
+
+    // Wait for the dialog to appear
+    for (int i = 0; i < 2; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
     // Verify the timer has started
     expect(find.text("Get ready"), findsOneWidget);
@@ -82,6 +88,8 @@ void main() {
 
     // Should see text "1 of 3"
     expect(find.text("1 of 3"), findsOneWidget);
+    // Verify the exercise name
+    expect(find.textContaining("Push-ups"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the first work portion of the timer
@@ -94,6 +102,8 @@ void main() {
 
     // Should no longer see text "1 of 3"
     expect(find.text("2 of 3"), findsOne);
+    // Verify the exercise name
+    expect(find.textContaining("Sit-ups"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the second work portion of the timer
@@ -106,6 +116,8 @@ void main() {
 
     // Should no longer see text "1 of 3"
     expect(find.text("3 of 3"), findsOne);
+    // Verify the exercise name
+    expect(find.textContaining("Jumping Jacks"), findsAtLeast(2));
 
     await tester.pump(const Duration(
         seconds: 11)); // skip past the third work portion of the timer
@@ -118,11 +130,20 @@ void main() {
     // Find and tap the restart button
     await tester.tap(find.text("Restart"));
 
-    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
-    await tester.pump(const Duration(seconds: 2));
+    // await tester.pumpAndSettle();
+
+    // await tester.pump();
+
+    // await tester.pump(const Duration(seconds: 2));
 
     // Verify the timer has started
     expect(find.text("Get ready"), findsOneWidget);
+    expect(find.textContaining("Push-ups"), findsOneWidget);
+    expect(find.textContaining("Sit-ups"), findsOneWidget);
+    expect(find.textContaining("Jumping Jacks"), findsOneWidget);
   });
 }

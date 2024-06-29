@@ -164,7 +164,7 @@ class DatabaseManager {
     await db.insert(
       _workoutTableName,
       workout.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.fail,
     );
   }
 

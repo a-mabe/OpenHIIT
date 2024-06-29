@@ -49,6 +49,7 @@ void main() {
         3,
         true,
         true,
+        false,
         "Harsh beep sequence",
         "Ding",
         "Quick beep sequence",
@@ -74,8 +75,8 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
-    await createOrEditWorkout(tester, workoutName, 2, false, true, "Ding",
-        "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
+    await createOrEditWorkout(tester, workoutName, 2, false, true, false,
+        "Ding", "Thunk", "Horn", "None", "Quick beep sequence", "90", "20");
 
     // Tap the workout to view details
     await tester.tap(find.text(workoutName));
@@ -84,11 +85,21 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
+    // Find and tap the three dots
+    await tester.tap(find.byKey(const Key('popup-menu')));
+
+    // Wait for the menu to appear
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
+
     // Find and tap the delete button
-    await tester.tap(find.byKey(const Key('delete-workout')));
+    await tester.tap(find.text('Delete'));
 
     // Wait for the dialog to appear
-    await tester.pump(const Duration(seconds: 1));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
 
     // Verify that the dialog is displayed
     expect(find.text('Delete $workoutName'), findsOneWidget);

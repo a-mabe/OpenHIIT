@@ -43,6 +43,7 @@ const List additionalMinutesKeys = [
   getReadyMinutesKey,
   warmupMinutesKey,
   cooldownMinutesKey,
+  iterationsKey,
   breakMinutesKey
 ];
 
@@ -50,6 +51,7 @@ const List additionalSecondsKeys = [
   getReadySecondsKey,
   warmupSecondsKey,
   cooldownSecondsKey,
+  iterationsKey,
   breakSecondsKey
 ];
 
@@ -62,6 +64,7 @@ const List<String> additionalTimeTitles = [
   repeatTitle,
   breakTitle
 ];
+List<String> allTitles = timeTitles + additionalTimeTitles;
 
 const List<String> timeSubTitles = [
   "Required",
