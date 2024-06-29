@@ -95,7 +95,7 @@ class LocalFileUtil {
     try {
       String? outputFile = await FilePicker.platform.saveFile(
         fileName: fileTitle,
-        allowedExtensions: ["json"],
+        allowedExtensions: ["json", "txt"],
         type: FileType.custom,
         bytes: utf8.encode(jsonEncode(workoutsToExport)),
       );
@@ -108,6 +108,8 @@ class LocalFileUtil {
         File(outputFile)
             .writeAsBytes(utf8.encode(jsonEncode(workoutsToExport)));
       }
+
+      return true;
     } on Exception catch (e) {
       logger.e("Error saving file to device: $e");
     }
