@@ -101,7 +101,13 @@ class ViewWorkoutState extends State<ViewWorkout> {
                     Permission.scheduleExactAlarm.request();
                   }
                 });
-              } else if (mounted) {
+
+                if (await Permission.scheduleExactAlarm.isDenied) {
+                  return;
+                }
+              }
+
+              if (context.mounted) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
