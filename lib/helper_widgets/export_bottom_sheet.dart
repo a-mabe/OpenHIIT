@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../constants/snackbars.dart';
 import '../import_export/local_file_util.dart';
@@ -72,11 +73,16 @@ class ExportBottomSheet extends StatelessWidget {
 
                       await fileUtil.writeFile([workout!]);
 
-                      await fileUtil.shareFile([workout!]).then((value) {
+                      ShareResult? result =
+                          await fileUtil.shareFile([workout!]);
+
+                      if (context.mounted) {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(successfulShareSnackBar);
-                      });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            result!.status == ShareResultStatus.success
+                                ? successfulShareSnackBar
+                                : errorShareSnackBar);
+                      }
                     }
                   : share,
               child: const Padding(

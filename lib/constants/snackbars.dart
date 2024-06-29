@@ -42,6 +42,14 @@ const successfulShareSnackBar = SnackBar(
   showCloseIcon: true,
 );
 
+const errorShareSnackBar = SnackBar(
+  backgroundColor: Color.fromARGB(255, 132, 19, 11),
+  content: Text('Share not completed', style: TextStyle(color: Colors.white)),
+  behavior: SnackBarBehavior.fixed,
+  duration: Duration(seconds: 4),
+  showCloseIcon: true,
+);
+
 const successfulShareMultipleSnackBar = SnackBar(
   content: Text('Files shared successfully!'),
   behavior: SnackBarBehavior.fixed,

@@ -56,16 +56,17 @@ class LocalFileUtil {
   ///
   /// Returns an integer value indicating the success of the file sharing operation.
   /// If the file sharing is successful, it returns 1. If an error occurs, it returns 0.
-  Future<int> shareFile(List<Workout> workouts) async {
+  Future<ShareResult?> shareFile(List<Workout> workouts) async {
     try {
       final file = await localFilePath(workouts);
 
-      await Share.shareXFiles([XFile(file.path)], text: 'Export');
+      ShareResult result =
+          await Share.shareXFiles([XFile(file.path)], text: 'OpenHIIT Export');
 
-      return 1;
+      return result;
     } catch (e) {
-      // If encountering an error, return 0
-      return 0;
+      // If encountering an error, return null
+      return null;
     }
   }
 
