@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import '../utils/functions.dart';
@@ -92,18 +94,26 @@ class ViewWorkoutState extends State<ViewWorkout> {
               ? MediaQuery.of(context).size.height / 8
               : MediaQuery.of(context).size.height / 5,
           child: StartButton(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CountDownTimer(),
-                  settings: RouteSettings(
-                    arguments: workout,
+            onTap: () async {
+              if (Platform.isAndroid) {
+                await Permission.scheduleExactAlarm.isDenied.then((value) {
+                  if (value) {
+                    Permission.scheduleExactAlarm.request();
+                  }
+                });
+              } else if (mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CountDownTimer(),
+                    settings: RouteSettings(
+                      arguments: workout,
+                    ),
                   ),
-                ),
-              ).then((value) {
-                setStatusBarBrightness(context);
-              });
+                ).then((value) {
+                  setStatusBarBrightness(context);
+                });
+              }
             },
           )),
       appBar: ViewWorkoutAppBar(
