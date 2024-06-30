@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,7 @@ import 'package:logger/logger.dart';
 import 'package:openhiit/helper_widgets/fab_column.dart';
 import 'package:openhiit/import_export/local_file_util.dart';
 import 'package:openhiit/utils/functions.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 import 'constants/snackbars.dart';
@@ -30,6 +32,14 @@ bool exporting = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await Permission.scheduleExactAlarm.isDenied.then((value) {
+      if (value) {
+        Permission.scheduleExactAlarm.request();
+      }
+    });
+  }
 
   GoogleFonts.config.allowRuntimeFetching = false;
 
