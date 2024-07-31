@@ -50,7 +50,10 @@ dependencies:
   audio_session: ^0.1.16
   flutter_material_color_picker: ^1.2.0
 
-  background_hiit_timer: 1.0.0-dev.3
+  background_hiit_timer:
+    git:
+      url: https://github.com/a-mabe/background_timer.git
+      ref: 1.0.0-dev.4
   just_audio: ^0.9.35
   soundpool: ^2.4.1
   auto_size_text: ^3.0.0
@@ -63,6 +66,8 @@ dependencies:
   fluttertoast: ^8.2.5
   file_saver: ^0.2.13
   permission_handler: ^11.3.1
+  real_volume: ^1.0.8
+  shared_preferences: ^2.2.3
 
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:background_hiit_timer/background_timer_controller.dart';
-import 'package:audio_session/audio_session.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:background_hiit_timer/background_timer.dart';
 import 'package:background_hiit_timer/background_timer_data.dart';
 import 'package:confetti/confetti.dart';
@@ -49,7 +49,10 @@ class CountDownTimerState extends State<CountDownTimer>
   bool doneVisible = false;
   bool done = false;
 
+  GlobalKey volumeKey = GlobalKey();
+
   late ConfettiController _controllerCenter;
+  late SharedPreferences preferences;
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late ListModel<ListTileModel> intervalInfo;
@@ -71,8 +74,7 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   void init() async {
-    final session = await AudioSession.instance;
-    session.setActive(false);
+    preferences = await SharedPreferences.getInstance();
   }
 
   @override
@@ -89,6 +91,7 @@ class CountDownTimerState extends State<CountDownTimer>
       fontColor: const Color.fromARGB(153, 255, 255, 255),
       fontWeight: FontWeight.normal,
       backgroundColor: Colors.transparent,
+      sizeMultiplier: 1,
     );
   }
 
@@ -233,7 +236,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                   TextButton.icon(
                                       style: ButtonStyle(
                                           backgroundColor:
-                                              MaterialStateProperty.all(
+                                              WidgetStateProperty.all(
                                                   const Color.fromARGB(
                                                       133, 255, 255, 255))),
                                       label: const Text(
@@ -252,7 +255,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                   TextButton.icon(
                                       style: ButtonStyle(
                                           backgroundColor:
-                                              MaterialStateProperty.all(
+                                              WidgetStateProperty.all(
                                                   const Color.fromARGB(
                                                       133, 255, 255, 255))),
                                       label: const Text(
@@ -263,9 +266,6 @@ class CountDownTimerState extends State<CountDownTimer>
                                             fontSize: 22),
                                       ),
                                       onPressed: () async {
-                                        final session =
-                                            await AudioSession.instance;
-                                        session.setActive(false);
                                         setState(() {
                                           shouldReset = true;
                                           doneVisible = false;
@@ -361,164 +361,532 @@ class CountDownTimerState extends State<CountDownTimer>
                       body: Stack(children: [
                 Container(
                   color: backgroundColor(timerData.status),
-                  child: Column(
-                    children: [
-                      Expanded(
-                          flex: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Row(children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  child: OrientationBuilder(
+                    builder: (context, orientation) {
+                      if (orientation == Orientation.landscape) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              flex: 50,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                      flex: 18,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 0, 0),
+                                        child: Row(children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 0, 0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              40),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              70, 0, 0, 0)),
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: Icon(
+                                                    color: Colors.white,
+                                                    Icons.arrow_back,
+                                                    size: MediaQuery.of(context)
+                                                                .orientation ==
+                                                            Orientation.portrait
+                                                        ? 50
+                                                        : 30,
+                                                  ),
+                                                )),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            intervalInfo.length > 0
+                                                ? intervalInfo[0]
+                                                    .intervalString()
+                                                : "",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                            .orientation ==
+                                                        Orientation.portrait
+                                                    ? 30
+                                                    : 20),
+                                          ),
+                                          const Spacer(),
+                                          const SizedBox(
+                                            width: 50,
+                                            height: 20,
+                                          )
+                                        ]),
+                                      )),
+                                  Expanded(
+                                      flex: 64,
+                                      child: Center(
+                                          child: AutoSizeText(
+                                        timerText(
+                                            timerData.currentMicroSeconds
+                                                .toString(),
+                                            workoutArgument),
+                                        maxLines: 1,
+                                        minFontSize: 20,
+                                        maxFontSize: 20000,
+                                        style: GoogleFonts.dmMono(
+                                          // 'DmMono',
+                                          fontSize: 20000,
+                                          height: .9,
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ))),
+                                  Expanded(
+                                    flex: 18,
                                     child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          color: MediaQuery.of(context)
-                                                      .orientation ==
-                                                  Orientation.portrait
-                                              ? const Color.fromARGB(
-                                                  70, 0, 0, 0)
-                                              : Colors.transparent),
-                                      // color: Colors.purple,
-                                      width: 50,
-                                      height: 50,
-                                      child: Icon(
-                                        color: Colors.white,
-                                        Icons.arrow_back,
-                                        size: MediaQuery.of(context)
-                                                    .orientation ==
-                                                Orientation.portrait
-                                            ? 50
-                                            : 30,
-                                      ),
-                                    )),
+                                        color:
+                                            const Color.fromARGB(70, 0, 0, 0),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Visibility(
+                                                  visible:
+                                                      !timerData.changeVolume,
+                                                  child: const Spacer()),
+                                              Visibility(
+                                                  visible:
+                                                      !timerData.changeVolume,
+                                                  child: IconButton(
+                                                      padding: EdgeInsets.zero,
+                                                      iconSize: 30,
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          shouldReset = true;
+                                                          doneVisible = false;
+                                                          restart = true;
+                                                          done = false;
+                                                          WakelockPlus.enable();
+                                                        });
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.restart_alt,
+                                                        color: Colors.white,
+                                                      ))),
+                                              Visibility(
+                                                  visible:
+                                                      !timerData.changeVolume,
+                                                  child: const Spacer()),
+                                              Visibility(
+                                                visible:
+                                                    !timerData.changeVolume,
+                                                child: IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    iconSize: 50,
+                                                    onPressed: () {
+                                                      if (!timerData.paused) {
+                                                        _workoutController
+                                                            .pause();
+                                                      } else {
+                                                        _workoutController
+                                                            .resume();
+                                                      }
+                                                    },
+                                                    icon: Icon(
+                                                      timerData.paused
+                                                          ? Icons.play_arrow
+                                                          : Icons.pause,
+                                                      color: Colors.white,
+                                                    )),
+                                              ),
+                                              Visibility(
+                                                  visible:
+                                                      !timerData.changeVolume,
+                                                  child: const Spacer()),
+                                              Visibility(
+                                                  visible:
+                                                      timerData.changeVolume,
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        if (timerData.volume >
+                                                            0) {
+                                                          await preferences
+                                                              .setDouble(
+                                                                  'volume',
+                                                                  timerData
+                                                                          .volume -
+                                                                      10);
+                                                        }
+                                                      },
+                                                      icon: const Icon(
+                                                          color: Colors.white,
+                                                          Icons.volume_down))),
+                                              Visibility(
+                                                visible: timerData.changeVolume,
+                                                child: SliderTheme(
+                                                  data: SliderTheme.of(context)
+                                                      .copyWith(
+                                                    trackHeight: 6.0,
+                                                    thumbColor:
+                                                        const Color.fromARGB(
+                                                            255, 201, 201, 201),
+                                                    thumbShape:
+                                                        const RoundSliderThumbShape(
+                                                            enabledThumbRadius:
+                                                                12.0),
+                                                  ),
+                                                  child: ConstrainedBox(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                      minWidth: 50,
+                                                      maxWidth: 170,
+                                                    ),
+                                                    child: Slider(
+                                                      min: 0,
+                                                      max: 100,
+                                                      divisions: 10,
+                                                      label:
+                                                          "${timerData.volume.round()}%",
+                                                      value: timerData.volume,
+                                                      onChanged: (value) async {
+                                                        await preferences
+                                                            .setDouble('volume',
+                                                                value);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Visibility(
+                                                  visible:
+                                                      timerData.changeVolume,
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        if (timerData.volume <
+                                                            100) {
+                                                          await preferences
+                                                              .setDouble(
+                                                                  'volume',
+                                                                  timerData
+                                                                          .volume +
+                                                                      10);
+                                                        }
+                                                      },
+                                                      icon: const Icon(
+                                                          color: Colors.white,
+                                                          Icons.volume_up))),
+                                              IconButton(
+                                                  key: volumeKey,
+                                                  padding: EdgeInsets.zero,
+                                                  iconSize: 30,
+                                                  onPressed: () async {
+                                                    if (timerData
+                                                        .changeVolume) {
+                                                      await preferences.setBool(
+                                                          'changeVolume',
+                                                          false);
+                                                    } else {
+                                                      await preferences.setBool(
+                                                          'changeVolume', true);
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    timerData.changeVolume
+                                                        ? Icons.close
+                                                        : Icons.volume_up,
+                                                    color: Colors.white,
+                                                  )),
+                                              Visibility(
+                                                  visible:
+                                                      !timerData.changeVolume,
+                                                  child: const Spacer()),
+                                            ])),
+                                  ),
+                                ],
                               ),
-                              const Spacer(),
-                              Text(
-                                intervalInfo.length > 0
-                                    ? intervalInfo[0].intervalString()
-                                    : "",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize:
-                                        MediaQuery.of(context).orientation ==
+                            ),
+                            Expanded(
+                              flex: 50,
+                              child: Container(
+                                  color: const Color.fromARGB(22, 0, 0, 0),
+                                  child: AnimatedList(
+                                    key: listKey,
+                                    initialItemCount: intervalInfo.length,
+                                    itemBuilder: (context, index, animation) {
+                                      if (index >= intervalInfo.length) {
+                                        return Container();
+                                      } else {
+                                        return CardItemAnimated(
+                                          animation: animation,
+                                          item: intervalInfo[index],
+                                          fontColor: index == 0
+                                              ? Colors.white
+                                              : const Color.fromARGB(
+                                                  153, 255, 255, 255),
+                                          fontWeight: index == 0
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          backgroundColor: Colors.transparent,
+                                          sizeMultiplier: index == 0 ? 1.5 : 1,
+                                        );
+                                      }
+                                    },
+                                  )),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          Expanded(
+                              flex: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Row(children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 0, 0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                              color: MediaQuery.of(context)
+                                                          .orientation ==
+                                                      Orientation.portrait
+                                                  ? const Color.fromARGB(
+                                                      70, 0, 0, 0)
+                                                  : Colors.transparent),
+                                          width: 50,
+                                          height: 50,
+                                          child: Icon(
+                                            color: Colors.white,
+                                            Icons.arrow_back,
+                                            size: MediaQuery.of(context)
+                                                        .orientation ==
+                                                    Orientation.portrait
+                                                ? 50
+                                                : 30,
+                                          ),
+                                        )),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    intervalInfo.length > 0
+                                        ? intervalInfo[0].intervalString()
+                                        : "",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: MediaQuery.of(context)
+                                                    .orientation ==
                                                 Orientation.portrait
                                             ? 30
                                             : 20),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  if (!timerData.paused) {
-                                    _workoutController.pause();
-                                  } else {
-                                    _workoutController.resume();
-                                  }
-                                },
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          color: MediaQuery.of(context)
-                                                      .orientation ==
-                                                  Orientation.portrait
-                                              ? const Color.fromARGB(
-                                                  70, 0, 0, 0)
-                                              : Colors.transparent),
-                                      // color: Colors.purple,
-                                      width: 50,
-                                      height: 50,
-                                      child: Icon(
-                                        color: Colors.white,
-                                        timerData.paused
-                                            ? Icons.play_arrow
-                                            : Icons.pause,
-                                        size: MediaQuery.of(context)
-                                                    .orientation ==
-                                                Orientation.portrait
-                                            ? 50
-                                            : 30,
-                                      ),
-                                    )),
-                              )
-                            ]),
-                          )),
-                      Expanded(
-                          flex: 8,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: FittedBox(
-                              child: Text(
-                                timerScreenText(
-                                    currentWorkInterval,
-                                    timerData.status,
-                                    exercises,
+                                  ),
+                                  const Spacer(),
+                                  const SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                  )
+                                ]),
+                              )),
+                          Expanded(
+                            flex: 31,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 3.0, 20.0, 5.0),
+                              child: Center(
+                                  child: AutoSizeText(
+                                timerText(
+                                    timerData.currentMicroSeconds.toString(),
                                     workoutArgument),
-                                style: const TextStyle(
-                                    color: Colors.white, height: 1),
-                              ),
+                                maxLines: 1,
+                                minFontSize: 20,
+                                maxFontSize: 20000,
+                                style: GoogleFonts.dmMono(
+                                  // 'DmMono',
+                                  fontSize: 20000,
+                                  height: .7,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              )),
                             ),
-                          )),
-                      Expanded(
-                        flex: 34,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                          child: Center(
-                              child: AutoSizeText(
-                            timerText(timerData.currentMicroSeconds.toString(),
-                                workoutArgument),
-                            maxLines: 1,
-                            minFontSize: 20,
-                            maxFontSize: 20000,
-                            // presetFontSizes: presetFontSizes,
-                            style: GoogleFonts.dmMono(
-                              // 'DmMono',
-                              fontSize: 20000,
-                              height: .9,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 48,
-                        child: Container(
-                            color: const Color.fromARGB(22, 0, 0, 0),
-                            child: AnimatedList(
-                              key: listKey,
-                              initialItemCount: intervalInfo.length,
-                              itemBuilder: (context, index, animation) {
-                                if (index >= intervalInfo.length) {
-                                  return Container();
-                                } else {
-                                  return CardItemAnimated(
-                                    animation: animation,
-                                    item: intervalInfo[index],
-                                    fontColor: index == 0
-                                        ? Colors.white
-                                        : const Color.fromARGB(
-                                            153, 255, 255, 255),
-                                    fontWeight: index == 0
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    backgroundColor: Colors.transparent,
-                                  );
-                                }
-                              },
-                            )),
-                      ),
-                    ],
+                          ),
+                          Expanded(
+                            flex: 8,
+                            child: Container(
+                                color: const Color.fromARGB(70, 0, 0, 0),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Visibility(
+                                          visible: !timerData.changeVolume,
+                                          child: const Spacer()),
+                                      Visibility(
+                                          visible: !timerData.changeVolume,
+                                          child: IconButton(
+                                              padding: EdgeInsets.zero,
+                                              iconSize: 30,
+                                              onPressed: () {
+                                                setState(() {
+                                                  shouldReset = true;
+                                                  doneVisible = false;
+                                                  restart = true;
+                                                  done = false;
+                                                  WakelockPlus.enable();
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons.restart_alt,
+                                                color: Colors.white,
+                                              ))),
+                                      Visibility(
+                                          visible: !timerData.changeVolume,
+                                          child: const Spacer()),
+                                      Visibility(
+                                        visible: !timerData.changeVolume,
+                                        child: IconButton(
+                                            padding: EdgeInsets.zero,
+                                            iconSize: 50,
+                                            onPressed: () {
+                                              if (!timerData.paused) {
+                                                _workoutController.pause();
+                                              } else {
+                                                _workoutController.resume();
+                                              }
+                                            },
+                                            icon: Icon(
+                                              timerData.paused
+                                                  ? Icons.play_arrow
+                                                  : Icons.pause,
+                                              color: Colors.white,
+                                            )),
+                                      ),
+                                      Visibility(
+                                          visible: timerData.changeVolume,
+                                          child: IconButton(
+                                              onPressed: () async {
+                                                if (timerData.volume > 0) {
+                                                  await preferences.setDouble(
+                                                      'volume',
+                                                      timerData.volume - 10);
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                  color: Colors.white,
+                                                  Icons.volume_down))),
+                                      Visibility(
+                                        visible: timerData.changeVolume,
+                                        child: SliderTheme(
+                                          data:
+                                              SliderTheme.of(context).copyWith(
+                                            trackHeight: 6.0,
+                                            thumbColor: const Color.fromARGB(
+                                                255, 201, 201, 201),
+                                            thumbShape:
+                                                const RoundSliderThumbShape(
+                                                    enabledThumbRadius: 12.0),
+                                          ),
+                                          child: ConstrainedBox(
+                                            constraints: const BoxConstraints(
+                                              minWidth: 50,
+                                              maxWidth: 170,
+                                            ),
+                                            child: Slider(
+                                              min: 0,
+                                              max: 100,
+                                              divisions: 10,
+                                              label:
+                                                  "${timerData.volume.round()}%",
+                                              value: timerData.volume,
+                                              onChanged: (value) async {
+                                                await preferences.setDouble(
+                                                    'volume', value);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Visibility(
+                                          visible: timerData.changeVolume,
+                                          child: IconButton(
+                                              onPressed: () async {
+                                                if (timerData.volume < 100) {
+                                                  await preferences.setDouble(
+                                                      'volume',
+                                                      timerData.volume + 10);
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                  color: Colors.white,
+                                                  Icons.volume_up))),
+                                      Visibility(
+                                          visible: !timerData.changeVolume,
+                                          child: const Spacer()),
+                                      IconButton(
+                                          key: volumeKey,
+                                          padding: EdgeInsets.zero,
+                                          iconSize: 30,
+                                          onPressed: () async {
+                                            if (timerData.changeVolume) {
+                                              await preferences.setBool(
+                                                  'changeVolume', false);
+                                            } else {
+                                              await preferences.setBool(
+                                                  'changeVolume', true);
+                                            }
+                                          },
+                                          icon: Icon(
+                                            timerData.changeVolume
+                                                ? Icons.close
+                                                : Icons.volume_up,
+                                            color: Colors.white,
+                                          )),
+                                      Visibility(
+                                          visible: !timerData.changeVolume,
+                                          child: const Spacer()),
+                                    ])),
+                          ),
+                          Expanded(
+                            flex: 51,
+                            child: Container(
+                                color: const Color.fromARGB(22, 0, 0, 0),
+                                child: AnimatedList(
+                                  key: listKey,
+                                  initialItemCount: intervalInfo.length,
+                                  itemBuilder: (context, index, animation) {
+                                    if (index >= intervalInfo.length) {
+                                      return Container();
+                                    } else {
+                                      return CardItemAnimated(
+                                        animation: animation,
+                                        item: intervalInfo[index],
+                                        fontColor: index == 0
+                                            ? Colors.white
+                                            : const Color.fromARGB(
+                                                153, 255, 255, 255),
+                                        fontWeight: index == 0
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                        backgroundColor: Colors.transparent,
+                                        sizeMultiplier: index == 0 ? 1.5 : 1,
+                                      );
+                                    }
+                                  },
+                                )),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 complete()
