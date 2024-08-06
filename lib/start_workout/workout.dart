@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:audio_session/audio_session.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,6 +75,9 @@ class CountDownTimerState extends State<CountDownTimer>
   }
 
   void init() async {
+    final session = await AudioSession.instance;
+    await session.setActive(false);
+
     preferences = await SharedPreferences.getInstance();
   }
 
@@ -265,7 +269,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                             fontWeight: FontWeight.bold,
                                             fontSize: 22),
                                       ),
-                                      onPressed: () async {
+                                      onPressed: () {
                                         setState(() {
                                           shouldReset = true;
                                           doneVisible = false;
@@ -551,7 +555,8 @@ class CountDownTimerState extends State<CountDownTimer>
                                                       divisions: 10,
                                                       label:
                                                           "${timerData.volume.round()}%",
-                                                      value: timerData.volume,
+                                                      value: timerData.volume
+                                                          .toDouble(),
                                                       onChanged: (value) async {
                                                         await preferences
                                                             .setDouble('volume',
@@ -807,7 +812,8 @@ class CountDownTimerState extends State<CountDownTimer>
                                               divisions: 10,
                                               label:
                                                   "${timerData.volume.round()}%",
-                                              value: timerData.volume,
+                                              value:
+                                                  timerData.volume.toDouble(),
                                               onChanged: (value) async {
                                                 await preferences.setDouble(
                                                     'volume', value);
