@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/workout_data_type/workout_type.dart';
 import 'package:path_provider/path_provider.dart';
@@ -56,28 +57,45 @@ class LocalFileUtil {
   ///
   /// Returns an integer value indicating the success of the file sharing operation.
   /// If the file sharing is successful, it returns 1. If an error occurs, it returns 0.
-  Future<ShareResult?> shareFile(List<Workout> workouts) async {
+  Future<ShareResult?> shareFile(
+      List<Workout> workouts, BuildContext context) async {
     try {
       final file = await localFilePath(workouts);
 
-      ShareResult result =
-          await Share.shareXFiles([XFile(file.path)], text: 'OpenHIIT Export');
+      if (context.mounted) {
+        final box = context.findRenderObject() as RenderBox?;
 
-      return result;
+        ShareResult result = await Share.shareXFiles([XFile(file.path)],
+            text: 'OpenHIIT Export',
+            sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+
+        return result;
+      }
+
+      return null;
     } catch (e) {
       // If encountering an error, return null
       return null;
     }
   }
 
-  Future<ShareResult?> shareMultipleFiles(List<Workout> workouts) async {
+  Future<ShareResult?> shareMultipleFiles(
+      List<Workout> workouts, BuildContext context) async {
     try {
       List<XFile> files = [];
 
       files.add(XFile((await localFilePath(workouts)).path));
 
-      ShareResult result = await Share.shareXFiles(files, text: 'Export');
-      return result;
+      if (context.mounted) {
+        final box = context.findRenderObject() as RenderBox?;
+
+        ShareResult result = await Share.shareXFiles(files,
+            text: 'Export',
+            sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+        return result;
+      }
+
+      return null;
     } catch (e) {
       // If encountering an error, return 0
       return null;

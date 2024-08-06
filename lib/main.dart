@@ -342,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// It uses the [LocalFileUtil] class to write each workout to a file.
   /// After exporting and sharing the workouts, it sets the [exporting] flag to false.
   /// It also shows a success message using a snackbar.
-  void shareWorkouts() async {
+  void shareWorkouts(BuildContext buildContext) async {
     // Export and share workouts
     logger.i("Exporting and sharing workouts...");
     setState(() {
@@ -354,31 +354,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await fileUtil.writeFile(loadedWorkouts);
 
-    ShareResult? result = await fileUtil.shareMultipleFiles(loadedWorkouts);
+    if (buildContext.mounted) {
+      ShareResult? result =
+          await fileUtil.shareMultipleFiles(loadedWorkouts, buildContext);
 
-    if (result != null) {
-      if (result.status == ShareResultStatus.dismissed ||
-          result.status == ShareResultStatus.unavailable) {
-        setState(() {
-          logger.e("Share not completed.");
-          exporting = false;
-        });
+      if (result != null) {
+        if (result.status == ShareResultStatus.dismissed ||
+            result.status == ShareResultStatus.unavailable) {
+          setState(() {
+            logger.e("Share not completed.");
+            exporting = false;
+          });
 
-        if (mounted) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(errorShareMultipleSnackBar);
-        }
-      } else {
-        setState(() {
-          logger.i("Export and share complete.");
-          exporting = false;
-        });
+          if (mounted) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(errorShareMultipleSnackBar);
+          }
+        } else {
+          setState(() {
+            logger.i("Export and share complete.");
+            exporting = false;
+          });
 
-        if (mounted) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(successfulShareMultipleSnackBar);
+          if (mounted) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(successfulShareMultipleSnackBar);
+          }
         }
       }
     }
@@ -397,7 +400,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return ExportBottomSheet(
           workout: null,
           save: saveWorkouts,
-          share: shareWorkouts,
+          share: () => shareWorkouts(context),
         );
       },
     );
