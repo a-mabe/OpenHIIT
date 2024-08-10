@@ -49,10 +49,7 @@ dependencies:
   coverage: ^1.6.3
   flutter_material_color_picker: ^1.2.0
 
-  background_hiit_timer:
-    git:
-      url: https://github.com/a-mabe/background_timer.git
-      ref: 1.0.0-dev.4
+  background_hiit_timer: 1.0.0-dev.5
   just_audio: ^0.9.35
   soundpool: ^2.4.1
   auto_size_text: ^3.0.0
