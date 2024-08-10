@@ -28,6 +28,8 @@ class CardItemAnimated extends StatelessWidget {
   ///
   final VoidCallback? onTap;
 
+  final double sizeMultiplier;
+
   const CardItemAnimated({
     super.key,
     this.onTap,
@@ -36,19 +38,32 @@ class CardItemAnimated extends StatelessWidget {
     required this.fontWeight,
     required this.animation,
     required this.item,
+    required this.sizeMultiplier,
   });
 
   /// Calculate padding to place around text depending on the device orientation.
   ///
   double calcPadding(context) {
-    return MediaQuery.of(context).orientation == Orientation.portrait ? 15 : 5;
+    // return MediaQuery.of(context).orientation == Orientation.portrait ? 15 : 5;
+    return 10;
+  }
+
+  double calcHeight(String action) {
+    if (action.length > 20) {
+      if (action.length > 30) {
+        return 110 * sizeMultiplier;
+      }
+      return 100 * sizeMultiplier;
+    } else {
+      return 75 * sizeMultiplier;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     /// Minimum height that each ListTile can be.
     ///
-    double minHeight = 20;
+    double minHeight = 75;
 
     return SlideTransition(
       position: Tween<Offset>(
@@ -71,11 +86,9 @@ class CardItemAnimated extends StatelessWidget {
         ),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-              minHeight: minHeight,
-              maxHeight:
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? MediaQuery.of(context).size.height / 10
-                      : MediaQuery.of(context).size.height / 8),
+            minHeight: minHeight,
+            maxHeight: calcHeight(item.action),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -83,73 +96,25 @@ class CardItemAnimated extends StatelessWidget {
               Expanded(
                   flex: 20,
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 8, 0),
-                      child: AutoSizeText(
-                        item.intervalString().isEmpty
-                            ? ""
-                            : item.interval.toString(),
-                        maxLines: 1,
-                        minFontSize: 14,
-                        maxFontSize: 500,
-                        style: TextStyle(
-                          color: fontColor,
-                          fontSize: 500,
-                        ),
-                      ))
-                  // child: Padding(
-                  //     padding: const EdgeInsets.fromLTRB(15, 0, 12, 0),
-                  //     child: Row(
-                  //       children: [
-                  //         Expanded(
-                  //           flex: 28,
-                  //           child: Align(
-                  //               alignment: Alignment.bottomRight,
-                  //               child: AutoSizeText(
-                  //                 item.intervalString().isEmpty
-                  //                     ? ""
-                  //                     : item.interval.toString(),
-                  //                 maxLines: 1,
-                  //                 minFontSize: 14,
-                  //                 maxFontSize: 500,
-                  //                 style: const TextStyle(
-                  //                     color: Colors.white,
-                  //                     fontSize: 500,
-                  //                     height: 2),
-                  //               )),
-                  //         ),
-                  //         Expanded(
-                  //           flex: 2,
-                  //           child: Align(
-                  //               alignment: Alignment.bottomLeft,
-                  //               child: AutoSizeText(
-                  //                 item.intervalString().isEmpty
-                  //                     ? ""
-                  //                     : "/${item.total}",
-                  //                 maxLines: 1,
-                  //                 minFontSize: 1,
-                  //                 maxFontSize: 500,
-                  //                 style: const TextStyle(
-                  //                     color: Colors.white,
-                  //                     fontSize: 500,
-                  //                     height: 3),
-                  //               )
-                  //               // Padding(
-                  //               //     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  //               //     child: AutoSizeText(
-                  //               //       item.intervalString().isEmpty
-                  //               //           ? ""
-                  //               //           : "/${item.total}",
-                  //               //       maxLines: 1,
-                  //               //       minFontSize: 14,
-                  //               //       maxFontSize: 500,
-                  //               //       style: const TextStyle(
-                  //               //           color: Colors.white, fontSize: 500),
-                  //               //     ))
-                  //               ),
-                  //         ),
-                  //       ],
-                  //     ))
-                  ),
+                      padding: EdgeInsets.fromLTRB(15, calcPadding(context) + 5,
+                          8, calcPadding(context) + 5),
+                      child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 50,
+                            maxHeight: 100,
+                          ),
+                          child: AutoSizeText(
+                            item.intervalString().isEmpty
+                                ? ""
+                                : item.interval.toString(),
+                            maxLines: 1,
+                            minFontSize: 14,
+                            maxFontSize: 500,
+                            style: TextStyle(
+                              color: fontColor,
+                              fontSize: 500,
+                            ),
+                          )))),
               // Current interval text, "Work" if no exercise provided.
               Expanded(
                   flex: 60,

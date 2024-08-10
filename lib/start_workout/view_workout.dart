@@ -276,6 +276,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
                       fontWeight:
                           index == 0 ? FontWeight.bold : FontWeight.normal,
                       backgroundColor: Color(workout.colorInt),
+                      sizeMultiplier: 1,
                     );
                   },
                 ))

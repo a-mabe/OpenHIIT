@@ -73,10 +73,10 @@ class ExportBottomSheet extends StatelessWidget {
 
                       await fileUtil.writeFile([workout!]);
 
-                      ShareResult? result =
-                          await fileUtil.shareFile([workout!]);
-
                       if (context.mounted) {
+                        ShareResult? result =
+                            await fileUtil.shareFile([workout!], context);
+
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                             result!.status == ShareResultStatus.success
