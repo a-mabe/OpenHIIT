@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/create_workout/import_workout.dart';
+import 'package:openhiit/old/create_workout/import_workout.dart';
 
 import '../create_workout/create_timer.dart';
 import '../create_workout/create_workout.dart';

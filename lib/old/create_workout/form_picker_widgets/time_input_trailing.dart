@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/create_workout/set_timings_utils/set_timings_utils.dart';
+import 'package:openhiit/old/create_workout/set_timings_utils/set_timings_utils.dart';
 
 import 'number_input.dart';
 

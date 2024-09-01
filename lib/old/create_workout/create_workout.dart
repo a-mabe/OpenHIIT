@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:openhiit/create_workout/main_widgets/create_form.dart';
+import 'package:openhiit/old/create_workout/main_widgets/create_form.dart';
 import '../workout_data_type/workout_type.dart';
 import 'main_widgets/submit_button.dart';
 import 'set_exercises.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
 
 class CreateWorkout extends StatefulWidget {
   const CreateWorkout({super.key});

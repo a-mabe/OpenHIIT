@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/database/database_manager.dart';
-import 'package:openhiit/helper_widgets/file_error.dart';
-import 'package:openhiit/helper_widgets/loader.dart';
+import 'package:openhiit/old/helper_widgets/file_error.dart';
+import 'package:openhiit/old/helper_widgets/loader.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:uuid/uuid.dart';
 import '../helper_widgets/copy_or_skip.dart';
-import '../main.dart';
+import '../../main.dart';
 import '../workout_data_type/workout_type.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -48,7 +48,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
           "Adding imported workout to database: ${workoutArgument.toString()}");
 
       List<Workout> workouts =
-          await DatabaseManager().lists(DatabaseManager().initDB());
+          await DatabaseManager().workouts(await DatabaseManager().initDB());
 
       logger.i("Grabbed existing workouts: ${workouts.length}");
 
@@ -59,10 +59,10 @@ class ImportWorkoutState extends State<ImportWorkout> {
       for (var i = 0; i < workouts.length; i++) {
         if (i == 0) {
           workouts[i].workoutIndex = 0;
-          await DatabaseManager().insertList(workouts[i], database);
+          await DatabaseManager().insertWorkout(workouts[i], database);
         } else {
           workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          await DatabaseManager().updateList(workouts[i], database);
+          await DatabaseManager().updateWorkout(workouts[i], database);
         }
       }
 

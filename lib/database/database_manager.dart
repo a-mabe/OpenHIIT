@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import '../workout_data_type/workout_type.dart';
+import '../log/log.dart';
+import '../old/workout_data_type/workout_type.dart';
 
 class DatabaseManager {
   /// The name of the database.
@@ -18,83 +18,43 @@ class DatabaseManager {
   ///
   static const String _workoutTableName = "WorkoutTable";
 
+  /// Initialize the database.
+  ///
   Future<Database> initDB() async {
-    debugPrint("initDB executed");
+    logger.d("Initializing database");
 
+    /// Get a path to the database.
+    ///
+    String path = join(await getDatabasesPath(), _databaseName);
+
+    /// The version of the database.
+    ///
+    int databaseVersion = 6;
+
+    /// The version to start any migrations from.
+    ///
+    int versionToStartMigration = 2;
+
+    /// If the platform is Windows or Linux, use the FFI database factory.
+    /// Full app functionaly for Windows / Linux is not yet available.
+    ///
     if (Platform.isWindows || Platform.isLinux) {
+      logger.d("Platform is Windows or Linu, using FFI database factory");
+
       // Initialize FFI
       sqfliteFfiInit();
+
       // Change the default factory
       databaseFactory = databaseFactoryFfiNoIsolate;
+
+      // Set the path to an in-memory database
+      path = inMemoryDatabasePath;
     }
 
-    //Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(await getDatabasesPath(), _databaseName);
-    // Clear database for testing
-    // await deleteDatabase(path);
-    if (Platform.isWindows || Platform.isLinux) {
-      return await openDatabase(
-        inMemoryDatabasePath,
-        version: 5,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            title TEXT,
-            numExercises INTEGER,
-            exercises TEXT,
-            getReadyTime INTEGER,
-            exerciseTime INTEGER,
-            restTime INTEGER,
-            halfTime INTEGER,
-            breakTime INTEGER,
-            warmupTime INTEGER,
-            cooldownTime INTEGER,
-            iterations INTEGER,
-            halfwayMark INTEGER,
-            workSound TEXT,
-            restSound TEXT,
-            halfwaySound TEXT,
-            completeSound TEXT,
-            countdownSound TEXT,
-            colorInt INTEGER,
-            workoutIndex INTEGER,
-            showMinutes INTEGER
-            )
-            ''');
-        },
-        onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion == 1) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
-          }
-          if (oldVersion == 2) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
-          }
-          if (oldVersion == 3) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
-          }
-          if (oldVersion < newVersion) {
-            print("Add columns");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
-          }
-        },
-      );
-    }
     return await openDatabase(
       path,
-      version: 6,
-      onCreate: (Database db, int version) async {
+      version: databaseVersion,
+      onCreate: (db, version) async {
         await db.execute('''
             CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
             title TEXT,
@@ -121,38 +81,49 @@ class DatabaseManager {
             ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion == 2) {
-          await db
-              .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
-        }
-        if (oldVersion == 3) {
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
-        }
-        if (oldVersion == 4) {
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
-        }
-        if (oldVersion < newVersion) {
-          print("Add columns");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
-        }
+        migrateDatabase(oldVersion, newVersion, db, versionToStartMigration);
       },
     );
   }
 
-  /// Inserts the given list into the given database.
+  /// Migrate the database from one version to another.
+  /// - [oldVersion] The current version of the database.
+  /// - [newVersion] The new version of the database.
+  /// - [db] The database to migrate.
+  /// - [versionToStartMigration] The version to start the migration from.
   ///
-  Future<void> insertList(Workout workout, Database database) async {
+  Future<void> migrateDatabase(int oldVersion, int newVersion, Database db,
+      int versionToStartMigration) async {
+    if (oldVersion == versionToStartMigration) {
+      await db.execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
+    }
+    if (oldVersion == versionToStartMigration + 1) {
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
+    }
+    if (oldVersion == versionToStartMigration + 2) {
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
+    }
+    if (oldVersion < newVersion) {
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
+      await db
+          .execute("ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
+    }
+  }
+
+  /// Inserts the given list into the given database.
+  /// - [workout] The workout to insert.
+  /// - [database] The database to insert the workout into.
+  ///
+  Future<void> insertWorkout(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
     final db = database;
@@ -169,8 +140,10 @@ class DatabaseManager {
   }
 
   /// Update the given list in the given database.
+  /// - [workout] The workout to update.
+  /// - [database] The database to update the workout in.
   ///
-  Future<void> updateList(Workout workout, Database database) async {
+  Future<void> updateWorkout(Workout workout, Database database) async {
     /// Get a reference to the database.
     ///
     final db = database;
@@ -185,12 +158,8 @@ class DatabaseManager {
     );
   }
 
-  Future<void> deleteList(String id, Future<Database> database) async {
-    /// Get a reference to the database.
-    ///
-    final db = await database;
-
-    await db.delete(
+  Future<void> deleteWorkout(String id, Database database) async {
+    await database.delete(
       _workoutTableName,
       where: 'id = ?', // Use a `where` clause to delete a specific list.
       whereArgs: [
@@ -199,14 +168,40 @@ class DatabaseManager {
     );
   }
 
-  Future<List<Workout>> lists(Future<Database> database) async {
-    /// Get a reference to the database.
-    ///
-    final db = await database;
+  /// Asynchronously deletes a workout list from the database and updates the
+  /// workout indices of remaining lists accordingly.
+  ///
+  /// Parameters:
+  ///   - [workoutArgument]: The 'Workout' object representing the list to be deleted.
+  ///
+  /// Returns:
+  ///   - A Future representing the completion of the delete operation.
+  Future<void> deleteWorkoutAndReorder(
+      Workout workout, Database database) async {
+    // Delete the specified workout list from the database.
+    await DatabaseManager()
+        .deleteWorkout(workout.id, database)
+        .then((value) async {
+      // Retrieve the updated list of workouts from the database.
+      List<Workout> workouts = await DatabaseManager().workouts(database);
 
+      // Sort the workouts based on their workout indices.
+      workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
+
+      // Update the workout indices of remaining lists after the deleted list.
+      for (int i = workout.workoutIndex; i < workouts.length; i++) {
+        workouts[i].workoutIndex = i;
+        await DatabaseManager()
+            .updateWorkout(workouts[i], await DatabaseManager().initDB());
+      }
+    });
+  }
+
+  Future<List<Workout>> workouts(Database database) async {
     /// Query the table for all the TodoLists.
     ///
-    final List<Map<String, dynamic>> maps = await db.query(_workoutTableName);
+    final List<Map<String, dynamic>> maps =
+        await database.query(_workoutTableName);
 
     /// Convert the List<Map<String, dynamic> into a List<TodoList>.
     ///

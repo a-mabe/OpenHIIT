@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
-import '../main.dart';
+import '../../main.dart';
 import '../workout_data_type/workout_type.dart';
-import '../database/database_manager.dart';
+import '../../database/database_manager.dart';
 import 'form_picker_widgets/sound_dropdown.dart';
 import 'main_widgets/submit_button.dart';
 import 'constants/sounds.dart';
@@ -45,7 +45,7 @@ class _SetSoundsState extends State<SetSounds> {
     ///
     if (workoutArgument.id == "") {
       List<Workout> workouts =
-          await DatabaseManager().lists(DatabaseManager().initDB());
+          await DatabaseManager().workouts(await DatabaseManager().initDB());
 
       // Give the new workout an ID
       workoutArgument.id = const Uuid().v1();
@@ -56,10 +56,10 @@ class _SetSoundsState extends State<SetSounds> {
       // Increase the index of all old workouts by 1.
       for (var i = 0; i < workouts.length; i++) {
         if (i == 0) {
-          await DatabaseManager().insertList(workouts[i], database);
+          await DatabaseManager().insertWorkout(workouts[i], database);
         } else {
           workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          await DatabaseManager().updateList(workouts[i], database);
+          await DatabaseManager().updateWorkout(workouts[i], database);
         }
       }
     }
@@ -68,7 +68,7 @@ class _SetSoundsState extends State<SetSounds> {
     /// workout that was edited. Simply update the workout in the DB.
     ///
     else {
-      await DatabaseManager().updateList(workoutArgument, database);
+      await DatabaseManager().updateWorkout(workoutArgument, database);
     }
   }
 
