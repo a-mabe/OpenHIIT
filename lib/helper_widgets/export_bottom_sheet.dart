@@ -43,8 +43,8 @@ class ExportBottomSheet extends StatelessWidget {
 
                       if (context.mounted) {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(successfulSaveToDeviceSnackBar);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            createSuccessSnackBar("Saved to device!"));
                       }
                     }
                   : save,
@@ -80,8 +80,8 @@ class ExportBottomSheet extends StatelessWidget {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                             result!.status == ShareResultStatus.success
-                                ? successfulShareSnackBar
-                                : errorShareSnackBar);
+                                ? createSuccessSnackBar("Shared successfully!")
+                                : createErrorSnackBar("Share not completed"));
                       }
                     }
                   : share,

@@ -320,7 +320,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context)
-            .showSnackBar(successfulSaveMultipleToDeviceSnackBar);
+            .showSnackBar(createSuccessSnackBar("Saved to device!"));
       }
     } else {
       setState(() {
@@ -330,7 +330,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(errorSaveMultipleSnackBar);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(createErrorSnackBar("Save not completed"));
       }
     }
   }
@@ -369,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (mounted) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context)
-                .showSnackBar(errorShareMultipleSnackBar);
+                .showSnackBar(createErrorSnackBar("Share not completed"));
           }
         } else {
           setState(() {
@@ -380,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (mounted) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context)
-                .showSnackBar(successfulShareMultipleSnackBar);
+                .showSnackBar(createSuccessSnackBar("Shared successfully!"));
           }
         }
       }
