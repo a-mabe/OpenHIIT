@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/create_workout/import_workout.dart';
+import 'package:openhiit/pages/import_workout/import_workout.dart';
 
-import '../create_workout/create_timer.dart';
-import '../create_workout/create_workout.dart';
-import '../models/list_tile_model.dart';
-import '../workout_data_type/workout_type.dart';
+import '../pages/create_timer/create_timer.dart';
+import '../pages/create_workout/create_workout.dart';
+import '../models/lists/list_tile_model.dart';
+import '../models/workout_type.dart';
 
 /// Navigates to the 'ImportWorkout' screen while passing the provided 'Workout' object
 /// as an argument.
