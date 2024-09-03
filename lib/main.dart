@@ -7,21 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
-import 'package:openhiit/helper_widgets/fab_column.dart';
-import 'package:openhiit/import_export/local_file_util.dart';
+import 'package:openhiit/pages/view_workout/widgets/fab_column.dart';
+import 'package:openhiit/utils/import_export/local_file_util.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'constants/snackbars.dart';
-import 'create_workout/select_timer.dart';
-import 'helper_widgets/export_bottom_sheet.dart';
-import 'helper_widgets/loader.dart';
-import 'workout_data_type/workout_type.dart';
-import 'database/database_manager.dart';
-import 'start_workout/view_workout.dart';
-import 'helper_widgets/timer_list_tile.dart';
+import 'pages/select_timer/select_timer.dart';
+import 'widgets/home/export_bottom_sheet.dart';
+import 'widgets/loader.dart';
+import 'models/workout_type.dart';
+import 'utils/database/database_manager.dart';
+import 'pages/view_workout/view_workout.dart';
+import 'widgets/home/timer_list_tile.dart';
 
 // Global logger instance for logging messages
 var logger = Logger(
