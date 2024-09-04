@@ -3,13 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/pages/import_workout/widgets/file_error.dart';
 import 'package:openhiit/widgets/loader.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:uuid/uuid.dart';
 import 'widgets/copy_or_skip.dart';
-import '../../main.dart';
 import '../../models/workout_type.dart';
 import 'package:file_picker/file_picker.dart';
 

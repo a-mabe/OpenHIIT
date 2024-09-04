@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:soundpool/soundpool.dart';
-import '../constants/sound_name_map.dart';
+import '../constants/sounds.dart';
 
 /// Possible interval states
 // enum IntervalStates { start, work, rest, complete }
