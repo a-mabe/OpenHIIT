@@ -1,109 +1,32 @@
-# OpenHIIT
+# Privacy Policy for OpenHIIT
+**Effective Date: September 6th, 2024**
 
-![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/test.yaml/badge.svg)
-![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
+Thank you for using OpenHIIT (the "App") by CodePup ("we," "us," or "our"). This Privacy Policy explains how we collect, use, and disclose information when you use our App. We respect your privacy and are committed to protecting your personal information. This Privacy Policy applies solely to information collected through the App and does not apply to any information collected by us offline or through other means.
 
-<p align="center">
-   <img src="./assets/icon/openhiit-icon.png" width="150"/>
-</p>
+## Information We Collect
+We do not collect any personal information or any data that can identify you or is directly linked to you as an individual. You are not required to provide any personal information to use the App.
 
-<p align="center">
-  <a href="https://www.buymeacoffee.com/amabe"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" width="200" /></a>
-  <a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="140" /></a>
-  <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
-</p>
+## Use of Information
+Since we do not collect any personal information or user data, we do not use any information for any purpose. We do not track your activities within the App, nor do we share or sell any information to third parties.
 
-Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
+## Advertising
+The App does not display any advertisements, and we do not use any advertising networks or third-party services that collect or track user information.
 
-The timer package is being developed [here](https://github.com/a-mabe/background_timer).
+## Location Information
+The App does not collect or use any information about your location.
 
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Support](#support)
-6. [Contributing](#contributing)
-7. [License](#license)
+## Security
+While we do not collect or store any personal data, we take reasonable measures to protect the App from misuse, unauthorized access, and potential vulnerabilities. However, no data transmission over the internet or electronic storage can be guaranteed as completely secure.
 
-## Introduction
-OpenHIIT is a fully open source mobile application designed to assist users in their workout routines by providing customizable interval timers. It aims to help users maintain an efficient workout pace by setting intervals for exercise and rest periods.
+## Data Retention and Deletion Policy
+As we do not collect any personal or sensitive user data, there is no data to retain or delete. If this policy changes in the future, we will provide users with clear information on data retention and deletion.
 
-## Features
-- **Customizable Timers**: Create and customize interval timers according to your workout requirements.
-- **Multiple Intervals**: Set multiple exercise and rest intervals in a single timer session.
-- **Visual and Audio Cues**: Get visual and audio cues to indicate the start and end of each interval.
-- **Save and Load**: Save your favorite interval timer configurations and load them for future use.
+## Changes to this Privacy Policy
+We may update this Privacy Policy from time to time. Any updates will be posted on this page, and the updated version will take effect immediately. We encourage you to review this Privacy Policy periodically for any changes. Your continued use of the App after any revisions constitutes your acceptance of the updated Privacy Policy.
 
-<p align="center">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c7cc5c99-54ff-48a1-9aa9-8ec157454be6" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c974463f-466d-480d-bf4f-8476258657a9" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/6bfd8386-6576-4b2d-8ade-255252c13358" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/57dc7d12-54bc-46c5-aae4-19967065a7e5" width="150">
-</p>
+## Contact Us
+If you have any questions, concerns, or feedback regarding this Privacy Policy or our privacy practices, please contact mabe.abby.a@gmail.com.
 
-## Installation
-To install and test OpenHIIT, follow these steps:
+This Privacy Policy applies solely to the OpenHIIT app and does not cover any third-party websites, apps, or services that may be linked within the App. We encourage you to review the privacy policies of any third-party services before using them.
 
-1. Ensure you have Flutter and Dart SDK installed on your development environment. For more information, refer to the official Flutter documentation: [Flutter Installation](https://flutter.dev/docs/get-started/install)
-
-2. Clone the repository to your local machine using the following command:
-   ```
-   git clone https://github.com/a-mabe/openhiit.git
-   ```
-
-3. Change your working directory to the cloned repository:
-   ```
-   cd openhiit
-   ```
-
-4. Fetch the dependencies by running the following command:
-   ```
-   flutter pub get
-   ```
-
-5. Connect your mobile device or start an emulator.
-
-6. Launch the application using the following command:
-   ```
-   flutter run
-   ```
-
-The application will be installed on your device/emulator.
-
-## Usage
-Once OpenHIIT is installed and running on your device, follow these instructions to use the app:
-
-1. Launch the app and create a new interval timer.
-
-2. Customize the exercise and rest intervals according to your workout routine.
-
-3. Save the timer configuration.
-
-4. Start the timer and follow the visual and audio cues for exercise and rest intervals.
-
-5. Customize or load different timer configurations as needed.
-
-6. Provide feedback and report any bugs or issues you encounter during the beta testing phase.
-
-## Support
-
-For support and troubleshooting, please visit [the support page](./support.md).
-
-## Contributing
-Contributions to OpenHIIT are welcome. If you'd like to contribute, please follow these guidelines:
-
-1. Fork the repository on GitHub.
-
-2. Create a new branch with a descriptive name for your feature or bug fix.
-
-3. Make your changes and ensure they follow the project's coding style and guidelines.
-
-4. Commit your changes and push them to your forked repository.
-
-5. Submit a pull request, detailing the changes you made and explaining their purpose.
-
-## License
-OpenHIIT is open-source software released under the [MIT License](https://opensource.org/licenses/MIT). You are free to modify and distribute the application under the terms of this license. See the `LICENSE` file for more information.
-
-Please note that this README file is subject to change as the application evolves. Refer to the latest version of this file in the repository for the most up-to-date information.
+By using OpenHIIT, you acknowledge that you have read and understood this Privacy Policy and agree to its terms.
