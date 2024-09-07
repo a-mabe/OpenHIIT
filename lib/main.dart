@@ -13,6 +13,7 @@ import 'package:openhiit/utils/functions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'constants/snackbars.dart';
 import 'create_workout/select_timer.dart';
 import 'helper_widgets/export_bottom_sheet.dart';
@@ -438,6 +439,43 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Theme.of(context).scaffoldBackgroundColor,
         child: SafeArea(
           child: Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 30,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.info_outline),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("About OpenHIIT"),
+                              content: const Text(
+                                  "OpenHIIT is a free and open-source interval timer."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    final Uri url = Uri.parse(
+                                        'https://a-mabe.github.io/OpenHIIT/');
+                                    if (!await launchUrl(url)) {
+                                      throw Exception('Could not launch $url');
+                                    }
+                                  },
+                                  child: const Text("View privacy policy"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Close"),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                  ),
+                ],
+              ),
 
               /// Pushes to [SelectTimer()]
               floatingActionButton: Visibility(
