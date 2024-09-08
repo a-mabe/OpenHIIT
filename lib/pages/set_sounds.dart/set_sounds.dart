@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:openhiit/pages/home/home.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
-import '../../main.dart';
 import '../../models/workout_type.dart';
 import '../../utils/database/database_manager.dart';
 import 'widgets/sound_dropdown.dart';
