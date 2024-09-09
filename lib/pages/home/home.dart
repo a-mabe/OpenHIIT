@@ -5,7 +5,7 @@ import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/models/workout_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
 import 'package:openhiit/pages/view_workout/view_workout.dart';
-import 'package:openhiit/pages/view_workout/widgets/fab_column.dart';
+import 'package:openhiit/pages/home/widgets/fab_column.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:openhiit/utils/import_export/local_file_util.dart';
