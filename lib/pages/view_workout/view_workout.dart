@@ -15,7 +15,8 @@ import '../../models/lists/list_tile_model.dart';
 import '../active_timer/workout.dart';
 
 class ViewWorkout extends StatefulWidget {
-  const ViewWorkout({super.key});
+  final Workout workout;
+  const ViewWorkout({super.key, required this.workout});
   @override
   ViewWorkoutState createState() => ViewWorkoutState();
 }
@@ -65,9 +66,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    /// Extracting the Workout object from the route arguments.
-    ///
-    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workout = widget.workout;
 
     /// Parsing the exercises data from the Workout object.
     ///
@@ -111,7 +110,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CountDownTimer(),
+                    builder: (context) => CountDownTimer(workout: workout),
                     settings: RouteSettings(
                       arguments: workout,
                     ),

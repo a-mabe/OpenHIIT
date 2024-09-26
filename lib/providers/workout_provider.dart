@@ -7,16 +7,17 @@ class WorkoutProvider extends ChangeNotifier {
 
   List<Workout> get workouts => _workouts;
 
-  Future loadWorkoutData() async {
+  Future<List<Workout>> loadWorkoutData() async {
     var dbManager = DatabaseManager();
-    return dbManager.lists(dbManager.initDB()).then((entries) {
+    return dbManager.lists(dbManager.initDB()).then((workouts) {
       _workouts = workouts;
+      return _workouts;
     }).whenComplete(() {
       notifyListeners();
     });
   }
 
-  Future updateExpense(Workout workout) async {
+  Future updateWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
     return dbManager
         .updateList(workout, await DatabaseManager().initDB())
@@ -35,7 +36,7 @@ class WorkoutProvider extends ChangeNotifier {
     }).whenComplete(() => notifyListeners());
   }
 
-  Future addExpense(Workout workout) async {
+  Future addWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
     return dbManager
         .insertList(workout, await DatabaseManager().initDB())
@@ -44,7 +45,7 @@ class WorkoutProvider extends ChangeNotifier {
     }).whenComplete(() => notifyListeners());
   }
 
-  Future deleteExpense(Workout workout) async {
+  Future deleteWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
     return dbManager
         .deleteList(workout.id, DatabaseManager().initDB())
