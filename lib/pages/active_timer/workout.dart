@@ -18,20 +18,24 @@ import '../../models/lists/list_model_animated.dart';
 import '../../models/lists/list_tile_model.dart';
 
 class StartWorkout extends StatelessWidget {
-  const StartWorkout({super.key});
+  const StartWorkout({super.key, required this.workout});
+
+  final Workout workout;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CountDownTimer(),
+        child: CountDownTimer(workout: workout),
       ),
     );
   }
 }
 
 class CountDownTimer extends StatefulWidget {
-  const CountDownTimer({super.key});
+  const CountDownTimer({super.key, required this.workout});
+
+  final Workout workout;
 
   @override
   CountDownTimerState createState() => CountDownTimerState();
@@ -160,12 +164,10 @@ class CountDownTimerState extends State<CountDownTimer>
     WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
         false;
 
-    Workout workoutArgument =
-        ModalRoute.of(context)!.settings.arguments as Workout;
+    Workout workout = widget.workout;
 
-    List<dynamic> exercises = workoutArgument.exercises != ""
-        ? jsonDecode(workoutArgument.exercises)
-        : [];
+    List<dynamic> exercises =
+        workout.exercises != "" ? jsonDecode(workout.exercises) : [];
 
     final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
@@ -177,7 +179,7 @@ class CountDownTimerState extends State<CountDownTimer>
         shouldReset = false;
         intervalInfo = ListModel<ListTileModel>(
           listKey: listKey,
-          initialItems: listItems(exercises, workoutArgument),
+          initialItems: listItems(exercises, workout),
           removedItemBuilder: _buildRemovedItem,
         );
         intervalTotal = intervalInfo.length;
@@ -296,19 +298,19 @@ class CountDownTimerState extends State<CountDownTimer>
 
     return Countdown(
         controller: _workoutController,
-        iterations: workoutArgument.iterations,
-        workSeconds: workoutArgument.workTime,
-        restSeconds: workoutArgument.restTime,
-        breakSeconds: workoutArgument.breakTime,
-        getreadySeconds: workoutArgument.getReadyTime,
-        warmupSeconds: workoutArgument.warmupTime,
-        cooldownSeconds: workoutArgument.cooldownTime,
-        workSound: workoutArgument.workSound,
-        restSound: workoutArgument.restSound,
-        completeSound: workoutArgument.completeSound,
-        countdownSound: workoutArgument.countdownSound,
-        halfwaySound: workoutArgument.halfwaySound,
-        numberOfWorkIntervals: workoutArgument.numExercises,
+        iterations: workout.iterations,
+        workSeconds: workout.workTime,
+        restSeconds: workout.restTime,
+        breakSeconds: workout.breakTime,
+        getreadySeconds: workout.getReadyTime,
+        warmupSeconds: workout.warmupTime,
+        cooldownSeconds: workout.cooldownTime,
+        workSound: workout.workSound,
+        restSound: workout.restSound,
+        completeSound: workout.completeSound,
+        countdownSound: workout.countdownSound,
+        halfwaySound: workout.halfwaySound,
+        numberOfWorkIntervals: workout.numExercises,
         onFinished: () {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (intervalInfo.length == 1) {
@@ -333,11 +335,11 @@ class CountDownTimerState extends State<CountDownTimer>
           if (timerData.status == "complete" && restart == false) {
             done = true;
           } else if (timerData.status == "start" &&
-              timerData.iterations == workoutArgument.iterations) {
+              timerData.iterations == workout.iterations) {
             currentWorkInterval = 0;
             ListModel<ListTileModel> intervalList = ListModel<ListTileModel>(
               listKey: listKey,
-              initialItems: listItems(exercises, workoutArgument),
+              initialItems: listItems(exercises, workout),
               removedItemBuilder: _buildRemovedItem,
             );
 
@@ -437,7 +439,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                         timerText(
                                             timerData.currentMicroSeconds
                                                 .toString(),
-                                            workoutArgument),
+                                            workout),
                                         maxLines: 1,
                                         minFontSize: 20,
                                         maxFontSize: 20000,
@@ -712,7 +714,7 @@ class CountDownTimerState extends State<CountDownTimer>
                                   child: AutoSizeText(
                                 timerText(
                                     timerData.currentMicroSeconds.toString(),
-                                    workoutArgument),
+                                    workout),
                                 maxLines: 1,
                                 minFontSize: 20,
                                 maxFontSize: 20000,

@@ -6,12 +6,14 @@ import 'package:openhiit/models/workout_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
 import 'package:openhiit/pages/view_workout/view_workout.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
+import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:openhiit/utils/import_export/local_file_util.dart';
 import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
 import 'package:openhiit/widgets/home/timer_list_tile.dart';
 import 'package:openhiit/widgets/loader.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -34,13 +36,16 @@ class _MyHomePageState extends State<MyHomePage> {
   /// The initial list of workouts to be loaded fresh
   /// from the DB.
   ///
-  late Future<List<Workout>> workouts;
+  late Future workouts;
+
+  late WorkoutProvider workoutProvider;
 
   /// Initialize...
   @override
   void initState() {
     super.initState();
-    workouts = DatabaseManager().lists(DatabaseManager().initDB());
+
+    workoutProvider = Provider.of<WorkoutProvider>(context, listen: false);
   }
   // ---
 
@@ -95,12 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ViewWorkout(),
-
-        /// Pass the [tappedWorkout] as an argument to
-        /// the ViewWorkout page.
-        settings: RouteSettings(
-          arguments: tappedWorkout,
+        builder: (context) => ViewWorkout(
+          workout: tappedWorkout,
         ),
       ),
     ).then((value) {
@@ -398,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                         child: FutureBuilder(
-                            future: workouts,
+                            future: workoutProvider.loadWorkoutData(),
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               /// When [workouts] has successfully loaded.
