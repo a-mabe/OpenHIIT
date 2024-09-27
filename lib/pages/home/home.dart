@@ -33,11 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   ///
   List<Workout> reorderableWorkoutList = [];
 
-  /// The initial list of workouts to be loaded fresh
-  /// from the DB.
-  ///
-  late Future workouts;
-
   late WorkoutProvider workoutProvider;
 
   /// Initialize...
@@ -104,14 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
           workout: tappedWorkout,
         ),
       ),
-    ).then((value) {
-      /// When we come back to the hompage, refresh the
-      /// list of workouts by reloading from the DB.
-      ///
-      setState(() {
-        workouts = DatabaseManager().lists(DatabaseManager().initDB());
-      });
-    });
+    );
   }
   // ---
 
@@ -226,14 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),
-    ).then((value) {
-      /// When we come back to the hompage, refresh the
-      /// list of workouts by reloading from the DB.
-      ///
-      setState(() {
-        workouts = DatabaseManager().lists(DatabaseManager().initDB());
-      });
-    });
+    );
   }
   // ---
 
@@ -254,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
       exporting = true;
     });
 
-    List<Workout> loadedWorkouts = await workouts;
+    List<Workout> loadedWorkouts = workoutProvider.workouts;
 
     LocalFileUtil fileUtil = LocalFileUtil();
 
@@ -298,7 +279,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       exporting = true;
     });
-    List<Workout> loadedWorkouts = await workouts;
+    List<Workout> loadedWorkouts = workoutProvider.workouts;
 
     LocalFileUtil fileUtil = LocalFileUtil();
 
