@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:openhiit/pages/home/home.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
@@ -127,8 +128,14 @@ class ViewWorkoutState extends State<ViewWorkout> {
             ? 40
             : 80,
         onDelete: () {
-          deleteList(workout).then((value) => Navigator.pop(context));
-          Navigator.of(context).pop();
+          deleteList(workout).then((value) {
+            if (context.mounted) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MyHomePage()),
+                  (route) => false);
+            }
+          });
         },
         onEdit: () {
           Workout workoutCopy = workout.copy();
