@@ -8,12 +8,23 @@ import '../../models/workout_type.dart';
 class DatabaseManager {
   static const String _databaseName = "core1.db";
   static const String _workoutTableName = "WorkoutTable";
-  Database? _database;
 
-  DatabaseManager() {
+  // Singleton instance
+  static final DatabaseManager _instance = DatabaseManager._internal();
+
+  // Private constructor
+  DatabaseManager._internal() {
     _initPlatformDatabaseSettings();
   }
 
+  // Factory constructor to return the singleton instance
+  factory DatabaseManager() {
+    return _instance;
+  }
+
+  Database? _database;
+
+  // Initialize platform-specific database settings
   void _initPlatformDatabaseSettings() {
     if (Platform.isWindows || Platform.isLinux) {
       sqfliteFfiInit();
@@ -21,11 +32,16 @@ class DatabaseManager {
     }
   }
 
+  // Lazy initialization of the database, open it only once
   Future<Database> _getDatabase() async {
-    if (_database != null) return _database!;
-    return _database = await openWorkoutDatabase();
+    if (_database != null) {
+      return _database!;
+    }
+    _database = await openWorkoutDatabase();
+    return _database!;
   }
 
+  // Open the workout database
   Future<Database> openWorkoutDatabase() async {
     logger.d("Opening database");
 
@@ -70,6 +86,7 @@ class DatabaseManager {
     );
   }
 
+  // Handle database upgrades
   Future<void> _handleUpgrade(
       Database db, int oldVersion, int newVersion) async {
     if (oldVersion != newVersion) {
@@ -98,6 +115,7 @@ class DatabaseManager {
     }
   }
 
+  // Insert workout
   Future<void> insertWorkout(Workout workout) async {
     logger.d("Inserting workout: ${workout.title}");
 
@@ -109,6 +127,7 @@ class DatabaseManager {
     );
   }
 
+  // Update workout
   Future<void> updateWorkout(Workout workout) async {
     logger.d("Updating workout: ${workout.title}");
 
@@ -121,6 +140,7 @@ class DatabaseManager {
     );
   }
 
+  // Batch update workouts
   Future<void> updateWorkouts(List<Workout> workouts) async {
     logger.d("Updating ${workouts.length} workouts");
 
@@ -139,6 +159,7 @@ class DatabaseManager {
     await batch.commit(noResult: true);
   }
 
+  // Delete workout
   Future<void> deleteWorkout(String id) async {
     logger.d("Deleting workout with ID: $id");
 
@@ -150,6 +171,7 @@ class DatabaseManager {
     );
   }
 
+  // Get all workouts
   Future<List<Workout>> getWorkouts() async {
     logger.d("Getting all workouts");
 

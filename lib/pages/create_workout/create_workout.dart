@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:openhiit/widgets/form_widgets/create_form.dart';
 import '../../models/workout_type.dart';
 import '../../widgets/form_widgets/submit_button.dart';
-import '../set_exercises.dart/set_exercises.dart';
+import '../set_exercises/set_exercises.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(methodCount: 0),
