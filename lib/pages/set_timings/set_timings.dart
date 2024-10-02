@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:openhiit/pages/set_timings.dart/constants/set_timings_constants.dart';
+import 'package:openhiit/pages/set_timings/constants/set_timings_constants.dart';
 import 'widgets/time_input_trailing.dart';
 import '../../models/workout_type.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 import 'widgets/time_list_item.dart';
-import '../set_sounds.dart/set_sounds.dart';
+import '../set_sounds/set_sounds.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(methodCount: 0),
@@ -89,7 +89,7 @@ class _SetTimingsState extends State<SetTimings> {
     addListeners();
 
     logger.i(
-        "Loading for workout object for creation/editing: ${workout.toString()}");
+        "Loading workout object for creation/editing: ${workout.toString()}");
 
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(workout.workTime),

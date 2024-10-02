@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 import '../../models/workout_type.dart';
-import '../set_timings.dart/set_timings.dart';
+import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 
 var logger = Logger(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/widgets/form_widgets/create_form.dart';
 import '../../models/workout_type.dart';
-import '../set_timings.dart/set_timings.dart';
+import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 
 class CreateTimer extends StatefulWidget {

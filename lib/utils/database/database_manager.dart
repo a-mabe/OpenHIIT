@@ -1,166 +1,107 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:openhiit/utils/log/log.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../../models/workout_type.dart';
 
 class DatabaseManager {
-  /// The name of the database.
-  ///
-  /// e.g., "database.db"
-  ///
   static const String _databaseName = "core1.db";
-
-  /// The name of the table in the database where workouts are stored.
-  ///
-  /// e.g., "workouts"
-  ///
   static const String _workoutTableName = "WorkoutTable";
+  Database? _database;
 
-  Future<Database> initDB() async {
-    debugPrint("initDB executed");
+  DatabaseManager() {
+    _initPlatformDatabaseSettings();
+  }
 
+  void _initPlatformDatabaseSettings() {
     if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
       sqfliteFfiInit();
-      // Change the default factory
       databaseFactory = databaseFactoryFfiNoIsolate;
     }
+  }
 
-    //Directory documentsDirectory = await getApplicationDocumentsDirectory();
+  Future<Database> _getDatabase() async {
+    if (_database != null) return _database!;
+    return _database = await openWorkoutDatabase();
+  }
+
+  Future<Database> openWorkoutDatabase() async {
+    logger.d("Opening database");
+
+    const createWorkoutTableQuery = '''
+      CREATE TABLE IF NOT EXISTS $_workoutTableName(
+        id TEXT PRIMARY KEY,
+        title TEXT,
+        numExercises INTEGER,
+        exercises TEXT,
+        getReadyTime INTEGER,
+        exerciseTime INTEGER,
+        restTime INTEGER,
+        halfTime INTEGER,
+        breakTime INTEGER,
+        warmupTime INTEGER,
+        cooldownTime INTEGER,
+        iterations INTEGER,
+        halfwayMark INTEGER,
+        workSound TEXT,
+        restSound TEXT,
+        halfwaySound TEXT,
+        completeSound TEXT,
+        countdownSound TEXT,
+        colorInt INTEGER,
+        workoutIndex INTEGER,
+        showMinutes INTEGER
+      )
+    ''';
+
     String path = join(await getDatabasesPath(), _databaseName);
-    // Clear database for testing
-    // await deleteDatabase(path);
-    if (Platform.isWindows || Platform.isLinux) {
-      return await openDatabase(
-        inMemoryDatabasePath,
-        version: 5,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            title TEXT,
-            numExercises INTEGER,
-            exercises TEXT,
-            getReadyTime INTEGER,
-            exerciseTime INTEGER,
-            restTime INTEGER,
-            halfTime INTEGER,
-            breakTime INTEGER,
-            warmupTime INTEGER,
-            cooldownTime INTEGER,
-            iterations INTEGER,
-            halfwayMark INTEGER,
-            workSound TEXT,
-            restSound TEXT,
-            halfwaySound TEXT,
-            completeSound TEXT,
-            countdownSound TEXT,
-            colorInt INTEGER,
-            workoutIndex INTEGER,
-            showMinutes INTEGER
-            )
-            ''');
-        },
-        onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion == 1) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
-          }
-          if (oldVersion == 2) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
-          }
-          if (oldVersion == 3) {
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
-          }
-          if (oldVersion < newVersion) {
-            print("Add columns");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
-            await db.execute(
-                "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
-          }
-        },
-      );
-    }
-    return await openDatabase(
-      path,
-      version: 6,
-      onCreate: (Database db, int version) async {
-        await db.execute('''
-            CREATE TABLE IF NOT EXISTS WorkoutTable(id TEXT PRIMARY KEY,
-            title TEXT,
-            numExercises INTEGER,
-            exercises TEXT,
-            getReadyTime INTEGER,
-            exerciseTime INTEGER,
-            restTime INTEGER,
-            halfTime INTEGER,
-            breakTime INTEGER,
-            warmupTime INTEGER,
-            cooldownTime INTEGER,
-            iterations INTEGER,
-            halfwayMark INTEGER,
-            workSound TEXT,
-            restSound TEXT,
-            halfwaySound TEXT,
-            completeSound TEXT,
-            countdownSound TEXT,
-            colorInt INTEGER,
-            workoutIndex INTEGER,
-            showMinutes INTEGER
-            )
-            ''');
+    String dbPath =
+        (Platform.isWindows || Platform.isLinux) ? inMemoryDatabasePath : path;
+    int dbVersion = (Platform.isWindows || Platform.isLinux) ? 5 : 6;
+
+    return openDatabase(
+      dbPath,
+      version: dbVersion,
+      onCreate: (db, version) async {
+        await db.execute(createWorkoutTableQuery);
       },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion == 2) {
-          await db
-              .execute("ALTER TABLE WorkoutTable ADD COLUMN colorInt INTEGER;");
-        }
-        if (oldVersion == 3) {
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN workoutIndex INTEGER;");
-        }
-        if (oldVersion == 4) {
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN showMinutes INTEGER;");
-        }
-        if (oldVersion < newVersion) {
-          print("Add columns");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN getReadyTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN breakTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN warmupTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN cooldownTime INTEGER;");
-          await db.execute(
-              "ALTER TABLE WorkoutTable ADD COLUMN iterations INTEGER;");
-        }
-      },
+      onUpgrade: _handleUpgrade,
     );
   }
 
-  /// Inserts the given list into the given database.
-  ///
-  Future<void> insertList(Workout workout, Database database) async {
-    /// Get a reference to the database.
-    ///
-    final db = database;
+  Future<void> _handleUpgrade(
+      Database db, int oldVersion, int newVersion) async {
+    if (oldVersion != newVersion) {
+      logger.d("Upgrading database from $oldVersion to $newVersion");
+    }
 
-    /// Insert the TodoList into the correct table.
-    ///
-    /// In this case, replace any previous data.
-    ///
+    Map<int, List<String>> upgradeQueries = {
+      1: ["ALTER TABLE $_workoutTableName ADD COLUMN colorInt INTEGER;"],
+      2: ["ALTER TABLE $_workoutTableName ADD COLUMN workoutIndex INTEGER;"],
+      3: ["ALTER TABLE $_workoutTableName ADD COLUMN showMinutes INTEGER;"],
+      4: [
+        "ALTER TABLE $_workoutTableName ADD COLUMN getReadyTime INTEGER;",
+        "ALTER TABLE $_workoutTableName ADD COLUMN breakTime INTEGER;",
+        "ALTER TABLE $_workoutTableName ADD COLUMN warmupTime INTEGER;",
+        "ALTER TABLE $_workoutTableName ADD COLUMN cooldownTime INTEGER;",
+        "ALTER TABLE $_workoutTableName ADD COLUMN iterations INTEGER;"
+      ]
+    };
+
+    for (int i = oldVersion; i < newVersion; i++) {
+      if (upgradeQueries.containsKey(i)) {
+        for (var query in upgradeQueries[i]!) {
+          await db.execute(query);
+        }
+      }
+    }
+  }
+
+  Future<void> insertWorkout(Workout workout) async {
+    logger.d("Inserting workout: ${workout.title}");
+
+    final db = await _getDatabase();
     await db.insert(
       _workoutTableName,
       workout.toMap(),
@@ -168,80 +109,52 @@ class DatabaseManager {
     );
   }
 
-  /// Update the given list in the given database.
-  ///
-  Future<void> updateList(Workout workout, Database database) async {
-    /// Get a reference to the database.
-    ///
-    final db = database;
+  Future<void> updateWorkout(Workout workout) async {
+    logger.d("Updating workout: ${workout.title}");
 
+    final db = await _getDatabase();
     await db.update(
       _workoutTableName,
       workout.toMap(),
-      where: 'id = ?', // Ensure that the List has a matching id.
-      whereArgs: [
-        workout.id
-      ], // Pass the id as a whereArg to prevent SQL injection.
+      where: 'id = ?',
+      whereArgs: [workout.id],
     );
   }
 
-  Future<void> deleteList(String id, Future<Database> database) async {
-    /// Get a reference to the database.
-    ///
-    final db = await database;
+  Future<void> updateWorkouts(List<Workout> workouts) async {
+    logger.d("Updating ${workouts.length} workouts");
 
+    final db = await _getDatabase();
+    Batch batch = db.batch();
+
+    for (var workout in workouts) {
+      batch.update(
+        _workoutTableName,
+        workout.toMap(),
+        where: 'id = ?',
+        whereArgs: [workout.id],
+      );
+    }
+
+    await batch.commit(noResult: true);
+  }
+
+  Future<void> deleteWorkout(String id) async {
+    logger.d("Deleting workout with ID: $id");
+
+    final db = await _getDatabase();
     await db.delete(
       _workoutTableName,
-      where: 'id = ?', // Use a `where` clause to delete a specific list.
-      whereArgs: [
-        id
-      ], // Pass the List's id as a whereArg to prevent SQL injection.
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 
-  Future<List<Workout>> lists(Future<Database> database) async {
-    /// Get a reference to the database.
-    ///
-    final db = await database;
+  Future<List<Workout>> getWorkouts() async {
+    logger.d("Getting all workouts");
 
-    /// Query the table for all the TodoLists.
-    ///
+    final db = await _getDatabase();
     final List<Map<String, dynamic>> maps = await db.query(_workoutTableName);
-
-    /// Convert the List<Map<String, dynamic> into a List<TodoList>.
-    ///
-    return List.generate(maps.length, (i) {
-      return Workout(
-          maps[i]['id'],
-          maps[i]['title'],
-          maps[i]['numExercises'],
-          maps[i]['exercises'],
-          maps[i]['getReadyTime'] ?? 10,
-          maps[i]['exerciseTime'],
-          maps[i]['restTime'],
-          maps[i]['halfTime'],
-          maps[i]['breakTime'] ?? 0,
-          maps[i]['warmupTime'] ?? 0,
-          maps[i]['cooldownTime'] ?? 0,
-          maps[i]['iterations'] ?? 0,
-          maps[i]['halfwayMark'],
-          maps[i]['workSound'],
-          maps[i]['restSound'],
-          maps[i]['halfwaySound'],
-          maps[i]['completeSound'],
-          maps[i]['countdownSound'],
-          maps[i]['colorInt'] ??
-              4280391411, // Default to blue if no previous color selected
-          maps[i]['workoutIndex'] ??
-              i, // Default to the current index if no index change passed
-          maps[i]['showMinutes'] ?? 0 // Default to 0 if no previous selection
-          );
-    });
+    return maps.map((map) => Workout.fromMap(map)).toList();
   }
-
-  ///
-  /// -------------
-  /// END FUNCTIONS
-  /// -------------
-  ///
 }

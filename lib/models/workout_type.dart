@@ -198,6 +198,30 @@ class Workout {
     };
   }
 
+  Workout.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+    title = map['title'];
+    numExercises = map['numExercises'];
+    exercises = map['exercises'];
+    getReadyTime = map['getReadyTime'];
+    workTime = map['exerciseTime'];
+    restTime = map['restTime'];
+    halfTime = map['halfTime'];
+    breakTime = map['breakTime'];
+    warmupTime = map['warmupTime'];
+    cooldownTime = map['cooldownTime'];
+    iterations = map['iterations'];
+    halfwayMark = map['halfwayMark'];
+    workSound = map['workSound'];
+    restSound = map['restSound'];
+    halfwaySound = map['halfwaySound'];
+    completeSound = map['completeSound'];
+    countdownSound = map['countdownSound'];
+    colorInt = map['colorInt'];
+    workoutIndex = map['workoutIndex'];
+    showMinutes = map['showMinutes'];
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -271,6 +295,54 @@ class Workout {
       colorInt,
       workoutIndex,
       showMinutes,
+    );
+  }
+
+  Workout copyWith({
+    String? id,
+    String? title,
+    int? numExercises,
+    String? exercises,
+    int? getReadyTime,
+    int? workTime,
+    int? restTime,
+    int? halfTime,
+    int? breakTime,
+    int? warmupTime,
+    int? cooldownTime,
+    int? iterations,
+    int? halfwayMark,
+    String? workSound,
+    String? restSound,
+    String? halfwaySound,
+    String? completeSound,
+    String? countdownSound,
+    int? colorInt,
+    int? workoutIndex,
+    int? showMinutes,
+  }) {
+    return Workout(
+      id ?? this.id,
+      title ?? this.title,
+      numExercises ?? this.numExercises,
+      exercises ?? this.exercises,
+      getReadyTime ?? this.getReadyTime,
+      workTime ?? this.workTime,
+      restTime ?? this.restTime,
+      halfTime ?? this.halfTime,
+      breakTime ?? this.breakTime,
+      warmupTime ?? this.warmupTime,
+      cooldownTime ?? this.cooldownTime,
+      iterations ?? this.iterations,
+      halfwayMark ?? this.halfwayMark,
+      workSound ?? this.workSound,
+      restSound ?? this.restSound,
+      halfwaySound ?? this.halfwaySound,
+      completeSound ?? this.completeSound,
+      countdownSound ?? this.countdownSound,
+      colorInt ?? this.colorInt,
+      workoutIndex ?? this.workoutIndex,
+      showMinutes ?? this.showMinutes,
     );
   }
 

@@ -9,7 +9,7 @@ class WorkoutProvider extends ChangeNotifier {
 
   Future<List<Workout>> loadWorkoutData() async {
     var dbManager = DatabaseManager();
-    return dbManager.lists(dbManager.initDB()).then((workouts) {
+    return dbManager.getWorkouts().then((workouts) {
       _workouts = workouts;
       return _workouts;
     }).whenComplete(() {
@@ -19,9 +19,7 @@ class WorkoutProvider extends ChangeNotifier {
 
   Future updateWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
-    return dbManager
-        .updateList(workout, await DatabaseManager().initDB())
-        .then((_) {
+    return dbManager.updateWorkout(workout).then((_) {
       var updated = false;
       for (var i = 0; i < _workouts.length; i++) {
         if (_workouts[i].id == workout.id) {
@@ -38,18 +36,14 @@ class WorkoutProvider extends ChangeNotifier {
 
   Future addWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
-    return dbManager
-        .insertList(workout, await DatabaseManager().initDB())
-        .then((val) {
+    return dbManager.insertWorkout(workout).then((val) {
       _workouts.add(workout);
     }).whenComplete(() => notifyListeners());
   }
 
   Future deleteWorkout(Workout workout) async {
     var dbManager = DatabaseManager();
-    return dbManager
-        .deleteList(workout.id, DatabaseManager().initDB())
-        .then((_) {
+    return dbManager.deleteWorkout(workout.id).then((_) {
       _workouts.removeWhere((workout) => workout.id == workout.id);
     }).whenComplete(() => notifyListeners());
   }
@@ -65,6 +59,13 @@ class WorkoutProvider extends ChangeNotifier {
           ? Comparable.compare(aValue, bValue)
           : Comparable.compare(bValue, aValue);
     });
+    notifyListeners();
+  }
+
+  void updateWorkoutIndices(int start) {
+    for (var i = 0; i < _workouts.length; i++) {
+      _workouts[i] = _workouts[i].copyWith(workoutIndex: start + i);
+    }
     notifyListeners();
   }
 }
