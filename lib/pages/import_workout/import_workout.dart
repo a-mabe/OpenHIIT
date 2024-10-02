@@ -7,7 +7,6 @@ import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/pages/import_workout/widgets/file_error.dart';
 import 'package:openhiit/widgets/loader.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:uuid/uuid.dart';
 import 'widgets/copy_or_skip.dart';
 import '../../models/workout_type.dart';
@@ -37,8 +36,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
     /// of the list of workouts on the home page. If this is an existing workout
     /// that was edited, keep its index where it is.
     ///
-    Future<bool> importWorkoutUpdateDatabase(
-        Database database, Workout workoutArgument) async {
+    Future<bool> importWorkoutUpdateDatabase(Workout workoutArgument) async {
       /// Grab the list of existing workouts so we can bump down the
       /// index of each in order to make room for this new workout to be at
       /// the top of the list.
@@ -47,8 +45,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
       logger.i(
           "Adding imported workout to database: ${workoutArgument.toString()}");
 
-      List<Workout> workouts =
-          await DatabaseManager().lists(DatabaseManager().initDB());
+      List<Workout> workouts = await DatabaseManager().getWorkouts();
 
       logger.i("Grabbed existing workouts: ${workouts.length}");
 
@@ -59,10 +56,10 @@ class ImportWorkoutState extends State<ImportWorkout> {
       for (var i = 0; i < workouts.length; i++) {
         if (i == 0) {
           workouts[i].workoutIndex = 0;
-          await DatabaseManager().insertList(workouts[i], database);
+          await DatabaseManager().insertWorkout(workouts[i]);
         } else {
           workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          await DatabaseManager().updateList(workouts[i], database);
+          await DatabaseManager().updateWorkout(workouts[i]);
         }
       }
 
@@ -152,12 +149,9 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                           "Attempting to import ${workout.title}");
 
                                       try {
-                                        Database database =
-                                            await DatabaseManager().initDB();
-
                                         importStatus =
                                             await importWorkoutUpdateDatabase(
-                                                database, workout);
+                                                workout);
                                       } on Exception catch (e) {
                                         logger.e(
                                             "Database conflict on import: $e");

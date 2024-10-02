@@ -89,7 +89,7 @@ class _SetTimingsState extends State<SetTimings> {
     addListeners();
 
     logger.i(
-        "Loading for workout object for creation/editing: ${workout.toString()}");
+        "Loading workout object for creation/editing: ${workout.toString()}");
 
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(workout.workTime),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:openhiit/pages/home/home.dart';
+import 'package:openhiit/providers/workout_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 import '../../models/workout_type.dart';
 import '../../utils/database/database_manager.dart';
@@ -26,9 +27,7 @@ class _SetSoundsState extends State<SetSounds> {
   /// is successfully added to the DB, push to the home screen.
   ///
   void submitWorkout(Workout workoutArgument) async {
-    Database database = await DatabaseManager().initDB();
-
-    await updateDatabase(database, workoutArgument).then((value) => pushHome());
+    await saveWorkout(workoutArgument).then((value) => pushHome());
   }
 
   /// Update the database with the workout. If this is a brand new workout,
@@ -37,38 +36,20 @@ class _SetSoundsState extends State<SetSounds> {
   /// of the list of workouts on the home page. If this is an existing workout
   /// that was edited, keep its index where it is.
   ///
-  Future updateDatabase(database, Workout workoutArgument) async {
-    /// If the workout does not have an ID, that means this is a brand new
-    /// workout. Grab the list of existing workouts so we can bump down the
-    /// index of each in order to make room for this new workout to be at
-    /// the top of the list.
-    ///
+  Future saveWorkout(Workout workoutArgument) async {
+    WorkoutProvider workoutProvider =
+        Provider.of<WorkoutProvider>(context, listen: false);
+    DatabaseManager databaseManager = DatabaseManager();
+
     if (workoutArgument.id == "") {
-      List<Workout> workouts =
-          await DatabaseManager().lists(DatabaseManager().initDB());
-
-      // Give the new workout an ID
       workoutArgument.id = const Uuid().v1();
-
-      // Insert the new workout into the top (beginning) of the list
-      workouts.insert(0, workoutArgument);
-
-      // Increase the index of all old workouts by 1.
-      for (var i = 0; i < workouts.length; i++) {
-        if (i == 0) {
-          await DatabaseManager().insertList(workouts[i], database);
-        } else {
-          workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          await DatabaseManager().updateList(workouts[i], database);
-        }
-      }
-    }
-
-    /// If the workout already has an ID, that means this is an existing
-    /// workout that was edited. Simply update the workout in the DB.
-    ///
-    else {
-      await DatabaseManager().updateList(workoutArgument, database);
+      workoutProvider.updateWorkoutIndices(1);
+      await workoutProvider.addWorkout(workoutArgument).then((value) {
+        workoutProvider.sort((d) => d.workoutIndex, true);
+        databaseManager.updateWorkouts(workoutProvider.workouts);
+      });
+    } else {
+      await workoutProvider.updateWorkout(workoutArgument);
     }
   }
 

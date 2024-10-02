@@ -15,7 +15,6 @@ import 'package:openhiit/widgets/home/timer_list_tile.dart';
 import 'package:openhiit/widgets/loader.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Global flag to indicate if exporting is in progress
@@ -77,13 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
-    // Initialize the database and update the workout order in the database.
-    Database database = await DatabaseManager().initDB();
-
-    for (var i = 0; i < reorderableWorkoutList.length; i++) {
-      // Update the workout order in the database.
-      await DatabaseManager().updateList(reorderableWorkoutList[i], database);
-    }
+    DatabaseManager().updateWorkouts(reorderableWorkoutList);
   }
   // ---
 

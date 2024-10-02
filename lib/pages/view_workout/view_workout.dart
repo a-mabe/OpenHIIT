@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:openhiit/pages/home/home.dart';
+import 'package:openhiit/providers/workout_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import '../../utils/functions.dart';
 import 'widgets/start_button.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../widgets/card_item_animated.dart';
 import '../../utils/database/database_manager.dart';
 import 'widgets/view_workout_appbar.dart';
@@ -42,27 +43,13 @@ class ViewWorkoutState extends State<ViewWorkout> {
   /// Returns:
   ///   - A Future representing the completion of the delete operation.
   Future deleteList(workoutArgument) async {
-    // Initialize the database.
-    Future<Database> database = DatabaseManager().initDB();
+    WorkoutProvider workoutProvider =
+        Provider.of<WorkoutProvider>(context, listen: false);
+    DatabaseManager databaseManager = DatabaseManager();
 
-    // Delete the specified workout list from the database.
-    await DatabaseManager()
-        .deleteList(workoutArgument.id, database)
-        .then((value) async {
-      // Retrieve the updated list of workouts from the database.
-      List<Workout> workouts =
-          await DatabaseManager().lists(DatabaseManager().initDB());
-
-      // Sort the workouts based on their workout indices.
-      workouts.sort((a, b) => a.workoutIndex.compareTo(b.workoutIndex));
-
-      // Update the workout indices of remaining lists after the deleted list.
-      for (int i = workoutArgument.workoutIndex; i < workouts.length; i++) {
-        workouts[i].workoutIndex = i;
-        await DatabaseManager()
-            .updateList(workouts[i], await DatabaseManager().initDB());
-      }
-    });
+    workoutProvider.deleteWorkout(workoutArgument);
+    workoutProvider.updateWorkoutIndices(0);
+    databaseManager.updateWorkouts(workoutProvider.workouts);
   }
 
   @override
@@ -163,8 +150,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
           /// It duplicates the current workout and updates the list and the database accordingly.
 
           /// Fetch the list of workouts from the database.
-          List<Workout> workouts =
-              await DatabaseManager().lists(DatabaseManager().initDB());
+          List<Workout> workouts = await DatabaseManager().getWorkouts();
 
           /// Increment the workoutIndex of each workout in the list.
           for (Workout workout in workouts) {
@@ -199,15 +185,12 @@ class ViewWorkoutState extends State<ViewWorkout> {
           /// Insert the duplicate workout at the beginning of the list.
           workouts.insert(0, duplicateWorkout);
 
-          /// Initialize the database.
-          Database database = await DatabaseManager().initDB();
-
           /// Insert the duplicate workout into the database.
-          await DatabaseManager().insertList(duplicateWorkout, database);
+          await DatabaseManager().insertWorkout(duplicateWorkout);
 
           /// Update the workoutIndex of each workout in the database.
           for (Workout workout in workouts) {
-            await DatabaseManager().updateList(workout, database);
+            await DatabaseManager().updateWorkout(workout);
           }
 
           /// Navigate back to the main screen to show that the workout has been copied.
