@@ -48,6 +48,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
     DatabaseManager databaseManager = DatabaseManager();
 
     workoutProvider.deleteWorkout(workoutArgument);
+    workoutProvider.deleteIntervalsByWorkoutId(workoutArgument.id);
     workoutProvider.updateWorkoutIndices(0);
     databaseManager.updateWorkouts(workoutProvider.workouts);
   }

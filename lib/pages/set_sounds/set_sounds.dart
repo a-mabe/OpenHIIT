@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/utils/migrations/workout_type_migration.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:uuid/uuid.dart';
@@ -48,8 +49,10 @@ class _SetSoundsState extends State<SetSounds> {
         workoutProvider.sort((d) => d.workoutIndex, true);
         databaseManager.updateWorkouts(workoutProvider.workouts);
       });
+      await WorkoutTypeMigration().migrateToInterval(workoutArgument, false);
     } else {
       await workoutProvider.updateWorkout(workoutArgument);
+      await WorkoutTypeMigration().migrateToInterval(workoutArgument, true);
     }
   }
 

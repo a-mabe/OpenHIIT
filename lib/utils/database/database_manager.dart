@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:openhiit/models/interval_type.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -8,6 +9,7 @@ import '../../models/workout_type.dart';
 class DatabaseManager {
   static const String _databaseName = "core1.db";
   static const String _workoutTableName = "WorkoutTable";
+  static const String _intervalTableName = "IntervalTable";
 
   // Singleton instance
   static final DatabaseManager _instance = DatabaseManager._internal();
@@ -71,16 +73,32 @@ class DatabaseManager {
       )
     ''';
 
+    const createIntervalTableQuery = '''
+      CREATE TABLE IF NOT EXISTS $_intervalTableName(
+        id TEXT PRIMARY KEY,
+        workoutId TEXT,
+        time INTEGER,
+        name TEXT,
+        color INTEGER,
+        intervalIndex INTEGER,
+        sound TEXT,
+        halfwaySound TEXT
+      )
+    ''';
+
     String path = join(await getDatabasesPath(), _databaseName);
     String dbPath =
         (Platform.isWindows || Platform.isLinux) ? inMemoryDatabasePath : path;
-    int dbVersion = (Platform.isWindows || Platform.isLinux) ? 5 : 6;
+    int dbVersion = 7;
 
     return openDatabase(
       dbPath,
       version: dbVersion,
       onCreate: (db, version) async {
-        await db.execute(createWorkoutTableQuery);
+        Batch batch = db.batch();
+        batch.execute(createWorkoutTableQuery);
+        batch.execute(createIntervalTableQuery);
+        await batch.commit(noResult: true);
       },
       onUpgrade: _handleUpgrade,
     );
@@ -113,6 +131,53 @@ class DatabaseManager {
         }
       }
     }
+
+    if (oldVersion < newVersion) {
+      const createIntervalTableQuery = '''
+        CREATE TABLE IF NOT EXISTS $_intervalTableName(
+          id TEXT PRIMARY KEY,
+          workoutId TEXT,
+          time INTEGER,
+          name TEXT,
+          color INTEGER,
+          intervalIndex INTEGER,
+          sound TEXT,
+          halfwaySound TEXT
+        )
+      ''';
+
+      await db.execute(createIntervalTableQuery);
+    }
+  }
+
+  // Insert interval
+  Future<void> insertInterval(IntervalType interval) async {
+    logger.d("Inserting interval: ${interval.name}");
+
+    final db = await _getDatabase();
+    await db.insert(
+      _intervalTableName,
+      interval.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+  }
+
+  // Insert intervals
+  Future<void> insertIntervals(List<IntervalType> intervals) async {
+    logger.d("Inserting ${intervals.length} intervals");
+
+    final db = await _getDatabase();
+    Batch batch = db.batch();
+
+    for (var interval in intervals) {
+      batch.insert(
+        _intervalTableName,
+        interval.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.fail,
+      );
+    }
+
+    await batch.commit(noResult: true);
   }
 
   // Insert workout
@@ -125,6 +190,38 @@ class DatabaseManager {
       workout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.fail,
     );
+  }
+
+  // Update interval
+  Future<void> updateInterval(IntervalType interval) async {
+    logger.d("Updating interval: ${interval.name}");
+
+    final db = await _getDatabase();
+    await db.update(
+      _intervalTableName,
+      interval.toMap(),
+      where: 'id = ?',
+      whereArgs: [interval.id],
+    );
+  }
+
+  // Batch update intervals
+  Future<void> updateIntervals(List<IntervalType> intervals) async {
+    logger.d("Updating ${intervals.length} intervals");
+
+    final db = await _getDatabase();
+    Batch batch = db.batch();
+
+    for (var interval in intervals) {
+      batch.update(
+        _intervalTableName,
+        interval.toMap(),
+        where: 'id = ?',
+        whereArgs: [interval.id],
+      );
+    }
+
+    await batch.commit(noResult: true);
   }
 
   // Update workout
@@ -171,6 +268,30 @@ class DatabaseManager {
     );
   }
 
+  // Delete interval
+  Future<void> deleteInterval(String id) async {
+    logger.d("Deleting interval with ID: $id");
+
+    final db = await _getDatabase();
+    await db.delete(
+      _intervalTableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Delete intervals
+  Future<void> deleteIntervalsByWorkoutId(String workoutId) async {
+    logger.d("Deleting intervals for workout ID: $workoutId");
+
+    final db = await _getDatabase();
+    await db.delete(
+      _intervalTableName,
+      where: 'workoutId = ?',
+      whereArgs: [workoutId],
+    );
+  }
+
   // Get all workouts
   Future<List<Workout>> getWorkouts() async {
     logger.d("Getting all workouts");
@@ -178,5 +299,14 @@ class DatabaseManager {
     final db = await _getDatabase();
     final List<Map<String, dynamic>> maps = await db.query(_workoutTableName);
     return maps.map((map) => Workout.fromMap(map)).toList();
+  }
+
+  // Get all intervals
+  Future<List<IntervalType>> getIntervals() async {
+    logger.d("Getting all intervals");
+
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await db.query(_intervalTableName);
+    return maps.map((map) => IntervalType.fromMap(map)).toList();
   }
 }
