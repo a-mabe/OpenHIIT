@@ -48,6 +48,7 @@ class ViewWorkoutState extends State<ViewWorkout> {
     DatabaseManager databaseManager = DatabaseManager();
 
     workoutProvider.deleteWorkout(workoutArgument);
+    workoutProvider.deleteIntervalsByWorkoutId(workoutArgument.id);
     workoutProvider.updateWorkoutIndices(0);
     databaseManager.updateWorkouts(workoutProvider.workouts);
   }
@@ -159,27 +160,27 @@ class ViewWorkoutState extends State<ViewWorkout> {
 
           /// Create a duplicate of the current workout with a new unique ID and a workoutIndex of 0.
           Workout duplicateWorkout = Workout(
-            const Uuid().v1(),
-            workout.title,
-            workout.numExercises,
-            workout.exercises,
-            workout.getReadyTime,
-            workout.workTime,
-            workout.restTime,
-            workout.halfTime,
-            workout.breakTime,
-            workout.warmupTime,
-            workout.cooldownTime,
-            workout.iterations,
-            workout.halfwayMark,
-            workout.workSound,
-            workout.restSound,
-            workout.halfwaySound,
-            workout.completeSound,
-            workout.countdownSound,
-            workout.colorInt,
-            0,
-            workout.showMinutes,
+            id: const Uuid().v1(),
+            title: workout.title,
+            numExercises: workout.numExercises,
+            exercises: workout.exercises,
+            getReadyTime: workout.getReadyTime,
+            workTime: workout.workTime,
+            restTime: workout.restTime,
+            halfTime: workout.halfTime,
+            breakTime: workout.breakTime,
+            warmupTime: workout.warmupTime,
+            cooldownTime: workout.cooldownTime,
+            iterations: workout.iterations,
+            halfwayMark: workout.halfwayMark,
+            workSound: workout.workSound,
+            restSound: workout.restSound,
+            halfwaySound: workout.halfwaySound,
+            completeSound: workout.completeSound,
+            countdownSound: workout.countdownSound,
+            colorInt: workout.colorInt,
+            workoutIndex: 0,
+            showMinutes: workout.showMinutes,
           );
 
           /// Insert the duplicate workout at the beginning of the list.
