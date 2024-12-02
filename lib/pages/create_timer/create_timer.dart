@@ -1,8 +1,6 @@
-import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/set_exercises/set_exercises.dart';
-import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/widgets/form_widgets/create_form.dart';
 import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
@@ -20,7 +18,6 @@ class CreateTimer extends StatefulWidget {
 class CreateTimerState extends State<CreateTimer> {
   @override
   Widget build(BuildContext context) {
-    WorkoutProvider workoutProvider = WorkoutProvider();
     final formKey = GlobalKey<FormState>();
 
     /// Push to the SetTimings page.

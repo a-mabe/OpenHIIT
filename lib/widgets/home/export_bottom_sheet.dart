@@ -4,7 +4,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../constants/snackbars.dart';
 import '../../utils/import_export/local_file_util.dart';
-import '../../data/workout_type.dart';
 
 /// A bottom sheet widget used for exporting workout data.
 ///
@@ -78,11 +77,14 @@ class ExportBottomSheet extends StatelessWidget {
                         ShareResult? result =
                             await fileUtil.shareFile([timer!], context);
 
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            result!.status == ShareResultStatus.success
-                                ? createSuccessSnackBar("Shared successfully!")
-                                : createErrorSnackBar("Share not completed"));
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(result!
+                                      .status ==
+                                  ShareResultStatus.success
+                              ? createSuccessSnackBar("Shared successfully!")
+                              : createErrorSnackBar("Share not completed"));
+                        }
                       }
                     }
                   : share,

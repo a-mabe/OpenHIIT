@@ -1,13 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
-import '../../utils/functions.dart';
-import '../../data/workout_type.dart';
 
-///
-/// Background service countdown interval timer.
-///
 class TimerListTile extends StatefulWidget {
   final TimerType timer;
 
@@ -15,9 +8,6 @@ class TimerListTile extends StatefulWidget {
 
   final int index;
 
-  ///
-  /// Simple countdown timer
-  ///
   const TimerListTile({
     super.key,
     required this.timer,
@@ -29,9 +19,6 @@ class TimerListTile extends StatefulWidget {
   TimerListTileState createState() => TimerListTileState();
 }
 
-///
-/// State of timer
-///
 class TimerListTileState extends State<TimerListTile>
     with WidgetsBindingObserver {
   @override
@@ -70,13 +57,10 @@ class TimerListTileState extends State<TimerListTile>
         key: Key('$widget.index'),
         color: Color(widget.timer.color),
         child: ListTile(
-          // Title of the timer.
           title: Text(widget.timer.name),
           titleTextStyle: const TextStyle(
             fontSize: 20,
           ),
-          // Workout metadata.
-          // subtitle: Text(widget.timer.totalTime.toString()),
           subtitle: Text(
               '''${widget.timer.activities.isNotEmpty ? 'Exercises - ${widget.timer.activeIntervals}' : 'Intervals - ${widget.timer.activeIntervals}'}
 Exercise time - ${timeString(widget.timer.showMinutes, widget.timer.timeSettings.workTime)}

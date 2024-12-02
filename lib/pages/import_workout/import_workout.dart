@@ -6,13 +6,11 @@ import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/home/home.dart';
-import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/pages/import_workout/widgets/file_error.dart';
 import 'package:openhiit/widgets/loader.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'widgets/copy_or_skip.dart';
-import '../../data/workout_type.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ImportWorkout extends StatefulWidget {

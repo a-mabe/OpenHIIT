@@ -1,10 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
-import 'package:openhiit/utils/log/log.dart';
-import 'dart:convert';
-import '../../data/workout_type.dart';
 import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 
@@ -84,22 +79,6 @@ class _SetExercisesState extends State<SetExercises> {
           onSaved: (val) => setState(() => exercises.add(val!)),
         ),
       );
-    });
-  }
-
-  /// Push to the [SetTimings] view.
-  ///
-  void pushTimings(Workout workout) {
-    setState(() {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => const SetTimings(),
-      //     settings: RouteSettings(
-      //       arguments: workout,
-      //     ),
-      //   ),
-      // );
     });
   }
 

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
 
-import '../../../data/workout_type.dart';
-
 class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Called on delete button tap.
   ///

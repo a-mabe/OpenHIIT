@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/data/timer_type.dart';
-import 'package:openhiit/data/workout_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
 import 'package:openhiit/pages/view_workout/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
@@ -29,28 +28,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  /// List of workouts for reordering. The newly reordered
-  /// workout indeices with be saved to the DB.
-  ///
   List<TimerType> reorderableWorkoutList = [];
-
   late WorkoutProvider workoutProvider;
 
-  /// Initialize...
   @override
   void initState() {
     super.initState();
-
     workoutProvider = Provider.of<WorkoutProvider>(context, listen: false);
   }
-  // ---
 
-  /// Callback function for handling the reordering of items in the list.
-  ///
-  /// Parameters:
-  ///   - [oldIndex]: The index of the item before reordering.
-  ///   - [newIndex]: The index where the item is moved to after reordering.
-  ///
   void _onReorder(int oldIndex, int newIndex) async {
     // Ensure newIndex does not exceed the length of the list.
     if (newIndex > reorderableWorkoutList.length) {
@@ -81,23 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  /// Method called when a workout is tapped. Opens up the view workout page
-  /// for that workout.
-  ///
-  void onWorkoutTap(TimerType tappedTimer) {
-    /// Push the ViewWorkout page.
-    ///
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewTimer(
-          timer: tappedTimer,
-        ),
-      ),
-    );
-  }
-  // ---
-
   /// Widget for displaying a ReorderableListView of workout items.
   ///
   /// Parameters:
@@ -107,21 +76,25 @@ class _MyHomePageState extends State<MyHomePage> {
       onReorder: _onReorder, // Callback for handling item reordering.
       proxyDecorator: proxyDecorator, // Decorator for the dragged item.
       children: [
-        /// For each workout in the returned DB data snapshot.
-        ///
         for (final timer in snapshot.data)
           TimerListTile(
             key: Key('${timer.timerIndex}'), // Unique key for each list item.
             timer: timer,
             onTap: () {
-              onWorkoutTap(timer);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewTimer(
+                    timer: timer,
+                  ),
+                ),
+              );
             },
             index: timer.timerIndex,
           ),
       ],
     );
   }
-  // ---
 
   /// Generates the empty message for no [workouts] in DB.
   ///
@@ -188,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       Padding(
         padding: EdgeInsets.only(top: 16),
-        child: Text('Awaiting result...'),
+        child: Text('Fetching timers...'),
       ),
     ];
     return Center(
@@ -350,8 +323,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // ---
 
-  /// Build the home screen UI.
-  ///
   @override
   Widget build(BuildContext context) {
     setStatusBarBrightness(context);
@@ -411,7 +382,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             future: workoutProvider.loadWorkoutData(),
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
-                              /// When [workouts] has successfully loaded.
                               if (snapshot.hasData) {
                                 if (snapshot.data!.isEmpty) {
                                   return workoutEmpty();
@@ -421,15 +391,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       a.timerIndex.compareTo(b.timerIndex));
                                   return workoutListView(snapshot);
                                 }
-                              }
-
-                              /// When there was an error loading [workouts].
-                              else if (snapshot.hasError) {
+                              } else if (snapshot.hasError) {
                                 return workoutFetchError(snapshot);
-                              }
-
-                              /// While still waiting to load [workouts].
-                              else {
+                              } else {
                                 return workoutLoading();
                               }
                             }))),

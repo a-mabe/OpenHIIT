@@ -4,7 +4,6 @@ import 'package:background_hiit_timer/models/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/models/lists/timer_list_model_animated.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
-import 'package:openhiit/pages/active_timer/widgets/control_bar.dart';
 import 'package:openhiit/pages/active_timer/widgets/landscape_control_bar.dart';
 import 'package:openhiit/pages/active_timer/widgets/landscape_run_timer_appbar.dart';
 import 'package:openhiit/widgets/timer_card_item_animated.dart';
@@ -82,20 +81,6 @@ class LandscapeWorkoutViewState extends State<LandscapeWorkoutView> {
                 ),
               ]),
             ),
-            // Expanded(
-            //   flex: 10,
-            //   child: LandscapeControlBar(
-            //     onRestart: () => widget.controller.restart(),
-            //     paused: widget.paused,
-            //     changeVolume: widget.changeVolume,
-            //     volume: widget.volume,
-            //     onTogglePlayPause: widget.togglePause,
-            //     onAdjustVolume: widget.toggleVolumeSlider,
-            //     onSkipNext: widget.controller.skipNext,
-            //     onSkipPrevious: widget.controller.skipPrevious,
-            //     color: Colors.transparent,
-            //   ),
-            // ),
             Expanded(
                 flex: 47,
                 child: AnimatedList(

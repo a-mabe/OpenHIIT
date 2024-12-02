@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
 
-import '../../../data/workout_type.dart';
-
 class CopyOrSkipDialog extends StatelessWidget {
   /// Funtion to execute when the bulk FAB is pressed.
   ///

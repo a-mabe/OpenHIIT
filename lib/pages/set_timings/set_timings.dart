@@ -1,16 +1,8 @@
-import 'dart:async';
-
-import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_sound_settings.dart';
 import 'package:openhiit/data/timer_time_settings.dart';
 import 'package:openhiit/data/timer_type.dart';
-import 'package:openhiit/providers/workout_provider.dart';
-import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/set_timings/constants/set_timings_constants.dart';
-import 'package:provider/provider.dart';
 import 'widgets/time_input_trailing.dart';
-import '../../data/workout_type.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 import 'widgets/time_list_item.dart';
 import '../set_sounds/set_sounds.dart';
@@ -91,9 +83,6 @@ class _SetTimingsState extends State<SetTimings> {
 
   @override
   Widget build(BuildContext context) {
-    WorkoutProvider workoutProvider =
-        Provider.of<WorkoutProvider>(context, listen: false);
-
     Map<String, ValueNotifier<int>> notifierMap = {
       "Work": ValueNotifier(widget.timer.timeSettings.workTime),
       "Rest": ValueNotifier(widget.timer.timeSettings.restTime),
