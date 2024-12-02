@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/pages/create_timer/create_timer.dart';
 import '../../utils/functions.dart';
-import '../../models/workout_type.dart';
+import '../../data/workout_type.dart';
 import 'widgets/timer_option_card.dart';
 
 class SelectTimer extends StatefulWidget {
@@ -15,6 +17,7 @@ class SelectTimerState extends State<SelectTimer> {
   /// empty workout to pass to the next views.
   ///
   final workout = Workout.empty();
+  final timer = TimerType.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,15 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                     onTap: () {
-                      pushCreateTimer(workout, context, false, (value) {});
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateTimer(
+                            timer: timer,
+                            workout: false,
+                          ),
+                        ),
+                      );
                     },
                     optionIcon: Icons.timer,
                     optionTitle: "Interval Timer",
@@ -39,7 +50,15 @@ class SelectTimerState extends State<SelectTimer> {
                 ///
                 TimerOptionCard(
                   onTap: () {
-                    pushCreateWorkout(workout, context, false, (value) {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateTimer(
+                          timer: timer,
+                          workout: true,
+                        ),
+                      ),
+                    );
                   },
                   optionIcon: Icons.fitness_center,
                   optionTitle: "Workout",

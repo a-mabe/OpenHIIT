@@ -1,16 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/utils/log/log.dart';
 import 'dart:convert';
-import '../../models/workout_type.dart';
+import '../../data/workout_type.dart';
 import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
-
 class SetExercises extends StatefulWidget {
-  const SetExercises({super.key});
+  final TimerType timer;
+
+  const SetExercises({super.key, required this.timer});
 
   @override
   State<SetExercises> createState() => _SetExercisesState();
@@ -38,22 +39,12 @@ class _SetExercisesState extends State<SetExercises> {
   ///
   final formKey = GlobalKey<FormState>();
 
-  void generateTextControllers(Workout workout) {
-    /// If the workout already had a list of exercises and the
-    /// number of exercises is being updated, check the old
-    /// length so that the form fields can be prepopulated with
-    /// the old exercises.
-    ///
-    int currentNumWorkoutExercises =
-        workout.exercises != "" ? jsonDecode(workout.exercises).length : 0;
+  void generateTextControllers(TimerType timer) {
+    int currentNumWorkoutExercises = timer.activities.length;
 
-    List currentWorkoutExercises = [];
+    List currentWorkoutExercises = timer.activities;
 
-    if (currentNumWorkoutExercises > 0) {
-      currentWorkoutExercises = jsonDecode(workout.exercises);
-    }
-
-    for (var i = 0; i < workout.numExercises; i++) {
+    for (var i = 0; i < timer.activeIntervals; i++) {
       validators.add(false);
       if (i < currentNumWorkoutExercises) {
         // If there might be a previously set exercise, use it!
@@ -68,10 +59,8 @@ class _SetExercisesState extends State<SetExercises> {
 
   /// Generate the list of TextFormFields based off of the number of exercises.
   ///
-  List<Widget> generateTextFormFields(Workout workout) {
-    logger.i("Generating ${workout.numExercises} TextFormFields");
-
-    return List<Widget>.generate(workout.numExercises, (int index) {
+  List<Widget> generateTextFormFields(TimerType timer) {
+    return List<Widget>.generate(timer.activeIntervals, (int index) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
         child: TextFormField(
@@ -102,40 +91,38 @@ class _SetExercisesState extends State<SetExercises> {
   ///
   void pushTimings(Workout workout) {
     setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SetTimings(),
-          settings: RouteSettings(
-            arguments: workout,
-          ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const SetTimings(),
+      //     settings: RouteSettings(
+      //       arguments: workout,
+      //     ),
+      //   ),
+      // );
     });
   }
 
   /// Submit the form and call [pushTimings].
   ///
   void submitExercises(
-      GlobalKey<FormState> formKey, Workout workout, List exercises) {
+      GlobalKey<FormState> formKey, TimerType timer, List<String> exercises) {
     final form = formKey.currentState!;
     if (form.validate()) {
       form.save();
-      workout.exercises = jsonEncode(exercises);
-      pushTimings(workout);
+      timer.activities = exercises;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SetTimings(timer: timer),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    /// Grab the [workout] that was passed to this view
-    /// from the previous view.
-    ///
-    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    /// Generate the text controllers.
-    ///
-    generateTextControllers(workout);
+    generateTextControllers(widget.timer);
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -146,7 +133,7 @@ class _SetExercisesState extends State<SetExercises> {
           text: "Submit",
           color: Colors.blue,
           onTap: () {
-            submitExercises(formKey, workout, exercises);
+            submitExercises(formKey, widget.timer, exercises);
           },
         ),
         body: SizedBox(
@@ -157,7 +144,7 @@ class _SetExercisesState extends State<SetExercises> {
                     child: Form(
                       key: formKey,
                       child: Column(
-                        children: generateTextFormFields(workout),
+                        children: generateTextFormFields(widget.timer),
                       ),
                     )))));
   }

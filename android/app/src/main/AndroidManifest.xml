@@ -9,7 +9,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <service
-            android:name="id.flutter.openhiit_background_service.BackgroundService"
+            android:name="id.flutter.flutter_background_service.BackgroundService"
             android:foregroundServiceType="mediaPlayback">
         </service>
         <activity

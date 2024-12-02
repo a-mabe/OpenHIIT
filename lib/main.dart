@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:logger/logger.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:permission_handler/permission_handler.dart';

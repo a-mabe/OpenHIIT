@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:openhiit/data/timer_type.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../constants/snackbars.dart';
 import '../../utils/import_export/local_file_util.dart';
-import '../../models/workout_type.dart';
+import '../../data/workout_type.dart';
 
 /// A bottom sheet widget used for exporting workout data.
 ///
@@ -11,7 +12,7 @@ import '../../models/workout_type.dart';
 class ExportBottomSheet extends StatelessWidget {
   /// The workout to be exported.
   ///
-  final Workout? workout;
+  final TimerType? timer;
 
   /// Callback function to save the workout data.
   ///
@@ -21,7 +22,7 @@ class ExportBottomSheet extends StatelessWidget {
   ///
   final void Function()? share;
 
-  const ExportBottomSheet({super.key, this.workout, this.save, this.share});
+  const ExportBottomSheet({super.key, this.timer, this.save, this.share});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +34,13 @@ class ExportBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             InkWell(
-              onTap: workout != null
+              onTap: timer != null
                   ? () async {
                       LocalFileUtil fileUtil = LocalFileUtil();
 
-                      List<Workout> workoutsToExport = [workout!];
+                      List<TimerType> timersToExport = [timer!];
 
-                      await fileUtil.saveFileToDevice(workoutsToExport);
+                      await fileUtil.saveFileToDevice(timersToExport);
 
                       if (context.mounted) {
                         Navigator.pop(context);
@@ -67,15 +68,15 @@ class ExportBottomSheet extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: workout != null
+              onTap: timer != null
                   ? () async {
                       LocalFileUtil fileUtil = LocalFileUtil();
 
-                      await fileUtil.writeFile([workout!]);
+                      await fileUtil.writeFile([timer!]);
 
                       if (context.mounted) {
                         ShareResult? result =
-                            await fileUtil.shareFile([workout!], context);
+                            await fileUtil.shareFile([timer!], context);
 
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(

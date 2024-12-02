@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'list_tile_model.dart';
+import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 
 /// Keeps a Dart [List] in sync with an [AnimatedList].
 ///
@@ -15,15 +15,13 @@ import 'list_tile_model.dart';
 typedef RemovedItemBuilder<T> = Widget Function(
     T item, BuildContext context, Animation<double> animation);
 
-class ListModel<E> {
-  ListModel({
+class TimerListModel<E> {
+  TimerListModel({
     required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<ListTileModel>? initialItems,
-  }) : _items = List<E>.from(initialItems ?? <ListTileModel>[]);
+    Iterable<TimerListTileModel>? initialItems,
+  }) : _items = List<E>.from(initialItems ?? <TimerListTileModel>[]);
 
   final GlobalKey<AnimatedListState> listKey;
-  final RemovedItemBuilder<E> removedItemBuilder;
   final List<E> _items;
 
   AnimatedListState? get _animatedList => listKey.currentState;
@@ -31,19 +29,6 @@ class ListModel<E> {
   void insert(int index, E item) {
     _items.insert(index, item);
     _animatedList!.insertItem(index);
-  }
-
-  E removeAt(int index) {
-    final E removedItem = _items.removeAt(index);
-    if (removedItem != null && _animatedList != null) {
-      _animatedList!.removeItem(
-        index,
-        (BuildContext context, Animation<double> animation) {
-          return removedItemBuilder(removedItem, context, animation);
-        },
-      );
-    }
-    return removedItem;
   }
 
   int get length => _items.length;

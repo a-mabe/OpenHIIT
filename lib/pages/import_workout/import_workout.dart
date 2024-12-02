@@ -2,19 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/pages/import_workout/widgets/file_error.dart';
 import 'package:openhiit/widgets/loader.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'widgets/copy_or_skip.dart';
-import '../../models/workout_type.dart';
+import '../../data/workout_type.dart';
 import 'package:file_picker/file_picker.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
 
 class ImportWorkout extends StatefulWidget {
   const ImportWorkout({super.key});
@@ -30,40 +29,25 @@ class ImportWorkoutState extends State<ImportWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    WorkoutProvider workoutProvider = Provider.of<WorkoutProvider>(context);
+
     /// Update the database with the workout. If this is a brand new workout,
     /// make its index the first in the list of workouts and push down the
     /// rest of the workouts. This ensures the new workout appears at the top
     /// of the list of workouts on the home page. If this is an existing workout
     /// that was edited, keep its index where it is.
     ///
-    Future<bool> importWorkoutUpdateDatabase(Workout workoutArgument) async {
-      /// Grab the list of existing workouts so we can bump down the
-      /// index of each in order to make room for this new workout to be at
-      /// the top of the list.
-      ///
+    Future<bool> importWorkoutUpdateDatabase(
+        TimerType timer, WorkoutProvider workoutProvider) async {
+      logger.i("Adding imported timer to database: ${timer.toString()}");
+      timer.timerIndex = 0;
 
-      logger.i(
-          "Adding imported workout to database: ${workoutArgument.toString()}");
+      await workoutProvider
+          .addIntervals(workoutProvider.generateIntervalsFromSettings(timer));
+      await workoutProvider.addTimer(timer);
 
-      List<Workout> workouts = await DatabaseManager().getWorkouts();
-
-      logger.i("Grabbed existing workouts: ${workouts.length}");
-
-      // Insert the new workout into the top (beginning) of the list
-      workouts.insert(0, workoutArgument);
-
-      // Increase the index of all old workouts by 1.
-      for (var i = 0; i < workouts.length; i++) {
-        if (i == 0) {
-          workouts[i].workoutIndex = 0;
-          await DatabaseManager().insertWorkout(workouts[i]);
-        } else {
-          workouts[i].workoutIndex = workouts[i].workoutIndex + 1;
-          await DatabaseManager().updateWorkout(workouts[i]);
-        }
-      }
-
-      logger.i("Workout added and index of existing workouts updated.");
+      logger.d("Imported timer: $timer");
+      logger.d("All timers: ${workoutProvider.timers}");
       return true;
     }
 
@@ -136,22 +120,30 @@ class ImportWorkoutState extends State<ImportWorkout> {
                               final List<dynamic> parsedList =
                                   await jsonDecode(contents);
 
-                              for (Map<String, dynamic> parsedWorkout
+                              logger.d("Parsed list: $parsedList");
+
+                              for (Map<String, dynamic> parsedTimer
                                   in parsedList) {
                                 try {
-                                  Workout workout =
-                                      Workout.fromJson(parsedWorkout);
+                                  logger.d("Creating object from json");
 
-                                  if (workout.title.isNotEmpty) {
+                                  TimerType timer =
+                                      TimerType.fromJson(parsedTimer);
+
+                                  logger.d("Parsed timer: $timer");
+
+                                  logger.d("settings: ${timer.timeSettings}");
+
+                                  if (timer.name.isNotEmpty) {
                                     bool importStatus = true;
                                     do {
                                       logger.i(
-                                          "Attempting to import ${workout.title}");
+                                          "Attempting to import ${timer.name}");
 
                                       try {
                                         importStatus =
                                             await importWorkoutUpdateDatabase(
-                                                workout);
+                                                timer, workoutProvider);
                                       } on Exception catch (e) {
                                         logger.e(
                                             "Database conflict on import: $e");
@@ -163,7 +155,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return CopyOrSkipDialog(
-                                                workout: workout,
+                                                timer: timer,
                                                 onSkip: () {
                                                   Navigator.of(context).pop();
                                                 },
@@ -180,7 +172,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                    'Importing copy of ${workout.title}'),
+                                                    'Importing copy of ${timer.name}'),
                                                 behavior:
                                                     SnackBarBehavior.fixed,
                                                 duration:
@@ -193,12 +185,18 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                       }
 
                                       if (!importStatus) {
-                                        workout.title = "${workout.title}_copy";
-                                        workout.id = const Uuid().v1();
+                                        timer.name = "${timer.name}_copy";
+                                        timer.id = const Uuid().v1();
+                                        timer.timeSettings.id =
+                                            const Uuid().v1();
+                                        timer.timeSettings.timerId = timer.id;
+                                        timer.soundSettings.id =
+                                            const Uuid().v1();
+                                        timer.soundSettings.timerId = timer.id;
                                       }
                                     } while (!importStatus);
                                     logger.i(
-                                        "Successfully imported ${workout.title}");
+                                        "Successfully imported ${timer.name}");
                                   } else {
                                     // User canceled the file picker
                                   }
@@ -287,7 +285,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
             )),
             LoaderTransparent(
               loadingMessage: "Importing selected file(s)",
-              visibile: loading,
+              visible: loading,
             )
           ],
         )));

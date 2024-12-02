@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:openhiit/constants/snackbars.dart';
-import 'package:openhiit/models/workout_type.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/data/workout_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
-import 'package:openhiit/pages/view_workout/view_workout.dart';
+import 'package:openhiit/pages/view_workout/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// List of workouts for reordering. The newly reordered
   /// workout indeices with be saved to the DB.
   ///
-  List<Workout> reorderableWorkoutList = [];
+  List<TimerType> reorderableWorkoutList = [];
 
   late WorkoutProvider workoutProvider;
 
@@ -60,37 +61,37 @@ class _MyHomePageState extends State<MyHomePage> {
     if (oldIndex < newIndex) newIndex -= 1;
 
     // Extract the Workout item being reordered.
-    final Workout item = reorderableWorkoutList[oldIndex];
+    final TimerType item = reorderableWorkoutList[oldIndex];
     // Remove the item from its old position.
     reorderableWorkoutList.removeAt(oldIndex);
 
     // Update the workoutIndex of the item to the new position.
-    item.workoutIndex = newIndex;
+    item.timerIndex = newIndex;
     // Insert the item at the new position.
     reorderableWorkoutList.insert(newIndex, item);
 
     // Update the workoutIndex for all items in the list.
     setState(() {
       for (var i = 0; i < reorderableWorkoutList.length; i++) {
-        reorderableWorkoutList[i].workoutIndex = i;
+        reorderableWorkoutList[i].timerIndex = i;
       }
     });
 
-    DatabaseManager().updateWorkouts(reorderableWorkoutList);
+    DatabaseManager().updateTimers(reorderableWorkoutList);
   }
   // ---
 
   /// Method called when a workout is tapped. Opens up the view workout page
   /// for that workout.
   ///
-  void onWorkoutTap(Workout tappedWorkout) {
+  void onWorkoutTap(TimerType tappedTimer) {
     /// Push the ViewWorkout page.
     ///
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ViewWorkout(
-          workout: tappedWorkout,
+        builder: (context) => ViewTimer(
+          timer: tappedTimer,
         ),
       ),
     );
@@ -108,15 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         /// For each workout in the returned DB data snapshot.
         ///
-        for (final workout in snapshot.data)
+        for (final timer in snapshot.data)
           TimerListTile(
-            key: Key(
-                '${workout.workoutIndex}'), // Unique key for each list item.
-            workout: workout,
+            key: Key('${timer.timerIndex}'), // Unique key for each list item.
+            timer: timer,
             onTap: () {
-              onWorkoutTap(workout);
+              onWorkoutTap(timer);
             },
-            index: workout.workoutIndex,
+            index: timer.timerIndex,
           ),
       ],
     );
@@ -229,11 +229,8 @@ class _MyHomePageState extends State<MyHomePage> {
       exporting = true;
     });
 
-    List<Workout> loadedWorkouts = workoutProvider.workouts;
-
     LocalFileUtil fileUtil = LocalFileUtil();
-
-    bool result = await fileUtil.saveFileToDevice(loadedWorkouts);
+    bool result = await fileUtil.saveFileToDevice(workoutProvider.timers);
 
     if (result) {
       setState(() {
@@ -273,15 +270,15 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       exporting = true;
     });
-    List<Workout> loadedWorkouts = workoutProvider.workouts;
+    // List<Workout> loadedWorkouts = workoutProvider.workouts;
 
     LocalFileUtil fileUtil = LocalFileUtil();
 
-    await fileUtil.writeFile(loadedWorkouts);
+    await fileUtil.writeFile(workoutProvider.timers);
 
     if (buildContext.mounted) {
-      ShareResult? result =
-          await fileUtil.shareMultipleFiles(loadedWorkouts, buildContext);
+      ShareResult? result = await fileUtil.shareMultipleFiles(
+          workoutProvider.timers, buildContext);
 
       if (result != null) {
         if (result.status == ShareResultStatus.dismissed ||
@@ -323,7 +320,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return ExportBottomSheet(
-          workout: null,
+          timer: null,
           save: saveWorkouts,
           share: () => shareWorkouts(context),
         );
@@ -421,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 } else {
                                   reorderableWorkoutList = snapshot.data;
                                   reorderableWorkoutList.sort((a, b) =>
-                                      a.workoutIndex.compareTo(b.workoutIndex));
+                                      a.timerIndex.compareTo(b.timerIndex));
                                   return workoutListView(snapshot);
                                 }
                               }
@@ -438,7 +435,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             }))),
                 LoaderTransparent(
                   loadingMessage: "Exporting file(s)",
-                  visibile: exporting,
+                  visible: exporting,
                 )
               ])),
         ));
