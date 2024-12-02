@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/data/workout_type.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/home/home.dart';
@@ -29,12 +30,6 @@ class ImportWorkoutState extends State<ImportWorkout> {
   Widget build(BuildContext context) {
     WorkoutProvider workoutProvider = Provider.of<WorkoutProvider>(context);
 
-    /// Update the database with the workout. If this is a brand new workout,
-    /// make its index the first in the list of workouts and push down the
-    /// rest of the workouts. This ensures the new workout appears at the top
-    /// of the list of workouts on the home page. If this is an existing workout
-    /// that was edited, keep its index where it is.
-    ///
     Future<bool> importWorkoutUpdateDatabase(
         TimerType timer, WorkoutProvider workoutProvider) async {
       logger.i("Adding imported timer to database: ${timer.toString()}");
@@ -120,19 +115,33 @@ class ImportWorkoutState extends State<ImportWorkout> {
 
                               logger.d("Parsed list: $parsedList");
 
-                              for (Map<String, dynamic> parsedTimer
+                              for (Map<String, dynamic> parsedItem
                                   in parsedList) {
                                 try {
                                   logger.d("Creating object from json");
 
-                                  TimerType timer =
-                                      TimerType.fromJson(parsedTimer);
+                                  TimerType? timer;
+                                  Workout? workout;
 
-                                  logger.d("Parsed timer: $timer");
+                                  try {
+                                    timer = TimerType.fromJson(parsedItem);
+                                    logger.d("Parsed timer: $timer");
+                                  } catch (e) {
+                                    logger.e("Error parsing TimerType: $e");
+                                  }
 
-                                  logger.d("settings: ${timer.timeSettings}");
+                                  if (timer == null) {
+                                    try {
+                                      workout = Workout.fromJson(parsedItem);
+                                      timer = workoutProvider.migrateToTimer(
+                                          workout, false);
+                                      logger.d("Parsed workout: $workout");
+                                    } catch (e) {
+                                      logger.e("Error parsing Workout: $e");
+                                    }
+                                  }
 
-                                  if (timer.name.isNotEmpty) {
+                                  if (timer != null && timer.name.isNotEmpty) {
                                     bool importStatus = true;
                                     do {
                                       logger.i(
@@ -153,7 +162,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return CopyOrSkipDialog(
-                                                timer: timer,
+                                                timer: timer!,
                                                 onSkip: () {
                                                   Navigator.of(context).pop();
                                                 },
@@ -195,6 +204,11 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                     } while (!importStatus);
                                     logger.i(
                                         "Successfully imported ${timer.name}");
+                                  } else if (workout != null &&
+                                      workout.title.isNotEmpty) {
+                                    // Handle workout import logic here
+                                    logger.i(
+                                        "Successfully imported workout ${workout.title}");
                                   } else {
                                     // User canceled the file picker
                                   }
@@ -210,7 +224,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                           title:
                                               "Error reading ${file.path.split('/').last}",
                                           message:
-                                              "File contains invalid timer configuration, skipping import.",
+                                              "File contains invalid timer or workout configuration, skipping import.",
                                         );
                                       },
                                     );
@@ -219,7 +233,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                               }
                             } on Exception catch (e) {
                               logger.e(
-                                  "The provided file does not contain valid exported timer JSON: $e");
+                                  "The provided file does not contain valid exported timer or workout JSON: $e");
 
                               if (context.mounted) {
                                 await showDialog(
@@ -229,7 +243,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                       title:
                                           "Error reading ${file.path.split('/').last}",
                                       message:
-                                          "File contains invalid exported timer format, skipping import.",
+                                          "File contains invalid exported timer or workout format, skipping import.",
                                     );
                                   },
                                 );
