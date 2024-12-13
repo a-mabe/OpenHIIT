@@ -157,10 +157,10 @@ class CreateFormState extends State<CreateForm> {
                       NumberInput(
                           widgetWidth: 60,
                           numberInputKey: const Key('interval-input'),
-                          controller: TextEditingController(),
-                          numberValue: widget.timer.activeIntervals == 0
-                              ? -1
-                              : widget.timer.activeIntervals,
+                          controller: TextEditingController(
+                              text: widget.timer.activeIntervals == 0
+                                  ? ""
+                                  : widget.timer.activeIntervals.toString()),
                           formatter: (value) {
                             return value;
                           },

@@ -280,7 +280,7 @@ class _SetTimingsState extends State<SetTimings> {
                                 setState(() => repeat = 0);
                               }
                             } else {
-                              if (value != "") {
+                              if (value != "" && value != "0") {
                                 setState(() =>
                                     timeMap["${titleList[index]}-seconds"] =
                                         value!.contains(".")

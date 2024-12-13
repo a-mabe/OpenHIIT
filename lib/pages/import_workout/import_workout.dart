@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/data/workout_type.dart';
@@ -35,8 +36,14 @@ class ImportWorkoutState extends State<ImportWorkout> {
       logger.i("Adding imported timer to database: ${timer.toString()}");
       timer.timerIndex = 0;
 
-      await workoutProvider
-          .addIntervals(workoutProvider.generateIntervalsFromSettings(timer));
+      logger.d("Timer: ${timer.soundSettings}");
+
+      List<IntervalType> intervals =
+          workoutProvider.generateIntervalsFromSettings(timer);
+      timer.totalTime =
+          workoutProvider.calculateTotalTimeFromIntervals(intervals);
+
+      await workoutProvider.addIntervals(intervals);
       await workoutProvider.addTimer(timer);
 
       logger.d("Imported timer: $timer");
@@ -120,17 +127,20 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                 try {
                                   logger.d("Creating object from json");
 
-                                  TimerType? timer;
-                                  Workout? workout;
+                                  TimerType timer = TimerType.empty();
+                                  Workout workout = Workout.empty();
+                                  bool timerParsed = false;
 
                                   try {
                                     timer = TimerType.fromJson(parsedItem);
                                     logger.d("Parsed timer: $timer");
+                                    timerParsed = true;
                                   } catch (e) {
+                                    timerParsed = false;
                                     logger.e("Error parsing TimerType: $e");
                                   }
 
-                                  if (timer == null) {
+                                  if (!timerParsed) {
                                     try {
                                       workout = Workout.fromJson(parsedItem);
                                       timer = workoutProvider.migrateToTimer(
@@ -141,7 +151,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                     }
                                   }
 
-                                  if (timer != null && timer.name.isNotEmpty) {
+                                  if (timer.name.isNotEmpty) {
                                     bool importStatus = true;
                                     do {
                                       logger.i(
@@ -162,7 +172,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return CopyOrSkipDialog(
-                                                timer: timer!,
+                                                timer: timer,
                                                 onSkip: () {
                                                   Navigator.of(context).pop();
                                                 },
@@ -204,8 +214,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                     } while (!importStatus);
                                     logger.i(
                                         "Successfully imported ${timer.name}");
-                                  } else if (workout != null &&
-                                      workout.title.isNotEmpty) {
+                                  } else if (workout.title.isNotEmpty) {
                                     // Handle workout import logic here
                                     logger.i(
                                         "Successfully imported workout ${workout.title}");

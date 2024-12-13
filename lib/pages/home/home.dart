@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
@@ -8,7 +9,6 @@ import 'package:openhiit/pages/view_workout/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
-import 'package:openhiit/utils/functions.dart';
 import 'package:openhiit/utils/import_export/local_file_util.dart';
 import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
 import 'package:openhiit/widgets/home/timer_list_tile.dart';
@@ -88,7 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     timer: timer,
                   ),
                 ),
-              );
+              ).then((value) {
+                if (mounted) {
+                  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                    statusBarBrightness: Theme.of(context).brightness,
+                  ));
+                }
+              });
             },
             index: timer.timerIndex,
           ),
@@ -325,7 +331,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    setStatusBarBrightness(context);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Theme.of(context).brightness,
+    ));
 
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,

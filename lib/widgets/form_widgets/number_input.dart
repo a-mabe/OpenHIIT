@@ -6,7 +6,7 @@ import 'numerical_input_formatter.dart';
 class NumberInput extends StatefulWidget {
   /// Vars
 
-  final int numberValue;
+  final int? numberValue;
 
   final double widgetWidth;
 
@@ -34,7 +34,7 @@ class NumberInput extends StatefulWidget {
 
   const NumberInput({
     super.key,
-    required this.numberValue,
+    this.numberValue,
     required this.widgetWidth,
     required this.formatter,
     required this.onSaved,
@@ -57,6 +57,14 @@ class NumberInputState extends State<NumberInput> {
   @override
   void initState() {
     super.initState();
+    // Defer the state update to avoid calling setState during build
+    if (widget.numberValue != null) {
+      Future.microtask(() {
+        widget.controller.text = widget.numberValue == -1
+            ? ""
+            : widget.formatter(widget.numberValue).toString();
+      });
+    }
   }
 
   @override
@@ -66,10 +74,6 @@ class NumberInputState extends State<NumberInput> {
 
   @override
   Widget build(BuildContext context) {
-    widget.controller.text = widget.numberValue == -1
-        ? ""
-        : widget.formatter(widget.numberValue).toString();
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,

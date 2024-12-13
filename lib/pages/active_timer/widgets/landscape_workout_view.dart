@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:openhiit/models/lists/timer_list_model_animated.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/widgets/landscape_control_bar.dart';
-import 'package:openhiit/pages/active_timer/widgets/landscape_run_timer_appbar.dart';
+import 'package:openhiit/pages/active_timer/widgets/run_timer_appbar.dart';
 import 'package:openhiit/widgets/timer_card_item_animated.dart';
 
 class LandscapeWorkoutView extends StatefulWidget {
@@ -18,6 +18,7 @@ class LandscapeWorkoutView extends StatefulWidget {
   final VoidCallback toggleVolumeSlider;
   final GlobalKey<AnimatedListState> listKey;
   final TimerListModelAnimated<TimerListTileModel> intervalTiles;
+  final int showMinutes;
 
   const LandscapeWorkoutView({
     super.key,
@@ -30,6 +31,7 @@ class LandscapeWorkoutView extends StatefulWidget {
     required this.toggleVolumeSlider,
     required this.listKey,
     required this.intervalTiles,
+    required this.showMinutes,
   });
 
   @override
@@ -37,18 +39,45 @@ class LandscapeWorkoutView extends StatefulWidget {
 }
 
 class LandscapeWorkoutViewState extends State<LandscapeWorkoutView> {
+  String timerText(int currentSeconds, int showMinutes) {
+    if (showMinutes == 1) {
+      // int currentSecondsInt = int.parse(currentSeconds);
+      int seconds = currentSeconds % 60;
+      int minutes = ((currentSeconds - seconds) / 60).round();
+
+      if (minutes == 0) {
+        return currentSeconds.toString();
+      }
+
+      String secondsString = seconds.toString();
+      if (seconds < 10) {
+        secondsString = "0$seconds";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return currentSeconds.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Row(
           children: [
-            Expanded(flex: 8, child: LandscapeRunTimerAppBar()),
             Expanded(
               flex: 35,
               child: Column(children: [
                 Expanded(
-                    flex: 80,
+                    flex: 20,
+                    child: RunTimerAppBar(
+                      text: widget.intervalTiles.length > 0
+                          ? widget.intervalTiles[0].intervalString()
+                          : "",
+                    )),
+                Expanded(
+                    flex: 60,
                     child: Center(
                         child: FittedBox(
                             fit: BoxFit
@@ -60,10 +89,12 @@ class LandscapeWorkoutViewState extends State<LandscapeWorkoutView> {
                                   height: 1,
                                   color: Colors.white,
                                   fontSize: 1000),
-                              (widget.timerState.currentMicroSeconds /
-                                      const Duration(seconds: 1).inMicroseconds)
-                                  .round()
-                                  .toString(),
+                              timerText(
+                                  (widget.timerState.currentMicroSeconds /
+                                          const Duration(seconds: 1)
+                                              .inMicroseconds)
+                                      .round(),
+                                  widget.showMinutes),
                             )))),
                 Expanded(
                   flex: 20,

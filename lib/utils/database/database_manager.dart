@@ -107,6 +107,12 @@ class DatabaseManager {
     }
   }
 
+  // Return database version number
+  Future<int> getDatabaseVersion() async {
+    final db = await _getDatabase();
+    return db.getVersion();
+  }
+
   // Insert interval
   Future<void> insertInterval(IntervalType interval) async {
     final db = await _getDatabase();
@@ -120,17 +126,25 @@ class DatabaseManager {
   // Insert intervals
   Future<void> insertIntervals(List<IntervalType> intervals) async {
     final db = await _getDatabase();
-    Batch batch = db.batch();
+    const int batchSize = 10000; // Number of rows per batch
 
-    for (var interval in intervals) {
-      batch.insert(
-        intervalTableName,
-        interval.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.fail,
-      );
+    for (var i = 0; i < intervals.length; i += batchSize) {
+      final batch = db.batch();
+
+      // Get the next chunk of intervals
+      final chunk = intervals.skip(i).take(batchSize);
+
+      for (var interval in chunk) {
+        batch.insert(
+          intervalTableName,
+          interval.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.fail,
+        );
+      }
+
+      // Commit the batch
+      await batch.commit(noResult: true);
     }
-
-    await batch.commit(noResult: true);
   }
 
   Future<void> insertTimer(TimerType timer) async {
@@ -377,8 +391,13 @@ class DatabaseManager {
   // Get all workouts
   Future<List<Workout>> getWorkouts() async {
     final db = await _getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
-    return maps.map((map) => Workout.fromMap(map)).toList();
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
+      return maps.map((map) => Workout.fromMap(map)).toList();
+    } catch (e) {
+      // If the workouts table does not exist, return an empty list
+      return [];
+    }
   }
 
   // Get all intervals

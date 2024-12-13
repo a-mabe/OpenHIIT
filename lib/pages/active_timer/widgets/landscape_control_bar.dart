@@ -55,7 +55,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.color,
+      color: const Color.fromARGB(70, 0, 0, 0),
       child: Center(
           child: Stack(
         children: [
@@ -64,7 +64,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
             children: [
               IconButton(
                 icon: Icon(
-                  size: 35,
+                  size: 30,
                   widget.changeVolume ? Icons.close : Icons.volume_up,
                   color: Colors.white,
                 ),
@@ -73,13 +73,13 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
               IconButton(
                 tooltip: 'Skip Previous',
                 icon: const Icon(Icons.skip_previous,
-                    size: 35, color: Colors.white),
+                    size: 30, color: Colors.white),
                 onPressed: widget.onSkipPrevious,
               ),
               IconButton(
                 tooltip: 'Pause',
                 icon: Icon(
-                  size: 55,
+                  size: 40,
                   widget.paused ? Icons.play_arrow : Icons.pause,
                   color: Colors.white,
                 ),
@@ -94,7 +94,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
               IconButton(
                 tooltip: 'Restart',
                 icon: const Icon(Icons.restart_alt,
-                    size: 35, color: Colors.white),
+                    size: 30, color: Colors.white),
                 onPressed: () {
                   logger.d('Restarting timer');
                   widget.onRestart();

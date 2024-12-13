@@ -55,7 +55,7 @@ class ControlBarState extends State<ControlBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.color,
+      color: const Color.fromARGB(70, 0, 0, 0),
       child: Center(
           child: Stack(
         children: [

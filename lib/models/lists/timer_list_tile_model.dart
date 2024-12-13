@@ -14,14 +14,10 @@ class TimerListTileModel<E> {
   int seconds;
 
   String intervalString() {
-    if (action != "Rest" ||
-        action != "Warmup" ||
-        action != "Cooldown" ||
-        action != "Get ready" ||
-        action != "Break") {
-      return "$interval of $total";
+    if (["Rest", "Warmup", "Cooldown", "Get Ready", "Break"].contains(action)) {
+      return "";
     }
-    return "";
+    return "$interval of $total";
   }
 
   String timeString() {

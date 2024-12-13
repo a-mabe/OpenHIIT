@@ -5,6 +5,7 @@ import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:background_hiit_timer/models/timer_state.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/models/lists/timer_list_model_animated.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
@@ -133,7 +134,7 @@ class RunTimerState extends State<RunTimer> {
       case 'Cooldown':
         return Colors.blue;
       case 'Break':
-        return Colors.black;
+        return Colors.teal;
       default:
         return Colors.green;
     }
@@ -141,8 +142,10 @@ class RunTimerState extends State<RunTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child:
-        Scaffold(body: OrientationBuilder(builder: (context, orientation) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+    ));
+    return Scaffold(body: OrientationBuilder(builder: (context, orientation) {
       return Countdown(
           controller: _controller,
           intervals: widget.intervals,
@@ -160,42 +163,42 @@ class RunTimerState extends State<RunTimer> {
               removedTiles.removeAt(removedTiles.length - 1);
             }
 
-            if (orientation == Orientation.landscape) {
-              return Container(
+            Widget workoutView = orientation == Orientation.landscape
+                ? LandscapeWorkoutView(
+                    timerState: timerState,
+                    controller: _controller,
+                    paused: _paused,
+                    volume: _volume,
+                    togglePause: togglePause,
+                    changeVolume: _changeVolume,
+                    toggleVolumeSlider: toggleVolumeSlider,
+                    listKey: _listKey,
+                    intervalTiles: intervalTiles,
+                    showMinutes: widget.timer.showMinutes)
+                : PortraitWorkoutView(
+                    timerState: timerState,
+                    controller: _controller,
+                    paused: _paused,
+                    volume: _volume,
+                    togglePause: togglePause,
+                    changeVolume: _changeVolume,
+                    toggleVolumeSlider: toggleVolumeSlider,
+                    listKey: _listKey,
+                    intervalTiles: intervalTiles,
+                    showMinutes: widget.timer.showMinutes);
+
+            return Stack(children: [
+              Container(
                   color: backgroundColor(timerState.status),
-                  child: LandscapeWorkoutView(
-                      timerState: timerState,
-                      controller: _controller,
-                      paused: _paused,
-                      volume: _volume,
-                      togglePause: togglePause,
-                      changeVolume: _changeVolume,
-                      toggleVolumeSlider: toggleVolumeSlider,
-                      listKey: _listKey,
-                      intervalTiles: intervalTiles));
-            } else {
-              return Stack(children: [
-                Container(
-                    color: backgroundColor(timerState.status),
-                    child: PortraitWorkoutView(
-                        timerState: timerState,
-                        controller: _controller,
-                        paused: _paused,
-                        volume: _volume,
-                        togglePause: togglePause,
-                        changeVolume: _changeVolume,
-                        toggleVolumeSlider: toggleVolumeSlider,
-                        listKey: _listKey,
-                        intervalTiles: intervalTiles)),
-                TimerComplete(
-                  controller: _controllerCenter,
-                  visible: timerState.status == 'End',
-                  onRestart: () => _controller.restart(),
-                  timerName: widget.timer.name,
-                )
-              ]);
-            }
+                  child: SafeArea(child: workoutView)),
+              TimerComplete(
+                controller: _controllerCenter,
+                visible: timerState.status == 'End',
+                onRestart: () => _controller.restart(),
+                timerName: widget.timer.name,
+              )
+            ]);
           });
-    })));
+    }));
   }
 }

@@ -37,6 +37,11 @@ class WorkoutTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
+        false;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Theme.of(context).brightness,
+    ));
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (_) => WorkoutProvider())],
         child: MaterialApp(

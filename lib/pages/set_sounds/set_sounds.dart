@@ -1,8 +1,10 @@
+import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/widgets/loader.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:uuid/uuid.dart';
@@ -22,17 +24,16 @@ class SetSounds extends StatefulWidget {
   State<SetSounds> createState() => _SetSoundsState();
 }
 
-// Define a corresponding State class.
-// This class holds the data related to the Form.
 class _SetSoundsState extends State<SetSounds> {
-  /// Submit the workout by saving to the database. After the workout
-  /// is successfully added to the DB, push to the home screen.
-  ///
+  bool isLoading = false;
+
   void submitWorkout(TimerType timer, BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
+
     WorkoutProvider workoutProvider =
         Provider.of<WorkoutProvider>(context, listen: false);
-
-    timer.totalTime = workoutProvider.calculateTotalTimeFromTimer(timer);
 
     if (timer.id == "") {
       timer.id = const Uuid().v1();
@@ -41,14 +42,18 @@ class _SetSoundsState extends State<SetSounds> {
       timer.timeSettings.timerId = timer.id;
       timer.soundSettings.timerId = timer.id;
 
-      // Save the intervals
-      await workoutProvider
-          .addIntervals(workoutProvider.generateIntervalsFromSettings(timer));
+      List<IntervalType> intervals =
+          workoutProvider.generateIntervalsFromSettings(timer);
 
+      timer.totalTime =
+          workoutProvider.calculateTotalTimeFromIntervals(intervals);
+
+      await workoutProvider.addIntervals(intervals);
       await workoutProvider.addTimer(timer);
     } else {
-      await workoutProvider.updateIntervals(
-          workoutProvider.generateIntervalsFromSettings(timer));
+      await workoutProvider.deleteIntervalsByWorkoutId(timer.id);
+      await workoutProvider
+          .addIntervals(workoutProvider.generateIntervalsFromSettings(timer));
       await workoutProvider.updateTimer(timer);
     }
 
@@ -58,10 +63,12 @@ class _SetSoundsState extends State<SetSounds> {
           MaterialPageRoute(builder: (_) => const MyHomePage()),
           (route) => false);
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  /// Naviaget to the home screen.
-  ///
   void pushHome() {
     Navigator.pushAndRemoveUntil(
         context,
@@ -71,124 +78,117 @@ class _SetSoundsState extends State<SetSounds> {
 
   @override
   Widget build(BuildContext context) {
-    /// Initialize the soundpool. This will be used to play a preview of the
-    /// sound effects whenever a new sound option is selected.
-    ///
     Soundpool pool = Soundpool.fromOptions(options: const SoundpoolOptions());
 
-    /// Grab the workout that was passed from the previous view.
-    ///
-    // Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
-
-    /// Each sound effect must be loaded into the soundpool. Create a map
-    /// of soundFileString -> soundID.
-    ///
     var soundIdMap = {};
     for (final sound in allSounds) {
       soundIdMap[sound] = loadSound(sound, pool);
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("New Interval Timer"),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const Text("New Interval Timer"),
+          ),
+          bottomSheet: SubmitButton(
+            text: "Submit",
+            color: Colors.blue,
+            onTap: () {
+              submitWorkout(widget.timer, context);
+            },
+          ),
+          body: SizedBox(
+              height: (MediaQuery.of(context).size.height * 10) / 12,
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 20, 10, 30),
+                      child: Form(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SoundDropdown(
+                              dropdownKey: const Key("work-sound"),
+                              title: "Work Sound",
+                              initialSelection:
+                                  widget.timer.soundSettings.workSound,
+                              pool: pool,
+                              soundsList: soundsList,
+                              onFinished: (value) async {
+                                if (value != 'none') {
+                                  await pool.play(await soundIdMap[value]);
+                                }
+                                widget.timer.soundSettings.workSound = value!;
+                              }),
+                          SoundDropdown(
+                              dropdownKey: const Key("rest-sound"),
+                              title: "Rest Sound",
+                              initialSelection:
+                                  widget.timer.soundSettings.restSound,
+                              pool: pool,
+                              soundsList: soundsList,
+                              onFinished: (value) async {
+                                if (value != 'none') {
+                                  await pool.play(await soundIdMap[value]);
+                                }
+                                widget.timer.soundSettings.restSound = value!;
+                              }),
+                          SoundDropdown(
+                              dropdownKey: const Key("halfway-sound"),
+                              title: "Halfway Sound",
+                              initialSelection:
+                                  widget.timer.soundSettings.halfwaySound,
+                              pool: pool,
+                              soundsList: soundsList,
+                              onFinished: (value) async {
+                                if (value != 'none') {
+                                  await pool.play(await soundIdMap[value]);
+                                }
+                                widget.timer.soundSettings.halfwaySound =
+                                    value!;
+                              }),
+                          SoundDropdown(
+                              dropdownKey: const Key("countdown-sound"),
+                              title: "Countdown Sound",
+                              initialSelection:
+                                  widget.timer.soundSettings.countdownSound,
+                              pool: pool,
+                              soundsList: countdownSounds,
+                              onFinished: (value) async {
+                                if (value != 'none') {
+                                  await pool.play(await soundIdMap[value]);
+                                }
+                                widget.timer.soundSettings.countdownSound =
+                                    value!;
+                              }),
+                          SoundDropdown(
+                              dropdownKey: const Key("end-sound"),
+                              title: "Timer End Sound",
+                              initialSelection:
+                                  widget.timer.soundSettings.endSound,
+                              pool: pool,
+                              soundsList: soundsList,
+                              onFinished: (value) async {
+                                if (value != 'none') {
+                                  await pool.play(await soundIdMap[value]);
+                                }
+                                widget.timer.soundSettings.endSound = value!;
+                              }),
+                        ],
+                      ))))),
         ),
-        bottomSheet: SubmitButton(
-          text: "Submit",
-          color: Colors.blue,
-          onTap: () {
-            submitWorkout(widget.timer, context);
-          },
-        ),
-        body: SizedBox(
-            height: (MediaQuery.of(context).size.height * 10) / 12,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 20, 10, 30),
-                    child: Form(
-                        // key: formKey,
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SoundDropdown(
-                            dropdownKey: const Key("work-sound"),
-                            title: "Work Sound",
-                            initialSelection:
-                                widget.timer.soundSettings.workSound,
-                            pool: pool,
-                            soundsList: soundsList,
-                            onFinished: (value) async {
-                              //This is called when the user selects an item.
-                              if (value != 'none') {
-                                await pool.play(await soundIdMap[value]);
-                              }
-                              widget.timer.soundSettings.workSound = value!;
-                            }),
-                        SoundDropdown(
-                            dropdownKey: const Key("rest-sound"),
-                            title: "Rest Sound",
-                            initialSelection:
-                                widget.timer.soundSettings.restSound,
-                            pool: pool,
-                            soundsList: soundsList,
-                            onFinished: (value) async {
-                              //This is called when the user selects an item.
-                              if (value != 'none') {
-                                await pool.play(await soundIdMap[value]);
-                              }
-                              widget.timer.soundSettings.restSound = value!;
-                            }),
-                        SoundDropdown(
-                            dropdownKey: const Key("halfway-sound"),
-                            title: "Halfway Sound",
-                            initialSelection:
-                                widget.timer.soundSettings.halfwaySound,
-                            pool: pool,
-                            soundsList: soundsList,
-                            onFinished: (value) async {
-                              //This is called when the user selects an item.
-                              if (value != 'none') {
-                                await pool.play(await soundIdMap[value]);
-                              }
-                              widget.timer.soundSettings.halfwaySound = value!;
-                            }),
-                        SoundDropdown(
-                            dropdownKey: const Key("countdown-sound"),
-                            title: "Countdown Sound",
-                            initialSelection:
-                                widget.timer.soundSettings.countdownSound,
-                            pool: pool,
-                            soundsList: countdownSounds,
-                            onFinished: (value) async {
-                              //This is called when the user selects an item.
-                              if (value != 'none') {
-                                await pool.play(await soundIdMap[value]);
-                              }
-                              widget.timer.soundSettings.countdownSound =
-                                  value!;
-                            }),
-                        SoundDropdown(
-                            dropdownKey: const Key("end-sound"),
-                            title: "Timer End Sound",
-                            initialSelection:
-                                widget.timer.soundSettings.endSound,
-                            pool: pool,
-                            soundsList: soundsList,
-                            onFinished: (value) async {
-                              //This is called when the user selects an item.
-                              if (value != 'none') {
-                                await pool.play(await soundIdMap[value]);
-                              }
-                              widget.timer.soundSettings.endSound = value!;
-                            }),
-                      ],
-                    ))))));
+        if (isLoading)
+          SafeArea(
+              child: Scaffold(
+                  body: LoaderTransparent(
+            visible: isLoading,
+            loadingMessage: "Saving ${widget.timer.name} to database...",
+          )))
+      ],
+    );
   }
 
-  /// Method to load each sound effect into the soundpool.
-  ///
-  /// https://pub.dev/packages/soundpool
-  ///
   static Future<int> loadSound(String sound, Soundpool pool) async {
     if (sound != "none") {
       return await rootBundle

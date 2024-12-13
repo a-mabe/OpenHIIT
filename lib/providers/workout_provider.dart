@@ -21,22 +21,20 @@ class WorkoutProvider extends ChangeNotifier {
   Future<List<TimerType>> loadWorkoutData() async {
     logger.d("Loading data");
 
-    // For migration purposes
-    List<IntervalType> intervals = await loadIntervalData();
-
     var dbManager = DatabaseManager();
 
     await dbManager.getWorkouts().then((workouts) async {
       _workouts = workouts;
 
-      if (_workouts.isNotEmpty && intervals.isEmpty) {
+      if (_workouts.isNotEmpty) {
         logger.d("${workouts.length} workouts found, migrating to intervals");
         for (var workout in _workouts) {
-          await addIntervals(migrateToInterval(workout, false));
+          List<IntervalType> intervals = migrateToInterval(workout, false);
+          await addIntervals(intervals);
           TimerType timer = migrateToTimer(workout, false);
-          timer.timeSettings = migrateToTimerTimeSettings(workout);
-          timer.soundSettings = migrateToTimerSoundSettings(workout);
-          await addTimer(migrateToTimer(workout, false));
+          timer.totalTime = calculateTotalTimeFromIntervals(intervals);
+          logger.d("${timer.totalTime} total time for timer: ${timer.name}");
+          await addTimer(timer);
         }
         await dbManager.deleteWorkoutTable();
       }
@@ -67,7 +65,8 @@ class WorkoutProvider extends ChangeNotifier {
         color: workout.colorInt,
         intervalIndex: currentIndex++,
         startSound: "",
-        countdownSound: workout.countdownSound,
+        countdownSound:
+            workout.countdownSound != "none" ? workout.countdownSound : "",
         halfwaySound: "",
         endSound: "",
       ));
@@ -82,8 +81,11 @@ class WorkoutProvider extends ChangeNotifier {
         name: "Warmup",
         color: workout.colorInt,
         intervalIndex: currentIndex++,
-        startSound: workout.workSound, // Warmup uses work sound
-        countdownSound: workout.countdownSound,
+        startSound: workout.workSound != "none"
+            ? workout.workSound
+            : "", // Warmup uses work sound
+        countdownSound:
+            workout.countdownSound != "none" ? workout.countdownSound : "",
         halfwaySound: "",
         endSound: "",
       ));
@@ -105,10 +107,13 @@ class WorkoutProvider extends ChangeNotifier {
                 : exercises[exerciseIndex++],
             color: workout.colorInt,
             intervalIndex: currentIndex++,
-            startSound: workout.workSound,
-            countdownSound: workout.countdownSound,
-            halfwaySound: workout.halfwaySound,
-            endSound: workout.completeSound,
+            startSound: workout.workSound != "none" ? workout.workSound : "",
+            countdownSound:
+                workout.countdownSound != "none" ? workout.countdownSound : "",
+            halfwaySound:
+                workout.halfwaySound != "none" ? workout.halfwaySound : "",
+            endSound:
+                workout.completeSound != "none" ? workout.completeSound : "",
           ));
         }
 
@@ -122,8 +127,10 @@ class WorkoutProvider extends ChangeNotifier {
               name: "Rest",
               color: workout.colorInt,
               intervalIndex: currentIndex++,
-              startSound: workout.restSound,
-              countdownSound: workout.countdownSound,
+              startSound: workout.restSound != "none" ? workout.restSound : "",
+              countdownSound: workout.countdownSound != "none"
+                  ? workout.countdownSound
+                  : "",
               halfwaySound: "",
               endSound: "",
             ));
@@ -141,8 +148,9 @@ class WorkoutProvider extends ChangeNotifier {
           name: "Break",
           color: workout.colorInt,
           intervalIndex: currentIndex++,
-          startSound: workout.restSound,
-          countdownSound: workout.countdownSound,
+          startSound: workout.restSound != "none" ? workout.restSound : "",
+          countdownSound:
+              workout.countdownSound != "none" ? workout.countdownSound : "",
           halfwaySound: "",
           endSound: "",
         ));
@@ -154,8 +162,9 @@ class WorkoutProvider extends ChangeNotifier {
           name: "Rest",
           color: workout.colorInt,
           intervalIndex: currentIndex++,
-          startSound: workout.restSound,
-          countdownSound: workout.countdownSound,
+          startSound: workout.restSound != "none" ? workout.restSound : "",
+          countdownSound:
+              workout.countdownSound != "none" ? workout.countdownSound : "",
           halfwaySound: "",
           endSound: "",
         ));
@@ -173,10 +182,13 @@ class WorkoutProvider extends ChangeNotifier {
         name: "Cooldown",
         color: workout.colorInt,
         intervalIndex: currentIndex++,
-        startSound: workout.restSound, // Cooldown uses rest sound
-        countdownSound: workout.countdownSound,
+        startSound: workout.restSound != "none"
+            ? workout.restSound
+            : "", // Cooldown uses rest sound
+        countdownSound:
+            workout.countdownSound != "none" ? workout.countdownSound : "",
         halfwaySound: "",
-        endSound: workout.completeSound,
+        endSound: workout.completeSound != "none" ? workout.completeSound : "",
       ));
     }
 
@@ -187,7 +199,6 @@ class WorkoutProvider extends ChangeNotifier {
     int totalIntervals = workout.iterations > 0
         ? workout.numExercises * workout.iterations
         : workout.numExercises;
-    int totalTime = calculateTotalTimeFromWorkout(workout);
     TimerType timer = TimerType(
         id: workout.id,
         name: workout.title,
@@ -206,11 +217,18 @@ class WorkoutProvider extends ChangeNotifier {
         soundSettings: TimerSoundSettings(
           id: Uuid().v1(),
           timerId: workout.id,
-          workSound: workout.workSound,
-          restSound: workout.restSound,
-          halfwaySound: workout.halfwaySound,
-          endSound: workout.completeSound,
-          countdownSound: workout.countdownSound,
+          workSound:
+              workout.workSound.contains("none") ? "" : workout.workSound,
+          restSound:
+              workout.restSound.contains("none") ? "" : workout.restSound,
+          halfwaySound:
+              workout.halfwaySound.contains("none") ? "" : workout.halfwaySound,
+          endSound: workout.completeSound.contains("none")
+              ? ""
+              : workout.completeSound,
+          countdownSound: workout.countdownSound.contains("none")
+              ? ""
+              : workout.countdownSound,
         ),
         color: workout.colorInt,
         intervals: totalIntervals,
@@ -218,7 +236,7 @@ class WorkoutProvider extends ChangeNotifier {
         activities: workout.exercises != ""
             ? List<String>.from(jsonDecode(workout.exercises))
             : [],
-        totalTime: totalTime);
+        totalTime: 0);
 
     return timer;
   }
@@ -241,11 +259,14 @@ class WorkoutProvider extends ChangeNotifier {
     return TimerSoundSettings(
       id: Uuid().v1(),
       timerId: workout.id,
-      workSound: workout.workSound,
-      restSound: workout.restSound,
-      halfwaySound: workout.halfwaySound,
-      endSound: workout.completeSound,
-      countdownSound: workout.countdownSound,
+      workSound: workout.workSound.contains("none") ? "" : workout.workSound,
+      restSound: workout.restSound.contains("none") ? "" : workout.restSound,
+      halfwaySound:
+          workout.halfwaySound.contains("none") ? "" : workout.halfwaySound,
+      endSound:
+          workout.completeSound.contains("none") ? "" : workout.completeSound,
+      countdownSound:
+          workout.countdownSound.contains("none") ? "" : workout.countdownSound,
     );
   }
 
@@ -296,14 +317,6 @@ class WorkoutProvider extends ChangeNotifier {
       return TimerSoundSettings.empty();
     }
   }
-
-  // Future<TimerType> loadTimerSettingsByTimerId(TimerType timer) async {
-  //   var timeSettings = await loadTimeSettingsByTimerId(timer.id, true);
-  //   var soundSettings = await loadSoundSettingsByTimerId(timer.id, true);
-  //   timer.timeSettings = timeSettings;
-  //   timer.soundSettings = soundSettings;
-  //   return timer;
-  // }
 
   List<IntervalType> generateIntervalsFromSettings(TimerType timer) {
     List<IntervalType> intervals = [];
@@ -359,7 +372,7 @@ class WorkoutProvider extends ChangeNotifier {
             startSound: timer.soundSettings.workSound,
             countdownSound: timer.soundSettings.countdownSound,
             halfwaySound: timer.soundSettings.halfwaySound,
-            endSound: timer.soundSettings.endSound,
+            endSound: "",
           ));
         }
 
@@ -430,8 +443,13 @@ class WorkoutProvider extends ChangeNotifier {
         startSound: timer.soundSettings.restSound, // Cooldown uses rest sound
         countdownSound: timer.soundSettings.countdownSound,
         halfwaySound: "",
-        endSound: timer.soundSettings.endSound,
+        endSound: "",
       ));
+    }
+
+    // Set the end sound for the last interval
+    if (intervals.isNotEmpty) {
+      intervals[intervals.length - 1].endSound = timer.soundSettings.endSound;
     }
 
     return intervals;
@@ -628,7 +646,7 @@ class WorkoutProvider extends ChangeNotifier {
       }
 
       // Add break time if not last iteration
-      if (iteration < timer.timeSettings.restarts - 1) {
+      if (iteration < timer.timeSettings.restarts) {
         totalTime += timer.timeSettings.breakTime;
       }
 
@@ -637,6 +655,16 @@ class WorkoutProvider extends ChangeNotifier {
 
     // Add cooldown time
     totalTime += timer.timeSettings.cooldownTime;
+
+    return totalTime;
+  }
+
+  int calculateTotalTimeFromIntervals(List<IntervalType> intervals) {
+    int totalTime = 0;
+
+    for (var interval in intervals) {
+      totalTime += interval.time;
+    }
 
     return totalTime;
   }

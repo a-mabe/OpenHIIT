@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RunTimerAppBar extends StatefulWidget {
-  const RunTimerAppBar({super.key});
+  final String text;
+
+  const RunTimerAppBar({super.key, required this.text});
 
   @override
   RunTimerAppBarState createState() => RunTimerAppBarState();
@@ -20,10 +22,7 @@ class RunTimerAppBarState extends State<RunTimerAppBar> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
-                  color:
-                      MediaQuery.of(context).orientation == Orientation.portrait
-                          ? const Color.fromARGB(70, 0, 0, 0)
-                          : Colors.transparent),
+                  color: const Color.fromARGB(70, 0, 0, 0)),
               width: 50,
               height: 50,
               child: Icon(
@@ -36,6 +35,10 @@ class RunTimerAppBarState extends State<RunTimerAppBar> {
             )),
       ),
       const Spacer(),
+      Text(
+        widget.text,
+        style: TextStyle(color: Colors.white, fontSize: 30),
+      ),
       const Spacer(),
       const SizedBox(
         width: 50,

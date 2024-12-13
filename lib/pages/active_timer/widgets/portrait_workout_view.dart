@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_hiit_timer/background_timer_controller.dart';
 import 'package:background_hiit_timer/models/timer_state.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/models/lists/timer_list_model_animated.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/widgets/control_bar.dart';
@@ -18,6 +19,7 @@ class PortraitWorkoutView extends StatefulWidget {
   final VoidCallback toggleVolumeSlider;
   final GlobalKey<AnimatedListState> listKey;
   final TimerListModelAnimated<TimerListTileModel> intervalTiles;
+  final int showMinutes;
 
   const PortraitWorkoutView({
     super.key,
@@ -30,6 +32,7 @@ class PortraitWorkoutView extends StatefulWidget {
     required this.toggleVolumeSlider,
     required this.listKey,
     required this.intervalTiles,
+    required this.showMinutes,
   });
 
   @override
@@ -37,13 +40,40 @@ class PortraitWorkoutView extends StatefulWidget {
 }
 
 class PortraitWorkoutViewState extends State<PortraitWorkoutView> {
+  String timerText(int currentSeconds, int showMinutes) {
+    if (showMinutes == 1) {
+      // int currentSecondsInt = int.parse(currentSeconds);
+      int seconds = currentSeconds % 60;
+      int minutes = ((currentSeconds - seconds) / 60).round();
+
+      if (minutes == 0) {
+        return currentSeconds.toString();
+      }
+
+      String secondsString = seconds.toString();
+      if (seconds < 10) {
+        secondsString = "0$seconds";
+      }
+
+      return "$minutes:$secondsString";
+    } else {
+      return currentSeconds.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Column(
           children: [
-            Expanded(flex: 8, child: RunTimerAppBar()),
+            Expanded(
+                flex: 8,
+                child: RunTimerAppBar(
+                  text: widget.intervalTiles.length > 0
+                      ? widget.intervalTiles[0].intervalString()
+                      : "",
+                )),
             Expanded(
               flex: 35,
               child: Center(
@@ -53,12 +83,17 @@ class PortraitWorkoutViewState extends State<PortraitWorkoutView> {
                       child: AutoSizeText(
                         maxLines: 1,
                         minFontSize: 100,
-                        style: const TextStyle(
-                            height: .8, color: Colors.white, fontSize: 1000),
-                        (widget.timerState.currentMicroSeconds /
-                                const Duration(seconds: 1).inMicroseconds)
-                            .round()
-                            .toString(),
+                        style: GoogleFonts.dmMono(
+                          // 'DmMono',
+                          fontSize: 20000,
+                          height: .9,
+                          color: Colors.white,
+                        ),
+                        timerText(
+                            (widget.timerState.currentMicroSeconds /
+                                    const Duration(seconds: 1).inMicroseconds)
+                                .round(),
+                            widget.showMinutes),
                       ))),
             ),
             Expanded(

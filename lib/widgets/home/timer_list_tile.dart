@@ -65,7 +65,7 @@ class TimerListTileState extends State<TimerListTile>
               '''${widget.timer.activities.isNotEmpty ? 'Exercises - ${widget.timer.activeIntervals}' : 'Intervals - ${widget.timer.activeIntervals}'}
 Exercise time - ${timeString(widget.timer.showMinutes, widget.timer.timeSettings.workTime)}
 Rest time - ${timeString(widget.timer.showMinutes, widget.timer.timeSettings.restTime)}
-Total - ${widget.timer.totalTime ~/ 60} minutes'''),
+Total - ${(widget.timer.totalTime / 60).round()} minutes'''),
           subtitleTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
