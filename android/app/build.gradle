@@ -29,6 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace 'com.codepup.workout_timer'
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
