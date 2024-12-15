@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
-
-import '../../../models/workout_type.dart';
 
 class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Called on delete button tap.
@@ -19,7 +18,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Workout object - needed for values such as the workout
   /// title and colorInt.
   ///
-  final Workout workout;
+  final TimerType timer;
 
   /// Height of the appbar.
   ///
@@ -30,7 +29,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
       required this.onDelete,
       required this.onEdit,
       required this.onCopy,
-      required this.workout,
+      required this.timer,
       required this.height});
 
   @override
@@ -42,19 +41,19 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
         onCopy!();
         break;
       case 'Export':
-        exportWorkout(workout, context);
+        exportWorkout(timer, context);
         break;
       case 'Delete':
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Delete ${workout.title}'),
+              title: Text('Delete ${timer.name}'),
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
                     Text(
-                        'Are you sure you would like to delete ${workout.title}?'),
+                        'Are you sure you would like to delete ${timer.name}?'),
                   ],
                 ),
               ),
@@ -77,13 +76,13 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  void exportWorkout(Workout workout, BuildContext context) async {
+  void exportWorkout(TimerType timer, BuildContext context) async {
     showModalBottomSheet<void>(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       context: context,
       builder: (BuildContext context) {
         return ExportBottomSheet(
-          workout: workout,
+          timer: timer,
         );
       },
     );
@@ -105,10 +104,10 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(workout.colorInt),
+      backgroundColor: Color(timer.color),
       iconTheme: const IconThemeData(color: Colors.white),
       title: Text(
-        workout.title,
+        timer.name,
         style: const TextStyle(color: Colors.white),
       ),
       actions: [

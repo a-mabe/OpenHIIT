@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../utils/functions.dart';
-import '../../models/workout_type.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/pages/create_timer/create_timer.dart';
+import 'package:openhiit/pages/import_workout/import_workout.dart';
+import '../../data/workout_type.dart';
 import 'widgets/timer_option_card.dart';
 
 class SelectTimer extends StatefulWidget {
@@ -11,10 +13,8 @@ class SelectTimer extends StatefulWidget {
 }
 
 class SelectTimerState extends State<SelectTimer> {
-  /// Since this will be a new timer, go ahead and create an
-  /// empty workout to pass to the next views.
-  ///
   final workout = Workout.empty();
+  final timer = TimerType.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -24,34 +24,50 @@ class SelectTimerState extends State<SelectTimer> {
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: Column(
               children: [
-                /// Card for the interval timer option.
-                ///
                 TimerOptionCard(
                     onTap: () {
-                      pushCreateTimer(workout, context, false, (value) {});
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateTimer(
+                            timer: timer,
+                            workout: false,
+                          ),
+                        ),
+                      );
                     },
                     optionIcon: Icons.timer,
                     optionTitle: "Interval Timer",
                     optionDescription:
                         "An interval timer is a tool that helps you track the time spent working and resting during a workout."),
-
-                /// Card for the workout option.
-                ///
                 TimerOptionCard(
                   onTap: () {
-                    pushCreateWorkout(workout, context, false, (value) {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateTimer(
+                          timer: timer,
+                          workout: true,
+                        ),
+                      ),
+                    );
                   },
                   optionIcon: Icons.fitness_center,
                   optionTitle: "Workout",
                   optionDescription:
                       "A workout is a planned set of exercises combined with an interval timer.",
                 ),
-
-                /// Card for the import option.
-                ///
                 TimerOptionCard(
                   onTap: () {
-                    pushImportWorkout(workout, context, (value) {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ImportWorkout(),
+                        settings: RouteSettings(
+                          arguments: workout,
+                        ),
+                      ),
+                    );
                   },
                   optionIcon: Icons.upload_file,
                   optionTitle: "Import",

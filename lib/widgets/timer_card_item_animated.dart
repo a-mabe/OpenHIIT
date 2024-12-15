@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import '../models/lists/list_tile_model.dart';
+import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 
-class CardItemAnimated extends StatelessWidget {
+class TimerCardItemAnimated extends StatelessWidget {
   /// Color of the font used in each card.
   ///
   final Color fontColor;
@@ -22,7 +22,7 @@ class CardItemAnimated extends StatelessWidget {
   /// Object that contains all interval data to display
   /// in the ListTile.
   ///
-  final ListTileModel item;
+  final TimerListTileModel item;
 
   /// Function to invoke on ListTile tap.
   ///
@@ -30,7 +30,7 @@ class CardItemAnimated extends StatelessWidget {
 
   final double sizeMultiplier;
 
-  const CardItemAnimated({
+  const TimerCardItemAnimated({
     super.key,
     this.onTap,
     required this.fontColor,
@@ -104,9 +104,7 @@ class CardItemAnimated extends StatelessWidget {
                             maxHeight: 100,
                           ),
                           child: AutoSizeText(
-                            item.intervalString().isEmpty
-                                ? ""
-                                : item.interval.toString(),
+                            item.interval != 0 ? item.interval.toString() : "",
                             maxLines: 1,
                             minFontSize: 14,
                             maxFontSize: 500,

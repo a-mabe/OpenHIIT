@@ -1,5 +1,5 @@
-class ListTileModel<E> {
-  ListTileModel({
+class TimerListTileModel<E> {
+  TimerListTileModel({
     required this.action,
     required this.showMinutes,
     required this.interval,
@@ -14,7 +14,10 @@ class ListTileModel<E> {
   int seconds;
 
   String intervalString() {
-    return interval == 0 ? "" : "$interval of $total";
+    if (["Rest", "Warmup", "Cooldown", "Get Ready", "Break"].contains(action)) {
+      return "";
+    }
+    return "$interval of $total";
   }
 
   String timeString() {

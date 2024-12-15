@@ -105,8 +105,8 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
               unit: widget.unit != "" ? widget.unit : "s",
               min: 0,
               max: widget.showMinutes == 1
-                  ? (widget.unit != "" ? 999 : 59)
-                  : 999,
+                  ? 59
+                  : (widget.unit == "time(s)" ? 99 : 999),
               numberInputKey: Key(widget.secondsKey))
         ],
       ),

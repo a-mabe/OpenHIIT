@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:openhiit/data/timer_time_settings.dart';
+import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/set_timings/constants/set_timings_constants.dart';
 import 'widgets/time_input_trailing.dart';
-import '../../models/workout_type.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 import 'widgets/time_list_item.dart';
 import '../set_sounds/set_sounds.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
-
 class SetTimings extends StatefulWidget {
-  const SetTimings({super.key});
+  final TimerType timer;
+  final bool edit;
+
+  const SetTimings({super.key, required this.timer, this.edit = false});
 
   @override
   State<SetTimings> createState() => _SetTimingsState();
@@ -84,22 +83,20 @@ class _SetTimingsState extends State<SetTimings> {
 
   @override
   Widget build(BuildContext context) {
-    Workout workout = ModalRoute.of(context)!.settings.arguments as Workout;
+    Map<String, ValueNotifier<int>> notifierMap = {
+      "Work": ValueNotifier(widget.timer.timeSettings.workTime),
+      "Rest": ValueNotifier(widget.timer.timeSettings.restTime),
+      "Warm-up": ValueNotifier(widget.timer.timeSettings.warmupTime),
+      "Cool down": ValueNotifier(widget.timer.timeSettings.cooldownTime),
+      "Restart": ValueNotifier(widget.timer.timeSettings.restarts),
+      "Break": ValueNotifier(widget.timer.timeSettings.breakTime),
+      "Get ready": ValueNotifier(widget.timer.timeSettings.getReadyTime)
+    };
 
     addListeners();
 
-    logger.i(
-        "Loading workout object for creation/editing: ${workout.toString()}");
-
-    Map<String, ValueNotifier<int>> notifierMap = {
-      "Work": ValueNotifier(workout.workTime),
-      "Rest": ValueNotifier(workout.restTime),
-      "Warm-up": ValueNotifier(workout.warmupTime),
-      "Cool down": ValueNotifier(workout.cooldownTime),
-      "Restart": ValueNotifier(workout.iterations),
-      "Break": ValueNotifier(workout.iterations),
-      "Get ready": ValueNotifier(workout.getReadyTime)
-    };
+    // logger.i(
+    //     "Loading workout object for creation/editing: ${widget.timer.toString()}");
 
     return Scaffold(
         appBar: AppBar(
@@ -109,7 +106,7 @@ class _SetTimingsState extends State<SetTimings> {
           text: "Submit",
           color: const Color.fromARGB(255, 58, 165, 255),
           onTap: () {
-            submitTimings(workout, formKey);
+            submitTimings(widget.timer, formKey);
           },
         ),
         body: Padding(
@@ -120,8 +117,8 @@ class _SetTimingsState extends State<SetTimings> {
                   child: Column(
                       children: List<Widget>.generate(
                           timeTitles.length,
-                          (int index) =>
-                              determineTile(workout, index, notifierMap))),
+                          (int index) => determineTile(widget.timer,
+                              widget.timer.timeSettings, index, notifierMap))),
                 ))));
   }
 
@@ -135,54 +132,52 @@ class _SetTimingsState extends State<SetTimings> {
     });
   }
 
-  void submitTimings(Workout workoutArg, GlobalKey<FormState> formKey) {
+  void submitTimings(TimerType timer, GlobalKey<FormState> formKey) {
     // Validate returns true if the form is valid, or false otherwise.
     final form = formKey.currentState!;
     if (form.validate()) {
       form.save();
 
-      logger.i("Form submitted.");
-
-      workoutArg.workTime = (timeMap["$workTitle-minutes"]! * 60) +
+      timer.timeSettings.workTime = (timeMap["$workTitle-minutes"]! * 60) +
           timeMap["$workTitle-seconds"]!;
-      workoutArg.restTime = (timeMap["$restTitle-minutes"]! * 60) +
+      timer.timeSettings.restTime = (timeMap["$restTitle-minutes"]! * 60) +
           timeMap["$restTitle-seconds"]!;
 
       if (hasExpanded) {
-        workoutArg.getReadyTime = (timeMap["$getReadyTitle-minutes"]! * 60) +
-            timeMap["$getReadyTitle-seconds"]!;
-        workoutArg.warmupTime = (timeMap["$warmUpTitle-minutes"]! * 60) +
-            timeMap["$warmUpTitle-seconds"]!;
-        workoutArg.cooldownTime = (timeMap["$coolDownTitle-minutes"]! * 60) +
-            timeMap["$coolDownTitle-seconds"]!;
-        workoutArg.breakTime = (timeMap["$breakTitle-minutes"]! * 60) +
+        timer.timeSettings.getReadyTime =
+            (timeMap["$getReadyTitle-minutes"]! * 60) +
+                timeMap["$getReadyTitle-seconds"]!;
+        timer.timeSettings.warmupTime =
+            (timeMap["$warmUpTitle-minutes"]! * 60) +
+                timeMap["$warmUpTitle-seconds"]!;
+        timer.timeSettings.cooldownTime =
+            (timeMap["$coolDownTitle-minutes"]! * 60) +
+                timeMap["$coolDownTitle-seconds"]!;
+        timer.timeSettings.breakTime = (timeMap["$breakTitle-minutes"]! * 60) +
             timeMap["$breakTitle-seconds"]!;
-        workoutArg.iterations = repeat;
+        timer.timeSettings.restarts = repeat;
       }
-
-      logger.i("Saving workout: ${workoutArg.toString()}");
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SetSounds(),
-          settings: RouteSettings(
-            arguments: workoutArg,
+          builder: (context) => SetSounds(
+            timer: timer,
           ),
         ),
       );
     }
   }
 
-  Widget determineTile(Workout workoutArg, int index,
-      Map<String, ValueNotifier<int>> notifierMap) {
+  Widget determineTile(TimerType timer, TimerTimeSettings timeSettings,
+      int index, Map<String, ValueNotifier<int>> notifierMap) {
     switch (index) {
       case 0:
       case 1:
         return returnTile(
-            workoutArg,
+            timer,
             index,
-            determinePrefilledTime(workoutArg, timeTitles[index]),
+            determinePrefilledTime(timeSettings, timeTitles[index]),
             timeTitles,
             timeSubTitles,
             timeLeadingIcons,
@@ -190,14 +185,14 @@ class _SetTimingsState extends State<SetTimings> {
             timeSecondsKeys[index],
             notifierMap);
       case 2:
-        return returnExpansionTile(workoutArg, index, notifierMap);
+        return returnExpansionTile(timer, timeSettings, index, notifierMap);
       default:
         return const Text("");
     }
   }
 
   Widget returnTile(
-      Workout workoutArg,
+      TimerType timer,
       int index,
       int time,
       List<String> titleList,
@@ -213,7 +208,7 @@ class _SetTimingsState extends State<SetTimings> {
         builder: (BuildContext context, int val, Widget? child) {
           return GestureDetector(
               onTap: () {
-                if (workoutArg.showMinutes == 1) {
+                if (timer.showMinutes == 1) {
                   if (focusMap["${titleList[index]}-minute"]!.hasFocus) {
                     focusMap["${titleList[index]}-second"]!.requestFocus();
                   } else {
@@ -249,11 +244,11 @@ class _SetTimingsState extends State<SetTimings> {
                               controllerMap["${titleList[index]}-seconds"],
                           unit:
                               titleList[index] == repeatTitle ? "time(s)" : "s",
-                          widgetWidth: (workoutArg.showMinutes == 1 ||
+                          widgetWidth: (timer.showMinutes == 1 ||
                                   titleList[index] == repeatTitle)
                               ? 185
                               : 80,
-                          showMinutes: workoutArg.showMinutes,
+                          showMinutes: timer.showMinutes,
                           timeInSeconds: time,
                           minutesValidator: (value) {
                             return null;
@@ -285,7 +280,7 @@ class _SetTimingsState extends State<SetTimings> {
                                 setState(() => repeat = 0);
                               }
                             } else {
-                              if (value != "") {
+                              if (value != "" && value != "0") {
                                 setState(() =>
                                     timeMap["${titleList[index]}-seconds"] =
                                         value!.contains(".")
@@ -314,28 +309,31 @@ class _SetTimingsState extends State<SetTimings> {
         });
   }
 
-  Widget returnExpansionTile(Workout workoutArg, int index,
-      Map<String, ValueNotifier<int>> notifierMap) {
+  Widget returnExpansionTile(TimerType timer, TimerTimeSettings timeSettings,
+      int index, Map<String, ValueNotifier<int>> notifierMap) {
     return ExpansionTile(
       maintainState: true,
       title: Text(timeTitles[index]),
       subtitle: Text(timeSubTitles[index]),
       leading: timeLeadingIcons[index],
-      children: returnAdditionalTiles(workoutArg, index, notifierMap),
+      children: returnAdditionalTiles(timer, timeSettings, index, notifierMap),
       onExpansionChanged: (expanded) {
         hasExpanded = true;
       },
     );
   }
 
-  List<Widget> returnAdditionalTiles(Workout workoutArg, int index,
+  List<Widget> returnAdditionalTiles(
+      TimerType timer,
+      TimerTimeSettings timeSettings,
+      int index,
       Map<String, ValueNotifier<int>> notifierMap) {
     List<Widget> tileList = [];
     for (int i = 0; i < additionalTimeTitles.length; i++) {
       tileList.add(returnTile(
-          workoutArg,
+          timer,
           i,
-          determinePrefilledTime(workoutArg, additionalTimeTitles[i]),
+          determinePrefilledTime(timeSettings, additionalTimeTitles[i]),
           additionalTimeTitles,
           additionalTimeSubTitles,
           additionalTimeLeadingIcons,
@@ -347,22 +345,22 @@ class _SetTimingsState extends State<SetTimings> {
     return tileList;
   }
 
-  int determinePrefilledTime(Workout workoutArg, String title) {
+  int determinePrefilledTime(TimerTimeSettings timeSettings, String title) {
     switch (title) {
       case workTitle:
-        return workoutArg.workTime != 0 ? workoutArg.workTime : -1;
+        return timeSettings.workTime != 0 ? timeSettings.workTime : -1;
       case restTitle:
-        return workoutArg.restTime != 0 ? workoutArg.restTime : -1;
+        return timeSettings.restTime != 0 ? timeSettings.restTime : -1;
       case getReadyTitle:
-        return workoutArg.getReadyTime != 10 ? workoutArg.getReadyTime : 10;
+        return timeSettings.getReadyTime != 10 ? timeSettings.getReadyTime : 10;
       case warmUpTitle:
-        return workoutArg.warmupTime != 0 ? workoutArg.warmupTime : 0;
+        return timeSettings.warmupTime != 0 ? timeSettings.warmupTime : 0;
       case coolDownTitle:
-        return workoutArg.cooldownTime != 0 ? workoutArg.cooldownTime : 0;
+        return timeSettings.cooldownTime != 0 ? timeSettings.cooldownTime : 0;
       case repeatTitle:
-        return workoutArg.iterations;
+        return timeSettings.restarts;
       case breakTitle:
-        return workoutArg.breakTime != 0 ? workoutArg.breakTime : 0;
+        return timeSettings.breakTime != 0 ? timeSettings.breakTime : 0;
       default:
         return 9;
     }

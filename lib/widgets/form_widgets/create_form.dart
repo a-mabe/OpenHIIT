@@ -1,19 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:openhiit/data/timer_type.dart';
 import 'clock_picker.dart';
 import 'number_input.dart';
-import '../../models/workout_type.dart';
 import 'color_picker.dart';
 
 class CreateForm extends StatefulWidget {
   /// Vars
 
-  final Workout workout;
+  final TimerType timer;
 
   final GlobalKey<FormState> formKey;
 
-  const CreateForm({super.key, required this.workout, required this.formKey});
+  const CreateForm({super.key, required this.timer, required this.formKey});
 
   @override
   CreateFormState createState() => CreateFormState();
@@ -33,13 +33,13 @@ class CreateFormState extends State<CreateForm> {
   @override
   Widget build(BuildContext context) {
     List<bool> selectedTimerDisplayOptions =
-        widget.workout.showMinutes == 1 ? [false, true] : [true, false];
+        widget.timer.showMinutes == 1 ? [false, true] : [true, false];
 
     /// The onTap logic for [ColorPicker]. Opens a dialog that
     /// allows the user to select a color.
     ///
     void pickColor() {
-      Color selectedColor = Color(widget.workout.colorInt);
+      Color selectedColor = Color(widget.timer.color);
       showDialog(
         context: context,
         builder: (context) {
@@ -62,7 +62,7 @@ class CreateFormState extends State<CreateForm> {
                 onPressed: () {
                   Navigator.pop(context);
                   setState(() {
-                    widget.workout.colorInt = selectedColor.value;
+                    widget.timer.color = selectedColor.value;
                   });
                 },
                 child: const Text('Select'),
@@ -99,7 +99,7 @@ class CreateFormState extends State<CreateForm> {
                       ),
                       TextFormField(
                         key: const Key('timer-name'),
-                        initialValue: widget.workout.title,
+                        initialValue: widget.timer.name,
                         textCapitalization: TextCapitalization.sentences,
                         // The validator receives the text that the user has entered.
                         validator: (value) {
@@ -109,10 +109,10 @@ class CreateFormState extends State<CreateForm> {
                           return null;
                         },
                         onSaved: (String? val) {
-                          widget.workout.title = val!;
+                          widget.timer.name = val!;
                         },
                         onChanged: (String? val) {
-                          widget.workout.title = val!;
+                          widget.timer.name = val!;
                         },
                         style: const TextStyle(fontSize: 18),
                       ),
@@ -137,7 +137,7 @@ class CreateFormState extends State<CreateForm> {
                         onTap: () {
                           pickColor();
                         },
-                        color: Color(widget.workout.colorInt),
+                        color: Color(widget.timer.color),
                       )),
 
                       /// Workout/timer number of intervals.
@@ -157,10 +157,10 @@ class CreateFormState extends State<CreateForm> {
                       NumberInput(
                           widgetWidth: 60,
                           numberInputKey: const Key('interval-input'),
-                          controller: TextEditingController(),
-                          numberValue: widget.workout.numExercises == 0
-                              ? -1
-                              : widget.workout.numExercises,
+                          controller: TextEditingController(
+                              text: widget.timer.activeIntervals == 0
+                                  ? ""
+                                  : widget.timer.activeIntervals.toString()),
                           formatter: (value) {
                             return value;
                           },
@@ -171,11 +171,11 @@ class CreateFormState extends State<CreateForm> {
                             return null;
                           },
                           onSaved: (String? val) {
-                            widget.workout.numExercises = int.parse(val!);
+                            widget.timer.activeIntervals = int.parse(val!);
                           },
                           onChanged: (String? val) {
                             if (val!.isNotEmpty) {
-                              widget.workout.numExercises = int.parse(val);
+                              widget.timer.activeIntervals = int.parse(val);
                             }
                           },
                           unit: "intervals",
@@ -209,7 +209,7 @@ class CreateFormState extends State<CreateForm> {
                                       i < selectedTimerDisplayOptions.length;
                                       i++) {
                                     selectedTimerDisplayOptions[i] = i == index;
-                                    widget.workout.showMinutes = index;
+                                    widget.timer.showMinutes = index;
                                   }
                                 });
                               }))

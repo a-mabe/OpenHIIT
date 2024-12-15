@@ -29,6 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace 'com.codepup.workout_timer'
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -86,5 +87,5 @@ flutter {
 }
 
 dependencies {
-    implementation "androidx.multidex:multidex:2.0.0"
+    implementation "androidx.multidex:multidex:2.0.1"
 }

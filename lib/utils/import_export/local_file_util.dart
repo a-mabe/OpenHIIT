@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:openhiit/models/workout_type.dart';
+import 'package:openhiit/data/timer_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -18,10 +18,10 @@ class LocalFileUtil {
     return directory.path;
   }
 
-  Future<File> localFilePath(List<Workout> workouts) async {
+  Future<File> localFilePath(List<TimerType> timers) async {
     String fileTitle = "";
-    if (workouts.length == 1) {
-      fileTitle = "exported_openhiit_timer_${workouts[0].title}.json";
+    if (timers.length == 1) {
+      fileTitle = "exported_openhiit_timer_${timers[0].name}.json";
     } else {
       fileTitle = "exported_openhiit_timers.json";
     }
@@ -30,11 +30,11 @@ class LocalFileUtil {
     return File('$path/$fileTitle');
   }
 
-  Future<File> writeFile(List<Workout> workouts) async {
-    final file = await localFilePath(workouts);
+  Future<File> writeFile(List<TimerType> timers) async {
+    final file = await localFilePath(timers);
 
     // Write the file
-    return file.writeAsString(jsonEncode(workouts));
+    return file.writeAsString(jsonEncode(timers));
   }
 
   Future<String> readFile(PlatformFile platformFile) async {
@@ -58,9 +58,9 @@ class LocalFileUtil {
   /// Returns an integer value indicating the success of the file sharing operation.
   /// If the file sharing is successful, it returns 1. If an error occurs, it returns 0.
   Future<ShareResult?> shareFile(
-      List<Workout> workouts, BuildContext context) async {
+      List<TimerType> timers, BuildContext context) async {
     try {
-      final file = await localFilePath(workouts);
+      final file = await localFilePath(timers);
 
       if (context.mounted) {
         final box = context.findRenderObject() as RenderBox?;
@@ -80,11 +80,11 @@ class LocalFileUtil {
   }
 
   Future<ShareResult?> shareMultipleFiles(
-      List<Workout> workouts, BuildContext context) async {
+      List<TimerType> timers, BuildContext context) async {
     try {
       List<XFile> files = [];
 
-      files.add(XFile((await localFilePath(workouts)).path));
+      files.add(XFile((await localFilePath(timers)).path));
 
       if (context.mounted) {
         final box = context.findRenderObject() as RenderBox?;
@@ -102,10 +102,10 @@ class LocalFileUtil {
     }
   }
 
-  Future<bool> saveFileToDevice(List<Workout> workoutsToExport) async {
+  Future<bool> saveFileToDevice(List<TimerType> timers) async {
     String fileTitle = "";
-    if (workoutsToExport.length == 1) {
-      fileTitle = "exported_openhiit_timer_${workoutsToExport[0].title}.json";
+    if (timers.length == 1) {
+      fileTitle = "exported_openhiit_timer_${timers[0].name}.json";
     } else {
       fileTitle = "exported_openhiit_timers.json";
     }
@@ -115,7 +115,7 @@ class LocalFileUtil {
         fileName: fileTitle,
         allowedExtensions: ["json", "txt"],
         type: FileType.custom,
-        bytes: utf8.encode(jsonEncode(workoutsToExport)),
+        bytes: utf8.encode(jsonEncode(timers)),
       );
 
       if (outputFile == null) {
@@ -123,8 +123,7 @@ class LocalFileUtil {
       }
 
       if (Platform.isIOS) {
-        File(outputFile)
-            .writeAsBytes(utf8.encode(jsonEncode(workoutsToExport)));
+        File(outputFile).writeAsBytes(utf8.encode(jsonEncode(timers)));
       }
 
       return true;

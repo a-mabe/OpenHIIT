@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:openhiit/models/interval_type.dart';
+
+import 'package:background_hiit_timer/models/interval_type.dart';
+import 'package:openhiit/data/timer_sound_settings.dart';
+import 'package:openhiit/data/timer_time_settings.dart';
+import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/utils/database/constants.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import '../../models/workout_type.dart';
+import '../../data/workout_type.dart';
 
 class DatabaseManager {
   static const String _databaseName = "core1.db";
-  static const String _workoutTableName = "WorkoutTable";
-  static const String _intervalTableName = "IntervalTable";
 
   // Singleton instance
   static final DatabaseManager _instance = DatabaseManager._internal();
@@ -47,45 +50,6 @@ class DatabaseManager {
   Future<Database> openWorkoutDatabase() async {
     logger.d("Opening database");
 
-    const createWorkoutTableQuery = '''
-      CREATE TABLE IF NOT EXISTS $_workoutTableName(
-        id TEXT PRIMARY KEY,
-        title TEXT,
-        numExercises INTEGER,
-        exercises TEXT,
-        getReadyTime INTEGER,
-        exerciseTime INTEGER,
-        restTime INTEGER,
-        halfTime INTEGER,
-        breakTime INTEGER,
-        warmupTime INTEGER,
-        cooldownTime INTEGER,
-        iterations INTEGER,
-        halfwayMark INTEGER,
-        workSound TEXT,
-        restSound TEXT,
-        halfwaySound TEXT,
-        completeSound TEXT,
-        countdownSound TEXT,
-        colorInt INTEGER,
-        workoutIndex INTEGER,
-        showMinutes INTEGER
-      )
-    ''';
-
-    const createIntervalTableQuery = '''
-      CREATE TABLE IF NOT EXISTS $_intervalTableName(
-        id TEXT PRIMARY KEY,
-        workoutId TEXT,
-        time INTEGER,
-        name TEXT,
-        color INTEGER,
-        intervalIndex INTEGER,
-        sound TEXT,
-        halfwaySound TEXT
-      )
-    ''';
-
     String path = join(await getDatabasesPath(), _databaseName);
     String dbPath =
         (Platform.isWindows || Platform.isLinux) ? inMemoryDatabasePath : path;
@@ -98,6 +62,9 @@ class DatabaseManager {
         Batch batch = db.batch();
         batch.execute(createWorkoutTableQuery);
         batch.execute(createIntervalTableQuery);
+        batch.execute(createTimerTableQuery);
+        batch.execute(createTimeSettingsTableQuery);
+        batch.execute(createSoundSettingsTableQuery);
         await batch.commit(noResult: true);
       },
       onUpgrade: _handleUpgrade,
@@ -112,15 +79,15 @@ class DatabaseManager {
     }
 
     Map<int, List<String>> upgradeQueries = {
-      1: ["ALTER TABLE $_workoutTableName ADD COLUMN colorInt INTEGER;"],
-      2: ["ALTER TABLE $_workoutTableName ADD COLUMN workoutIndex INTEGER;"],
-      3: ["ALTER TABLE $_workoutTableName ADD COLUMN showMinutes INTEGER;"],
+      1: ["ALTER TABLE $workoutTableName ADD COLUMN colorInt INTEGER;"],
+      2: ["ALTER TABLE $workoutTableName ADD COLUMN workoutIndex INTEGER;"],
+      3: ["ALTER TABLE $workoutTableName ADD COLUMN showMinutes INTEGER;"],
       4: [
-        "ALTER TABLE $_workoutTableName ADD COLUMN getReadyTime INTEGER;",
-        "ALTER TABLE $_workoutTableName ADD COLUMN breakTime INTEGER;",
-        "ALTER TABLE $_workoutTableName ADD COLUMN warmupTime INTEGER;",
-        "ALTER TABLE $_workoutTableName ADD COLUMN cooldownTime INTEGER;",
-        "ALTER TABLE $_workoutTableName ADD COLUMN iterations INTEGER;"
+        "ALTER TABLE $workoutTableName ADD COLUMN getReadyTime INTEGER;",
+        "ALTER TABLE $workoutTableName ADD COLUMN breakTime INTEGER;",
+        "ALTER TABLE $workoutTableName ADD COLUMN warmupTime INTEGER;",
+        "ALTER TABLE $workoutTableName ADD COLUMN cooldownTime INTEGER;",
+        "ALTER TABLE $workoutTableName ADD COLUMN iterations INTEGER;"
       ]
     };
 
@@ -133,30 +100,24 @@ class DatabaseManager {
     }
 
     if (oldVersion < newVersion) {
-      const createIntervalTableQuery = '''
-        CREATE TABLE IF NOT EXISTS $_intervalTableName(
-          id TEXT PRIMARY KEY,
-          workoutId TEXT,
-          time INTEGER,
-          name TEXT,
-          color INTEGER,
-          intervalIndex INTEGER,
-          sound TEXT,
-          halfwaySound TEXT
-        )
-      ''';
-
       await db.execute(createIntervalTableQuery);
+      await db.execute(createTimerTableQuery);
+      await db.execute(createTimeSettingsTableQuery);
+      await db.execute(createSoundSettingsTableQuery);
     }
+  }
+
+  // Return database version number
+  Future<int> getDatabaseVersion() async {
+    final db = await _getDatabase();
+    return db.getVersion();
   }
 
   // Insert interval
   Future<void> insertInterval(IntervalType interval) async {
-    logger.d("Inserting interval: ${interval.name}");
-
     final db = await _getDatabase();
     await db.insert(
-      _intervalTableName,
+      intervalTableName,
       interval.toMap(),
       conflictAlgorithm: ConflictAlgorithm.fail,
     );
@@ -164,15 +125,45 @@ class DatabaseManager {
 
   // Insert intervals
   Future<void> insertIntervals(List<IntervalType> intervals) async {
-    logger.d("Inserting ${intervals.length} intervals");
+    final db = await _getDatabase();
+    const int batchSize = 10000; // Number of rows per batch
 
+    for (var i = 0; i < intervals.length; i += batchSize) {
+      final batch = db.batch();
+
+      // Get the next chunk of intervals
+      final chunk = intervals.skip(i).take(batchSize);
+
+      for (var interval in chunk) {
+        batch.insert(
+          intervalTableName,
+          interval.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.fail,
+        );
+      }
+
+      // Commit the batch
+      await batch.commit(noResult: true);
+    }
+  }
+
+  Future<void> insertTimer(TimerType timer) async {
+    final db = await _getDatabase();
+    await db.insert(
+      timerTableName,
+      timer.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+  }
+
+  Future<void> insertTimers(List<TimerType> timers) async {
     final db = await _getDatabase();
     Batch batch = db.batch();
 
-    for (var interval in intervals) {
+    for (var timer in timers) {
       batch.insert(
-        _intervalTableName,
-        interval.toMap(),
+        timerTableName,
+        timer.toMap(),
         conflictAlgorithm: ConflictAlgorithm.fail,
       );
     }
@@ -180,25 +171,41 @@ class DatabaseManager {
     await batch.commit(noResult: true);
   }
 
-  // Insert workout
-  Future<void> insertWorkout(Workout workout) async {
-    logger.d("Inserting workout: ${workout.title}");
-
+  Future<void> insertTimeSettings(TimerTimeSettings timeSettings) async {
     final db = await _getDatabase();
     await db.insert(
-      _workoutTableName,
-      workout.toMap(),
+      timeSettingsTableName,
+      timeSettings.toMap(),
       conflictAlgorithm: ConflictAlgorithm.fail,
     );
   }
 
+  Future<void> insertSoundSettings(TimerSoundSettings soundSettings) async {
+    final db = await _getDatabase();
+    await db.insert(
+      soundSettingsTableName,
+      soundSettings.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+  }
+
+  // Insert workout
+  // Future<void> insertWorkout(Workout workout) async {
+  //   logger.d("Inserting workout: ${workout.title}");
+
+  //   final db = await _getDatabase();
+  //   await db.insert(
+  //     _workoutTableName,
+  //     workout.toMap(),
+  //     conflictAlgorithm: ConflictAlgorithm.fail,
+  //   );
+  // }
+
   // Update interval
   Future<void> updateInterval(IntervalType interval) async {
-    logger.d("Updating interval: ${interval.name}");
-
     final db = await _getDatabase();
     await db.update(
-      _intervalTableName,
+      intervalTableName,
       interval.toMap(),
       where: 'id = ?',
       whereArgs: [interval.id],
@@ -207,14 +214,26 @@ class DatabaseManager {
 
   // Batch update intervals
   Future<void> updateIntervals(List<IntervalType> intervals) async {
-    logger.d("Updating ${intervals.length} intervals");
-
     final db = await _getDatabase();
     Batch batch = db.batch();
 
+    // Collect all interval IDs to be updated
+    List<String> intervalIds =
+        intervals.map((interval) => interval.id).toList();
+    String timerId = intervals.first.workoutId;
+
+    // Delete intervals that match the timerId but are not in the update list
+    await db.delete(
+      intervalTableName,
+      where:
+          'workoutId = ? AND id NOT IN (${List.filled(intervalIds.length, '?').join(', ')})',
+      whereArgs: [timerId, ...intervalIds],
+    );
+
+    // Update intervals
     for (var interval in intervals) {
       batch.update(
-        _intervalTableName,
+        intervalTableName,
         interval.toMap(),
         where: 'id = ?',
         whereArgs: [interval.id],
@@ -224,57 +243,106 @@ class DatabaseManager {
     await batch.commit(noResult: true);
   }
 
-  // Update workout
-  Future<void> updateWorkout(Workout workout) async {
-    logger.d("Updating workout: ${workout.title}");
-
+  Future<void> updateTimer(TimerType timer) async {
     final db = await _getDatabase();
     await db.update(
-      _workoutTableName,
-      workout.toMap(),
+      timerTableName,
+      timer.toMap(),
       where: 'id = ?',
-      whereArgs: [workout.id],
+      whereArgs: [timer.id],
     );
   }
 
-  // Batch update workouts
-  Future<void> updateWorkouts(List<Workout> workouts) async {
-    logger.d("Updating ${workouts.length} workouts");
-
+  Future<void> updateTimers(List<TimerType> timers) async {
     final db = await _getDatabase();
     Batch batch = db.batch();
 
-    for (var workout in workouts) {
+    for (var timer in timers) {
       batch.update(
-        _workoutTableName,
-        workout.toMap(),
+        timerTableName,
+        timer.toMap(),
         where: 'id = ?',
-        whereArgs: [workout.id],
+        whereArgs: [timer.id],
       );
     }
 
     await batch.commit(noResult: true);
   }
 
+  Future<void> updateTimeSettingsByTimerId(
+      String timerId, TimerTimeSettings timeSettings) async {
+    final db = await _getDatabase();
+    await db.update(
+      timeSettingsTableName,
+      timeSettings.toMap(),
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+  }
+
+  Future<void> updateSoundSettingsByTimerId(
+      String timerId, TimerSoundSettings soundSettings) async {
+    final db = await _getDatabase();
+    await db.update(
+      soundSettingsTableName,
+      soundSettings.toMap(),
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+  }
+
+  // Update workout
+  // Future<void> updateWorkout(Workout workout) async {
+  //   logger.d("Updating workout: ${workout.title}");
+
+  //   final db = await _getDatabase();
+  //   await db.update(
+  //     _workoutTableName,
+  //     workout.toMap(),
+  //     where: 'id = ?',
+  //     whereArgs: [workout.id],
+  //   );
+  // }
+
+  // Batch update workouts
+  // Future<void> updateWorkouts(List<Workout> workouts) async {
+  //   logger.d("Updating ${workouts.length} workouts");
+
+  //   final db = await _getDatabase();
+  //   Batch batch = db.batch();
+
+  //   for (var workout in workouts) {
+  //     batch.update(
+  //       _workoutTableName,
+  //       workout.toMap(),
+  //       where: 'id = ?',
+  //       whereArgs: [workout.id],
+  //     );
+  //   }
+
+  //   await batch.commit(noResult: true);
+  // }
+
   // Delete workout
   Future<void> deleteWorkout(String id) async {
-    logger.d("Deleting workout with ID: $id");
-
     final db = await _getDatabase();
     await db.delete(
-      _workoutTableName,
+      workoutTableName,
       where: 'id = ?',
       whereArgs: [id],
     );
   }
 
+  Future<void> deleteWorkoutTable() async {
+    final db = await _getDatabase();
+    await db.execute("DROP TABLE IF EXISTS $workoutTableName");
+  }
+
   // Delete interval
   Future<void> deleteInterval(String id) async {
-    logger.d("Deleting interval with ID: $id");
-
     final db = await _getDatabase();
     await db.delete(
-      _intervalTableName,
+      intervalTableName,
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -282,31 +350,134 @@ class DatabaseManager {
 
   // Delete intervals
   Future<void> deleteIntervalsByWorkoutId(String workoutId) async {
-    logger.d("Deleting intervals for workout ID: $workoutId");
-
     final db = await _getDatabase();
     await db.delete(
-      _intervalTableName,
+      intervalTableName,
       where: 'workoutId = ?',
       whereArgs: [workoutId],
     );
   }
 
+  // Delete timer
+  Future<void> deleteTimer(String id) async {
+    final db = await _getDatabase();
+    await db.delete(
+      timerTableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Delete time settings
+  Future<void> deleteTimeSettingsByTimerId(String timerId) async {
+    final db = await _getDatabase();
+    await db.delete(
+      timeSettingsTableName,
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+  }
+
+  // Delete sound settings
+  Future<void> deleteSoundSettingsByTimerId(String timerId) async {
+    final db = await _getDatabase();
+    await db.delete(
+      soundSettingsTableName,
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+  }
+
   // Get all workouts
   Future<List<Workout>> getWorkouts() async {
-    logger.d("Getting all workouts");
-
     final db = await _getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(_workoutTableName);
-    return maps.map((map) => Workout.fromMap(map)).toList();
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
+      return maps.map((map) => Workout.fromMap(map)).toList();
+    } catch (e) {
+      // If the workouts table does not exist, return an empty list
+      return [];
+    }
   }
 
   // Get all intervals
   Future<List<IntervalType>> getIntervals() async {
-    logger.d("Getting all intervals");
-
     final db = await _getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(_intervalTableName);
+    final List<Map<String, dynamic>> maps = await db.query(intervalTableName);
     return maps.map((map) => IntervalType.fromMap(map)).toList();
+  }
+
+  Future<List<IntervalType>> getIntervalsByWorkoutId(String workoutId) async {
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await db.query(
+      intervalTableName,
+      where: 'workoutId = ?',
+      whereArgs: [workoutId],
+    );
+    return maps.map((map) => IntervalType.fromMap(map)).toList();
+  }
+
+  // Get all timers
+  Future<List<TimerType>> getTimers() async {
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await db.query(timerTableName);
+    return maps.map((map) => TimerType.fromMap(map)).toList();
+  }
+
+  // Get all timers with their settings
+  Future<List<TimerType>> getTimersWithSettings() async {
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> timerMaps = await db.query(timerTableName);
+    List<TimerType> timers = [];
+
+    for (var timerMap in timerMaps) {
+      TimerType timer = TimerType.fromMap(timerMap);
+
+      // Fetch and set time settings
+      TimerTimeSettings? timeSettings =
+          await getTimeSettingsByTimerId(timer.id);
+      if (timeSettings != null) {
+        timer.timeSettings = timeSettings;
+      }
+
+      // Fetch and set sound settings
+      TimerSoundSettings? soundSettings =
+          await getSoundSettingsByTimerId(timer.id);
+      if (soundSettings != null) {
+        timer.soundSettings = soundSettings;
+      }
+
+      timers.add(timer);
+    }
+
+    return timers;
+  }
+
+  // Get time settings by timer ID
+  Future<TimerTimeSettings?> getTimeSettingsByTimerId(String timerId) async {
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await db.query(
+      timeSettingsTableName,
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+    if (maps.isEmpty) {
+      return null;
+    }
+    return TimerTimeSettings.fromMap(maps.first);
+  }
+
+  // Get sound settings by timer ID
+  Future<TimerSoundSettings?> getSoundSettingsByTimerId(String timerId) async {
+    final db = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await db.query(
+      soundSettingsTableName,
+      where: 'timerId = ?',
+      whereArgs: [timerId],
+    );
+    if (maps.isEmpty) {
+      return null;
+    }
+    return TimerSoundSettings.fromMap(maps.first);
   }
 }

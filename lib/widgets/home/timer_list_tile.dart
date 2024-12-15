@@ -1,25 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import '../../utils/functions.dart';
-import '../../models/workout_type.dart';
+import 'package:openhiit/data/timer_type.dart';
 
-///
-/// Background service countdown interval timer.
-///
 class TimerListTile extends StatefulWidget {
-  final Workout workout;
+  final TimerType timer;
 
   final Function? onTap;
 
   final int index;
 
-  ///
-  /// Simple countdown timer
-  ///
   const TimerListTile({
     super.key,
-    required this.workout,
+    required this.timer,
     required this.onTap,
     required this.index,
   });
@@ -28,9 +19,6 @@ class TimerListTile extends StatefulWidget {
   TimerListTileState createState() => TimerListTileState();
 }
 
-///
-/// State of timer
-///
 class TimerListTileState extends State<TimerListTile>
     with WidgetsBindingObserver {
   @override
@@ -67,19 +55,17 @@ class TimerListTileState extends State<TimerListTile>
   Widget build(BuildContext context) {
     return Card(
         key: Key('$widget.index'),
-        color: Color(widget.workout.colorInt),
+        color: Color(widget.timer.color),
         child: ListTile(
-          // Title of the workout.
-          title: Text(widget.workout.title),
+          title: Text(widget.timer.name),
           titleTextStyle: const TextStyle(
             fontSize: 20,
           ),
-          // Workout metadata.
           subtitle: Text(
-              '''${widget.workout.exercises != "" ? 'Exercises - ${jsonDecode(widget.workout.exercises).length}' : 'Intervals - ${widget.workout.numExercises}'}
-Exercise time - ${timeString(widget.workout.showMinutes, widget.workout.workTime)}
-Rest time - ${timeString(widget.workout.showMinutes, widget.workout.restTime)}
-Total - ${calculateWorkoutTime(widget.workout)} minutes'''),
+              '''${widget.timer.activities.isNotEmpty ? 'Exercises - ${widget.timer.activeIntervals}' : 'Intervals - ${widget.timer.activeIntervals}'}
+Exercise time - ${timeString(widget.timer.showMinutes, widget.timer.timeSettings.workTime)}
+Rest time - ${timeString(widget.timer.showMinutes, widget.timer.timeSettings.restTime)}
+Total - ${(widget.timer.totalTime / 60).round()} minutes'''),
           subtitleTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),

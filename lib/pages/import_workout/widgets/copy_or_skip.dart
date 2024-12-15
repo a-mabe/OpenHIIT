@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../models/workout_type.dart';
+import 'package:openhiit/data/timer_type.dart';
 
 class CopyOrSkipDialog extends StatelessWidget {
   /// Funtion to execute when the bulk FAB is pressed.
@@ -12,28 +11,28 @@ class CopyOrSkipDialog extends StatelessWidget {
   ///
   final void Function() onImportCopy;
 
-  final Workout workout;
+  final TimerType timer;
 
   const CopyOrSkipDialog(
       {super.key,
-      required this.workout,
+      required this.timer,
       required this.onImportCopy,
       required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Import conflict ${workout.title}'),
+      title: Text('Import conflict ${timer.name}'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
             Text(
-                'Existing timer with same ID, skip ${workout.title} or import copy?'),
+                'Existing timer with same ID, skip ${timer.name} or import copy?'),
           ],
         ),
       ),
       actions: <Widget>[
-        TextButton(child: const Text('Skip'), onPressed: onSkip),
+        TextButton(onPressed: onSkip, child: const Text('Skip')),
         TextButton(
           onPressed: onImportCopy,
           child: const Text('Import Copy'),
