@@ -18,7 +18,7 @@ Welcome to OpenHIIT, an open-source workout interval timer mobile application de
 The background timer package is being developed [here](https://github.com/a-mabe/background_timer).
 
 ## Table of Contents
-1. [Introduction](#introduction)
+1. [Why OpenHIIT?](#why-openhiit?)
 2. [Features](#features)
 3. [Installation](#installation)
 4. [Usage](#usage)
@@ -26,14 +26,18 @@ The background timer package is being developed [here](https://github.com/a-mabe
 6. [Contributing](#contributing)
 7. [License](#license)
 
-## Introduction
-OpenHIIT is a fully open source mobile application designed to assist users in their workout routines by providing customizable interval timers. It aims to help users maintain an efficient workout pace by setting intervals for exercise and rest periods.
+## Why OpenHIIT?
+
+- No restrictions on the number of configured timers and workouts.
+- No features behind paywalls.
+- No ads or subscriptions; open sourced under the [MIT license](#license).
 
 ## Features
 - **Customizable Timers**: Create and customize interval timers according to your workout requirements.
 - **Multiple Intervals**: Set multiple exercise and rest intervals in a single timer session.
 - **Visual and Audio Cues**: Get visual and audio cues to indicate the start and end of each interval.
-- **Save and Load**: Save your favorite interval timer configurations and load them for future use.
+- **Save and Load**: Save any number of timer configurations and load them for future use.
+- **Export and Import**: Export your timers and send them to a friend or another device to import.
 
 <p align="center">
    <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c7cc5c99-54ff-48a1-9aa9-8ec157454be6" width="150">
