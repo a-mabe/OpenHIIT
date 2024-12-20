@@ -4,7 +4,7 @@
 ![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
 
 <p align="center">
-   <img src="./assets/icon/openhiit-icon.png" width="150"/>
+   <img src="./assets/icon/openhiit-ios.png" width="150"/>
 </p>
 
 <p align="center">
@@ -13,12 +13,12 @@
   <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
 </p>
 
-Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter. This README file provides an overview of the application, its features, installation instructions, and other important information for beta testing.
+Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter.
 
-The timer package is being developed [here](https://github.com/a-mabe/background_timer).
+▶️ The background timer package is being developed [here](https://github.com/a-mabe/background_timer).
 
 ## Table of Contents
-1. [Introduction](#introduction)
+1. [Why OpenHIIT?](#why-openhiit)
 2. [Features](#features)
 3. [Installation](#installation)
 4. [Usage](#usage)
@@ -26,23 +26,43 @@ The timer package is being developed [here](https://github.com/a-mabe/background
 6. [Contributing](#contributing)
 7. [License](#license)
 
-## Introduction
-OpenHIIT is a fully open source mobile application designed to assist users in their workout routines by providing customizable interval timers. It aims to help users maintain an efficient workout pace by setting intervals for exercise and rest periods.
+## Why OpenHIIT?
+
+- No restrictions on the number of configured timers and workouts.
+- No features behind paywalls.
+- No ads or subscriptions; open sourced under the [MIT license](#license).
 
 ## Features
-- **Customizable Timers**: Create and customize interval timers according to your workout requirements.
-- **Multiple Intervals**: Set multiple exercise and rest intervals in a single timer session.
-- **Visual and Audio Cues**: Get visual and audio cues to indicate the start and end of each interval.
-- **Save and Load**: Save your favorite interval timer configurations and load them for future use.
+
+⏲️ **Customizable Timers** - Create and customize interval timers according to your workout requirements.
+
+🔊 **Visual and Audio Cues** - Get visual and audio cues to indicate the different intervals.
+
+💾 **Save and Load** - Save any number of timer configurations and load them for future use.
+
+📱 **Export and Import** - Export your timers and send them to a friend or another device to import.
+
+🖌️ **Color Code Timers** - Color code your timers to stay organized.
+
+🏋️ **Add Exercises** - Type in the exercises for your workout to display with the timer.
 
 <p align="center">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c7cc5c99-54ff-48a1-9aa9-8ec157454be6" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/c974463f-466d-480d-bf4f-8476258657a9" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/6bfd8386-6576-4b2d-8ade-255252c13358" width="150">
-   <img src="https://github.com/a-mabe/OpenHIIT/assets/39250511/57dc7d12-54bc-46c5-aae4-19967065a7e5" width="150">
+   <img src="https://github.com/user-attachments/assets/6b8f941c-1da6-4849-a892-e5f2d5534e21" width="200">
+   <img src="https://github.com/user-attachments/assets/dd16a054-97b2-4848-ac3f-0788e6d8a9c9" width="200">
+   <img src="https://github.com/user-attachments/assets/fc5cb739-0be4-4f30-8b47-877b0edc541f" width="200">
+   <img src="https://github.com/user-attachments/assets/0a2f304f-b59f-45a4-bacb-a5307c184347" width="200">
 </p>
 
 ## Installation
+
+### Download the app
+
+<a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="180" /></a>
+
+<a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="180" /></a>
+
+### Install from source
+
 To install and test OpenHIIT, follow these steps:
 
 1. Ensure you have Flutter and Dart SDK installed on your development environment. For more information, refer to the official Flutter documentation: [Flutter Installation](https://flutter.dev/docs/get-started/install)
@@ -84,7 +104,7 @@ Once OpenHIIT is installed and running on your device, follow these instructions
 
 5. Customize or load different timer configurations as needed.
 
-6. Provide feedback and report any bugs or issues you encounter during the beta testing phase.
+6. Provide feedback and report any bugs or issues you encounter.
 
 ## Support
 
