@@ -64,7 +64,7 @@ class ControlBarState extends State<ControlBar> {
             children: [
               IconButton(
                 icon: Icon(
-                  size: 35,
+                  size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
                   widget.changeVolume ? Icons.close : Icons.volume_up,
                   color: Colors.white,
                 ),
@@ -72,14 +72,15 @@ class ControlBarState extends State<ControlBar> {
               ),
               IconButton(
                 tooltip: 'Skip Previous',
-                icon: const Icon(Icons.skip_previous,
-                    size: 35, color: Colors.white),
+                icon: Icon(Icons.skip_previous,
+                    size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
+                    color: Colors.white),
                 onPressed: widget.onSkipPrevious,
               ),
               IconButton(
                 tooltip: 'Pause',
                 icon: Icon(
-                  size: 55,
+                  size: MediaQuery.of(context).size.width > 600 ? 65 : 55,
                   widget.paused ? Icons.play_arrow : Icons.pause,
                   color: Colors.white,
                 ),
@@ -87,14 +88,16 @@ class ControlBarState extends State<ControlBar> {
               ),
               IconButton(
                 tooltip: 'Skip Next',
-                icon:
-                    const Icon(Icons.skip_next, size: 30, color: Colors.white),
+                icon: Icon(Icons.skip_next,
+                    size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
+                    color: Colors.white),
                 onPressed: widget.onSkipNext,
               ),
               IconButton(
                 tooltip: 'Restart',
-                icon: const Icon(Icons.restart_alt,
-                    size: 35, color: Colors.white),
+                icon: Icon(Icons.restart_alt,
+                    size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
+                    color: Colors.white),
                 onPressed: () {
                   logger.d('Restarting timer');
                   widget.onRestart();
