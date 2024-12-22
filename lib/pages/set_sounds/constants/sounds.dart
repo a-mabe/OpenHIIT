@@ -13,13 +13,13 @@ const List<String> soundsList = <String>[
   'ding',
   'ding-sequence',
   'thunk',
-  'none',
+  '',
 ];
 
 const List<String> countdownSounds = <String>[
   'countdown-beep',
   'short-rest-beep',
-  'none',
+  '',
 ];
 
 var soundNames = {
@@ -38,5 +38,5 @@ var soundNames = {
   "short-rest-beep": "Beep",
   "short-whistle": "Short whistle",
   "thunk": "Thunk",
-  "none": "None"
+  "": "None"
 };

@@ -116,7 +116,7 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (value != '') {
                                   await pool.play(await soundIdMap[value]);
                                 }
                                 widget.timer.soundSettings.workSound = value!;
@@ -129,7 +129,7 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (value != '') {
                                   await pool.play(await soundIdMap[value]);
                                 }
                                 widget.timer.soundSettings.restSound = value!;
@@ -142,7 +142,7 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (value != '') {
                                   await pool.play(await soundIdMap[value]);
                                 }
                                 widget.timer.soundSettings.halfwaySound =
@@ -156,7 +156,7 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: countdownSounds,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (value != '') {
                                   await pool.play(await soundIdMap[value]);
                                 }
                                 widget.timer.soundSettings.countdownSound =
@@ -170,7 +170,7 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (value != '') {
                                   await pool.play(await soundIdMap[value]);
                                 }
                                 widget.timer.soundSettings.endSound = value!;
@@ -190,7 +190,7 @@ class _SetSoundsState extends State<SetSounds> {
   }
 
   static Future<int> loadSound(String sound, Soundpool pool) async {
-    if (sound != "none") {
+    if (sound != "") {
       return await rootBundle
           .load("packages/background_hiit_timer/lib/assets/audio/$sound.mp3")
           .then((ByteData soundData) {
