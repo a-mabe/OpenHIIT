@@ -82,7 +82,9 @@ class _SetSoundsState extends State<SetSounds> {
 
     var soundIdMap = {};
     for (final sound in allSounds) {
-      soundIdMap[sound] = loadSound(sound, pool);
+      if (sound != "none") {
+        soundIdMap[sound] = loadSound(sound, pool);
+      }
     }
 
     return Stack(
@@ -116,10 +118,12 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (!value.contains("none")) {
                                   await pool.play(await soundIdMap[value]);
+                                  widget.timer.soundSettings.workSound = value!;
+                                } else {
+                                  widget.timer.soundSettings.workSound = "";
                                 }
-                                widget.timer.soundSettings.workSound = value!;
                               }),
                           SoundDropdown(
                               dropdownKey: const Key("rest-sound"),
@@ -129,10 +133,12 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (!value.contains("none")) {
                                   await pool.play(await soundIdMap[value]);
+                                  widget.timer.soundSettings.restSound = value!;
+                                } else {
+                                  widget.timer.soundSettings.restSound = "";
                                 }
-                                widget.timer.soundSettings.restSound = value!;
                               }),
                           SoundDropdown(
                               dropdownKey: const Key("halfway-sound"),
@@ -142,11 +148,13 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (!value.contains("none")) {
                                   await pool.play(await soundIdMap[value]);
+                                  widget.timer.soundSettings.halfwaySound =
+                                      value!;
+                                } else {
+                                  widget.timer.soundSettings.halfwaySound = "";
                                 }
-                                widget.timer.soundSettings.halfwaySound =
-                                    value!;
                               }),
                           SoundDropdown(
                               dropdownKey: const Key("countdown-sound"),
@@ -156,11 +164,14 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: countdownSounds,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (!value.contains("none")) {
                                   await pool.play(await soundIdMap[value]);
+                                  widget.timer.soundSettings.countdownSound =
+                                      value!;
+                                } else {
+                                  widget.timer.soundSettings.countdownSound =
+                                      "";
                                 }
-                                widget.timer.soundSettings.countdownSound =
-                                    value!;
                               }),
                           SoundDropdown(
                               dropdownKey: const Key("end-sound"),
@@ -170,10 +181,12 @@ class _SetSoundsState extends State<SetSounds> {
                               pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
-                                if (value != 'none') {
+                                if (!value.contains("none")) {
                                   await pool.play(await soundIdMap[value]);
+                                  widget.timer.soundSettings.endSound = value!;
+                                } else {
+                                  widget.timer.soundSettings.endSound = "";
                                 }
-                                widget.timer.soundSettings.endSound = value!;
                               }),
                         ],
                       ))))),
@@ -190,7 +203,7 @@ class _SetSoundsState extends State<SetSounds> {
   }
 
   static Future<int> loadSound(String sound, Soundpool pool) async {
-    if (sound != "none") {
+    if (sound != "") {
       return await rootBundle
           .load("packages/background_hiit_timer/lib/assets/audio/$sound.mp3")
           .then((ByteData soundData) {
