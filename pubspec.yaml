@@ -90,6 +90,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
 
   # background_timer:
   #   git:

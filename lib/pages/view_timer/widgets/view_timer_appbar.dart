@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
 
-class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ViewTimerAppbar extends StatelessWidget implements PreferredSizeWidget {
   /// Called on delete button tap.
   ///
   final VoidCallback? onDelete;
@@ -24,7 +24,7 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   final double height;
 
-  const ViewWorkoutAppBar(
+  const ViewTimerAppbar(
       {super.key,
       required this.onDelete,
       required this.onEdit,
@@ -113,12 +113,12 @@ class ViewWorkoutAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         // Defines the edit button.
         IconButton(
-          key: const Key("edit-workout"),
+          key: const Key("Edit"),
           icon: const Icon(Icons.edit, color: Colors.white),
           onPressed: onEdit,
         ),
         PopupMenuButton<String>(
-          key: const Key("popup-menu"),
+          key: const Key("Menu"),
           onSelected: (String item) {
             handleMenuSelection(item, context);
           },

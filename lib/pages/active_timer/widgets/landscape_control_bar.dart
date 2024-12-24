@@ -64,6 +64,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
             children: [
               IconButton(
                 icon: Icon(
+                  key: const Key('volume'),
                   size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
                   widget.changeVolume ? Icons.close : Icons.volume_up,
                   color: Colors.white,
@@ -71,6 +72,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
                 onPressed: widget.onAdjustVolume,
               ),
               IconButton(
+                key: const Key('skip_previous'),
                 tooltip: 'Skip Previous',
                 icon: Icon(Icons.skip_previous,
                     size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
@@ -78,6 +80,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
                 onPressed: widget.onSkipPrevious,
               ),
               IconButton(
+                key: const Key('play_pause'),
                 tooltip: 'Pause',
                 icon: Icon(
                   size: MediaQuery.of(context).size.width > 600 ? 60 : 45,
@@ -87,6 +90,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
                 onPressed: widget.onTogglePlayPause,
               ),
               IconButton(
+                key: const Key('skip_next'),
                 tooltip: 'Skip Next',
                 icon: Icon(Icons.skip_next,
                     size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
@@ -94,6 +98,7 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
                 onPressed: widget.onSkipNext,
               ),
               IconButton(
+                key: const Key('restart'),
                 tooltip: 'Restart',
                 icon: Icon(Icons.restart_alt,
                     size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
