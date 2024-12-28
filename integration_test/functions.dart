@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
@@ -187,6 +191,20 @@ Future<void> verifyWorkoutOrTimerOpens(
   expect(find.text("Start"), findsOneWidget);
 }
 
+Future<void> takeScreenshot(WidgetTester tester, String fileName) async {
+  final screenshotFile = File(fileName);
+  final bytes = await tester.runAsync(() async {
+    final renderRepaintBoundary = tester
+        .firstRenderObject<RenderRepaintBoundary>(find.byType(RepaintBoundary));
+    final image = await renderRepaintBoundary.toImage();
+    final byteData = await image.toByteData(format: ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
+  });
+  if (bytes != null) {
+    await screenshotFile.writeAsBytes(bytes);
+  }
+}
+
 Future<void> runWorkoutOne(WidgetTester tester) async {
   await tester.tap(find.text('Start'));
   await tester.pumpAndSettle();
@@ -194,6 +212,8 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
 
   await Future.delayed(const Duration(seconds: 12), () {});
   print("${tester.allWidgets}");
+  debugDumpApp();
+  // debugDumpRenderTree();
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
