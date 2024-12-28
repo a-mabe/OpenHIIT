@@ -195,8 +195,9 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   await tester.pumpAndSettle();
   print("checking for get ready");
   expect(find.textContaining("Get Ready"), findsOneWidget);
-
+  print("stepping through timer");
   for (int i = 0; i < 12; i++) {
+    print("pushing pump $i");
     await tester.pumpAndSettle(const Duration(seconds: 1));
   }
   print("Checking for push-ups");
