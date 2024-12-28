@@ -206,7 +206,7 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
     );
 
     // Check if widget state has updated after each pump
-    print("Current widget state: ${tester.allWidgets}");
+    // print("Current widget state: ${tester.allWidgets}");
   }
   print("Checking for push-ups");
   expect(find.textContaining("1 of 3"), findsOneWidget);
