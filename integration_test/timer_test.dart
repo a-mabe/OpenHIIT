@@ -16,7 +16,7 @@ void main() {
   group('end-to-end test', () {
     testWidgets('verify app load', (tester) async {
       await loadApp(tester);
-      // await binding.setSurfaceSize(const Size(1080, 2400));
+      await binding.setSurfaceSize(const Size(1080, 2400));
       expect(find.text('No saved timers'), findsOneWidget);
     });
     testWidgets('create a workout', (tester) async {
