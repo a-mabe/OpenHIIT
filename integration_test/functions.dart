@@ -137,7 +137,7 @@ Future<void> editWorkoutOne(
 
 Future<void> loadApp(WidgetTester tester) async {
   await tester.pumpWidget(const WorkoutTimer());
-  await tester.pumpAndSettle(const Duration(seconds: 15));
+  await tester.pumpAndSettle(const Duration(seconds: 5));
 }
 
 Future<void> navigateToAddWorkoutOrTimer(
@@ -189,10 +189,13 @@ Future<void> verifyWorkoutOrTimerOpens(
 
 Future<void> runWorkoutOne(WidgetTester tester) async {
   await tester.tap(find.text('Start'));
-  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 10));
+  for (int i = 0; i < 12; i++) {
+    await tester.pump(const Duration(seconds: 1));
+  }
+  print("Checking for push-ups");
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
@@ -253,17 +256,17 @@ Future<void> runTimerOne(WidgetTester tester) async {
   expect(find.textContaining("Break"), findsAtLeast(1));
 
   await tester.tap(find.byIcon(Icons.arrow_back));
-  await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   expect(find.text("Start"), findsOneWidget);
 }
 
 Future<void> deleteWorkoutOrTimer(WidgetTester tester, String name) async {
   await verifyWorkoutOrTimerOpens(tester, name);
   await tester.tap(find.byKey(const Key('Menu')));
-  await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   await tester.tap(find.byIcon(Icons.delete));
-  await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   await tester.tap(find.text("Delete"));
-  await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   expect(find.text(name), findsNothing);
 }
