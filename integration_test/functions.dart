@@ -198,7 +198,15 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   print("stepping through timer");
   for (int i = 0; i < 12; i++) {
     print("pushing pump $i");
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1)).timeout(
+      Duration(seconds: 2),
+      onTimeout: () {
+        print("Pump $i timed out!");
+      },
+    );
+
+    // Check if widget state has updated after each pump
+    print("Current widget state: ${tester.allWidgets}");
   }
   print("Checking for push-ups");
   expect(find.textContaining("1 of 3"), findsOneWidget);
