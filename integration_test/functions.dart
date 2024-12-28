@@ -188,28 +188,11 @@ Future<void> verifyWorkoutOrTimerOpens(
 }
 
 Future<void> runWorkoutOne(WidgetTester tester) async {
-  print("going to tap start");
-
   await tester.tap(find.text('Start'));
-  print("tapped start");
   await tester.pumpAndSettle();
-  print("checking for get ready");
   expect(find.textContaining("Get Ready"), findsOneWidget);
-  print("stepping through timer");
-  await tester.pumpAndSettle();
-  // for (int i = 0; i < 12; i++) {
-  //   print("pushing pump $i");
-  //   await tester.pump(const Duration(seconds: 1)).timeout(
-  //     Duration(seconds: 2),
-  //     onTimeout: () {
-  //       print("Pump $i timed out!");
-  //     },
-  //   );
 
-  //   // Check if widget state has updated after each pump
-  //   // print("Current widget state: ${tester.allWidgets}");
-  // }
-  print("Checking for push-ups");
+  await tester.pump(const Duration(seconds: 12));
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
