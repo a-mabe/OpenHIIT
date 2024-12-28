@@ -4,7 +4,8 @@ import 'package:integration_test/integration_test.dart';
 import 'functions.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
   const String workoutName = 'Test Workout';
   const String workoutName2 = 'Test Workout Edited';
