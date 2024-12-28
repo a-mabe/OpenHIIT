@@ -188,8 +188,12 @@ Future<void> verifyWorkoutOrTimerOpens(
 }
 
 Future<void> runWorkoutOne(WidgetTester tester) async {
+  print("going to tap start");
+
   await tester.tap(find.text('Start'));
+  print("tapped start");
   await tester.pumpAndSettle();
+  print("checking for get ready");
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
   for (int i = 0; i < 12; i++) {
