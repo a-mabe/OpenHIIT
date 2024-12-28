@@ -193,6 +193,7 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
   await Future.delayed(const Duration(seconds: 12), () {});
+  print("${tester.allWidgets}");
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
