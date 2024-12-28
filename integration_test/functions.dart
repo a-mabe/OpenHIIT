@@ -210,7 +210,7 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
-  await Future.delayed(const Duration(seconds: 12), () {});
+  await Future.delayed(const Duration(seconds: 15), () {});
   print("${tester.allWidgets}");
   debugDumpApp();
   // debugDumpRenderTree();
