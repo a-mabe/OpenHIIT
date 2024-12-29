@@ -7,10 +7,11 @@ Future<void> main() async {
     'adb',
     [
       'shell',
-      'pm',
-      'grant',
+      'appops',
+      'set',
       'com.codepup.workout_timer',
       'android.permission.SCHEDULE_EXACT_ALARM',
+      'allow',
     ],
   );
   // await Process.run(
