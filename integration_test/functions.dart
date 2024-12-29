@@ -209,7 +209,7 @@ Future<void> takeScreenshot(WidgetTester tester, String fileName) async {
 Future<void> runWorkoutOne(
     WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
   await tester.tap(find.text('Start'));
-  await binding.convertFlutterSurfaceToImage();
+  // await binding.convertFlutterSurfaceToImage();
   await tester.pumpAndSettle();
   final path = await binding.takeScreenshot('screenshot_two');
   print('Screenshot saved at: $path');
