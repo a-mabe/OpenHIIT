@@ -86,7 +86,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1)); // skip past the animation
 
     // Find and tap the three dots
-    await tester.tap(find.byKey(const Key('popup-menu')));
+    await tester.tap(find.byKey(const Key('Menu')));
 
     // Wait for the menu to appear
     for (int i = 0; i < 5; i++) {
