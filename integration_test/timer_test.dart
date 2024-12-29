@@ -38,13 +38,7 @@ void main() {
     testWidgets('run a workout and restart', (tester) async {
       await loadApp(tester);
       await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await runWorkoutOne(tester);
-      if (Platform.isAndroid) {
-        await binding.convertFlutterSurfaceToImage();
-        await tester.pumpAndSettle();
-      }
-      final path = await binding.takeScreenshot('screenshot_two');
-      print('Screenshot saved at: $path');
+      await runWorkoutOne(tester, binding);
     });
     testWidgets('edit workout', (tester) async {
       await loadApp(tester);
