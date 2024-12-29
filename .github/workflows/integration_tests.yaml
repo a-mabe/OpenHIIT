@@ -47,4 +47,4 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
-          script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
+          script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart --debug
