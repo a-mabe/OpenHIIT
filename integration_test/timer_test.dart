@@ -38,7 +38,7 @@ void main() {
     testWidgets('run a workout and restart', (tester) async {
       await loadApp(tester);
       await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await runWorkoutOne(tester);
+      await runWorkoutOne(tester, binding);
     });
     testWidgets('edit workout', (tester) async {
       await loadApp(tester);

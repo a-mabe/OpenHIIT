@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
 
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
@@ -205,10 +206,18 @@ Future<void> takeScreenshot(WidgetTester tester, String fileName) async {
   }
 }
 
-Future<void> runWorkoutOne(WidgetTester tester) async {
+Future<void> runWorkoutOne(
+    WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
   await tester.tap(find.text('Start'));
   await tester.pumpAndSettle();
   expect(find.textContaining("Get Ready"), findsOneWidget);
+
+  if (Platform.isAndroid) {
+    await binding.convertFlutterSurfaceToImage();
+    await tester.pumpAndSettle();
+  }
+  await binding.takeScreenshot('screenshot_two');
+  print('Screenshot saved');
 
   print("Start wait");
 
@@ -217,6 +226,13 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   });
 
   print("Finished wait");
+
+  if (Platform.isAndroid) {
+    await binding.convertFlutterSurfaceToImage();
+    await tester.pumpAndSettle();
+  }
+  await binding.takeScreenshot('screenshot_three');
+  print('Screenshot saved');
 
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
