@@ -47,4 +47,4 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
-          script: flutter test -d emulator-5554 integration_test/timer_test.dart
+          script: flutter test -d emulator-5554
