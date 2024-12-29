@@ -209,11 +209,11 @@ Future<void> takeScreenshot(WidgetTester tester, String fileName) async {
 Future<void> runWorkoutOne(
     WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
   await tester.tap(find.text('Start'));
+  await binding.convertFlutterSurfaceToImage();
   await tester.pumpAndSettle();
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
   if (Platform.isAndroid) {
-    await binding.convertFlutterSurfaceToImage();
     await tester.pumpAndSettle();
   }
   await binding.takeScreenshot('screenshot_two');
