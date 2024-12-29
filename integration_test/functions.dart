@@ -221,18 +221,26 @@ Future<void> runWorkoutOne(WidgetTester tester) async {
   // expect(find.textContaining("1 of 3"), findsOneWidget);
   // expect(find.textContaining("Push-ups"), findsOneWidget);
 
-  await Future.delayed(const Duration(seconds: 10), () {});
+  await tester.runAsync(() async {
+    await Future.delayed(const Duration(seconds: 10));
+  });
   expect(find.textContaining("1 of 3"), findsNothing);
 
-  await Future.delayed(const Duration(seconds: 10), () {});
+  await tester.runAsync(() async {
+    await Future.delayed(const Duration(seconds: 10));
+  });
   expect(find.textContaining("2 of 3"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
-  await Future.delayed(const Duration(seconds: 20), () {});
+  await tester.runAsync(() async {
+    await Future.delayed(const Duration(seconds: 20));
+  });
   expect(find.textContaining("3 of 3"), findsOneWidget);
   expect(find.textContaining("Jumping Jacks"), findsOneWidget);
 
-  await Future.delayed(const Duration(seconds: 10), () {});
+  await tester.runAsync(() async {
+    await Future.delayed(const Duration(seconds: 10));
+  });
   expect(find.textContaining("Nice"), findsOneWidget);
   await tester.tap(find.text("Restart"));
   await tester.pumpAndSettle();
