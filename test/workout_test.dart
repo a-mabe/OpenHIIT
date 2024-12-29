@@ -69,7 +69,7 @@ void main() {
     expect(find.text("Start"), findsOneWidget);
 
     // Find and tap the edit button
-    await tester.tap(find.byKey(const Key('edit-workout')));
+    await tester.tap(find.byKey(const Key('Edit')));
 
     await tester.pump(); // allow the application to handle
 

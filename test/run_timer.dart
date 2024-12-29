@@ -10,7 +10,7 @@ const double landscapeWidth = portraitHeight;
 const double landscapeHeight = portraitWidth;
 
 void main() {
-  testWidgets('Test CreateWorkout', (WidgetTester tester) async {
+  testWidgets('Test Run', (WidgetTester tester) async {
     final TestWidgetsFlutterBinding binding =
         TestWidgetsFlutterBinding.ensureInitialized();
 
