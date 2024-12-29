@@ -50,6 +50,7 @@ jobs:
           script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
       
       - name: Upload screenshots
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: integration-test-screenshots
