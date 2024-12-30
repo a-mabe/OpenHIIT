@@ -61,6 +61,7 @@ jobs:
             adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
             adb -s emulator-5554 shell chmod 644 /data/system/permissions.xml
             adb -s emulator-5554 reboot
+            sleep 120
             flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
       
       # - name: Upload screenshots
