@@ -8,17 +8,22 @@ import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
 
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
+  print("LOG --- tapping dropdown");
   await tester.tap(find.byKey(key));
   await tester.pumpAndSettle();
+  print("LOG --- dropdown opened, selecting sound");
   await tester.tap(find
       .descendant(of: find.byKey(key), matching: find.text(soundName))
       .last);
   await tester.pumpAndSettle();
+  print("LOG --- sound selected");
 }
 
 Future<void> selectColor(WidgetTester tester) async {
+  print("LOG --- opening color picker");
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
+  print("LOG --- hitting select");
   await tester.tap(find.text('Select'));
   await tester.pumpAndSettle();
 }
@@ -26,6 +31,7 @@ Future<void> selectColor(WidgetTester tester) async {
 Future<void> setExercises(WidgetTester tester) async {
   const exercises = ['Push-ups', 'Sit-ups', 'Jumping Jacks'];
   for (int i = 0; i < exercises.length; i++) {
+    print("LOG --- entering text ${exercises[i]}");
     await tester.enterText(find.byKey(Key('exercise-$i')), exercises[i]);
   }
 }
