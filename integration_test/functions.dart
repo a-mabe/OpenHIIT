@@ -53,6 +53,7 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     };
     for (var key in timings.keys) {
       if (key != 'break-seconds') {
+        await tester.pumpAndSettle();
         await tester.enterText(find.byKey(Key(key)), timings[key]!);
       } else {
         await tester.pump(Duration(seconds: 3));
