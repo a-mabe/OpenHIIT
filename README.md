@@ -17,6 +17,8 @@ Welcome to OpenHIIT, an open-source workout interval timer mobile application de
 
 ▶️ The background timer package is being developed [here](https://github.com/a-mabe/background_timer).
 
+This project is tested with BrowserStack.
+
 ## Table of Contents
 1. [Why OpenHIIT?](#why-openhiit)
 2. [Features](#features)
