@@ -49,9 +49,6 @@ void main() {
     // });
     testWidgets('verify app load', (tester) async {
       await loadApp(tester);
-      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          const MethodChannel('flutter.baseflow.com/permissions/methods'),
-          (MethodCall methodCall) async => PermissionStatus.granted);
       // await binding.setSurfaceSize(const Size(1080, 2400));
       expect(find.text('No saved timers'), findsOneWidget);
       // if (Platform.isAndroid) {
