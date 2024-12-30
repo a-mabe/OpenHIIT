@@ -43,7 +43,7 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
 
   if (fullWorkout) {
     await tester.tap(find.byType(ExpansionTile).first);
-    await tester.pump(Duration(seconds: 3));
+    await tester.pumpAndSettle();
     const timings = {
       'get-ready-seconds': '40',
       'cooldown-seconds': '30',
