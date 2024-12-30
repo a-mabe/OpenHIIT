@@ -43,9 +43,11 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Set permissions
         run: |
-          export ANDROID_SDK_ROOT=~/Library/Android/sdk
           adb -s emulator-5554 root
           adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
       
