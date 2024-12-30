@@ -211,8 +211,8 @@ Future<void> runWorkoutOne(
   await tester.tap(find.text('Start'));
   // await binding.convertFlutterSurfaceToImage();
   await tester.pumpAndSettle();
-  final path = await binding.takeScreenshot('screenshot_two');
-  print('Screenshot saved at: $path');
+  // final path = await binding.takeScreenshot('screenshot_two');
+  // print('Screenshot saved at: $path');
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
   print("Start wait");
