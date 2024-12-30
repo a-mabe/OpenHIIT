@@ -43,6 +43,9 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
 
   if (fullWorkout) {
     await tester.tap(find.byType(ExpansionTile).first);
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(Duration(seconds: 1));
+    }
     await tester.pumpAndSettle();
     const timings = {
       'get-ready-seconds': '40',
@@ -53,7 +56,6 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     };
     for (var key in timings.keys) {
       if (key != 'break-seconds') {
-        await tester.pumpAndSettle();
         await tester.enterText(find.byKey(Key(key)), timings[key]!);
       } else {
         await tester.pump(Duration(seconds: 3));
