@@ -41,17 +41,20 @@ jobs:
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+          sudo udevadm trigger --name-match=kvm     
+      - name: Install Patrol CLI
+        run: dart pub global activate patrol_cli
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
-          script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
-      
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: integration-test-screenshots
-          path: screenshots/
+          script: patrol test -t integration_test/timer_test.dart -d emulator-5554
+          # script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
+
+      # - name: Upload screenshots
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: integration-test-screenshots
+      #     path: screenshots/

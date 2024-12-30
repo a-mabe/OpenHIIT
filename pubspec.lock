@@ -177,8 +177,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-  fake_async:
+  dispose_scope:
     dependency: transitive
+    description:
+      name: dispose_scope
+      sha256: "48ec38ca2631c53c4f8fa96b294c801e55c335db5e3fb9f82cede150cfe5a2af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
+  fake_async:
+    dependency: "direct main"
     description:
       name: fake_async
       sha256: "511392330127add0b769b75a987850d136345d9227c6b94c96a04cf4a391bf78"
@@ -607,6 +623,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  patrol:
+    dependency: "direct dev"
+    description:
+      name: patrol
+      sha256: f2b423122e63b1251fc31165ba1f7d85d60e22b4d20076ef39dcb47f83e35467
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.13.2"
+  patrol_finders:
+    dependency: transitive
+    description:
+      name: patrol_finders
+      sha256: "5a1e2b4c6636e89645fc596d68224cfe6cca28e11c855b98dd0df9bed0d80405"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  patrol_log:
+    dependency: transitive
+    description:
+      name: patrol_log
+      sha256: ad5d7b759d16071ca16aa9b27eb4f106ce23079792d4312941874dbc33e795cb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   permission_handler:
     dependency: "direct main"
     description:
@@ -775,6 +815,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  shelf:
+    dependency: transitive
+    description:
+      name: shelf
+      sha256: ad29c505aee705f41a4d8963641f91ac4cee3c8fad5947e033390a7bd8180fa4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
   shimmer:
     dependency: "direct main"
     description:
