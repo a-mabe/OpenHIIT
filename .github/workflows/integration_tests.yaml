@@ -46,17 +46,20 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Set permissions
-        run: |
-          adb -s emulator-5554 root
-          adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
+      # - name: Set permissions
+      #   run: |
+      #     adb -s emulator-5554 root
+      #     adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
       
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
-          script: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
+          script: |
+            adb -s emulator-5554 root
+            adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
+            flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
       
       # - name: Upload screenshots
       #   if: always()
