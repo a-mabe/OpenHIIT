@@ -7,7 +7,7 @@ orbs:
 jobs:
   integration_test_android:
     executor:
-      name: android/android-machine
+      name: android/android_machine
       resource-class: large
       tag: 2021.10.1
     steps:
