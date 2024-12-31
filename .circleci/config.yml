@@ -8,7 +8,7 @@ jobs:
   integration_test_android:
     executor:
       name: android/android-machine
-      resource-class: medium
+      resource-class: large
       tag: 2021.10.1
     steps:
       - checkout
