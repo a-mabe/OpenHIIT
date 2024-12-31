@@ -25,3 +25,8 @@ jobs:
           test-command: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
       - store_artifacts:
           path: test
+
+workflows:
+  integration-test-workflow:
+    jobs:
+      - integration_test_android
