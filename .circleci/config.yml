@@ -9,6 +9,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: medium
+      tag: 2021.10.1
     steps:
       - checkout
       - flutter-orb/install_sdk_and_pub:
