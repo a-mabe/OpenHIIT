@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
       - flutter-orb/install_sdk_and_pub:
-          cache-version: machine
+          version: 3.27.1
       - android/create-avd:
           avd-name: flutter
           install: true
