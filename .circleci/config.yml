@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  android: circleci/android@3.0.2
+  android: circleci/android@2.4.0
   flutter-orb: circleci/flutter@2.0.4
 
 jobs:
