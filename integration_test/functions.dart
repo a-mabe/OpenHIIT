@@ -59,14 +59,7 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
   await tester.enterText(find.byKey(const Key('rest-seconds')), restTime);
 
   if (fullWorkout) {
-    await tester.ensureVisible(find.byType(ExpansionTile));
     await tester.tap(find.byType(ExpansionTile).first);
-    await tester.pumpAndSettle(); // Optionally settle the initial state
-    // await tester.pumpUntilFound(
-    //   find.text('Optional'), // Condition: Find the text "Optional"
-    //   const Duration(milliseconds: 100), // Optional: Polling interval
-    //   const Duration(seconds: 30), // Timeout for the wait
-    // );
     await tester.pumpAndSettle();
     const timings = {
       'get-ready-seconds': '40',
