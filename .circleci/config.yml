@@ -1,0 +1,27 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@3.0.2
+  flutter-orb: circleci/flutter@2.0.4
+
+jobs:
+  integration_test_android:
+    executor:
+      name: android/android-machine
+      resource-class: medium
+    steps:
+      - checkout
+      - flutter-orb/install_sdk_and_pub:
+          cache-version: machine
+      - android/create-avd:
+          avd-name: flutter
+          install: true
+          system-image: system-images;android-35;default;x86
+      - android/start-emulator:
+          avd-name: flutter
+          post-emulator-launch-assemble-command: 'flutter build apk --debug'
+          restore-gradle-cache-find-args: ./android -name 'build.gradle'
+      - android/run-tests:
+          test-command: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
+      - store_artifacts:
+          path: test
