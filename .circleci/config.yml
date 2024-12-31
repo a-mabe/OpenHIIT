@@ -9,7 +9,7 @@ jobs:
     executor:
       name: android/android_machine
       resource_class: large
-      tag: 2021.10.1
+      tag: default
     steps:
       - checkout
       - run:
