@@ -21,6 +21,10 @@ jobs:
             java -version
       - flutter-orb/install_sdk_and_pub:
           version: 3.27.1
+      - run:
+          name: Set JDK 17
+          command: |
+            flutter config --jdk-dir=/usr/lib/jvm/java-17-openjdk-amd64
       - android/create-avd:
           avd-name: flutter
           install: true
