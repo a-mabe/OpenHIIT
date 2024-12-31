@@ -32,10 +32,12 @@ jobs:
       - android/start-emulator:
           avd-name: flutter
           no-window: true
-          # post-emulator-launch-assemble-command: 'flutter build apk --debug'
+          post-emulator-launch-assemble-command: |
+            flutter devices
+            flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
           # restore-gradle-cache-find-args: ./android -name 'build.gradle'
-      - android/run-tests:
-          test-command: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
+      # - android/run-tests:
+      #     test-command: flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
       - store_artifacts:
           path: test
 
