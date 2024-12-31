@@ -57,7 +57,6 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     bool fullWorkout) async {
   await tester.enterText(find.byKey(const Key('work-seconds')), workTime);
   await tester.enterText(find.byKey(const Key('rest-seconds')), restTime);
-
   if (fullWorkout) {
     await tester.tap(find.byType(ExpansionTile).first);
     await tester.pumpAndSettle();
