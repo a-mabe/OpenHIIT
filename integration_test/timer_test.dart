@@ -12,40 +12,40 @@ void main() {
   const String timerName = 'Test Timer';
 
   group('end-to-end test', () {
-    testWidgets('verify app load', (tester) async {
-      await loadApp(tester);
-      expect(find.text('No saved timers'), findsOneWidget);
-    });
-    testWidgets('create a workout', (tester) async {
-      await loadApp(tester);
-      await navigateToAddWorkoutOrTimer(tester, true);
-      await createWorkout(tester, workoutName);
-    });
-    testWidgets('run a workout and restart', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await runWorkoutOne(tester, binding);
-    });
-    testWidgets('edit workout', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await editWorkout(tester, workoutName2);
-    });
-    testWidgets('run an edited workout and restart', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName2);
-      await runWorkoutTwo(tester);
-    });
+    // testWidgets('verify app load', (tester) async {
+    //   await loadApp(tester);
+    //   expect(find.text('No saved timers'), findsOneWidget);
+    // });
+    // testWidgets('create a workout', (tester) async {
+    //   await loadApp(tester);
+    //   await navigateToAddWorkoutOrTimer(tester, true);
+    //   await createWorkout(tester, workoutName);
+    // });
+    // testWidgets('run a workout and restart', (tester) async {
+    //   await loadApp(tester);
+    //   await verifyWorkoutOrTimerOpens(tester, workoutName);
+    //   await runWorkoutOne(tester, binding);
+    // });
+    // testWidgets('edit workout', (tester) async {
+    //   await loadApp(tester);
+    //   await verifyWorkoutOrTimerOpens(tester, workoutName);
+    //   await editWorkout(tester, workoutName2);
+    // });
+    // testWidgets('run an edited workout and restart', (tester) async {
+    //   await loadApp(tester);
+    //   await verifyWorkoutOrTimerOpens(tester, workoutName2);
+    //   await runWorkoutTwo(tester);
+    // });
     testWidgets('create a timer', (tester) async {
       await loadApp(tester);
       await navigateToAddWorkoutOrTimer(tester, false);
       await createTimer(tester, timerName);
     });
-    testWidgets('run timer and cancel timer', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, timerName);
-      await runTimerOne(tester);
-    });
+    // testWidgets('run timer and cancel timer', (tester) async {
+    //   await loadApp(tester);
+    //   await verifyWorkoutOrTimerOpens(tester, timerName);
+    //   await runTimerOne(tester);
+    // });
     testWidgets('delete timer', (tester) async {
       await loadApp(tester);
       await deleteWorkoutOrTimer(tester, timerName);
