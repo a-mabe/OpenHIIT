@@ -36,6 +36,23 @@ Future<void> setExercises(WidgetTester tester) async {
   }
 }
 
+extension PumpUntilFound on WidgetTester {
+  Future<void> pumpUntilFound(
+    Finder finder, [
+    Duration pollingInterval = const Duration(milliseconds: 100),
+    Duration timeout = const Duration(seconds: 5),
+  ]) async {
+    final end = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(end)) {
+      if (finder.evaluate().isNotEmpty) {
+        return;
+      }
+      await pump(pollingInterval);
+    }
+    throw Exception('Timeout: Element not found: $finder');
+  }
+}
+
 Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     bool fullWorkout) async {
   await tester.enterText(find.byKey(const Key('work-seconds')), workTime);
@@ -43,9 +60,12 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
 
   if (fullWorkout) {
     await tester.tap(find.byType(ExpansionTile).first);
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(Duration(seconds: 1));
-    }
+    await tester.pumpAndSettle(); // Optionally settle the initial state
+    await tester.pumpUntilFound(
+      find.text('Optional'), // Condition: Find the text "Optional"
+      const Duration(milliseconds: 100), // Optional: Polling interval
+      const Duration(seconds: 30), // Timeout for the wait
+    );
     await tester.pumpAndSettle();
     const timings = {
       'get-ready-seconds': '40',
