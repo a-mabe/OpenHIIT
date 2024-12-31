@@ -17,7 +17,7 @@ jobs:
       - android/create-avd:
           avd-name: flutter
           install: true
-          system-image: system-images;android-35;default;x86
+          system-image: system-images;android-35;default;x86_54
       - android/start-emulator:
           avd-name: flutter
           post-emulator-launch-assemble-command: 'flutter build apk --debug'
