@@ -8,7 +8,7 @@ jobs:
   integration_test_android:
     executor:
       name: android/android_machine
-      resource_class: X-large
+      resource_class: xlarge
       tag: default
     steps:
       - checkout
