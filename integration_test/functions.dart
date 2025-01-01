@@ -36,23 +36,6 @@ Future<void> setExercises(WidgetTester tester) async {
   }
 }
 
-extension PumpUntilFound on WidgetTester {
-  Future<void> pumpUntilFound(
-    Finder finder, [
-    Duration pollingInterval = const Duration(milliseconds: 100),
-    Duration timeout = const Duration(seconds: 5),
-  ]) async {
-    final end = DateTime.now().add(timeout);
-    while (DateTime.now().isBefore(end)) {
-      if (finder.evaluate().isNotEmpty) {
-        return;
-      }
-      await pump(pollingInterval);
-    }
-    throw Exception('Timeout: Element not found: $finder');
-  }
-}
-
 Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     bool fullWorkout) async {
   await tester.enterText(find.byKey(const Key('work-seconds')), workTime);
@@ -164,7 +147,7 @@ Future<void> editWorkoutOne(
 
 Future<void> loadApp(WidgetTester tester) async {
   await tester.pumpWidget(const WorkoutTimer());
-  await tester.pumpAndSettle(const Duration(seconds: 5));
+  await tester.pumpAndSettle();
 }
 
 Future<void> navigateToAddWorkoutOrTimer(
@@ -231,43 +214,25 @@ Future<void> takeScreenshot(WidgetTester tester, String fileName) async {
 Future<void> runWorkoutOne(
     WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
   await tester.tap(find.text('Start'));
-  // await binding.convertFlutterSurfaceToImage();
   await tester.pumpAndSettle();
-  // final path = await binding.takeScreenshot('screenshot_two');
-  // print('Screenshot saved at: $path');
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
-  print("Start wait");
-
-  await tester.runAsync(() async {
-    await Future.delayed(const Duration(seconds: 12));
-  });
-
-  print("Finished wait");
-
+  await Future.delayed(const Duration(seconds: 12));
   expect(find.textContaining("1 of 3"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
-  await tester.runAsync(() async {
-    await Future.delayed(const Duration(seconds: 10));
-  });
+  await Future.delayed(const Duration(seconds: 10));
   expect(find.textContaining("1 of 3"), findsNothing);
 
-  await tester.runAsync(() async {
-    await Future.delayed(const Duration(seconds: 10));
-  });
+  await Future.delayed(const Duration(seconds: 10));
   expect(find.textContaining("2 of 3"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
-  await tester.runAsync(() async {
-    await Future.delayed(const Duration(seconds: 20));
-  });
+  await Future.delayed(const Duration(seconds: 20));
   expect(find.textContaining("3 of 3"), findsOneWidget);
   expect(find.textContaining("Jumping Jacks"), findsOneWidget);
 
-  await tester.runAsync(() async {
-    await Future.delayed(const Duration(seconds: 10));
-  });
+  await Future.delayed(const Duration(seconds: 10));
   expect(find.textContaining("Nice"), findsOneWidget);
   await tester.tap(find.text("Restart"));
   await tester.pumpAndSettle();
