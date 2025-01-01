@@ -1,6 +1,6 @@
-name: Integration Tests
+name: Build and Run Integration Tests
 
-run-name: ${{ github.actor }} is testing the app
+run-name: ${{ github.actor }} is building and testing OpenHIIT
 
 on:
   workflow_dispatch:
@@ -13,12 +13,14 @@ on:
     branches:
       - 'main'
       - 'pre-release'
-    paths-ignore:
-      - '**.md'
-      - '**.yaml'
-      - 'doc/**'
-      - '.git/'
-      - '.vscode/'
+    paths:
+      - 'lib/**'
+      - 'test_driver/**'
+      - 'integration_test/**'
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'android/**'
+      - 'ios/**'
 
 jobs:
   Build:
@@ -45,11 +47,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      # - name: Set permissions
-      #   run: |
-      #     adb -s emulator-5554 root
-      #     adb -s emulator-5554 shell "echo '<permission name="android.permission.SCHEDULE_EXACT_ALARM" granted="true" package="com.codepup.workout_timer" />' >> /data/system/permissions.xml"
       
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -63,10 +60,3 @@ jobs:
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
             flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/timer_test.dart
-      
-      # - name: Upload screenshots
-      #   if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: integration-test-screenshots
-      #     path: screenshots/
