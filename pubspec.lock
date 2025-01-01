@@ -105,14 +105,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
-  coverage:
-    dependency: "direct main"
-    description:
-      name: coverage
-      sha256: "576aaab8b1abdd452e0f656c3e73da9ead9d7880e15bdc494189d9c1a1baf0db"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.0"
   cross_file:
     dependency: transitive
     description:
@@ -177,22 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-  dispose_scope:
-    dependency: transitive
-    description:
-      name: dispose_scope
-      sha256: "48ec38ca2631c53c4f8fa96b294c801e55c335db5e3fb9f82cede150cfe5a2af"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.7"
   fake_async:
     dependency: "direct main"
     description:
@@ -279,7 +255,7 @@ packages:
     source: hosted
     version: "5.1.2"
   flutter_driver:
-    dependency: "direct dev"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -362,14 +338,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  glob:
-    dependency: transitive
-    description:
-      name: glob
-      sha256: "0e7014b3b7d4dac1ca4d6114f82bf1782ee86745b9b42a92c9289c23d8a0ab63"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
   google_fonts:
     dependency: "direct main"
     description:
@@ -402,14 +370,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
-  infinite_listview:
-    dependency: transitive
-    description:
-      name: infinite_listview
-      sha256: f6062c1720eb59be553dfa6b89813d3e8dd2f054538445aaa5edaddfa5195ce6
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -423,30 +383,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
-  just_audio:
-    dependency: "direct main"
-    description:
-      name: just_audio
-      sha256: ee50602364ba83fa6308f5512dd560c713ec3e1f2bc75f0db43618f0d82ef71a
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.39"
-  just_audio_platform_interface:
-    dependency: transitive
-    description:
-      name: just_audio_platform_interface
-      sha256: "0243828cce503c8366cc2090cefb2b3c871aa8ed2f520670d76fd47aa1ab2790"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.0"
-  just_audio_web:
-    dependency: transitive
-    description:
-      name: just_audio_web
-      sha256: "9a98035b8b24b40749507687520ec5ab404e291d2b0937823ff45d92cb18d448"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.13"
   leak_tracker:
     dependency: transitive
     description:
@@ -487,14 +423,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   matcher:
     dependency: transitive
     description:
@@ -535,22 +463,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  numberpicker:
-    dependency: "direct main"
-    description:
-      name: numberpicker
-      sha256: "4c129154944b0f6b133e693f8749c3f8bfb67c4d07ef9dcab48b595c22d1f156"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
-  package_config:
-    dependency: transitive
-    description:
-      name: package_config
-      sha256: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   package_info_plus:
     dependency: transitive
     description:
@@ -623,30 +535,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  patrol:
-    dependency: "direct dev"
-    description:
-      name: patrol
-      sha256: f2b423122e63b1251fc31165ba1f7d85d60e22b4d20076ef39dcb47f83e35467
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.13.2"
-  patrol_finders:
-    dependency: transitive
-    description:
-      name: patrol_finders
-      sha256: "5a1e2b4c6636e89645fc596d68224cfe6cca28e11c855b98dd0df9bed0d80405"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.0"
-  patrol_log:
-    dependency: transitive
-    description:
-      name: patrol_log
-      sha256: ad5d7b759d16071ca16aa9b27eb4f106ce23079792d4312941874dbc33e795cb
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
   permission_handler:
     dependency: "direct main"
     description:
@@ -815,14 +703,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
-  shelf:
-    dependency: transitive
-    description:
-      name: shelf
-      sha256: ad29c505aee705f41a4d8963641f91ac4cee3c8fad5947e033390a7bd8180fa4
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.1"
   shimmer:
     dependency: "direct main"
     description:
@@ -868,14 +748,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  source_maps:
-    dependency: transitive
-    description:
-      name: source_maps
-      sha256: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.12"
   source_span:
     dependency: transitive
     description:

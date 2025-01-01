@@ -33,11 +33,6 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
-    testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
-    }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -61,8 +56,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: "true"
     }
 
     dependenciesInfo {
@@ -86,10 +79,6 @@ android {
 
            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
        }
-       debug {
-            minifyEnabled false
-            shrinkResources false
-        }
    }
 }
 
@@ -99,5 +88,4 @@ flutter {
 
 dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
-    androidTestUtil "androidx.test:orchestrator:1.5.1"
 }
