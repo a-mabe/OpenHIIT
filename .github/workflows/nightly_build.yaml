@@ -3,6 +3,9 @@ name: Nightly Build
 run-name: Building the Android and iOS app bundles 🚀
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight UTC
