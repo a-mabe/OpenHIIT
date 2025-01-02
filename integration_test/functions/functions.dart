@@ -7,6 +7,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
 
+Future<void> loadApp(WidgetTester tester) async {
+  await tester.pumpWidget(const WorkoutTimer());
+  await tester.pumpAndSettle();
+}
+
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
   print("LOG --- tapping dropdown");
   await tester.tap(find.byKey(key));
@@ -104,6 +109,50 @@ Future<void> createOrEditWorkoutOrTimer(
   expect(find.text(workoutName), findsOneWidget);
 }
 
+Future<void> checkWorkoutOrTimer(
+    WidgetTester tester,
+    String name,
+    int numIntervals,
+    bool exercises,
+    Map<String, int> times,
+    Map<String, String> sounds) async {
+  await tester.tap(find.byIcon(Icons.edit));
+  await tester.pumpAndSettle();
+
+  expect(find.text(name), findsOneWidget);
+  expect(find.text(numIntervals.toString()), findsOneWidget);
+  await tester.tap(find.text('Submit'));
+  await tester.pumpAndSettle();
+
+  if (exercises) {
+    expect(find.text('Push-ups'), findsOneWidget);
+    expect(find.text('Sit-ups'), findsOneWidget);
+    expect(find.text('Jumping Jacks'), findsOneWidget);
+
+    await tester.tap(find.text('Submit'));
+    await tester.pumpAndSettle();
+  }
+
+  await tester.tap(find.byType(ExpansionTile).first);
+  await tester.pumpAndSettle();
+  for (var key in times.keys) {
+    expect(find.text(key.toString()), findsExactly(times[key]!));
+  }
+  await tester.tap(find.text('Submit'));
+  await tester.pumpAndSettle();
+
+  for (var key in sounds.keys) {
+    final workDropdown = find.byKey(Key(key));
+    expect(find.descendant(of: workDropdown, matching: find.text(sounds[key]!)),
+        findsExactly(2));
+  }
+
+  await tester.tap(find.text('Submit'));
+  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
+  expect(find.text(name), findsOneWidget);
+}
+
 Future<void> editWorkoutOne(
     WidgetTester tester,
     String workoutName,
@@ -143,11 +192,6 @@ Future<void> editWorkoutOne(
   await tester.tap(find.text('Submit'));
   await tester.pumpAndSettle();
   expect(find.text(workoutName), findsOneWidget);
-}
-
-Future<void> loadApp(WidgetTester tester) async {
-  await tester.pumpWidget(const WorkoutTimer());
-  await tester.pumpAndSettle();
 }
 
 Future<void> navigateToAddWorkoutOrTimer(
