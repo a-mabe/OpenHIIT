@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -14,7 +12,6 @@ void main() {
   group('end-to-end test', () {
     testWidgets('create a timer', (tester) async {
       await loadApp(tester);
-      // await binding.setSurfaceSize(const Size(1080, 2400));
       await navigateToAddWorkoutOrTimer(tester, false);
       await createTimer(tester, timerName);
     });
