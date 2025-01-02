@@ -88,13 +88,14 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
-          profile: pixel_7_pro
+          # profile: pixel_7_pro
           script: |
-            flutter build apk --target integration_test/workout_test.dart --debug
-            adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
-            adb -s emulator-5554 root
-            adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            avdmanager list device
+        # flutter build apk --target integration_test/workout_test.dart --debug
+        # adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
+        # adb -s emulator-5554 root
+        # adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+        # flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
   
   # Timer:
   #   runs-on: ubuntu-latest
