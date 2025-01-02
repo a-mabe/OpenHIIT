@@ -14,7 +14,7 @@ void main() {
   group('end-to-end test', () {
     testWidgets('create a timer', (tester) async {
       await loadApp(tester);
-      await binding.setSurfaceSize(const Size(1080, 2400));
+      // await binding.setSurfaceSize(const Size(1080, 2400));
       await navigateToAddWorkoutOrTimer(tester, false);
       await createTimer(tester, timerName);
     });

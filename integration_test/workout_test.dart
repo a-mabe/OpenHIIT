@@ -15,11 +15,11 @@ void main() {
   group('end-to-end test', () {
     testWidgets('create a workout', (tester) async {
       await loadApp(tester);
-      await binding.setSurfaceSize(const Size(1080, 2400));
+      // await binding.setSurfaceSize(const Size(1080, 2400));
       await navigateToAddWorkoutOrTimer(tester, true);
       await createWorkout(tester, workoutName);
     });
-    testWidgets('check timer settings', (tester) async {
+    testWidgets('check workout settings', (tester) async {
       await loadApp(tester);
       await verifyWorkoutOrTimerOpens(tester, workoutName);
       await checkWorkoutOrTimer(tester, workoutName, 3, true, {
