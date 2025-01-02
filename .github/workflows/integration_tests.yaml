@@ -28,20 +28,31 @@ jobs:
     name: Build Debug APK
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+          check-latest: true
+
+      - name: Checkout app code
         uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
-      - name: Install dependencies
-        run: flutter pub get
+      - run: flutter doctor -v
 
-      - name: Build debug APK
+      - run: flutter pub get
+
+      - name: Build Android Release APK
         run: flutter build apk --debug
 
-      - name: Upload APK as artifact
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v3
         with:
           name: debug-apk

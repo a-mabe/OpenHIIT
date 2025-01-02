@@ -61,13 +61,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
 
       - name: Upload Android AppBundle Artifact
         uses: actions/upload-artifact@v3
         with:
           name: release-aab
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/flutter-apk/app-debug.aab
 
   BuildiOSRelease:
     runs-on: macos-latest
