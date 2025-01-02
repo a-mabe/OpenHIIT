@@ -15,24 +15,24 @@ void main() {
       await navigateToAddWorkoutOrTimer(tester, false);
       await createTimer(tester, timerName);
     });
-    // testWidgets('check timer settings', (tester) async {
-    //   await loadApp(tester);
-    //   await verifyWorkoutOrTimerOpens(tester, timerName);
-    //   await checkWorkoutOrTimer(tester, timerName, 1, false, {
-    //     "10": 2,
-    //     "40": 1,
-    //     "30": 1,
-    //     "90": 1,
-    //     "20": 1,
-    //     "2": 1
-    //   }, {
-    //     "work-sound": "None",
-    //     "rest-sound": "None",
-    //     "halfway-sound": "None",
-    //     "countdown-sound": "None",
-    //     "end-sound": "None",
-    //   });
-    // });
+    testWidgets('check timer settings', (tester) async {
+      await loadApp(tester);
+      await verifyWorkoutOrTimerOpens(tester, timerName);
+      await checkWorkoutOrTimer(tester, timerName, 1, false, {
+        "10": 2,
+        "40": 1,
+        "30": 1,
+        "90": 1,
+        "20": 1,
+        "2": 1
+      }, {
+        "work-sound": "None",
+        "rest-sound": "None",
+        "halfway-sound": "None",
+        "countdown-sound": "None",
+        "end-sound": "None",
+      });
+    });
     testWidgets('run timer and cancel timer', (tester) async {
       await loadApp(tester);
       await verifyWorkoutOrTimerOpens(tester, timerName);
