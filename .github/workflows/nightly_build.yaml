@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - workflows
+      - workflow
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight UTC
 
