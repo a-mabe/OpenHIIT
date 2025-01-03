@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
-import 'package:openhiit/pages/view_workout/view_timer.dart';
+import 'package:openhiit/pages/view_timer/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';

@@ -7,8 +7,8 @@ import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/workout.dart';
 import 'package:openhiit/pages/create_timer/create_timer.dart';
 import 'package:openhiit/pages/home/home.dart';
-import 'package:openhiit/pages/view_workout/widgets/start_button.dart';
-import 'package:openhiit/pages/view_workout/widgets/view_workout_appbar.dart';
+import 'package:openhiit/pages/view_timer/widgets/start_button.dart';
+import 'package:openhiit/pages/view_timer/widgets/view_timer_appbar.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/functions.dart';
@@ -92,7 +92,7 @@ class ViewTimerState extends State<ViewTimer> {
                         }
                       },
                     )),
-                appBar: ViewWorkoutAppBar(
+                appBar: ViewTimerAppbar(
                   timer: widget.timer,
                   height:
                       MediaQuery.of(context).orientation == Orientation.portrait

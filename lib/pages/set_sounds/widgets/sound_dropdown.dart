@@ -55,6 +55,11 @@ class SoundDropdownState extends State<SoundDropdown>
 
   @override
   Widget build(BuildContext context) {
+    String initialSelection;
+    widget.initialSelection == ""
+        ? initialSelection = "none"
+        : initialSelection = widget.initialSelection;
+
     return SizedBox(
       height: 110,
       child: Column(
@@ -73,7 +78,7 @@ class SoundDropdownState extends State<SoundDropdown>
           DropdownMenu<String>(
             key: widget.dropdownKey,
             width: 240,
-            initialSelection: widget.initialSelection,
+            initialSelection: initialSelection,
             onSelected: (String? value) {
               // This is called when the user selects an item.
               widget.onFinished!(value);

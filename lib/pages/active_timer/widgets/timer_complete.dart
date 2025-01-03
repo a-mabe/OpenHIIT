@@ -99,6 +99,7 @@ class TimerCompleteState extends State<TimerComplete> {
                 height: 40,
               ),
               FilledButton.icon(
+                key: const Key('back'),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -113,6 +114,7 @@ class TimerCompleteState extends State<TimerComplete> {
                 height: 10,
               ),
               FilledButton.icon(
+                key: const Key('restart'),
                 onPressed: widget.onRestart,
                 style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(
