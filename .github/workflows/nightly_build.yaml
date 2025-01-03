@@ -12,7 +12,7 @@ on:
 
 jobs:
 
-  BuildAndroidRelease:
+  BuildAndroid:
     runs-on: ubuntu-latest
     environment: build
     permissions:
@@ -54,10 +54,10 @@ jobs:
           echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> android/key.properties
 
-      - name: Build Android Release APK
+      - name: Build Android Debug APK
         run: flutter build apk --debug
 
-      - name: Build Android Release AppBundle
+      - name: Build Android Debug AppBundle
         run: flutter build appbundle --debug
 
       - name: Upload APK Artifact
@@ -72,7 +72,7 @@ jobs:
           name: debug-aab
           path: build/app/outputs/flutter-apk/app-debug.aab
 
-  BuildiOSRelease:
+  BuildiOS:
     runs-on: macos-latest
     environment: build
     permissions:
@@ -123,7 +123,7 @@ jobs:
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v3
         with:
-         name: release-ipa
+         name: debug-ipa
          path: build/ios/ipa/*.ipa
 
       - name: Clean up keychain and provisioning profile
