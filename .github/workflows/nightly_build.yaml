@@ -4,9 +4,6 @@ run-name: Building the Android and iOS app bundles 🚀
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - workflow
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight UTC
 
