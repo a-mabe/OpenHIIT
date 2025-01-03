@@ -1,6 +1,6 @@
 name: Build and Release Flutter App
 
-run-name: ${{ github.actor }} is building the Android app bundle 🚀
+run-name: ${{ github.actor }} is building Android and iOS releases 🚀
 
 on:
   workflow_dispatch:
