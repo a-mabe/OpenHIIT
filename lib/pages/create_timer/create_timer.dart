@@ -20,19 +20,6 @@ class CreateTimerState extends State<CreateTimer> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
 
-    /// Push to the SetTimings page.
-    ///
-    // void pushTimings(TimerType timer) {
-    //   setState(() {
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => const SetTimings(timer: timer),
-    //       ),
-    //     );
-    //   });
-    // }
-
     /// Submit and form, save the workout values, and move
     /// to the next view.
     ///
@@ -65,19 +52,5 @@ class CreateTimerState extends State<CreateTimer> {
           },
         ),
         body: CreateForm(timer: widget.timer, formKey: formKey));
-
-    // return Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text("New Interval Timer"),
-    //     ),
-    //     bottomSheet: SubmitButton(
-    //       text: "Submit",
-    //       color: const Color.fromARGB(255, 58, 165, 255),
-    //       onTap: () {
-    //         submitForm(widget.timer, snapshot.data);
-    //       },
-    //     ),
-    //     body: CreateForm(timer: widget.timer, formKey: formKey));
-    // body: CreateForm(timer: widget.timer, formKey: formKey));
   }
 }
