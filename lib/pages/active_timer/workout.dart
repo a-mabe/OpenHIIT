@@ -45,6 +45,7 @@ class RunTimerState extends State<RunTimer> {
   @override
   void initState() {
     super.initState();
+    WakelockPlus.enable();
     initializeAudioSession();
     loadPreferences();
     _controllerCenter =
@@ -148,7 +149,6 @@ class RunTimerState extends State<RunTimer> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,
     ));
-    WakelockPlus.enable();
     return Scaffold(body: OrientationBuilder(builder: (context, orientation) {
       return Countdown(
           controller: _controller,
