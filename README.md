@@ -1,7 +1,9 @@
 # OpenHIIT
 
-![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/test.yaml/badge.svg)
-![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
+![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/integration_tests.yaml/badge.svg)
+![Nightly Build](https://github.com/a-mabe/openhiit/actions/workflows/nightly_build.yaml/badge.svg)
+![Pre-Release](https://github.com/a-mabe/openhiit/actions/workflows/pre_release.yaml/badge.svg)
+![Release](https://github.com/a-mabe/openhiit/actions/workflows/release.yaml/badge.svg)
 
 <p align="center">
    <img src="./assets/icon/openhiit-ios.png" width="150"/>
@@ -16,8 +18,6 @@
 Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter.
 
 ▶️ The background timer package is being developed [here](https://github.com/a-mabe/background_timer).
-
-This project is tested with BrowserStack.
 
 ## Table of Contents
 1. [Why OpenHIIT?](#why-openhiit)
