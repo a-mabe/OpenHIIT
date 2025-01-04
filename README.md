@@ -1,7 +1,9 @@
 # OpenHIIT
 
-![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/test.yaml/badge.svg)
-![Release Build](https://github.com/a-mabe/openhiit/actions/workflows/build_and_release.yaml/badge.svg)
+![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/integration_tests.yaml/badge.svg)
+![Nightly Build](https://github.com/a-mabe/openhiit/actions/workflows/nightly_build.yaml/badge.svg)
+![Pre-Release](https://github.com/a-mabe/openhiit/actions/workflows/pre_release.yaml/badge.svg)
+![Release](https://github.com/a-mabe/openhiit/actions/workflows/release.yaml/badge.svg)
 
 <p align="center">
    <img src="./assets/icon/openhiit-ios.png" width="150"/>
