@@ -74,7 +74,6 @@ jobs:
   BuildiOSRelease:
     runs-on: macos-latest
     environment: production
-    needs: GetVersionNumber
     permissions:
       contents: write
     steps:

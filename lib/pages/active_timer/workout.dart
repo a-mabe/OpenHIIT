@@ -15,6 +15,7 @@ import 'package:openhiit/pages/active_timer/widgets/timer_complete.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:openhiit/widgets/timer_card_item_animated.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class RunTimer extends StatefulWidget {
   final TimerType timer;
@@ -44,6 +45,7 @@ class RunTimerState extends State<RunTimer> {
   @override
   void initState() {
     super.initState();
+    WakelockPlus.enable();
     initializeAudioSession();
     loadPreferences();
     _controllerCenter =
@@ -63,6 +65,7 @@ class RunTimerState extends State<RunTimer> {
   @override
   void dispose() {
     _controllerCenter.dispose();
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -119,6 +122,7 @@ class RunTimerState extends State<RunTimer> {
       _paused = !_paused;
     });
     _paused ? _controller.pause() : _controller.resume();
+    _paused ? WakelockPlus.disable() : WakelockPlus.enable();
   }
 
   Color backgroundColor(String state) {
