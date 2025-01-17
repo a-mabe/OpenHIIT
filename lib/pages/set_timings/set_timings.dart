@@ -222,13 +222,17 @@ class _SetTimingsState extends State<SetTimings> {
                 titleText: titleList[index],
                 subtitleText: subtitleList[index],
                 enabled: titleList[index] == breakTitle
-                    ? (notifierMap[breakTitle]!.value > 0 ? true : false)
+                    ? ((notifierMap[breakTitle]!.value > 0) ||
+                            (notifierMap[repeatTitle]!.value > 0)
+                        ? true
+                        : false)
                     : true,
                 leadingWidget: iconList[index],
                 trailingWidget: titleList[index] != additionalConfigTitle
                     ? Visibility(
                         visible: titleList[index] == breakTitle
-                            ? (notifierMap[breakTitle]!.value > 0
+                            ? ((notifierMap[breakTitle]!.value > 0) ||
+                                    (notifierMap[repeatTitle]!.value > 0)
                                 ? true
                                 : false)
                             : true,
