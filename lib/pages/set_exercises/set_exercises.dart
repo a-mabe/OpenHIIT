@@ -12,26 +12,10 @@ class SetExercises extends StatefulWidget {
   State<SetExercises> createState() => _SetExercisesState();
 }
 
-// Define a corresponding State class.
-// This class holds the data related to the Form.
 class _SetExercisesState extends State<SetExercises> {
-  /// The list of validators to be used in the form. Each
-  /// validator will correspond to one TextFormField.
-  ///
   List<bool> validators = [];
-
-  /// The list of validators to be used in the form. Each
-  /// validator will correspond to one TextFormField.
-  ///
   List<TextEditingController> controllers = [];
-
-  /// The list of exercises the user had filled out in the form. Each
-  /// validator will correspond to one TextFormField.
-  ///
   List<String> exercises = [];
-
-  /// The global key for the form.
-  ///
   final formKey = GlobalKey<FormState>();
 
   void generateTextControllers(TimerType timer) {
@@ -42,18 +26,14 @@ class _SetExercisesState extends State<SetExercises> {
     for (var i = 0; i < timer.activeIntervals; i++) {
       validators.add(false);
       if (i < currentNumWorkoutExercises) {
-        // If there might be a previously set exercise, use it!
         controllers
             .add(TextEditingController(text: currentWorkoutExercises[i]));
       } else {
-        // Otherwise, blank text controller.
         controllers.add(TextEditingController());
       }
     }
   }
 
-  /// Generate the list of TextFormFields based off of the number of exercises.
-  ///
   List<Widget> generateTextFormFields(TimerType timer) {
     return List<Widget>.generate(timer.activeIntervals, (int index) {
       return Padding(
@@ -62,8 +42,6 @@ class _SetExercisesState extends State<SetExercises> {
           key: Key('exercise-$index'),
           textCapitalization: TextCapitalization.sentences,
           maxLength: 40,
-
-          /// Validate that the field is filled out.
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -75,15 +53,12 @@ class _SetExercisesState extends State<SetExercises> {
             labelText: 'Exercise #${index + 1}',
             errorText: validators[index] ? 'Value Can\'t Be Empty' : null,
           ),
-          // onSaved push the value into the list of exercises.
           onSaved: (val) => setState(() => exercises.add(val!)),
         ),
       );
     });
   }
 
-  /// Submit the form and call [pushTimings].
-  ///
   void submitExercises(
       GlobalKey<FormState> formKey, TimerType timer, List<String> exercises) {
     final form = formKey.currentState!;

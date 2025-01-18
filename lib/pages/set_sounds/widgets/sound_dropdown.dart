@@ -2,28 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:soundpool/soundpool.dart';
 import '../constants/sounds.dart';
 
-/// Possible interval states
-// enum IntervalStates { start, work, rest, complete }
-
-///
-/// Background service countdown interval timer.
-///
 class SoundDropdown extends StatefulWidget {
   final String title;
-
   final String initialSelection;
-
   final Soundpool pool;
-
   final Key dropdownKey;
-
   final List<String> soundsList;
-
   final Function? onFinished;
 
-  ///
-  /// Simple countdown timer
-  ///
   const SoundDropdown({
     super.key,
     required this.title,
@@ -38,9 +24,6 @@ class SoundDropdown extends StatefulWidget {
   SoundDropdownState createState() => SoundDropdownState();
 }
 
-///
-/// State of timer
-///
 class SoundDropdownState extends State<SoundDropdown>
     with WidgetsBindingObserver {
   @override
@@ -70,7 +53,6 @@ class SoundDropdownState extends State<SoundDropdown>
             child: Text(
               widget.title,
               style: const TextStyle(
-                // color: Colors.grey[700],
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -80,7 +62,6 @@ class SoundDropdownState extends State<SoundDropdown>
             width: 240,
             initialSelection: initialSelection,
             onSelected: (String? value) {
-              // This is called when the user selects an item.
               widget.onFinished!(value);
             },
             dropdownMenuEntries: widget.soundsList
