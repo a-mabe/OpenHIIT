@@ -10,6 +10,7 @@ import 'package:openhiit/main.dart';
 Future<void> loadApp(WidgetTester tester) async {
   await tester.pumpWidget(const WorkoutTimer());
   await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 2));
 }
 
 Future<void> selectSound(WidgetTester tester, Key key, String soundName) async {
