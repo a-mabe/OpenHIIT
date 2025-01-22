@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TimerOptionCard extends StatefulWidget {
-  /// Vars
-
-  /// Function to run when the InkWell is tapped.
-  ///
   final Function? onTap;
-
-  /// Icon to display on the card.
-  ///
   final IconData optionIcon;
-
-  /// Title text to display on the card.
-  ///
   final String optionTitle;
-
-  /// Description text to display on the card.
-  ///
   final String optionDescription;
 
   const TimerOptionCard(

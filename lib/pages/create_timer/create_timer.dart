@@ -20,11 +20,7 @@ class CreateTimerState extends State<CreateTimer> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
 
-    /// Submit and form, save the workout values, and move
-    /// to the next view.
-    ///
     void submitForm(TimerType timer) {
-      // Validate returns true if the form is valid, or false otherwise.
       final form = formKey.currentState!;
       if (form.validate()) {
         form.save();
@@ -38,7 +34,6 @@ class CreateTimerState extends State<CreateTimer> {
         );
       }
     }
-    // ---
 
     return Scaffold(
         appBar: AppBar(

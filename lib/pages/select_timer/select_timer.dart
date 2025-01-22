@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:openhiit/constants/strings.dart';
 import 'package:openhiit/data/timer_type.dart';
 import 'package:openhiit/pages/create_timer/create_timer.dart';
 import 'package:openhiit/pages/import_workout/import_workout.dart';
-import '../../data/workout_type.dart';
 import 'widgets/timer_option_card.dart';
 
 class SelectTimer extends StatefulWidget {
@@ -13,9 +13,6 @@ class SelectTimer extends StatefulWidget {
 }
 
 class SelectTimerState extends State<SelectTimer> {
-  final workout = Workout.empty();
-  final timer = TimerType.empty();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,32 +27,30 @@ class SelectTimerState extends State<SelectTimer> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CreateTimer(
-                            timer: timer,
+                            timer: TimerType.empty(),
                             workout: false,
                           ),
                         ),
                       );
                     },
                     optionIcon: Icons.timer,
-                    optionTitle: "Interval Timer",
-                    optionDescription:
-                        "An interval timer is a tool that helps you track the time spent working and resting during a workout."),
+                    optionTitle: intervalTimerTitle,
+                    optionDescription: intervalTimerDescription),
                 TimerOptionCard(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CreateTimer(
-                          timer: timer,
+                          timer: TimerType.empty(),
                           workout: true,
                         ),
                       ),
                     );
                   },
                   optionIcon: Icons.fitness_center,
-                  optionTitle: "Workout",
-                  optionDescription:
-                      "A workout is a planned set of exercises combined with an interval timer.",
+                  optionTitle: workoutTitle,
+                  optionDescription: workoutDescription,
                 ),
                 TimerOptionCard(
                   onTap: () {
@@ -63,15 +58,12 @@ class SelectTimerState extends State<SelectTimer> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const ImportWorkout(),
-                        settings: RouteSettings(
-                          arguments: workout,
-                        ),
                       ),
                     );
                   },
                   optionIcon: Icons.upload_file,
-                  optionTitle: "Import",
-                  optionDescription: "Import a workout or timer from file.",
+                  optionTitle: importTitle,
+                  optionDescription: importDescription,
                 ),
               ],
             )));
