@@ -59,13 +59,13 @@ jobs:
         run: flutter build appbundle
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Upload Android AppBundle Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
@@ -123,7 +123,7 @@ jobs:
           
       # Collect the file and upload as artifact         
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
          name: release-ipa
          path: build/ios/ipa/*.ipa

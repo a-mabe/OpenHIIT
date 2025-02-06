@@ -58,13 +58,13 @@ jobs:
         run: flutter build appbundle --debug
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
 
       - name: Upload Android AppBundle Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: debug-aab
           path: build/app/outputs/flutter-apk/app-debug.aab
@@ -118,7 +118,7 @@ jobs:
         run: flutter build ipa --debug --export-options-plist=$RUNNER_TEMP/ExportOptions.plist
            
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
          name: debug-ipa
          path: build/ios/ipa/*.ipa
