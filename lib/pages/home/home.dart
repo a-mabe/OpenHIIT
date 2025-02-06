@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:openhiit/constants/snackbars.dart';
 import 'package:openhiit/constants/strings.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
 import 'package:openhiit/pages/view_timer/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';

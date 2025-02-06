@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/constants/strings.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/create_timer/create_timer.dart';
 import 'package:openhiit/pages/import_workout/import_workout.dart';
 import 'widgets/timer_option_card.dart';

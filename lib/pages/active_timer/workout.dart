@@ -6,7 +6,7 @@ import 'package:background_hiit_timer/models/timer_state.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/lists/timer_list_model_animated.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/widgets/landscape_workout_view.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 
 class TimerListTile extends StatefulWidget {
   final TimerType timer;

@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
-import 'package:openhiit/data/timer_sound_settings.dart';
-import 'package:openhiit/data/timer_time_settings.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_sound_settings.dart';
+import 'package:openhiit/models/timer/timer_time_settings.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/utils/database/constants.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import '../../data/workout_type.dart';
+import '../../models/timer/workout_type.dart';
 
 class DatabaseManager {
   static const String _databaseName = "core1.db";

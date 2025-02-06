@@ -1,9 +1,9 @@
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
-import '../data/workout_type.dart';
+import '../models/timer/workout_type.dart';
 
 /// Sets the status bar brightness based on the brightness theme of the provided
 /// [BuildContext]. This function disables automatic system UI adjustment for

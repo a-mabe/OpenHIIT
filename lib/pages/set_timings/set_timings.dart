@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_time_settings.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_time_settings.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/set_timings/constants/set_timings_constants.dart';
 import 'widgets/time_input_trailing.dart';
 import '../../widgets/form_widgets/submit_button.dart';

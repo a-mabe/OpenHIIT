@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../constants/snackbars.dart';
