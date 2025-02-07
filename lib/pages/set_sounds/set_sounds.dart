@@ -1,7 +1,7 @@
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/widgets/loader.dart';

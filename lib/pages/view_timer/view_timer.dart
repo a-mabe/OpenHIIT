@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/workout.dart';
 import 'package:openhiit/pages/create_timer/create_timer.dart';

@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_sound_settings.dart';
-import 'package:openhiit/data/timer_time_settings.dart';
-import 'package:openhiit/data/timer_type.dart';
-import 'package:openhiit/data/workout_type.dart';
+import 'package:openhiit/models/timer/timer_sound_settings.dart';
+import 'package:openhiit/models/timer/timer_time_settings.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
+import 'package:openhiit/models/timer/workout_type.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/import_export/local_file_util.dart';
 import 'package:uuid/uuid.dart';

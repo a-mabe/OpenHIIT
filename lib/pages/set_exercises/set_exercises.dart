@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import '../set_timings/set_timings.dart';
 import '../../widgets/form_widgets/submit_button.dart';
 

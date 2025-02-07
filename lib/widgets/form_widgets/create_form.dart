@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:openhiit/data/timer_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
 import 'clock_picker.dart';
 import 'number_input.dart';
 import 'color_picker.dart';

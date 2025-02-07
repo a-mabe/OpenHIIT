@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
-import 'package:openhiit/data/timer_type.dart';
-import 'package:openhiit/data/workout_type.dart';
+import 'package:openhiit/models/timer/timer_type.dart';
+import 'package:openhiit/models/timer/workout_type.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/home/home.dart';

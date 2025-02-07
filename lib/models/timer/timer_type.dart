@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:openhiit/data/timer_sound_settings.dart';
-import 'package:openhiit/data/timer_time_settings.dart';
+import 'package:openhiit/models/timer/timer_sound_settings.dart';
+import 'package:openhiit/models/timer/timer_time_settings.dart';
 import 'package:uuid/uuid.dart';
 
-import '../utils/log/log.dart';
+import '../../utils/log/log.dart';
 
 class TimerType {
   String id;
