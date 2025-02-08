@@ -142,17 +142,17 @@ jobs:
     steps:
 
       - name: Download Android APK Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release-apk
 
       - name: Download Android AAB Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release-aab
 
       - name: Download iOS IPA Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release-ipa
 
