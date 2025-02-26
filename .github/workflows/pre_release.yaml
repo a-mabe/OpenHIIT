@@ -141,6 +141,21 @@ jobs:
       contents: write
     steps:
 
+      - name: Create release issue
+        run: |
+          new_issue_url=$(gh issue create \
+            --title "$TITLE" \
+            --template "Release"
+            )
+          if [[ $PINNED == true ]]; then
+            gh issue pin "$new_issue_url"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TITLE: "Release ${{ github.ref_name }}"
+          PINNED: true
+
       - name: Download Android APK Artifact
         uses: actions/download-artifact@v4
         with:
