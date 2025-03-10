@@ -1,0 +1,48 @@
+name: Announce Pre-Release OpenHIIT
+
+run-name: Creating pre-release discussion
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number'
+        required: true
+        type: string
+      playstore_link:
+        description: 'Google Play Store link'
+        required: true
+        type: string
+      appstore_link:
+        description: 'App Store link'
+        required: true
+        type: string
+
+jobs:
+
+  BuildAndroidRelease:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create a Pre-Release GitHub Discussion
+        id: create-discussion
+        uses: abirismyname/create-discussion@v1.x
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+        with:
+          title: |
+            OpenHIIT v${{ github.event.inputs.version }}-beta is out now!
+          body: |
+            OpenHIIT v${{ github.event.inputs.version }}-beta available for open testing.
+            - Download the APK from the latest beta release or join open testing on [Google Play Store](${{ github.event.inputs.playstore_link }}) and the [App Store](${{ github.event.inputs.appstore_link }}).
+          repository-id: ${{ secrets.REPO_ID }}
+          category-id: ${{ secrets.CAT_ID }}
+
+      - name: Print discussion url and id
+        run: |
+          echo discussion-id: ${{steps.create-discussion.outputs.discussion-id}} 
+          echo discussion-url: ${{steps.create-discussion.outputs.discussion-url}}             
