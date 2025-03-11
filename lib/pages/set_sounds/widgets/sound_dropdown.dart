@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:soundpool/soundpool.dart';
 import '../constants/sounds.dart';
 
 class SoundDropdown extends StatefulWidget {
   final String title;
   final String initialSelection;
-  final Soundpool pool;
   final Key dropdownKey;
   final List<String> soundsList;
   final Function? onFinished;
@@ -14,7 +12,6 @@ class SoundDropdown extends StatefulWidget {
     super.key,
     required this.title,
     required this.initialSelection,
-    required this.pool,
     required this.dropdownKey,
     required this.soundsList,
     required this.onFinished,
