@@ -1,13 +1,11 @@
-import 'package:audio_session/audio_session.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/workout_provider.dart';
 import 'package:openhiit/widgets/loader.dart';
 import 'package:provider/provider.dart';
-import 'package:soundpool/soundpool.dart';
 import 'package:uuid/uuid.dart';
 import 'widgets/sound_dropdown.dart';
 import '../../widgets/form_widgets/submit_button.dart';
@@ -27,12 +25,6 @@ class SetSounds extends StatefulWidget {
 
 class _SetSoundsState extends State<SetSounds> {
   bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeAudioSession();
-  }
 
   void submitWorkout(TimerType timer, BuildContext context) async {
     setState(() {
@@ -85,14 +77,22 @@ class _SetSoundsState extends State<SetSounds> {
 
   @override
   Widget build(BuildContext context) {
-    Soundpool pool = Soundpool.fromOptions(options: const SoundpoolOptions());
-
-    var soundIdMap = {};
-    for (final sound in allSounds) {
-      if (sound != "none") {
-        soundIdMap[sound] = loadSound(sound, pool);
-      }
-    }
+    final player = AudioPlayer();
+    player.setAudioContext(AudioContext(
+      android: AudioContextAndroid(
+        contentType: AndroidContentType.sonification,
+        audioFocus: AndroidAudioFocus.none,
+        usageType: AndroidUsageType.media,
+      ),
+      iOS: AudioContextIOS(
+        category: AVAudioSessionCategory.playback,
+        options: {
+          AVAudioSessionOptions.mixWithOthers,
+        },
+      ),
+    ));
+    player.audioCache =
+        AudioCache(prefix: 'packages/background_hiit_timer/assets/');
 
     return Stack(
       children: [
@@ -122,11 +122,11 @@ class _SetSoundsState extends State<SetSounds> {
                               title: "Work Sound",
                               initialSelection:
                                   widget.timer.soundSettings.workSound,
-                              pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
                                 if (!value.contains("none")) {
-                                  await pool.play(await soundIdMap[value]);
+                                  await player
+                                      .play(AssetSource("audio/$value.mp3"));
                                   widget.timer.soundSettings.workSound = value!;
                                 } else {
                                   widget.timer.soundSettings.workSound = "";
@@ -137,11 +137,11 @@ class _SetSoundsState extends State<SetSounds> {
                               title: "Rest Sound",
                               initialSelection:
                                   widget.timer.soundSettings.restSound,
-                              pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
                                 if (!value.contains("none")) {
-                                  await pool.play(await soundIdMap[value]);
+                                  await player
+                                      .play(AssetSource("audio/$value.mp3"));
                                   widget.timer.soundSettings.restSound = value!;
                                 } else {
                                   widget.timer.soundSettings.restSound = "";
@@ -152,11 +152,11 @@ class _SetSoundsState extends State<SetSounds> {
                               title: "Halfway Sound",
                               initialSelection:
                                   widget.timer.soundSettings.halfwaySound,
-                              pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
                                 if (!value.contains("none")) {
-                                  await pool.play(await soundIdMap[value]);
+                                  await player
+                                      .play(AssetSource("audio/$value.mp3"));
                                   widget.timer.soundSettings.halfwaySound =
                                       value!;
                                 } else {
@@ -168,11 +168,11 @@ class _SetSoundsState extends State<SetSounds> {
                               title: "Countdown Sound",
                               initialSelection:
                                   widget.timer.soundSettings.countdownSound,
-                              pool: pool,
                               soundsList: countdownSounds,
                               onFinished: (value) async {
                                 if (!value.contains("none")) {
-                                  await pool.play(await soundIdMap[value]);
+                                  await player
+                                      .play(AssetSource("audio/$value.mp3"));
                                   widget.timer.soundSettings.countdownSound =
                                       value!;
                                 } else {
@@ -185,11 +185,11 @@ class _SetSoundsState extends State<SetSounds> {
                               title: "Timer End Sound",
                               initialSelection:
                                   widget.timer.soundSettings.endSound,
-                              pool: pool,
                               soundsList: soundsList,
                               onFinished: (value) async {
                                 if (!value.contains("none")) {
-                                  await pool.play(await soundIdMap[value]);
+                                  await player
+                                      .play(AssetSource("audio/$value.mp3"));
                                   widget.timer.soundSettings.endSound = value!;
                                 } else {
                                   widget.timer.soundSettings.endSound = "";
@@ -207,37 +207,5 @@ class _SetSoundsState extends State<SetSounds> {
           )))
       ],
     );
-  }
-
-  Future<void> initializeAudioSession() async {
-    final session = await AudioSession.instance;
-
-    await session.configure(const AudioSessionConfiguration(
-      avAudioSessionCategory: AVAudioSessionCategory.playback,
-      avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.mixWithOthers,
-      avAudioSessionMode: AVAudioSessionMode.defaultMode,
-      avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
-      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-      androidAudioAttributes: AndroidAudioAttributes(
-        contentType: AndroidAudioContentType.sonification,
-        flags: AndroidAudioFlags.audibilityEnforced,
-        usage: AndroidAudioUsage.notification,
-      ),
-      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-      androidWillPauseWhenDucked: true,
-    ));
-  }
-
-  Future<int> loadSound(String sound, Soundpool pool) async {
-    if (sound != "") {
-      return await rootBundle
-          .load("packages/background_hiit_timer/lib/assets/audio/$sound.mp3")
-          .then((ByteData soundData) {
-        return pool.load(soundData);
-      });
-    }
-    return -1;
   }
 }
