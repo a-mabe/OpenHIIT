@@ -20,10 +20,10 @@ void main() {
       await verifyWorkoutOrTimerOpens(tester, timerName);
       await checkWorkoutOrTimer(tester, timerName, 1, false, {
         "10": 2,
-        "40": 1,
+        "8": 1,
         "30": 1,
         "90": 1,
-        "20": 1,
+        "11": 1,
         "2": 1
       }, {
         "work-sound": "None",
