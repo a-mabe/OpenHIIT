@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:openhiit_audioplayers/openhiit_audioplayers.dart';
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
@@ -25,6 +25,21 @@ class SetSounds extends StatefulWidget {
 
 class _SetSoundsState extends State<SetSounds> {
   bool isLoading = false;
+  AudioPlayer player = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    initAudioContext();
+    player.audioCache =
+        AudioCache(prefix: 'packages/background_hiit_timer/assets/');
+  }
+
+  Future<void> initAudioContext() async {
+    await AudioPlayer.global.setAudioContext(
+        AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers)
+            .build());
+  }
 
   void submitWorkout(TimerType timer, BuildContext context) async {
     setState(() {
@@ -77,23 +92,6 @@ class _SetSoundsState extends State<SetSounds> {
 
   @override
   Widget build(BuildContext context) {
-    final player = AudioPlayer();
-    player.setAudioContext(AudioContext(
-      android: AudioContextAndroid(
-        contentType: AndroidContentType.sonification,
-        audioFocus: AndroidAudioFocus.none,
-        usageType: AndroidUsageType.media,
-      ),
-      iOS: AudioContextIOS(
-        category: AVAudioSessionCategory.playback,
-        options: {
-          AVAudioSessionOptions.mixWithOthers,
-        },
-      ),
-    ));
-    player.audioCache =
-        AudioCache(prefix: 'packages/background_hiit_timer/assets/');
-
     return Stack(
       children: [
         Scaffold(
