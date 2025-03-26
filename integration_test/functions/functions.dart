@@ -293,7 +293,10 @@ Future<void> runWorkoutTwo(WidgetTester tester) async {
   expect(find.textContaining("1 of 2"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 20));
+  for (int i = 0; i < 20; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("1 of 2"), findsNothing);
 
   await tester.pump(const Duration(seconds: 12));
@@ -314,7 +317,7 @@ Future<void> runTimerOne(WidgetTester tester) async {
   expect(find.textContaining("Warmup"), findsOneWidget);
 
   for (int i = 0; i < 65; i++) {
-    print("LOG --- waiting for work");
+    print("LOG --- waiting for timer to run");
     await tester.pump(const Duration(seconds: 1));
   }
 
