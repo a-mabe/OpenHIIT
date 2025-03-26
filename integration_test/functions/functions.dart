@@ -313,9 +313,9 @@ Future<void> runTimerOne(WidgetTester tester) async {
   expect(find.textContaining("Get Ready"), findsOneWidget);
   expect(find.textContaining("Warmup"), findsOneWidget);
 
-  for (int i = 0; i < 25; i++) {
+  for (int i = 0; i < 65; i++) {
     print("LOG --- waiting for work");
-    await tester.pump(const Duration(seconds: 65));
+    await tester.pump(const Duration(seconds: 1));
   }
 
   expect(find.textContaining("1 of 1"), findsOneWidget);
