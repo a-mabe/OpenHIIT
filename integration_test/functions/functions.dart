@@ -303,7 +303,10 @@ Future<void> runWorkoutTwo(WidgetTester tester) async {
   expect(find.textContaining("2 of 2"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 20));
+  for (int i = 0; i < 20; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("Nice"), findsOneWidget);
   await tester.tap(find.text("Restart"));
   await tester.pumpAndSettle();
