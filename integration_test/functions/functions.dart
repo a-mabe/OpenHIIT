@@ -269,7 +269,10 @@ Future<void> runWorkoutOne(
   await Future.delayed(const Duration(seconds: 10));
   expect(find.textContaining("1 of 3"), findsNothing);
 
-  await Future.delayed(const Duration(seconds: 10));
+  for (int i = 0; i < 10; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("2 of 3"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
