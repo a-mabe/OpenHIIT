@@ -107,6 +107,7 @@ Future<void> createOrEditWorkoutOrTimer(
   await tester.tap(find.text('Submit'));
   await tester.pump(Duration(seconds: 1));
   await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   expect(find.text(workoutName), findsOneWidget);
 }
 
@@ -269,7 +270,10 @@ Future<void> runWorkoutOne(
   await Future.delayed(const Duration(seconds: 10));
   expect(find.textContaining("1 of 3"), findsNothing);
 
-  await Future.delayed(const Duration(seconds: 10));
+  for (int i = 0; i < 10; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("2 of 3"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
@@ -289,18 +293,27 @@ Future<void> runWorkoutTwo(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.textContaining("Get Ready"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 10));
+  for (int i = 0; i < 10; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("1 of 2"), findsOneWidget);
   expect(find.textContaining("Push-ups"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 20));
+  for (int i = 0; i < 20; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("1 of 2"), findsNothing);
 
   await tester.pump(const Duration(seconds: 12));
   expect(find.textContaining("2 of 2"), findsOneWidget);
   expect(find.textContaining("Sit-ups"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 20));
+  for (int i = 0; i < 20; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
   expect(find.textContaining("Nice"), findsOneWidget);
   await tester.tap(find.text("Restart"));
   await tester.pumpAndSettle();
@@ -313,8 +326,11 @@ Future<void> runTimerOne(WidgetTester tester) async {
   expect(find.textContaining("Get Ready"), findsOneWidget);
   expect(find.textContaining("Warmup"), findsOneWidget);
 
-  await tester.pump(const Duration(seconds: 50));
-  await tester.pump(const Duration(seconds: 12));
+  for (int i = 0; i < 65; i++) {
+    print("LOG --- waiting for timer to run");
+    await tester.pump(const Duration(seconds: 1));
+  }
+
   expect(find.textContaining("1 of 1"), findsOneWidget);
   expect(find.textContaining("Work"), findsAtLeast(1));
 
