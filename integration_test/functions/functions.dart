@@ -238,6 +238,7 @@ Future<void> createTimer(WidgetTester tester, String name) async {
 
 Future<void> verifyWorkoutOrTimerOpens(
     WidgetTester tester, String workoutName) async {
+  await tester.pump(Duration(seconds: 1));
   await tester.tap(find.text(workoutName));
   await tester.pump(Duration(seconds: 1));
   expect(find.text("Start"), findsOneWidget);
