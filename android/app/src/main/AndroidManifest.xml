@@ -4,11 +4,19 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission
+            android:name="android.permission.RECEIVE_BOOT_COMPLETED"
+            tools:node="remove"/>
    <application
         android:label="OpenHIIT"
         android:requestLegacyExternalStorage="true"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <receiver
+            android:name="id.flutter.flutter_background_service.BootReceiver"
+            tools:replace="android:exported,android:enabled"
+            android:enabled="false"
+            android:exported="false" />
         <service
             android:name="id.flutter.flutter_background_service.BackgroundService"
             android:foregroundServiceType="mediaPlayback"
