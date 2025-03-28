@@ -107,6 +107,7 @@ Future<void> createOrEditWorkoutOrTimer(
   await tester.tap(find.text('Submit'));
   await tester.pump(Duration(seconds: 1));
   await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 1));
   expect(find.text(workoutName), findsOneWidget);
 }
 
