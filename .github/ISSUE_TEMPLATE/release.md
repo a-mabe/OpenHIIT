@@ -22,6 +22,9 @@ assignees: a-mabe
 - [ ] Ensure pre-release workflow has created a GitHub Issue for the release titled `X.Y.Z-beta`.
 - [ ] Ensure pre-release artifacts are built and attached to the release.
 - [ ] Manually upload to Google Play Open Testing & TestFlight.
+    - [ ] Take new screenshots as needed.
+    - [ ] Create "What's Changed" text:
+        - <put here>
 - [ ] Workflow manually triggered to open discussion post to advertise the beta release for open testing.
 
 ## 3. Beta Testing Phase
