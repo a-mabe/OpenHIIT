@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - '*-beta'
+      - '*-beta*'
 
 jobs:
 
