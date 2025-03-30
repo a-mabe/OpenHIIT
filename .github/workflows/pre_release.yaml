@@ -141,6 +141,9 @@ jobs:
       contents: write
     steps:
 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Create release issue
         run: |
           new_issue_url=$(gh issue create \
