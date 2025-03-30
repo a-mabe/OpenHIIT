@@ -145,6 +145,7 @@ jobs:
         run: |
           new_issue_url=$(gh issue create \
             --title "$TITLE" \
+            --body "" \
             --template "Release"
             )
           if [[ $PINNED == true ]]; then
