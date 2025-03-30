@@ -145,8 +145,7 @@ jobs:
         run: |
           new_issue_url=$(gh issue create \
             --title "$TITLE" \
-            --body "" \
-            --template "Release"
+            --body-file ".github/ISSUE_TEMPLATE/release.md"
             )
           if [[ $PINNED == true ]]; then
             gh issue pin "$new_issue_url"
