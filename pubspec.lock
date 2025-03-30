@@ -507,10 +507,10 @@ packages:
     dependency: "direct main"
     description:
       name: openhiit_audioplayers
-      sha256: "646ccbe1ac6c46234fdf2e9d794ec6486316ade8cadbd66c59e707becfab4eb8"
+      sha256: c5b765b9f3e8b9f2b6fe1323671a0eb0a363ac6ac173ed4b4240b49b681f83c0
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   openhiit_audioplayers_darwin:
     dependency: transitive
     description:
@@ -683,10 +683,10 @@ packages:
     dependency: "direct main"
     description:
       name: provider
-      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
+      sha256: "489024f942069c2920c844ee18bb3d467c69e48955a4f32d1677f71be103e310"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.2"
+    version: "6.1.4"
   rxdart:
     dependency: transitive
     description:
@@ -715,10 +715,10 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
-      sha256: "846849e3e9b68f3ef4b60c60cf4b3e02e9321bc7f4d8c4692cf87ffa82fc8a3a"
+      sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.2"
+    version: "2.5.3"
   shared_preferences_android:
     dependency: transitive
     description:
@@ -1024,10 +1024,10 @@ packages:
     dependency: "direct main"
     description:
       name: wakelock_plus
-      sha256: "36c88af0b930121941345306d259ec4cc4ecca3b151c02e3a9e71aede83c615e"
+      sha256: b90fbcc8d7bdf3b883ea9706d9d76b9978cb1dfa4351fcc8014d6ec31a493354
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.10"
+    version: "1.2.11"
   wakelock_plus_platform_interface:
     dependency: transitive
     description:
