@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_hiit_timer
-      sha256: a97df51e0fb6d83d2e9bcf4be8ee921cfd7842dc5596f95278a99af6300db78a
+      sha256: "21d389d9c59eb5d8cc9404f6bca26994c0386aaf9ab55826399268f004892e79"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   boolean_selector:
     dependency: transitive
     description:
