@@ -45,7 +45,7 @@ dependencies:
   wakelock_plus: ^1.0.0
   flutter_launcher_icons: ^0.14.1
   flutter_material_color_picker: ^1.2.0
-  background_hiit_timer: ^1.2.0
+  background_hiit_timer: 1.2.1
   auto_size_text: ^3.0.0
   google_fonts: ^6.2.1
   shimmer: ^3.0.0
