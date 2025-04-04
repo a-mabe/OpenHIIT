@@ -30,12 +30,12 @@ jobs:
 
       - name: Create a Pre-Release GitHub Discussion
         id: create-discussion
-        uses: abirismyname/create-discussion@v1.x
+        uses: abirismyname/create-discussion@v2
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
         with:
           title: |
-            OpenHIIT v${{ github.event.inputs.version }}-beta is out now!
+            OpenHIIT v${{ github.event.inputs.version }}-beta released to open testing
           body: |
             OpenHIIT v${{ github.event.inputs.version }}-beta available for open testing.
             - Download the APK from the latest beta release or join open testing on [Google Play Store](${{ github.event.inputs.playstore_link }}) and the [App Store](${{ github.event.inputs.appstore_link }}).
