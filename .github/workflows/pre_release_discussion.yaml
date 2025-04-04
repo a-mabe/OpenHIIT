@@ -30,7 +30,7 @@ jobs:
 
       - name: Create a Pre-Release GitHub Discussion
         id: create-discussion
-        uses: abirismyname/create-discussion@v2
+        uses: abirismyname/create-discussion@main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
         with:
