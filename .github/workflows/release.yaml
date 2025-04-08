@@ -35,12 +35,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Download Beta Release Assets
+      - name: Download Beta Release Android Assets
         uses: dsaltares/fetch-gh-release-asset@1.0.0
         with:
           repo: ${{ github.repository }}
           version: 'tags/${{ env.LATEST_BETA }}'
-          file: "app-release.aab, app-release.apk, workout_timer.ipa"
+          file: "app-release.*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Beta Release iOS Assets
+        uses: dsaltares/fetch-gh-release-asset@1.0.0
+        with:
+          repo: ${{ github.repository }}
+          version: 'tags/${{ env.LATEST_BETA }}'
+          file: "workout_timer.ipa"
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create Final Release
