@@ -70,7 +70,7 @@ jobs:
           path: build/app/outputs/flutter-apk/app-debug.aab
 
   BuildiOS:
-    runs-on: macos-latest
+    runs-on: macos-15
     environment: build
     permissions:
       contents: write
