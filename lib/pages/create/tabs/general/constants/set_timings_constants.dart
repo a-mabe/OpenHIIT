@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
 const String workTitle = "Work";
+const String workKey = "work";
 const String restTitle = "Rest";
+const String restKey = "rest";
 const String additionalConfigTitle = "Additional configuration";
 const String getReadyTitle = "Get ready";
+const String getReadyKey = "getReady";
 const String warmUpTitle = "Warm-up";
+const String warmUpKey = "warmup";
 const String coolDownTitle = "Cool down";
+const String coolDownKey = "cooldown";
 const String repeatTitle = "Restart";
+const String repeatKey = "restart";
 const String breakTitle = "Break";
+const String breakKey = "break";
 
 const String workMinutesKey = "work-minutes";
 const String workSecondsKey = "work-seconds";
@@ -55,7 +62,7 @@ const List additionalSecondsKeys = [
   breakSecondsKey
 ];
 
-const List<String> timeTitles = [workTitle, restTitle, additionalConfigTitle];
+const List<String> timeTitles = [workTitle, restTitle];
 
 const List<String> additionalTimeTitles = [
   getReadyTitle,
@@ -64,7 +71,17 @@ const List<String> additionalTimeTitles = [
   repeatTitle,
   breakTitle
 ];
+
 List<String> allTitles = timeTitles + additionalTimeTitles;
+const List<String> allKeys = [
+  workKey,
+  restKey,
+  getReadyKey,
+  warmUpKey,
+  coolDownKey,
+  repeatKey,
+  breakKey
+];
 
 const List<String> timeSubTitles = [
   "Required",

@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/pages/active_timer/workout.dart';
-import 'package:openhiit/pages/create_timer/create_timer.dart';
+import 'package:openhiit/pages/create/create.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/pages/view_timer/widgets/start_button.dart';
 import 'package:openhiit/pages/view_timer/widgets/view_timer_appbar.dart';
-import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/providers/timer_creation_notifier.dart';
+import 'package:openhiit/providers/timer_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/functions.dart';
 import 'package:openhiit/utils/log/log.dart';
@@ -28,12 +29,17 @@ class ViewTimer extends StatefulWidget {
 class ViewTimerState extends State<ViewTimer> {
   GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   bool isLoading = false;
+  late TimerProvider timerProvider;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     double sizeHeight = MediaQuery.of(context).size.height;
-    final workoutProvider =
-        Provider.of<WorkoutProvider>(context, listen: false);
+    timerProvider = Provider.of<TimerProvider>(context);
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,
@@ -105,9 +111,7 @@ class ViewTimerState extends State<ViewTimer> {
                     logger.d(
                         "Delete button pressed for timer: ${widget.timer.name}");
 
-                    await workoutProvider
-                        .deleteTimer(widget.timer)
-                        .then((value) {
+                    await timerProvider.deleteTimer(widget.timer).then((value) {
                       if (context.mounted) {
                         Navigator.pushAndRemoveUntil(
                           context,
@@ -127,15 +131,15 @@ class ViewTimerState extends State<ViewTimer> {
                     logger.d(
                         "Edit button pressed for timer: ${widget.timer.name}");
 
-                    TimerType timerCopy = widget.timer.copy();
+                    TimerCreationNotifier timerCreationNotifier =
+                        Provider.of<TimerCreationNotifier>(context,
+                            listen: false);
+                    timerCreationNotifier.setTimerDraft(widget.timer);
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateTimer(
-                          timer: timerCopy,
-                          workout: widget.timer.activities.isNotEmpty,
-                        ),
+                        builder: (context) => CreateTabBar(),
                       ),
                     );
                   },
@@ -144,9 +148,9 @@ class ViewTimerState extends State<ViewTimer> {
                       isLoading = true;
                     });
                     TimerType timerCopy = widget.timer.copyNew();
-                    await workoutProvider.addIntervals(workoutProvider
+                    await timerProvider.addIntervals(await timerProvider
                         .generateIntervalsFromSettings(timerCopy));
-                    await workoutProvider.addTimer(timerCopy).then((value) {
+                    await timerProvider.addTimer(timerCopy).then((value) {
                       if (context.mounted) {
                         Navigator.push(
                           context,
