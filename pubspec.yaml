@@ -56,6 +56,7 @@ dependencies:
   url_launcher: ^6.3.0
   provider: ^6.1.2
   openhiit_audioplayers: ^1.0.0
+  tutorial_coach_mark: ^1.3.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

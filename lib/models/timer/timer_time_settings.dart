@@ -33,6 +33,23 @@ class TimerTimeSettings {
         getReadyTime = 10,
         restarts = 0;
 
+  TimerTimeSettings copyWith(
+    Map<String, int> map, {
+    Map<String, dynamic>? updates,
+  }) {
+    return TimerTimeSettings(
+      id: updates?['id'] ?? id,
+      timerId: updates?['timerId'] ?? timerId,
+      workTime: updates?['workTime'] ?? workTime,
+      restTime: updates?['restTime'] ?? restTime,
+      breakTime: updates?['breakTime'] ?? breakTime,
+      warmupTime: updates?['warmupTime'] ?? warmupTime,
+      cooldownTime: updates?['cooldownTime'] ?? cooldownTime,
+      getReadyTime: updates?['getReadyTime'] ?? getReadyTime,
+      restarts: updates?['restarts'] ?? restarts,
+    );
+  }
+
   TimerTimeSettings copyWithTimerId(String newTimerId) {
     String newId = Uuid().v1();
 
