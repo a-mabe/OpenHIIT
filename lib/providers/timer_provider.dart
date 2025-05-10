@@ -9,7 +9,7 @@ import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/timer/workout_type.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:openhiit/utils/import_export/utils/local_file_util.dart';
+import 'package:openhiit/utils/log/log.dart';
 import 'package:uuid/uuid.dart';
 
 class TimerProvider extends ChangeNotifier {
