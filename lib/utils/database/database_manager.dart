@@ -105,6 +105,62 @@ class DatabaseManager {
       await db.execute(createTimeSettingsTableQuery);
       await db.execute(createSoundSettingsTableQuery);
     }
+
+    // if (oldVersion < 8) {
+    //   // Check if the old table exists
+    //   final tables = await db.rawQuery(
+    //       "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+    //       [timeSettingsTableName]);
+
+    //   if (tables.isNotEmpty) {
+    //     // Table exists, so do the migration
+    //     await db.execute('''
+    //   CREATE TABLE time_settings_temp (
+    //     id TEXT PRIMARY KEY,
+    //     timerId TEXT,
+    //     getReadyTime INTEGER,
+    //     workTime INTEGER,
+    //     restTime INTEGER,
+    //     breakTime INTEGER,
+    //     warmupTime INTEGER,
+    //     cooldownTime INTEGER,
+    //     restarts INTEGER
+    //   );
+    // ''');
+
+    //     await db.execute('''
+    //   INSERT INTO time_settings_temp (
+    //     id,
+    //     timerId,
+    //     getReadyTime,
+    //     workTime,
+    //     restTime,
+    //     breakTime,
+    //     warmupTime,
+    //     cooldownTime,
+    //     restarts
+    //   )
+    //   SELECT
+    //     id,
+    //     timerId,
+    //     getReadyTime,
+    //     workTime,
+    //     restTime,
+    //     breakTime,
+    //     warmupTime,
+    //     cooldownTime,
+    //     restarts
+    //   FROM $timeSettingsTableName;
+    // ''');
+
+    //     await db.execute("DROP TABLE $timeSettingsTableName;");
+    //     await db.execute(
+    //         "ALTER TABLE time_settings_temp RENAME TO $timeSettingsTableName;");
+    //   } else {
+    //     logger.d(
+    //         "Skipping getReadyTime -> getReadyTime migration because $timeSettingsTableName does not exist.");
+    //   }
+    // }
   }
 
   // Return database version number

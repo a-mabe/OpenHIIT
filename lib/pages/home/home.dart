@@ -8,11 +8,12 @@ import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/select_timer/select_timer.dart';
 import 'package:openhiit/pages/view_timer/view_timer.dart';
 import 'package:openhiit/pages/home/widgets/fab_column.dart';
-import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/providers/timer_creation_notifier.dart';
+import 'package:openhiit/providers/timer_provider.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
-import 'package:openhiit/utils/import_export/local_file_util.dart';
-import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
-import 'package:openhiit/widgets/home/timer_list_tile.dart';
+import 'package:openhiit/utils/import_export/utils/local_file_util.dart';
+import 'package:openhiit/utils/import_export/widgets/export_bottom_sheet.dart';
+import 'package:openhiit/pages/home/widgets/timer_list_tile.dart';
 import 'package:openhiit/widgets/loader.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -29,12 +30,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<TimerType> reorderableTimerList = [];
-  late WorkoutProvider workoutProvider;
+  late TimerProvider workoutProvider;
 
   @override
   void initState() {
     super.initState();
-    workoutProvider = Provider.of<WorkoutProvider>(context, listen: false);
+    workoutProvider = Provider.of<TimerProvider>(context, listen: false);
   }
 
   void _onReorder(int oldIndex, int newIndex) async {
@@ -105,6 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void pushSelectTimerPage() async {
+    TimerCreationNotifier timerCreationNotifier =
+        Provider.of<TimerCreationNotifier>(context, listen: false);
+    timerCreationNotifier.reset();
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SelectTimer()),

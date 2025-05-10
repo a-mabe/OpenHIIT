@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
-import 'package:openhiit/widgets/home/export_bottom_sheet.dart';
+import 'package:openhiit/utils/import_export/widgets/export_bottom_sheet.dart';
 
 class ViewTimerAppbar extends StatelessWidget implements PreferredSizeWidget {
   /// Called on delete button tap.

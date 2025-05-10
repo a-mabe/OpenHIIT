@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../constants/snackbars.dart';
-import '../../utils/import_export/local_file_util.dart';
+import 'package:openhiit/constants/snackbars.dart';
+import 'package:openhiit/utils/import_export/utils/local_file_util.dart';
 
 /// A bottom sheet widget used for exporting workout data.
 ///
