@@ -9,6 +9,7 @@ import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/timer/workout_type.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
 import 'package:openhiit/utils/import_export/local_file_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class WorkoutProvider extends ChangeNotifier {
@@ -39,6 +40,76 @@ class WorkoutProvider extends ChangeNotifier {
         await dbManager.deleteWorkoutTable();
       }
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    bool hasRunWarmupMigration =
+        prefs.getBool('hasRunWarmupMigration') ?? false;
+
+    if (!hasRunWarmupMigration) {
+      logger.i("Running warmup migration");
+
+      await dbManager.getTimersWithSettings().then((timers) {
+        _timers = timers;
+      });
+
+      for (var timer in _timers) {
+        if (timer.timeSettings.warmupTime > 0) {
+          logger.d(
+              "Timer ${timer.name} has warmup time, adding warmup rest interval");
+
+          // Retrieve the intervals for the timer
+          List<IntervalType> intervals =
+              await dbManager.getIntervalsByWorkoutId(timer.id);
+
+          // Find the warmup interval
+          final warmupInterval = intervals.firstWhere(
+            (interval) => interval.name == "Warmup",
+            orElse: () => IntervalType(
+                id: "",
+                workoutId: "",
+                time: 0,
+                name: "",
+                color: 0,
+                intervalIndex: 0,
+                startSound: "",
+                halfwaySound: "",
+                countdownSound: "",
+                endSound: ""),
+          );
+
+          if (warmupInterval.name == "Warmup") {
+            // Create a new rest interval
+            final restInterval = IntervalType(
+              id: "${timer.id}_warmup_rest",
+              workoutId: timer.id,
+              time: timer.timeSettings.restTime,
+              name: "Rest",
+              color: timer.color,
+              intervalIndex: warmupInterval.intervalIndex + 1,
+              startSound: timer.soundSettings.restSound,
+              countdownSound: timer.soundSettings.countdownSound,
+              halfwaySound: "",
+              endSound: "",
+            );
+
+            intervals.insert(warmupInterval.intervalIndex + 1, restInterval);
+
+            // Update indices for subsequent intervals
+            for (var interval in intervals) {
+              if (interval.intervalIndex >= restInterval.intervalIndex &&
+                  interval.id != restInterval.id) {
+                interval.intervalIndex += 1;
+              }
+            }
+
+            await addInterval(restInterval);
+            await updateIntervals(intervals);
+          }
+        }
+      }
+      logger.i("Warmup migration completed");
+      await prefs.setBool('hasRunWarmupMigration', true);
+    }
 
     return dbManager.getTimersWithSettings().then((timers) {
       _timers = timers;
@@ -274,6 +345,7 @@ class WorkoutProvider extends ChangeNotifier {
     var dbManager = DatabaseManager();
     return dbManager.getIntervals().then((intervals) {
       // _intervals = intervals;
+      intervals.sort((a, b) => a.intervalIndex.compareTo(b.intervalIndex));
       return intervals;
     });
   }
@@ -348,6 +420,19 @@ class WorkoutProvider extends ChangeNotifier {
         color: timer.color,
         intervalIndex: currentIndex++,
         startSound: timer.soundSettings.workSound, // Warmup uses work sound
+        countdownSound: timer.soundSettings.countdownSound,
+        halfwaySound: "",
+        endSound: "",
+      ));
+      // Add rest after warmup
+      intervals.add(IntervalType(
+        id: "${timer.id}_warmup_rest",
+        workoutId: timer.id,
+        time: timer.timeSettings.restTime,
+        name: "Rest",
+        color: timer.color,
+        intervalIndex: currentIndex++,
+        startSound: timer.soundSettings.restSound,
         countdownSound: timer.soundSettings.countdownSound,
         halfwaySound: "",
         endSound: "",
