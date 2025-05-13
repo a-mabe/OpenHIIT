@@ -189,18 +189,6 @@ class DatabaseManager {
     );
   }
 
-  // Insert workout
-  // Future<void> insertWorkout(Workout workout) async {
-  //   logger.d("Inserting workout: ${workout.title}");
-
-  //   final db = await _getDatabase();
-  //   await db.insert(
-  //     _workoutTableName,
-  //     workout.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.fail,
-  //   );
-  // }
-
   // Update interval
   Future<void> updateInterval(IntervalType interval) async {
     final db = await _getDatabase();
@@ -291,38 +279,6 @@ class DatabaseManager {
     );
   }
 
-  // Update workout
-  // Future<void> updateWorkout(Workout workout) async {
-  //   logger.d("Updating workout: ${workout.title}");
-
-  //   final db = await _getDatabase();
-  //   await db.update(
-  //     _workoutTableName,
-  //     workout.toMap(),
-  //     where: 'id = ?',
-  //     whereArgs: [workout.id],
-  //   );
-  // }
-
-  // Batch update workouts
-  // Future<void> updateWorkouts(List<Workout> workouts) async {
-  //   logger.d("Updating ${workouts.length} workouts");
-
-  //   final db = await _getDatabase();
-  //   Batch batch = db.batch();
-
-  //   for (var workout in workouts) {
-  //     batch.update(
-  //       _workoutTableName,
-  //       workout.toMap(),
-  //       where: 'id = ?',
-  //       whereArgs: [workout.id],
-  //     );
-  //   }
-
-  //   await batch.commit(noResult: true);
-  // }
-
   // Delete workout
   Future<void> deleteWorkout(String id) async {
     final db = await _getDatabase();
@@ -403,7 +359,10 @@ class DatabaseManager {
   // Get all intervals
   Future<List<IntervalType>> getIntervals() async {
     final db = await _getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(intervalTableName);
+    final List<Map<String, dynamic>> maps = await db.query(
+      intervalTableName,
+      orderBy: 'intervalIndex ASC',
+    );
     return maps.map((map) => IntervalType.fromMap(map)).toList();
   }
 
@@ -413,6 +372,7 @@ class DatabaseManager {
       intervalTableName,
       where: 'workoutId = ?',
       whereArgs: [workoutId],
+      orderBy: 'intervalIndex ASC',
     );
     return maps.map((map) => IntervalType.fromMap(map)).toList();
   }
