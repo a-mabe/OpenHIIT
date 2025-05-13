@@ -29,9 +29,6 @@ Future<void> selectColor(WidgetTester tester) async {
   print("LOG --- opening color picker");
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
-  print("LOG --- hitting select");
-  await tester.tap(find.text('Select'));
-  await tester.pumpAndSettle();
 }
 
 Future<void> setExercises(WidgetTester tester) async {
