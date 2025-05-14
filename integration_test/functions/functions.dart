@@ -29,6 +29,14 @@ Future<void> selectColor(WidgetTester tester) async {
   print("LOG --- opening color picker");
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
+  // Tap the desired color (e.g., red)
+  final Size screenSize =
+      tester.view.physicalSize / tester.view.devicePixelRatio;
+  final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
+
+  // Tap the center of the screen
+  await tester.tapAt(center);
+  await tester.pumpAndSettle();
 }
 
 Future<void> setExercises(WidgetTester tester) async {
