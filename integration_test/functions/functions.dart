@@ -29,8 +29,13 @@ Future<void> selectColor(WidgetTester tester) async {
   print("LOG --- opening color picker");
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
-  print("LOG --- hitting select");
-  await tester.tap(find.text('Select'));
+  // Tap the desired color (e.g., red)
+  final Size screenSize =
+      tester.view.physicalSize / tester.view.devicePixelRatio;
+  final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
+
+  // Tap the center of the screen
+  await tester.tapAt(center);
   await tester.pumpAndSettle();
 }
 
@@ -50,7 +55,7 @@ Future<void> setTimings(WidgetTester tester, String workTime, String restTime,
     await tester.tap(find.byType(ExpansionTile).first);
     await tester.pumpAndSettle();
     const timings = {
-      'get-ready-seconds': '40',
+      'get-ready-seconds': '10',
       'cooldown-seconds': '30',
       'warmup-seconds': '20',
       'iterations': '2',
@@ -327,7 +332,7 @@ Future<void> runTimerOne(WidgetTester tester) async {
   expect(find.textContaining("Get Ready"), findsOneWidget);
   expect(find.textContaining("Warmup"), findsOneWidget);
 
-  for (int i = 0; i < 65; i++) {
+  for (int i = 0; i < 61; i++) {
     print("LOG --- waiting for timer to run");
     await tester.pump(const Duration(seconds: 1));
   }
