@@ -146,7 +146,7 @@ jobs:
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            flutter build apk --target integration_test/test_test.dart --debug
+            flutter build apk --target integration_test/general_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
