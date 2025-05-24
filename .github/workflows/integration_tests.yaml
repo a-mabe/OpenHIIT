@@ -140,7 +140,7 @@ jobs:
         uses: android-actions/setup-android@v3
       
       - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.33.0
         with:
           api-level: 35
           arch: x86_64
