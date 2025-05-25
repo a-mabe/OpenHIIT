@@ -141,12 +141,20 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
+      # - name: run tests
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 35
+      #     arch: x86_64
+      #     profile: pixel_6_pro
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2.30.0
         with:
-          api-level: 35
-          arch: x86_64
-          profile: pixel_6_pro
+          api-level: 29
+          arch: x86
+          target: google_apis
+          profile: Nexus 6
+          emulator-options: "-no-window -no-audio -no-snapshot -gpu swiftshader_indirect"
           script: |
             flutter build apk --target integration_test/general_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
