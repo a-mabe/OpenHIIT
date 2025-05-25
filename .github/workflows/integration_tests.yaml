@@ -111,6 +111,8 @@ jobs:
 
   General:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
 
@@ -140,12 +142,11 @@ jobs:
         uses: android-actions/setup-android@v3
       
       - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2.30.0
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
-          disable-animations: true
           script: |
             flutter build apk --target integration_test/general_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
