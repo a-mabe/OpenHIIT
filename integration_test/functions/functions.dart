@@ -94,6 +94,7 @@ Future<void> selectSound(
 }
 
 Future<void> openViewTimer(WidgetTester tester, String name) async {
+  await waitForText(tester, name);
   await tester.tap(find.text(name));
   while (find.text('Start').evaluate().isEmpty) {
     await tester.pump();
@@ -106,7 +107,7 @@ Future<void> tapStartButton(WidgetTester tester) async {
 }
 
 Future<void> waitForText(WidgetTester tester, String text) async {
-  final timeout = Duration(seconds: 300);
+  final timeout = Duration(seconds: 180);
   final interval = Duration(seconds: 1);
   final endTime = DateTime.now().add(timeout);
 
