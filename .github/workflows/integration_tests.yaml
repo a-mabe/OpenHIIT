@@ -148,7 +148,7 @@ jobs:
       #     arch: x86_64
       #     profile: pixel_6_pro
       - name: Run Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2.30.0
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           arch: x86
