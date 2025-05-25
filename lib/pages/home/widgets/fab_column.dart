@@ -21,6 +21,7 @@ class FABColumn extends StatelessWidget {
           height: 20,
         ),
         FloatingActionButton(
+          key: const Key("create-timer"),
           onPressed: create,
           tooltip: 'Create a new timer',
           heroTag: "create",
