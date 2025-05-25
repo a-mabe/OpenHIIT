@@ -155,6 +155,7 @@ jobs:
           target: google_apis
           profile: Nexus 6
           emulator-options: "-no-window -no-audio -no-snapshot -gpu swiftshader_indirect"
+          force-avd-creation: false
           script: |
             flutter build apk --target integration_test/general_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
