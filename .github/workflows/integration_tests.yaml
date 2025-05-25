@@ -140,14 +140,12 @@ jobs:
         uses: android-actions/setup-android@v3
       
       - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.30.0
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
           disable-animations: true
-          emulator-options: "-no-window -no-audio -gpu swiftshader"
-          cmake: 3.10.2.4988404
           script: |
             flutter build apk --target integration_test/general_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
