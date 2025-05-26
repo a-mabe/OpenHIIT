@@ -58,9 +58,10 @@ jobs:
         with:
           api-level: 34
           arch: x86_64
-          profile: "Nexus 5"
+          profile: pixel_6_pro
           disable-animations: true
           ram-size: 3072
+          emulator-options: "-no-window -gpu swiftshader_indirect"
           script: |
             flutter build apk --target integration_test/workout_test.dart --debug
             adb -s emulator-5554 wait-for-device
