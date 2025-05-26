@@ -48,10 +48,6 @@ class _SetSoundsState extends State<SetSounds> {
 
     WorkoutProvider workoutProvider =
         Provider.of<WorkoutProvider>(context, listen: false);
-    List<IntervalType> intervals =
-        workoutProvider.generateIntervalsFromSettings(timer);
-    timer.totalTime =
-        workoutProvider.calculateTotalTimeFromIntervals(intervals);
 
     if (timer.id == "") {
       timer.id = const Uuid().v1();
@@ -60,9 +56,19 @@ class _SetSoundsState extends State<SetSounds> {
       timer.timeSettings.timerId = timer.id;
       timer.soundSettings.timerId = timer.id;
 
+      List<IntervalType> intervals =
+          workoutProvider.generateIntervalsFromSettings(timer);
+      timer.totalTime =
+          workoutProvider.calculateTotalTimeFromIntervals(intervals);
+
       await workoutProvider.addIntervals(intervals);
       await workoutProvider.addTimer(timer);
     } else {
+      List<IntervalType> intervals =
+          workoutProvider.generateIntervalsFromSettings(timer);
+      timer.totalTime =
+          workoutProvider.calculateTotalTimeFromIntervals(intervals);
+
       await workoutProvider.deleteIntervalsByWorkoutId(timer.id);
       await workoutProvider.addIntervals(intervals);
       await workoutProvider.updateTimer(timer);
