@@ -95,7 +95,7 @@ Future<void> selectSound(
 
 Future<void> openViewTimer(WidgetTester tester, String name) async {
   await waitForText(tester, name);
-  await tester.tap(find.text(name));
+  await tester.tap(find.text(name).first);
   while (find.text('Start').evaluate().isEmpty) {
     await tester.pump();
   }
@@ -123,4 +123,27 @@ Future<void> waitForText(WidgetTester tester, String text) async {
   }
 
   throw Exception('Text "$text" not found within $timeout.');
+}
+
+Future<void> deleteWorkoutOrTimer(WidgetTester tester, String name) async {
+  await tester.tap(find.byKey(const Key('Menu')));
+  await tester.pump(Duration(seconds: 1));
+  await tester.tap(find.byIcon(Icons.delete));
+  await tester.pump(Duration(seconds: 1));
+  await tester.tap(find.text("Delete"));
+  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
+}
+
+Future<void> copyWorkoutOrTimer(WidgetTester tester, String name) async {
+  await tester.tap(find.byKey(const Key('Menu')));
+  await tester.pump(Duration(seconds: 1));
+  await tester.tap(find.byIcon(Icons.copy));
+  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapRestart(WidgetTester tester) async {
+  await tester.tap(find.text('Restart'));
+  await tester.pumpAndSettle();
 }

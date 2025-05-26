@@ -8,28 +8,47 @@ void main() {
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
   group('end-to-end test', () {
-    testWidgets('timer with work and rest', (tester) async {
+    testWidgets('simple timer and restart', (tester) async {
       await loadApp(tester);
       expect(find.text('No saved timers'), findsOneWidget);
       await tapCreateTimerButton(tester);
       await pickTimerType(tester, false);
       await enterTimerName(tester, 'Test Timer');
       await pickColor(tester);
-      await enterInterval(tester, 4);
+      await enterInterval(tester, 2);
       await tapSubmit(tester);
-      await enterTime(tester, "work-seconds", "8");
-      await enterTime(tester, "rest-seconds", "5");
+      await enterTime(tester, "work-seconds", "6");
+      await enterTime(tester, "rest-seconds", "4");
       await tapSubmit(tester);
       await selectSound(tester, "work-sound", "Harsh beep sequence");
       await tapSubmit(tester);
       await openViewTimer(tester, 'Test Timer');
       await tapStartButton(tester);
       await waitForText(tester, "Get Ready");
-      await waitForText(tester, "1 of 4");
-      await waitForText(tester, "2 of 4");
-      await waitForText(tester, "3 of 4");
-      await waitForText(tester, "4 of 4");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "2 of 2");
       await waitForText(tester, "Nice job!");
+      await tapRestart(tester);
+      await waitForText(tester, "Get Ready");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "2 of 2");
+      await waitForText(tester, "Nice job!");
+    });
+
+    testWidgets('copy timer', (tester) async {
+      await loadApp(tester);
+      expect(find.text('Test Timer'), findsOneWidget);
+      await openViewTimer(tester, 'Test Timer');
+      await copyWorkoutOrTimer(tester, 'Test Timer');
+      expect(find.text('Test Timer'), findsNWidgets(2));
+    });
+
+    testWidgets('delete timer', (tester) async {
+      await loadApp(tester);
+      expect(find.text('Test Timer'), findsNWidgets(2));
+      await openViewTimer(tester, 'Test Timer');
+      await deleteWorkoutOrTimer(tester, 'Test Timer');
+      expect(find.text('Test Timer'), findsOneWidget);
     });
   });
 }
