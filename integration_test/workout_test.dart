@@ -7,42 +7,46 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
-  const String workoutName = 'Test Workout';
-  const String workoutName2 = 'Test Workout Edited';
-
   group('end-to-end test', () {
-    testWidgets('create a workout', (tester) async {
+    testWidgets('timer with exercises and all settings changed',
+        (tester) async {
       await loadApp(tester);
-      await navigateToAddWorkoutOrTimer(tester, true);
-      await createWorkout(tester, workoutName);
-    });
-    testWidgets('check workout settings', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await checkWorkoutOrTimer(tester, workoutName, 3, true, {
-        "10": 3,
-      }, {
-        "work-sound": "Harsh beep sequence",
-        "rest-sound": "Ding",
-        "halfway-sound": "Quick beep sequence",
-        "countdown-sound": "Beep",
-        "end-sound": "Horn",
-      });
-    });
-    testWidgets('run a workout and restart', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await runWorkoutOne(tester, binding);
-    });
-    testWidgets('edit workout', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName);
-      await editWorkout(tester, workoutName2);
-    });
-    testWidgets('run an edited workout and restart', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, workoutName2);
-      await runWorkoutTwo(tester);
+      expect(find.text('No saved timers'), findsOneWidget);
+      await tapCreateTimerButton(tester);
+      await pickTimerType(tester, true);
+      await enterTimerName(tester, 'Test Workout');
+      await pickColor(tester);
+      await enterInterval(tester, 2);
+      await tapSubmit(tester);
+      await enterExercise(tester, 0, "Push-ups");
+      await enterExercise(tester, 1, "Squats");
+      await closeKeyboard(tester);
+      await tapSubmit(tester);
+      await enterTime(tester, "work-seconds", "8");
+      await enterTime(tester, "rest-seconds", "5");
+      await enterAdvancedTime(tester, "7", "8", "8", "1", "5");
+      await tapSubmit(tester);
+      await selectSound(tester, "work-sound", "None");
+      await selectSound(tester, "rest-sound", "None");
+      await selectSound(tester, "halfway-sound", "None");
+      await selectSound(tester, "countdown-sound", "None");
+      await selectSound(tester, "end-sound", "None");
+      await tapSubmit(tester);
+      await openViewTimer(tester, 'Test Workout');
+      await tapStartButton(tester);
+      await waitForText(tester, "7");
+      await waitForText(tester, "Warmup");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "Push-ups");
+      await waitForText(tester, "2 of 2");
+      await waitForText(tester, "Squats");
+      await waitForText(tester, "Break");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "Push-ups");
+      await waitForText(tester, "2 of 2");
+      await waitForText(tester, "Squats");
+      await waitForText(tester, "Cooldown");
+      await waitForText(tester, "Nice job!");
     });
   });
 }

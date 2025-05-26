@@ -7,40 +7,48 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
-  const String timerName = 'Test Timer';
-
   group('end-to-end test', () {
-    testWidgets('create a timer', (tester) async {
+    testWidgets('simple timer and restart', (tester) async {
       await loadApp(tester);
-      await navigateToAddWorkoutOrTimer(tester, false);
-      await createTimer(tester, timerName);
+      expect(find.text('No saved timers'), findsOneWidget);
+      await tapCreateTimerButton(tester);
+      await pickTimerType(tester, false);
+      await enterTimerName(tester, 'Test Timer');
+      await pickColor(tester);
+      await enterInterval(tester, 2);
+      await tapSubmit(tester);
+      await enterTime(tester, "work-seconds", "6");
+      await enterTime(tester, "rest-seconds", "4");
+      await tapSubmit(tester);
+      await selectSound(tester, "work-sound", "Harsh beep sequence");
+      await tapSubmit(tester);
+      await openViewTimer(tester, 'Test Timer');
+      await tapStartButton(tester);
+      await waitForText(tester, "Get Ready");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "2 of 2");
+      await waitForText(tester, "Nice job!");
+      await tapRestart(tester);
+      await waitForText(tester, "Get Ready");
+      await waitForText(tester, "1 of 2");
+      await waitForText(tester, "2 of 2");
+      await waitForText(tester, "Nice job!");
     });
-    testWidgets('check timer settings', (tester) async {
+
+    testWidgets('copy timer', (tester) async {
       await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, timerName);
-      await checkWorkoutOrTimer(tester, timerName, 1, false, {
-        "10": 2,
-        "40": 1,
-        "30": 1,
-        "90": 1,
-        "20": 1,
-        "2": 1
-      }, {
-        "work-sound": "None",
-        "rest-sound": "None",
-        "halfway-sound": "None",
-        "countdown-sound": "None",
-        "end-sound": "None",
-      });
+      expect(find.text('Test Timer'), findsOneWidget);
+      await openViewTimer(tester, 'Test Timer');
+      await copyWorkoutOrTimer(tester, 'Test Timer');
+      expect(find.text('Test Timer'), findsNWidgets(2));
     });
-    testWidgets('run timer and cancel timer', (tester) async {
-      await loadApp(tester);
-      await verifyWorkoutOrTimerOpens(tester, timerName);
-      await runTimerOne(tester);
-    });
+
     testWidgets('delete timer', (tester) async {
       await loadApp(tester);
-      await deleteWorkoutOrTimer(tester, timerName);
+      expect(find.text('Test Timer'), findsNWidgets(2));
+      await openViewTimer(tester, 'Test Timer');
+      await deleteWorkoutOrTimer(tester, 'Test Timer');
+      expect(find.text('Test Timer'), findsOneWidget);
     });
   });
 }
