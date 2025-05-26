@@ -58,16 +58,19 @@ class _SetSoundsState extends State<SetSounds> {
 
       List<IntervalType> intervals =
           workoutProvider.generateIntervalsFromSettings(timer);
-
       timer.totalTime =
           workoutProvider.calculateTotalTimeFromIntervals(intervals);
 
       await workoutProvider.addIntervals(intervals);
       await workoutProvider.addTimer(timer);
     } else {
+      List<IntervalType> intervals =
+          workoutProvider.generateIntervalsFromSettings(timer);
+      timer.totalTime =
+          workoutProvider.calculateTotalTimeFromIntervals(intervals);
+
       await workoutProvider.deleteIntervalsByWorkoutId(timer.id);
-      await workoutProvider
-          .addIntervals(workoutProvider.generateIntervalsFromSettings(timer));
+      await workoutProvider.addIntervals(intervals);
       await workoutProvider.updateTimer(timer);
     }
 
