@@ -8,7 +8,8 @@ void main() {
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
   group('end-to-end test', () {
-    testWidgets('timer with exercises', (tester) async {
+    testWidgets('timer with exercises and all settings changed',
+        (tester) async {
       await loadApp(tester);
       expect(find.text('No saved timers'), findsOneWidget);
       await tapCreateTimerButton(tester);
