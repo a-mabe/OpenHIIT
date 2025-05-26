@@ -58,7 +58,7 @@ jobs:
         with:
           api-level: 34
           arch: x86_64
-          profile: pixel_6_pro
+          profile: nexus_5
           disable-animations: true
           ram-size: 3072
           script: |
