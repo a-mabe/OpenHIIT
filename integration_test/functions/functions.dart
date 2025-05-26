@@ -11,14 +11,6 @@ Future<void> loadApp(WidgetTester tester) async {
 Future<void> tapCreateTimerButton(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('create-timer')));
   await tester.pumpAndSettle();
-  // Tap the desired color (e.g., red)
-  final Size screenSize =
-      tester.view.physicalSize / tester.view.devicePixelRatio;
-  final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
-
-  // Tap the center of the screen
-  await tester.tapAt(center);
-  await tester.pumpAndSettle();
 }
 
 Future<void> pickTimerType(WidgetTester tester, bool isWorkout) async {
@@ -34,7 +26,10 @@ Future<void> enterTimerName(WidgetTester tester, String name) async {
 Future<void> pickColor(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
-  await tester.tap(find.text('Select'));
+  final Size screenSize =
+      tester.view.physicalSize / tester.view.devicePixelRatio;
+  final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
+  await tester.tapAt(center);
   await tester.pumpAndSettle();
 }
 
