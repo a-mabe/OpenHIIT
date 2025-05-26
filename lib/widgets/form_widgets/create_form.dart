@@ -39,35 +39,20 @@ class CreateFormState extends State<CreateForm> {
     /// allows the user to select a color.
     ///
     void pickColor() {
-      Color selectedColor = Color(widget.timer.color);
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             content: MaterialColorPicker(
               onMainColorChange: (value) {
-                selectedColor = value as Color;
+                setState(() {
+                  widget.timer.color = (value as Color).value;
+                });
+                Navigator.pop(context);
               },
               allowShades: false,
-              selectedColor: selectedColor,
+              selectedColor: Color(widget.timer.color),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    widget.timer.color = selectedColor.value;
-                  });
-                },
-                child: const Text('Select'),
-              ),
-            ],
           );
         },
       );
