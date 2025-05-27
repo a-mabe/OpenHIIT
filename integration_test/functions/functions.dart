@@ -8,6 +8,11 @@ Future<void> loadApp(WidgetTester tester) async {
   await tester.pump(Duration(seconds: 2));
 }
 
+Future<void> tapInfoButton(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.info_outline));
+  await tester.pumpAndSettle();
+}
+
 Future<void> tapCreateTimerButton(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('create-timer')));
   await tester.pumpAndSettle();
@@ -20,6 +25,11 @@ Future<void> pickTimerType(WidgetTester tester, bool isWorkout) async {
 
 Future<void> enterTimerName(WidgetTester tester, String name) async {
   await tester.enterText(find.byKey(const Key('timer-name')), name);
+  await tester.pumpAndSettle();
+}
+
+Future<void> clearTimerName(WidgetTester tester) async {
+  await tester.enterText(find.byKey(const Key('timer-name')), '');
   await tester.pumpAndSettle();
 }
 
@@ -60,6 +70,11 @@ Future<void> enterTime(WidgetTester tester, String key, String time) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> tapAdvancedTile(WidgetTester tester) async {
+  await tester.tap(find.byType(ExpansionTile).first);
+  await tester.pumpAndSettle();
+}
+
 Future<void> enterAdvancedTime(
     WidgetTester tester,
     String getReadySeconds,
@@ -67,8 +82,7 @@ Future<void> enterAdvancedTime(
     String warmupSeconds,
     String iterations,
     String breakSeconds) async {
-  await tester.tap(find.byType(ExpansionTile).first);
-  await tester.pumpAndSettle();
+  await tapAdvancedTile(tester);
   final timings = {
     'get-ready-seconds': getReadySeconds,
     'cooldown-seconds': cooldownSeconds,
@@ -128,7 +142,7 @@ Future<void> waitForText(WidgetTester tester, String text) async {
   throw Exception('Text "$text" not found within $timeout.');
 }
 
-Future<void> deleteWorkoutOrTimer(WidgetTester tester, String name) async {
+Future<void> deleteWorkoutOrTimer(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Menu')));
   await tester.pump(Duration(seconds: 1));
   await tester.tap(find.byIcon(Icons.delete));
@@ -138,7 +152,7 @@ Future<void> deleteWorkoutOrTimer(WidgetTester tester, String name) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> copyWorkoutOrTimer(WidgetTester tester, String name) async {
+Future<void> copyWorkoutOrTimer(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Menu')));
   await tester.pump(Duration(seconds: 1));
   await tester.tap(find.byIcon(Icons.copy));
@@ -146,7 +160,33 @@ Future<void> copyWorkoutOrTimer(WidgetTester tester, String name) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> editWorkoutOrTimer(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.edit));
+  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
+}
+
 Future<void> tapRestart(WidgetTester tester) async {
   await tester.tap(find.text('Restart'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapBackButton(WidgetTester tester) async {
+  await tester.tap(find.byTooltip('Back'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapPauseButton(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.pause));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapResumeButton(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.play_arrow));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapNextButton(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.skip_next));
   await tester.pumpAndSettle();
 }
