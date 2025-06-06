@@ -50,11 +50,7 @@ class GeneralSectionState extends State<GeneralSection> {
               ),
               onSaved: (value) {
                 if (value != null && value.trim().isNotEmpty) {
-                  print("The name is: ${value.trim()}");
-                  print(
-                      "The name was: ${timerCreationNotifier.timerDraft.name}");
                   timerCreationNotifier.updateProperty("name", value.trim());
-                  print("And now is: ${timerCreationNotifier.timerDraft.name}");
                 } else {
                   timerCreationNotifier.updateProperty("name", "Timer");
                 }

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 
@@ -6,7 +7,6 @@ class EditorTile extends StatelessWidget {
   final Color fontColor;
   final FontWeight fontWeight;
   final Color backgroundColor;
-  final Animation<double> animation;
   final TimerListTileModel item;
 
   final VoidCallback? onTap;
@@ -26,7 +26,6 @@ class EditorTile extends StatelessWidget {
       required this.fontColor,
       required this.backgroundColor,
       required this.fontWeight,
-      required this.animation,
       required this.item,
       required this.sizeMultiplier,
       this.controller});
@@ -55,17 +54,10 @@ class EditorTile extends StatelessWidget {
     ///
     double minHeight = 75;
 
+    print("The action is: ${item.action}");
     print(item.action);
 
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1, 0),
-        end: const Offset(0, 0),
-      ).animate(CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeIn,
-          reverseCurve: Curves.easeOut)),
-      child: Container(
+    return Container(
         decoration: BoxDecoration(
           color: backgroundColor,
           // Set top border.
@@ -120,7 +112,8 @@ class EditorTile extends StatelessWidget {
                       ].contains(item.action.toLowerCase())
                           ? TextFormField(
                               controller: controller,
-                              initialValue: item.action,
+                              initialValue:
+                                  controller == null ? item.action : null,
                               onSaved: onSaved,
                               validator: validator,
                               onTap: onTap,
@@ -186,8 +179,6 @@ class EditorTile extends StatelessWidget {
               )
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

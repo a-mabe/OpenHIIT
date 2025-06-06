@@ -96,7 +96,6 @@ class SelectTimerState extends State<SelectTimer> {
       opacityShadow: 0.5,
       imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
       onSkip: () {
-        print("skip");
         return true;
       },
     );

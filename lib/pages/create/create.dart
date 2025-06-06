@@ -29,6 +29,7 @@ class CreateTabBarState extends State<CreateTabBar>
   final formKey = GlobalKey<FormState>();
   late TabController _tabController;
   Future<List<IntervalType>>? intervalsFuture;
+  List<TextEditingController> controllers = [];
   TimerType? timer;
 
   @override
@@ -41,9 +42,23 @@ class CreateTabBarState extends State<CreateTabBar>
         var timerCreationNotifier =
             Provider.of<TimerCreationNotifier>(context, listen: false);
         var timerProvider = Provider.of<TimerProvider>(context, listen: false);
-        timerCreationNotifier.timerDraft.activities.clear();
+
+        if (timerCreationNotifier.timerDraft.activities.isEmpty) {
+          timerCreationNotifier.timerDraft.activities = List.generate(
+              timerCreationNotifier.timerDraft.activeIntervals,
+              (index) => 'Work');
+        }
+        if (controllers.isEmpty) {
+          controllers = List.generate(
+            timerCreationNotifier.timerDraft.activeIntervals,
+            (index) => TextEditingController(
+              text: timerCreationNotifier.timerDraft.activities[index],
+            ),
+          );
+        }
+
+        // timerCreationNotifier.timerDraft.activities.clear();
         formKey.currentState?.save();
-        print("Preview tab selected");
         setState(() {
           intervalsFuture = timerProvider
               .generateIntervalsFromSettings(timerCreationNotifier.timerDraft);
@@ -138,10 +153,15 @@ class CreateTabBarState extends State<CreateTabBar>
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
-          List<TimerListTileModel> items = listItems(timer!, snapshot.data!);
+          final intervals = snapshot.data!;
           return PreviewTab(
-            items: items,
-          );
+              intervals: intervals, timer: timer!, controllers: controllers);
+
+          // List<TimerListTileModel> items = listItems(timer!, snapshot.data!);
+
+          // return PreviewTab(
+          //   items: items,
+          // );
         }
       },
     );
