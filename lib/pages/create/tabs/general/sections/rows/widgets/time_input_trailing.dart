@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/pages/set_timings/utils/set_timings_utils.dart';
+import 'package:openhiit/pages/create/tabs/general/utils/set_timings_utils.dart';
 
-import '../../../widgets/form_widgets/number_input.dart';
+import 'package:openhiit/pages/create/tabs/general/sections/rows/widgets/number_input.dart';
 
 class TimeInputTrailing extends StatefulWidget {
-  /// Vars
-
   final int showMinutes;
   final int timeInSeconds;
+  final bool enabled;
 
   final double widgetWidth;
 
   final String minutesKey;
   final String secondsKey;
 
-  final TextEditingController? minutesController;
-  final TextEditingController? secondsController;
-
   final String unit;
 
   final String title;
+
+  final TextEditingController minutesController;
+  final TextEditingController secondsController;
 
   final Function(String?)? minutesOnSaved;
   final Function(String?)? secondsOnSaved;
@@ -35,17 +34,18 @@ class TimeInputTrailing extends StatefulWidget {
   const TimeInputTrailing({
     this.showMinutes = 0,
     this.timeInSeconds = 0,
+    this.enabled = true,
     this.widgetWidth = 0,
     this.minutesKey = "",
     this.secondsKey = "",
     this.unit = "",
     this.title = "",
+    required this.minutesController,
+    required this.secondsController,
     this.minutesOnSaved,
     this.secondsOnSaved,
     this.minuteFocusNode,
     this.secondFocusNode,
-    required this.minutesController,
-    required this.secondsController,
     this.minutesValidator,
     this.secondsValidator,
     required this.secondsOnChanged,
@@ -57,6 +57,8 @@ class TimeInputTrailing extends StatefulWidget {
 }
 
 class TimeInputTrailingState extends State<TimeInputTrailing> {
+  int showMinutes = 0;
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +71,8 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
 
   @override
   Widget build(BuildContext context) {
+    showMinutes = widget.showMinutes;
+
     return SizedBox(
       width: widget.widgetWidth,
       child: Row(
@@ -77,11 +81,10 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
           Visibility(
               visible: (widget.showMinutes == 1 && widget.unit != "time(s)"),
               child: NumberInput(
+                  enabled: widget.enabled,
                   focusNode: widget.minuteFocusNode,
-                  widgetWidth: 50,
-                  numberValue: widget.timeInSeconds,
-                  controller:
-                      widget.minutesController ?? TextEditingController(),
+                  controller: widget.minutesController,
+                  widgetWidth: 80,
                   formatter: minutesFormatter,
                   onSaved: widget.minutesOnSaved!,
                   onChanged: (text) {},
@@ -91,18 +94,18 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
                   max: 99,
                   numberInputKey: Key(widget.minutesKey))),
           NumberInput(
+              enabled: widget.enabled,
               focusNode: widget.secondFocusNode,
+              controller: widget.secondsController,
               title: widget.title,
-              widgetWidth: 50,
-              numberValue: widget.timeInSeconds,
-              controller: widget.secondsController ?? TextEditingController(),
+              widgetWidth: 60,
               formatter: widget.showMinutes == 1
                   ? secondsRemainderFormatter
                   : secondsFormatter,
               onSaved: widget.secondsOnSaved!,
               onChanged: widget.secondsOnChanged!,
               validator: widget.secondsValidator!,
-              unit: widget.unit != "" ? widget.unit : "s",
+              unit: widget.unit,
               min: 0,
               max: widget.showMinutes == 1
                   ? 59

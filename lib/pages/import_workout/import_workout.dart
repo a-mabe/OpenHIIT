@@ -5,7 +5,7 @@ import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/timer/workout_type.dart';
-import 'package:openhiit/providers/workout_provider.dart';
+import 'package:openhiit/providers/timer_provider.dart';
 import 'package:openhiit/utils/log/log.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/pages/import_workout/widgets/file_error.dart';
@@ -24,22 +24,26 @@ class ImportWorkout extends StatefulWidget {
 
 class ImportWorkoutState extends State<ImportWorkout> {
   String errorText = "";
-
   bool loading = false;
+  late TimerProvider timerProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    timerProvider = Provider.of<TimerProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    WorkoutProvider workoutProvider = Provider.of<WorkoutProvider>(context);
-
     Future<bool> importWorkoutUpdateDatabase(
-        TimerType timer, WorkoutProvider workoutProvider) async {
+        TimerType timer, TimerProvider workoutProvider) async {
       logger.i("Adding imported timer to database: ${timer.toString()}");
       timer.timerIndex = 0;
 
       logger.d("Timer: ${timer.soundSettings}");
 
       List<IntervalType> intervals =
-          workoutProvider.generateIntervalsFromSettings(timer);
+          await workoutProvider.generateIntervalsFromSettings(timer);
       timer.totalTime =
           workoutProvider.calculateTotalTimeFromIntervals(intervals);
 
@@ -143,7 +147,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                   if (!timerParsed) {
                                     try {
                                       workout = Workout.fromJson(parsedItem);
-                                      timer = workoutProvider.migrateToTimer(
+                                      timer = timerProvider.migrateToTimer(
                                           workout, false);
                                       logger.d("Parsed workout: $workout");
                                     } catch (e) {
@@ -160,7 +164,7 @@ class ImportWorkoutState extends State<ImportWorkout> {
                                       try {
                                         importStatus =
                                             await importWorkoutUpdateDatabase(
-                                                timer, workoutProvider);
+                                                timer, timerProvider);
                                       } on Exception catch (e) {
                                         logger.e(
                                             "Database conflict on import: $e");

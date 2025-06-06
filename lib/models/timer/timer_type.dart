@@ -44,7 +44,7 @@ class TimerType {
         activeIntervals = 0,
         activities = [],
         showMinutes = 0,
-        color = 4280391411;
+        color = 4280391411; // blue
 
   TimerType copy() {
     return TimerType(
@@ -109,30 +109,27 @@ class TimerType {
         showMinutes = map['showMinutes'] ?? 0,
         color = map['color'] ?? 4280391411;
 
-  TimerType copyWith(
-      {String? id,
-      String? name,
-      TimerTimeSettings? timeSettings,
-      TimerSoundSettings? soundSettings,
-      int? totalTime,
-      int? intervals,
-      int? activeIntervals,
-      List<String>? activities,
-      int? color,
-      int? showMinutes,
-      int? timerIndex}) {
+  TimerType copyWith(Map<String, dynamic> updates) {
     return TimerType(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      timerIndex: timerIndex ?? this.timerIndex,
-      timeSettings: timeSettings ?? this.timeSettings,
-      soundSettings: soundSettings ?? this.soundSettings,
-      totalTime: totalTime ?? this.totalTime,
-      intervals: intervals ?? this.intervals,
-      activeIntervals: activeIntervals ?? this.activeIntervals,
-      activities: activities ?? this.activities,
-      showMinutes: showMinutes ?? this.showMinutes,
-      color: color ?? this.color,
+      id: updates['id'] ?? id,
+      name: updates['name'] ?? name,
+      timerIndex: updates['timerIndex'] ?? timerIndex,
+      timeSettings: updates['timeSettings'] is TimerTimeSettings
+          ? updates['timeSettings']
+          : updates['timeSettings'] != null
+              ? TimerTimeSettings.fromJson(updates['timeSettings'])
+              : timeSettings,
+      soundSettings: updates['soundSettings'] is TimerSoundSettings
+          ? updates['soundSettings']
+          : updates['soundSettings'] != null
+              ? TimerSoundSettings.fromJson(updates['soundSettings'])
+              : soundSettings,
+      totalTime: updates['totalTime'] ?? totalTime,
+      intervals: updates['intervals'] ?? intervals,
+      activeIntervals: updates['activeIntervals'] ?? activeIntervals,
+      activities: updates['activities'] ?? activities,
+      showMinutes: updates['showMinutes'] ?? showMinutes,
+      color: updates['color'] ?? color,
     );
   }
 

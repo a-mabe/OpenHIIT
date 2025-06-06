@@ -27,6 +27,21 @@ class TimerSoundSettings {
         endSound = "long-bell",
         countdownSound = "countdown-beep";
 
+  TimerSoundSettings copyWith(
+    Map<String, String> map, {
+    Map<String, dynamic>? updates,
+  }) {
+    return TimerSoundSettings(
+      id: updates?['id'] ?? id,
+      timerId: updates?['timerId'] ?? timerId,
+      workSound: updates?['workSound'] ?? workSound,
+      restSound: updates?['restSound'] ?? restSound,
+      halfwaySound: updates?['halfwaySound'] ?? halfwaySound,
+      endSound: updates?['endSound'] ?? endSound,
+      countdownSound: updates?['countdownSound'] ?? countdownSound,
+    );
+  }
+
   TimerSoundSettings copyWithTimerId(String newTimerId) {
     String newId = Uuid().v1();
 
