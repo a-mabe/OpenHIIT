@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
+import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/models/timer/timer_sound_settings.dart';
 import 'package:openhiit/models/timer/timer_time_settings.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
@@ -388,6 +389,36 @@ class TimerProvider extends ChangeNotifier {
     } else {
       return TimerSoundSettings.empty();
     }
+  }
+
+  Future<List<TimerListTileModel>> listItems(TimerType timer) async {
+    List<TimerListTileModel> listItems = [];
+
+    List<IntervalType> intervals = await generateIntervalsFromSettings(timer);
+
+    int workIntervalIndex = ["Rest", "Get Ready", "Warmup", "Cooldown", "Break"]
+            .contains(intervals.first.name)
+        ? 0
+        : 1;
+    for (var interval in intervals) {
+      listItems.add(
+        TimerListTileModel(
+          action: interval.name,
+          showMinutes: timer.showMinutes,
+          interval: ["Rest", "Get ready", "Warmup", "Cooldown", "Break"]
+                  .contains(interval.name)
+              ? 0
+              : workIntervalIndex++,
+          total: timer.activeIntervals,
+          seconds: interval.time,
+        ),
+      );
+      if (interval.id.contains("break")) {
+        workIntervalIndex = 1;
+      }
+    }
+
+    return listItems;
   }
 
   Future<List<IntervalType>> generateIntervalsFromSettings(
