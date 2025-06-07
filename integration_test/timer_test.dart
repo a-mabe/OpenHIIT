@@ -13,6 +13,7 @@ void main() {
       expect(find.text('No saved timers'), findsOneWidget);
       await tapInfoButton(tester);
       expect(find.text('About OpenHIIT'), findsOneWidget);
+      await closeInfoButton(tester);
       await tapCreateTimerButton(tester);
       await pickTimerType(tester, false);
       await enterTimerName(tester, 'Test Timer');

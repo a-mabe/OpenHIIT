@@ -13,6 +13,11 @@ Future<void> tapInfoButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> closeInfoButton(WidgetTester tester) async {
+  await tester.tap(find.text('Close'));
+  await tester.pumpAndSettle();
+}
+
 Future<void> tapCreateTimerButton(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('create-timer')));
   await tester.pumpAndSettle();
