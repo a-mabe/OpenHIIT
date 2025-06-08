@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
@@ -38,9 +39,13 @@ Future<void> clearTimerName(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> pickColor(WidgetTester tester) async {
+Future<void> openColorPicker(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('color-picker')));
   await tester.pumpAndSettle();
+}
+
+Future<void> pickColor(WidgetTester tester) async {
+  await openColorPicker(tester);
   final Size screenSize =
       tester.view.physicalSize / tester.view.devicePixelRatio;
   final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
@@ -98,7 +103,7 @@ Future<void> enterAdvancedTime(
   for (var key in timings.keys) {
     if (key != 'break-seconds') {
       await tester.enterText(find.byKey(Key(key)), timings[key]!);
-    } else {
+    } else if (timings[key] != "") {
       await tester.pump(Duration(seconds: 3));
       await tester.enterText(find.byKey(Key(key)), timings[key]!);
     }
@@ -193,5 +198,10 @@ Future<void> tapResumeButton(WidgetTester tester) async {
 
 Future<void> tapNextButton(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.skip_next));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapMinutesSecondsToggle(WidgetTester tester) async {
+  await tester.tap(find.textContaining("1:42"));
   await tester.pumpAndSettle();
 }
