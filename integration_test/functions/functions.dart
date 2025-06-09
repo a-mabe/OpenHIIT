@@ -29,8 +29,26 @@ Future<void> pickTimerType(WidgetTester tester, bool isWorkout) async {
 }
 
 Future<void> enterTimerName(WidgetTester tester, String name) async {
-  await tester.enterText(find.byKey(const Key('timer-name')), name);
-  await tester.pumpAndSettle();
+  // Try to clear and enter the name until it appears on screen or timeout
+  final timeout = Duration(seconds: 10);
+  final interval = Duration(milliseconds: 200);
+  final endTime = DateTime.now().add(timeout);
+
+  while (DateTime.now().isBefore(endTime)) {
+    // Clear the text box first
+    await tester.enterText(find.byKey(const Key('timer-name')), '');
+    await tester.pumpAndSettle();
+
+    // Enter the name
+    await tester.enterText(find.byKey(const Key('timer-name')), name);
+    await tester.pumpAndSettle();
+
+    // Check if the name appears on screen
+    if (find.text(name).evaluate().isNotEmpty) {
+      break;
+    }
+    await tester.pump(interval);
+  }
 }
 
 Future<void> clearTimerName(WidgetTester tester) async {
