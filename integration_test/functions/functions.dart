@@ -203,9 +203,18 @@ Future<void> tapBackButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> tapBackText(WidgetTester tester) async {
-  await tester.tap(find.text('Back'));
-  await tester.pumpAndSettle();
+Future<void> tapAppBarBack(WidgetTester tester) async {
+  await tester.tap(find.byKey(const Key('run-timer-appbar-back-button')));
+  while (find.text('Start').evaluate().isEmpty) {
+    await tester.pump();
+  }
+}
+
+Future<void> tapTimerEndBack(WidgetTester tester) async {
+  await tester.tap(find.byKey(const Key('timer-end-back')));
+  while (find.text('Start').evaluate().isEmpty) {
+    await tester.pump();
+  }
 }
 
 Future<void> tapPauseButton(WidgetTester tester) async {

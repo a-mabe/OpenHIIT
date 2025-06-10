@@ -37,7 +37,7 @@ void main() {
       await tapNextButton(tester);
       await waitForText(tester, "2 of 2");
       await waitForText(tester, "Nice job!");
-      await tapBackText(tester);
+      await tapTimerEndBack(tester);
     });
 
     testWidgets('copy timer', (tester) async {
