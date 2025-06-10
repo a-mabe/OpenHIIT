@@ -219,6 +219,7 @@ void main() {
       await tapStartButton(tester);
       await waitForText(tester, "Get Ready");
       await waitForText(tester, "1 of 1");
+      await tapBackButton(tester);
     });
   });
 }
