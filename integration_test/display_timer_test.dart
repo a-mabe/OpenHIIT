@@ -35,7 +35,6 @@ void main() {
       expect(find.widgetWithText(TextFormField, '0'), findsOneWidget);
       await tapSubmit(tester);
       await tapSubmit(tester);
-      expect(find.text('Test Timer'), findsOneWidget);
       await openViewTimer(tester, 'Test Timer');
       await tapStartButton(tester);
       await waitForText(tester, "1:30");

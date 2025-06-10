@@ -186,6 +186,8 @@ void main() {
       await waitForText(tester, "Get Ready");
       await waitForText(tester, "1 of 1");
       await tapAppBarBack(tester);
+      await tapBackButton(tester);
+      await waitForText(tester, "Test Workout Edited");
     });
 
     testWidgets(
@@ -221,6 +223,8 @@ void main() {
       await waitForText(tester, "Get Ready");
       await waitForText(tester, "1 of 1");
       await tapAppBarBack(tester);
+      await tapBackButton(tester);
+      await waitForText(tester, "Test Workout Edited");
     });
   });
 }
