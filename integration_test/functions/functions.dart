@@ -203,6 +203,11 @@ Future<void> tapBackButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> tapBackText(WidgetTester tester) async {
+  await tester.tap(find.text('Back'));
+  await tester.pumpAndSettle();
+}
+
 Future<void> tapPauseButton(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.pause));
   await tester.pumpAndSettle();
