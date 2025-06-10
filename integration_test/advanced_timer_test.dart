@@ -185,46 +185,48 @@ void main() {
       await tapStartButton(tester);
       await waitForText(tester, "Get Ready");
       await waitForText(tester, "1 of 1");
-      await tapAppBarBack(tester);
+      await waitForText(tester, "Nice job!");
+      await tapTimerEndBack(tester);
       await tapBackButton(tester);
       await waitForText(tester, "Test Workout Edited");
     });
 
-    // testWidgets(
-    //     'edit workout, decrease intervals, and verify pre-filled settings',
-    //     (tester) async {
-    //   // Assumes previous test created 'Test Workout'
-    //   await loadApp(tester);
-    //   await openViewTimer(tester, 'Test Workout Edited');
-    //   await editWorkoutOrTimer(tester);
+    testWidgets(
+        'edit workout, decrease intervals, and verify pre-filled settings',
+        (tester) async {
+      // Assumes previous test created 'Test Workout'
+      await loadApp(tester);
+      await openViewTimer(tester, 'Test Workout Edited');
+      await editWorkoutOrTimer(tester);
 
-    //   expect(find.text('Test Workout Edited'), findsOneWidget);
-    //   expect(find.widgetWithText(TextFormField, '1'), findsOneWidget);
-    //   await tapSubmit(tester);
-    //   expect(find.widgetWithText(TextFormField, 'Push-ups'), findsOneWidget);
-    //   await tapSubmit(tester);
-    //   await tapAdvancedTile(tester);
-    //   await enterAdvancedTime(tester, "8", "9", "10", "0", "");
-    //   await tapSubmit(tester);
+      expect(find.text('Test Workout Edited'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, '1'), findsOneWidget);
+      await tapSubmit(tester);
+      expect(find.widgetWithText(TextFormField, 'Push-ups'), findsOneWidget);
+      await tapSubmit(tester);
+      await tapAdvancedTile(tester);
+      await enterAdvancedTime(tester, "8", "9", "10", "0", "");
+      await tapSubmit(tester);
 
-    //   // Check sounds are "Beep"
-    //   expect(find.text('Beep'), findsNWidgets(10));
+      // Check sounds are "Beep"
+      expect(find.text('Beep'), findsNWidgets(10));
 
-    //   await tapSubmit(tester);
-    //   await openViewTimer(tester, 'Test Workout Edited');
+      await tapSubmit(tester);
+      await openViewTimer(tester, 'Test Workout Edited');
 
-    //   // Only "Push-ups" should be present
-    //   expect(find.textContaining('Push-ups'), findsOneWidget);
-    //   expect(find.textContaining('Squats'), findsNothing);
-    //   expect(find.textContaining('Planks'), findsNothing);
-    //   expect(find.textContaining('Break'), findsNothing);
+      // Only "Push-ups" should be present
+      expect(find.textContaining('Push-ups'), findsOneWidget);
+      expect(find.textContaining('Squats'), findsNothing);
+      expect(find.textContaining('Planks'), findsNothing);
+      expect(find.textContaining('Break'), findsNothing);
 
-    //   await tapStartButton(tester);
-    //   await waitForText(tester, "Get Ready");
-    //   await waitForText(tester, "1 of 1");
-    //   await tapAppBarBack(tester);
-    //   await tapBackButton(tester);
-    //   await waitForText(tester, "Test Workout Edited");
-    // });
+      await tapStartButton(tester);
+      await waitForText(tester, "Get Ready");
+      await waitForText(tester, "1 of 1");
+      await waitForText(tester, "Nice job!");
+      await tapTimerEndBack(tester);
+      await tapBackButton(tester);
+      await waitForText(tester, "Test Workout Edited");
+    });
   });
 }

@@ -93,6 +93,9 @@ Future<void> enterExercise(
 }
 
 Future<void> enterTime(WidgetTester tester, String key, String time) async {
+  while (find.byKey(Key(key)).evaluate().isEmpty) {
+    await tester.pump();
+  }
   await tester.enterText(find.byKey(Key(key)), time);
   await tester.pumpAndSettle();
 }
