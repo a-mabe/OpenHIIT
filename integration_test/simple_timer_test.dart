@@ -11,6 +11,9 @@ void main() {
     testWidgets('simple timer and restart', (tester) async {
       await loadApp(tester);
       expect(find.text('No saved timers'), findsOneWidget);
+      await tapInfoButton(tester);
+      expect(find.text('About OpenHIIT'), findsOneWidget);
+      await closeInfoButton(tester);
       await tapCreateTimerButton(tester);
       await pickTimerType(tester, false);
       await enterTimerName(tester, 'Test Timer');
@@ -31,15 +34,19 @@ void main() {
       await tapRestart(tester);
       await waitForText(tester, "Get Ready");
       await waitForText(tester, "1 of 2");
+      await tapNextButton(tester);
       await waitForText(tester, "2 of 2");
       await waitForText(tester, "Nice job!");
+      await tapTimerEndBack(tester);
+      await tapBackButton(tester);
+      await waitForText(tester, "Test Timer");
     });
 
     testWidgets('copy timer', (tester) async {
       await loadApp(tester);
       expect(find.text('Test Timer'), findsOneWidget);
       await openViewTimer(tester, 'Test Timer');
-      await copyWorkoutOrTimer(tester, 'Test Timer');
+      await copyWorkoutOrTimer(tester);
       expect(find.text('Test Timer'), findsNWidgets(2));
     });
 
@@ -47,7 +54,7 @@ void main() {
       await loadApp(tester);
       expect(find.text('Test Timer'), findsNWidgets(2));
       await openViewTimer(tester, 'Test Timer');
-      await deleteWorkoutOrTimer(tester, 'Test Timer');
+      await deleteWorkoutOrTimer(tester);
       expect(find.text('Test Timer'), findsOneWidget);
     });
   });

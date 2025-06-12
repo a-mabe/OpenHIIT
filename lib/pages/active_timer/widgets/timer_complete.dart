@@ -99,7 +99,7 @@ class TimerCompleteState extends State<TimerComplete> {
                 height: 40,
               ),
               FilledButton.icon(
-                key: const Key('back'),
+                key: const Key('timer-end-back'),
                 onPressed: () {
                   Navigator.pop(context);
                 },

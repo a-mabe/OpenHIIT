@@ -14,6 +14,7 @@ class RunTimerAppBarState extends State<RunTimerAppBar> {
   Widget build(BuildContext context) {
     return Row(children: [
       GestureDetector(
+        key: const Key("run-timer-appbar-back-button"),
         onTap: () {
           Navigator.pop(context);
         },
