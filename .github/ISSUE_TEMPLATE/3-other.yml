@@ -3,21 +3,21 @@ description: Not a bug or feature request? Use this template to file an issue.
 labels: ["question"]
 body:
   - type: checkboxes
-    id: checklist
+    id: checklist-1
     attributes:
       label: Checklist
       options:            
         - label: I made sure that the issue I am raising doesn't already exist
           required: true
   - type: checkboxes
-    id: checklist
+    id: checklist-2
     attributes:
       label: Checklist
       options:            
         - label: I made sure this should not be a bug
           required: true
   - type: checkboxes
-    id: checklist
+    id: checklist-3
     attributes:
       label: Checklist
       options:            
