@@ -1,0 +1,102 @@
+name: Feature Request
+description: File a suggestion or feature request
+labels: ["enhancement"]
+body:
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:             
+        - label: I made sure that the issue I am raising doesn't already exist
+          required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case / Problem
+      description: |
+        What problem would be solved by this feature?
+      placeholder: Explain the use case for this feature request.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal / Solution
+      description: |
+        What do you propose as a solution? Add as much information as you can.
+      placeholder: Describe the feature that solves the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Example Code
+      description: |
+        Not required, but it can be helpful to provide example code that shows how you think the feature should be implemented.
+      value: |
+        <details>
+        <summary>Example Code</summary>
+        
+        ```dart
+        void main() {
+        }
+        ```
+        
+        </details>
+    validations:
+      required: false
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Platform
+      description: Not required, but please list if one specific platform is affected by this feature request.
+      multiple: true
+      options:
+        - Android
+        - iOS
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Audio Files/URLs/Sources
+      description: |
+        * Provide the files or URLs which are involved in your feature request, e.g. a new sound file.
+      placeholder: |
+        Drag and drop your source files here or provide a link.
+    validations:
+      required: false
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups
+      description: |
+        If applicable, add mockup screenshots or videos to help to explain what this feature would look like. 
+        It can also be screenshots/screen recordings of existing apps, built using other libraries (like native libraries).
+      placeholder: Drag and drop your screenshots here.
+    validations:
+      required: false
+  - type: textarea
+    id: more-info
+    attributes:
+      label: Related issues / more information
+      description: |
+        Do you have any other useful information about this feature report?
+        References to other issues / sites / repositories / apps / tutorials with similar functionality?
+      placeholder: |
+        App xyz already provides this feature.
+        See abc repository for inspiration.
+        Related: #123, #456
+    validations:
+      required: false
+  - type: dropdown
+    id: working-pull-request
+    attributes:
+      label: Working on PR
+      description: Are you interested in working on a PR for this?
+      multiple: false
+      options:
+        - nope
+        - yep
+    validations:
+      required: true
