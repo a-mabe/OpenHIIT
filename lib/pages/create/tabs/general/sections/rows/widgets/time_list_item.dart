@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TimeListItem extends StatefulWidget {
-  /// Vars
-
   final String titleText;
   final String subtitleText;
   final bool enabled;
@@ -37,7 +35,10 @@ class TimeListItemState extends State<TimeListItem> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(widget.titleText),
-      subtitle: Text(widget.subtitleText),
+      subtitle: Text(
+        widget.subtitleText,
+        style: TextStyle(fontSize: 14, color: Colors.grey),
+      ),
       leading: widget.leadingWidget ?? const Text(""),
       trailing: widget.trailingWidget ?? const Text(""),
       enabled: widget.enabled,

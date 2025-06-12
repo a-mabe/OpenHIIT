@@ -3,16 +3,17 @@ import 'dart:convert';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
+import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/models/timer/timer_sound_settings.dart';
 import 'package:openhiit/models/timer/timer_time_settings.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/models/timer/workout_type.dart';
 import 'package:openhiit/utils/database/database_manager.dart';
-import 'package:openhiit/utils/import_export/local_file_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:openhiit/utils/log/log.dart';
 import 'package:uuid/uuid.dart';
 
-class WorkoutProvider extends ChangeNotifier {
+class TimerProvider extends ChangeNotifier {
   List<Workout> _workouts = [];
   List<TimerType> _timers = [];
 
@@ -390,7 +391,38 @@ class WorkoutProvider extends ChangeNotifier {
     }
   }
 
-  List<IntervalType> generateIntervalsFromSettings(TimerType timer) {
+  Future<List<TimerListTileModel>> listItems(TimerType timer) async {
+    List<TimerListTileModel> listItems = [];
+
+    List<IntervalType> intervals = await generateIntervalsFromSettings(timer);
+
+    int workIntervalIndex = ["Rest", "Get Ready", "Warmup", "Cooldown", "Break"]
+            .contains(intervals.first.name)
+        ? 0
+        : 1;
+    for (var interval in intervals) {
+      listItems.add(
+        TimerListTileModel(
+          action: interval.name,
+          showMinutes: timer.showMinutes,
+          interval: ["Rest", "Get ready", "Warmup", "Cooldown", "Break"]
+                  .contains(interval.name)
+              ? 0
+              : workIntervalIndex++,
+          total: timer.activeIntervals,
+          seconds: interval.time,
+        ),
+      );
+      if (interval.id.contains("break")) {
+        workIntervalIndex = 1;
+      }
+    }
+
+    return listItems;
+  }
+
+  Future<List<IntervalType>> generateIntervalsFromSettings(
+      TimerType timer) async {
     List<IntervalType> intervals = [];
     int currentIndex = 0; // Track the index of each interval
 
@@ -449,7 +481,7 @@ class WorkoutProvider extends ChangeNotifier {
             id: "${timer.id}_work_${iteration}_$i",
             workoutId: timer.id,
             time: timer.timeSettings.workTime,
-            name: timer.activities.isEmpty || i > timer.activities.length
+            name: timer.activities.isEmpty || i >= timer.activities.length
                 ? "Work"
                 : timer.activities[i],
             color: timer.color,
@@ -677,7 +709,7 @@ class WorkoutProvider extends ChangeNotifier {
   void updateTimerIndices(int start) {
     logger.d("Updating indices for ${_timers.length} timers");
     for (var i = 0; i < _timers.length; i++) {
-      _timers[i] = _timers[i].copyWith(timerIndex: start + i);
+      _timers[i] = _timers[i].copyWith({"timerIndex": start + i});
     }
     notifyListeners();
   }
@@ -752,5 +784,27 @@ class WorkoutProvider extends ChangeNotifier {
     }
 
     return totalTime;
+  }
+
+  Future submitNewWorkout(TimerType newTimer) async {
+    if (newTimer.id == "") {
+      newTimer.id = const Uuid().v4();
+      newTimer.timeSettings.id = const Uuid().v4();
+      newTimer.soundSettings.id = const Uuid().v4();
+      newTimer.timeSettings.timerId = newTimer.id;
+      newTimer.soundSettings.timerId = newTimer.id;
+
+      List<IntervalType> newIntervals =
+          await generateIntervalsFromSettings(newTimer);
+
+      newTimer.totalTime = calculateTotalTimeFromIntervals(newIntervals);
+
+      await addIntervals(newIntervals);
+      await addTimer(newTimer);
+    } else {
+      await deleteIntervalsByWorkoutId(newTimer.id);
+      await addIntervals(await generateIntervalsFromSettings(newTimer));
+      await updateTimer(newTimer);
+    }
   }
 }
