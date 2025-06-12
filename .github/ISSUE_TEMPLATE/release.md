@@ -1,5 +1,5 @@
 ---
-name: Release
+name: Maintainers Only - Release
 about: Release checklist.
 title: "[MAINTAINER] [RELEASE]"
 labels: maintainer, release
