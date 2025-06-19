@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:openhiit/main.dart';
 
@@ -19,16 +20,23 @@ Future<void> closeInfoButton(WidgetTester tester) async {
 }
 
 Future<void> tapCreateTimerButton(WidgetTester tester) async {
+  print("LOG --- Tapping create timer button");
   await tester.tap(find.byKey(const Key('create-timer')));
   await tester.pumpAndSettle();
 }
 
 Future<void> pickTimerType(WidgetTester tester, bool isWorkout) async {
+  print("LOG --- Picking timer type: ${isWorkout ? 'Workout' : 'Timer'}");
   await tester.tap(find.byIcon(isWorkout ? Icons.fitness_center : Icons.timer));
-  await tester.pumpAndSettle();
+  // Wait until the timer name input is present before proceeding
+  while (find.byKey(const Key('timer-name')).evaluate().isEmpty) {
+    await tester.pump();
+  }
+  await tester.pump();
 }
 
 Future<void> enterTimerName(WidgetTester tester, String name) async {
+  print("LOG --- Entering timer name: $name");
   // Try to clear and enter the name until it appears on screen or timeout
   final timeout = Duration(seconds: 10);
   final interval = Duration(milliseconds: 200);
@@ -37,11 +45,11 @@ Future<void> enterTimerName(WidgetTester tester, String name) async {
   while (DateTime.now().isBefore(endTime)) {
     // Clear the text box first
     await tester.enterText(find.byKey(const Key('timer-name')), '');
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     // Enter the name
     await tester.enterText(find.byKey(const Key('timer-name')), name);
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     // Check if the name appears on screen
     if (find.text(name).evaluate().isNotEmpty) {
@@ -58,7 +66,7 @@ Future<void> clearTimerName(WidgetTester tester) async {
 
 Future<void> openColorPicker(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('color-picker')));
-  await tester.pumpAndSettle();
+  await tester.pump();
 }
 
 Future<void> pickColor(WidgetTester tester) async {
@@ -66,19 +74,21 @@ Future<void> pickColor(WidgetTester tester) async {
   final Size screenSize =
       tester.view.physicalSize / tester.view.devicePixelRatio;
   final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
-  await tester.tapAt(center);
-  await tester.pumpAndSettle();
+  await tester.tapAt(center); // Adjust the offset as needed
+  await tester.pump();
 }
 
 Future<void> enterInterval(WidgetTester tester, int interval) async {
   await tester.enterText(
-      find.byKey(const Key('interval-input')), interval.toString());
-  await tester.pumpAndSettle();
+    find.byKey(const Key('interval-input')),
+    interval.toString(),
+  );
+  await tester.pump();
 }
 
 Future<void> closeKeyboard(WidgetTester tester) async {
   await tester.testTextInput.receiveAction(TextInputAction.done);
-  await tester.pumpAndSettle();
+  await tester.pump();
 }
 
 Future<void> tapSubmit(WidgetTester tester) async {
@@ -87,7 +97,10 @@ Future<void> tapSubmit(WidgetTester tester) async {
 }
 
 Future<void> enterExercise(
-    WidgetTester tester, int index, String exercise) async {
+  WidgetTester tester,
+  int index,
+  String exercise,
+) async {
   await tester.enterText(find.byKey(Key('exercise-$index')), exercise);
   await tester.pumpAndSettle();
 }
@@ -97,31 +110,59 @@ Future<void> enterTime(WidgetTester tester, String key, String time) async {
     await tester.pump();
   }
   await tester.enterText(find.byKey(Key(key)), time);
-  await tester.pumpAndSettle();
+  await tester.pump();
 }
 
-Future<void> tapAdvancedTile(WidgetTester tester) async {
-  await tester.tap(find.byType(ExpansionTile).first);
-  await tester.pumpAndSettle();
+Future<void> tapSoundTab(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.volume_up));
+  // Pump until "Work Sound" is found on the screen
+  while (find.textContaining('Work Sound').evaluate().isEmpty) {
+    await tester.pump();
+  }
 }
+
+Future<void> tapEditorTab(WidgetTester tester) async {
+  await tester.tap(find.textContaining('Editor'));
+  // Wait for editor tab to finish loading (no timer-name or work-sound fields present)
+  while (find.byKey(const Key('timer-name')).evaluate().isNotEmpty ||
+      find.byKey(const Key('work-sound')).evaluate().isNotEmpty) {
+    await tester.pump();
+  }
+  // Wait for loading spinner to disappear
+  while (find.byType(CircularProgressIndicator).evaluate().isNotEmpty) {
+    await tester.pump();
+  }
+  while (find.textContaining('Work').evaluate().isEmpty) {
+    await tester.pump();
+  }
+  // Ensure the editor tab is fully loaded
+  await tester.pump();
+}
+
+// Future<void> tapAdvancedTile(WidgetTester tester) async {
+//   await tester.tap(find.byType(ExpansionTile).first);
+//   await tester.pumpAndSettle();
+// }
 
 Future<void> enterAdvancedTime(
-    WidgetTester tester,
-    String getReadySeconds,
-    String cooldownSeconds,
-    String warmupSeconds,
-    String iterations,
-    String breakSeconds) async {
-  await tapAdvancedTile(tester);
+  WidgetTester tester,
+  String getReadySeconds,
+  String cooldownSeconds,
+  String warmupSeconds,
+  String iterations,
+  String breakSeconds,
+) async {
   final timings = {
-    'get-ready-seconds': getReadySeconds,
-    'cooldown-seconds': cooldownSeconds,
-    'warmup-seconds': warmupSeconds,
-    'iterations': iterations,
-    'break-seconds': breakSeconds
+    'get ready-seconds': getReadySeconds,
+    'cool down-seconds': cooldownSeconds,
+    'warm-up-seconds': warmupSeconds,
+    'restart-seconds': iterations,
+    'break-seconds': breakSeconds,
   };
   for (var key in timings.keys) {
     if (key != 'break-seconds') {
+      print("LOG --- Entering advanced time for $key: ${timings[key]}");
+      await tester.ensureVisible(find.byKey(Key(key)));
       await tester.enterText(find.byKey(Key(key)), timings[key]!);
     } else if (timings[key] != "") {
       await tester.pump(Duration(seconds: 3));
@@ -131,13 +172,73 @@ Future<void> enterAdvancedTime(
 }
 
 Future<void> selectSound(
-    WidgetTester tester, String key, String soundName) async {
-  await tester.tap(find.byKey(Key(key)));
-  await tester.pumpAndSettle();
-  await tester.tap(find
-      .descendant(of: find.byKey(Key(key)), matching: find.text(soundName))
-      .last);
-  await tester.pumpAndSettle();
+  WidgetTester tester,
+  String key,
+  String soundName,
+) async {
+  print("LOG --- Selecting sound: $soundName");
+
+  final dropdown = find.byKey(Key(key));
+  await tester.ensureVisible(dropdown);
+  await tester.pump();
+
+  await tester.tap(dropdown);
+  await tester.pump(const Duration(seconds: 1)); // let the menu appear
+
+  final dropdownMenuItem = find.descendant(
+    of: dropdown,
+    matching: find.text(soundName),
+  );
+
+  if (dropdownMenuItem.evaluate().isNotEmpty) {
+    await tester.tap(dropdownMenuItem.last);
+    await tester.pump(Duration(seconds: 1));
+    print("LOG --- Successfully selected sound: $soundName");
+    return;
+  }
+
+  throw Exception('Could not find a tappable "$soundName" item.');
+}
+
+Future<void> enterEditorTileText(
+  WidgetTester tester,
+  String key,
+  String text,
+) async {
+  print("LOG --- Entering text for $key: $text");
+
+  // Try to clear and enter the text until it appears on screen or timeout
+  final timeout = Duration(seconds: 10);
+  final interval = Duration(milliseconds: 200);
+  final endTime = DateTime.now().add(timeout);
+
+  while (DateTime.now().isBefore(endTime)) {
+    // Ensure the text box is visible
+    await tester.ensureVisible(find.byKey(Key(key)));
+    await tester.pump();
+
+    // Clear the text box first
+    await tester.enterText(find.byKey(Key(key)), '');
+    await tester.pump();
+
+    // Enter the name
+    await tester.enterText(find.byKey(Key(key)), text);
+    await tester.pump();
+
+    // Check if the text appears on screen
+    if (find.text(text).evaluate().isNotEmpty) {
+      break;
+    }
+    await tester.pump(interval);
+  }
+}
+
+Future<void> tapSaveButton(WidgetTester tester) async {
+  await tester.tap(find.byKey(const Key('save-timer')));
+  // Wait until the 'create-timer' key is found before pumping
+  while (find.byKey(const Key('create-timer')).evaluate().isEmpty) {
+    await tester.pump();
+  }
 }
 
 Future<void> openViewTimer(WidgetTester tester, String name) async {
@@ -239,3 +340,17 @@ Future<void> tapMinutesSecondsToggle(WidgetTester tester) async {
   await tester.tap(find.textContaining("1:42"));
   await tester.pumpAndSettle();
 }
+
+// Future<void> waitUntilTappable(Finder finder, WidgetTester tester) async {
+//   const timeout = Duration(seconds: 5);
+//   const interval = Duration(milliseconds: 100);
+//   final endTime = DateTime.now().add(timeout);
+
+//   while (DateTime.now().isBefore(endTime)) {
+//     await tester.pump(interval);
+//     final hitTestable = tester.hitTestOnBinding(finder.evaluate().first.size?.center(Offset.zero)).path;
+//     if (hitTestable.isNotEmpty) return;
+//   }
+
+//   throw Exception("Widget never became tappable: $finder");
+// }

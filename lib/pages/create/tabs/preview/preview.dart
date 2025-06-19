@@ -42,6 +42,7 @@ class PreviewTabState extends State<PreviewTab> {
         print("The interval is: ${items[index].interval}");
 
         return EditorTile(
+          textKey: "editor-$index",
           item: items[index],
           controller: !["Rest", "Get Ready", "Warmup", "Cooldown", "Break"]
                   .contains(items[index].action)

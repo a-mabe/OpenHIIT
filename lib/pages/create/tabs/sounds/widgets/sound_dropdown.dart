@@ -64,7 +64,9 @@ class SoundDropdownState extends State<SoundDropdown>
             dropdownMenuEntries: widget.soundsList
                 .map<DropdownMenuEntry<String>>((String value) {
               return DropdownMenuEntry<String>(
-                  value: value, label: soundNames[value]!);
+                value: value,
+                label: soundNames[value]!,
+              );
             }).toList(),
           )
         ],

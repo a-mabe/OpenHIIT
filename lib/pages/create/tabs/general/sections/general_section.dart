@@ -7,9 +7,7 @@ import 'package:openhiit/providers/timer_creation_notifier.dart';
 import 'package:provider/provider.dart';
 
 class GeneralSection extends StatefulWidget {
-  const GeneralSection({
-    super.key,
-  });
+  const GeneralSection({super.key});
 
   @override
   GeneralSectionState createState() => GeneralSectionState();
@@ -38,33 +36,35 @@ class GeneralSectionState extends State<GeneralSection> {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-            child: TextFormField(
-              key: const Key("timer-name"),
-              initialValue: timerCreationNotifier.timerDraft.name,
-              style: const TextStyle(fontSize: 24),
-              decoration: InputDecoration(
-                hintText: "Add title",
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              ),
-              onSaved: (value) {
-                if (value != null && value.trim().isNotEmpty) {
-                  timerCreationNotifier.updateProperty("name", value.trim());
-                } else {
-                  timerCreationNotifier.updateProperty("name", "Timer");
-                }
-              },
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Name cannot be empty';
-                }
-                return null;
-              },
-              // Handle validation
-              // return null;
-            )),
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+          child: TextFormField(
+            key: const Key("timer-name"),
+            initialValue: timerCreationNotifier.timerDraft.name,
+            style: const TextStyle(fontSize: 24),
+            decoration: InputDecoration(
+              hintText: "Add title",
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            ),
+            onSaved: (value) {
+              if (value != null && value.trim().isNotEmpty) {
+                timerCreationNotifier.updateProperty("name", value.trim());
+              } else {
+                timerCreationNotifier.updateProperty("name", "Timer");
+              }
+            },
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Name cannot be empty';
+              }
+              return null;
+            },
+            // Handle validation
+            // return null;
+          ),
+        ),
         TappableRow(
+          key: const Key("color-picker"),
           title: "Color",
           trailing: Container(
             width: 20,
@@ -85,13 +85,16 @@ class GeneralSectionState extends State<GeneralSection> {
                         Navigator.pop(context); // Close the dialog
                         setState(() {
                           timerCreationNotifier.updateProperty(
-                              "color", value.value);
+                            "color",
+                            value.value,
+                          );
                         });
                       }
                     },
                     allowShades: false,
-                    selectedColor:
-                        Color(timerCreationNotifier.timerDraft.color),
+                    selectedColor: Color(
+                      timerCreationNotifier.timerDraft.color,
+                    ),
                   ),
                 );
               },
@@ -136,10 +139,7 @@ class GeneralSectionState extends State<GeneralSection> {
                           ],
                         ),
                       ),
-                      Divider(
-                        color: Colors.grey.shade800,
-                        thickness: 1,
-                      ),
+                      Divider(color: Colors.grey.shade800, thickness: 1),
                       Container(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -197,11 +197,9 @@ class GeneralSectionState extends State<GeneralSection> {
             );
           },
         ),
-        Divider(
-          thickness: 1,
-          color: Colors.grey,
-        ),
+        Divider(thickness: 1, color: Colors.grey),
         TimeRow(
+          key: const Key("interval-input"),
           title: "Active Intervals",
           subtitle: "Required - work intervals",
           showMinutes: 0,

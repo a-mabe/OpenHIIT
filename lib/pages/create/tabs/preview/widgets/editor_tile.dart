@@ -8,6 +8,7 @@ class EditorTile extends StatelessWidget {
   final FontWeight fontWeight;
   final Color backgroundColor;
   final TimerListTileModel item;
+  final String textKey;
 
   final VoidCallback? onTap;
   final void Function(String?)? onSaved;
@@ -27,6 +28,7 @@ class EditorTile extends StatelessWidget {
       required this.backgroundColor,
       required this.fontWeight,
       required this.item,
+      required this.textKey,
       required this.sizeMultiplier,
       this.controller});
 
@@ -54,8 +56,7 @@ class EditorTile extends StatelessWidget {
     ///
     double minHeight = 75;
 
-    print("The action is: ${item.action}");
-    print(item.action);
+    print("The key is: ${textKey}");
 
     return Container(
         decoration: BoxDecoration(
@@ -111,6 +112,7 @@ class EditorTile extends StatelessWidget {
                         "rest"
                       ].contains(item.action.toLowerCase())
                           ? TextFormField(
+                              key: Key(textKey),
                               controller: controller,
                               initialValue:
                                   controller == null ? item.action : null,
