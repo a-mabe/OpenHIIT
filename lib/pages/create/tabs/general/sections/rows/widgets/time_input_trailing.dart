@@ -5,7 +5,7 @@ import 'package:openhiit/pages/create/tabs/general/sections/rows/widgets/number_
 
 class TimeInputTrailing extends StatefulWidget {
   final int showMinutes;
-  final int timeInSeconds;
+  // final int timeInSeconds;
   final bool enabled;
 
   final double widgetWidth;
@@ -33,7 +33,7 @@ class TimeInputTrailing extends StatefulWidget {
 
   const TimeInputTrailing({
     this.showMinutes = 0,
-    this.timeInSeconds = 0,
+    // this.timeInSeconds = 0,
     this.enabled = true,
     this.widgetWidth = 0,
     this.minutesKey = "",
@@ -65,8 +65,28 @@ class TimeInputTrailingState extends State<TimeInputTrailing> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void didUpdateWidget(covariant oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("TimeInputTrailing didUpdateWidget");
+
+    if (widget.showMinutes == 1) {
+      int totalSeconds = int.tryParse(widget.secondsController.text) ?? 0;
+      int minutes = totalSeconds ~/ 60;
+      int seconds = totalSeconds % 60;
+
+      // Only update if values actually change to avoid unnecessary rebuilds
+      if ((int.tryParse(widget.minutesController.text) ?? 0) != minutes ||
+          (int.tryParse(widget.secondsController.text) ?? 0) != seconds) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if ((int.tryParse(widget.minutesController.text) ?? 0) != minutes) {
+            widget.minutesController.text = minutes.toString();
+          }
+          if ((int.tryParse(widget.secondsController.text) ?? 0) != seconds) {
+            widget.secondsController.text = seconds.toString();
+          }
+        });
+      }
+    }
   }
 
   @override

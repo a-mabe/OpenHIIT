@@ -56,8 +56,6 @@ class EditorTile extends StatelessWidget {
     ///
     double minHeight = 75;
 
-    print("The key is: ${textKey}");
-
     return Container(
         decoration: BoxDecoration(
           color: backgroundColor,

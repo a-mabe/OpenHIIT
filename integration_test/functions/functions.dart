@@ -239,6 +239,7 @@ Future<void> tapSaveButton(WidgetTester tester) async {
   while (find.byKey(const Key('create-timer')).evaluate().isEmpty) {
     await tester.pump();
   }
+  await tester.pump();
 }
 
 Future<void> openViewTimer(WidgetTester tester, String name) async {
@@ -294,7 +295,6 @@ Future<void> copyWorkoutOrTimer(WidgetTester tester) async {
 Future<void> editWorkoutOrTimer(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.edit));
   await tester.pump(Duration(seconds: 1));
-  await tester.pumpAndSettle();
 }
 
 Future<void> tapRestart(WidgetTester tester) async {
@@ -336,9 +336,23 @@ Future<void> tapNextButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> tapMinutesSecondsToggle(WidgetTester tester) async {
-  await tester.tap(find.textContaining("1:42"));
-  await tester.pumpAndSettle();
+Future<void> tapMinutesSecondsToggle(WidgetTester tester, bool minutes) async {
+  await tester.tap(find.byKey(const Key('timer-display-toggle')));
+  await tester.pump();
+
+  while (find.byKey(Key("minutes-option")).evaluate().isEmpty) {
+    await tester.pump();
+  }
+
+  if (minutes) {
+    await tester.tap(find.byKey(Key("minutes-option")));
+  } else {
+    await tester.tap(find.byKey(Key("seconds-option")));
+  }
+
+  while (find.byKey(Key("minutes-option")).evaluate().isNotEmpty) {
+    await tester.pump();
+  }
 }
 
 // Future<void> waitUntilTappable(Finder finder, WidgetTester tester) async {

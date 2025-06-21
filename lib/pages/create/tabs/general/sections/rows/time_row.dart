@@ -53,7 +53,7 @@ class TimeRowState extends State<TimeRow> {
           enabled: widget.enabled,
           secondsOnChanged: (text) {},
           showMinutes: widget.showMinutes,
-          timeInSeconds: 0,
+          // timeInSeconds: 0,
           minutesKey: "${widget.title.toLowerCase()}-minutes",
           secondsKey: "${widget.title.toLowerCase()}-seconds",
           unit: widget.unit,

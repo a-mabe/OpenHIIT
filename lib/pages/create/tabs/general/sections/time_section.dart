@@ -27,6 +27,8 @@ class TimeSectionState extends State<TimeSection> {
     TimerCreationNotifier timerCreationNotifier =
         Provider.of<TimerCreationNotifier>(context, listen: false);
 
+    print("set state called");
+
     controllerMap.forEach((key, controller) {
       final title = key.split("-")[0];
       final isMinutes = key.contains("-minutes");

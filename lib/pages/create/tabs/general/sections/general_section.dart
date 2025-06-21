@@ -103,6 +103,7 @@ class GeneralSectionState extends State<GeneralSection> {
         ),
         TappableRow(
           // leading: Icon(Icons.timer_10_select_rounded),
+          key: const Key("timer-display-toggle"),
           title: "Timer Display",
           subtitle: timerCreationNotifier.timerDraft.showMinutes == 1
               ? "Minutes View"
@@ -166,6 +167,7 @@ class GeneralSectionState extends State<GeneralSection> {
                   ),
                   actions: [
                     TextButton(
+                      key: const Key("minutes-option"),
                       onPressed: () {
                         Navigator.pop(context);
                         setState(() {
@@ -179,6 +181,7 @@ class GeneralSectionState extends State<GeneralSection> {
                       child: const Text('Minutes'),
                     ),
                     TextButton(
+                      key: const Key("seconds-option"),
                       onPressed: () {
                         Navigator.pop(context);
                         setState(() {

@@ -38,9 +38,6 @@ class PreviewTabState extends State<PreviewTab> {
     return ListView.builder(
       itemCount: widget.intervals.length,
       itemBuilder: (context, index) {
-        print("The action is: ${items[index].action}");
-        print("The interval is: ${items[index].interval}");
-
         return EditorTile(
           textKey: "editor-$index",
           item: items[index],
