@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
+import 'package:openhiit/models/lists/timer_list_tile_model.dart';
 import 'package:openhiit/models/timer/timer_type.dart';
 import 'package:openhiit/pages/create/tabs/general/general.dart';
 import 'package:openhiit/pages/create/tabs/preview/preview.dart';
@@ -9,6 +10,7 @@ import 'package:openhiit/pages/create/tabs/sounds/sounds.dart';
 import 'package:openhiit/pages/home/home.dart';
 import 'package:openhiit/providers/timer_creation_notifier.dart';
 import 'package:openhiit/providers/timer_provider.dart';
+import 'package:openhiit/utils/functions.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -40,23 +42,32 @@ class _CreateTabBarState extends State<CreateTabBar>
           Provider.of<TimerCreationNotifier>(context, listen: false);
       final timerProvider = Provider.of<TimerProvider>(context, listen: false);
 
+      formKey.currentState?.save();
+
       if (timerCreationNotifier.timerDraft.activities.isEmpty) {
         timerCreationNotifier.timerDraft.activities = List.generate(
-          timerCreationNotifier.timerDraft.activeIntervals,
+          timerCreationNotifier.timerDraft.activeIntervals *
+              (timerCreationNotifier.timerDraft.timeSettings.restarts + 1),
           (_) => 'Work',
         );
       }
 
       if (controllers.isEmpty) {
         controllers = List.generate(
-          timerCreationNotifier.timerDraft.activeIntervals,
+          timerCreationNotifier.timerDraft.activeIntervals *
+              (timerCreationNotifier.timerDraft.timeSettings.restarts + 1),
           (index) => TextEditingController(
             text: timerCreationNotifier.timerDraft.activities[index],
           ),
         );
       }
 
-      formKey.currentState?.save();
+      print("666666666666666666666666666666666666666666");
+      print(timerCreationNotifier.timerDraft.activities.length);
+      for (var i = 0; i < controllers.length; i++) {
+        print('Controller $i: ${controllers[i].text}');
+      }
+      print("666666666666666666666666666666666666666666");
 
       setState(() {
         intervalsFuture = timerProvider
@@ -94,12 +105,34 @@ class _CreateTabBarState extends State<CreateTabBar>
       ),
       body: Form(
         key: formKey,
-        child: TabBarView(controller: _tabController, children: [
-          const GeneralTab(),
-          const SoundTab(),
-          _EditorTabWidget(),
-        ]),
+        child: TabBarView(
+            controller: _tabController,
+            children: [const GeneralTab(), const SoundTab(), editorTab()]),
       ),
+    );
+  }
+
+  Widget editorTab() {
+    if (intervalsFuture == null) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return FutureBuilder<List<IntervalType>>(
+      future: intervalsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          // List<TimerListTileModel> items = listItems(timer!, snapshot.data!);
+          return PreviewTab(
+            timer: timer!,
+            intervals: snapshot.data!,
+            controllers: controllers,
+          );
+        }
+      },
     );
   }
 
@@ -120,32 +153,5 @@ class _CreateTabBarState extends State<CreateTabBar>
         );
       }
     }
-  }
-}
-
-class _EditorTabWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final state = context.findAncestorStateOfType<_CreateTabBarState>();
-    if (state == null || state.intervalsFuture == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return FutureBuilder<List<IntervalType>>(
-      future: state.intervalsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          final intervals = snapshot.data!;
-          return PreviewTab(
-            intervals: intervals,
-            timer: state.timer!,
-            controllers: state.controllers,
-          );
-        }
-      },
-    );
   }
 }

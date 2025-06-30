@@ -35,15 +35,49 @@ class PreviewTabState extends State<PreviewTab> {
 
   @override
   Widget build(BuildContext context) {
+    int workCount = -1;
+
     return ListView.builder(
       itemCount: widget.intervals.length,
       itemBuilder: (context, index) {
+        if ((items[index].interval) == 1) {
+          workCount += 1;
+        }
+
+        if ((items[index].interval) > 0) {
+          print("items[index].interval: ${items[index].interval}");
+          print("workCount: $workCount");
+
+          print("***********************");
+          print((((items[index].interval) - 1) +
+              (workCount * widget.timer.activeIntervals)));
+        }
+
+        void Function(String?) onSaved(int num) {
+          return (String? val) {
+            if (val != null) {
+              print(items[index].interval);
+              print("Saving value: $val");
+              print(
+                  "At location: ${((items[index].interval) - 1) + (num * widget.timer.activeIntervals)}");
+              print("workCount: $num");
+
+              TimerCreationNotifier timerCreationNotifier =
+                  Provider.of<TimerCreationNotifier>(context, listen: false);
+              timerCreationNotifier.timerDraft.activities[
+                  ((items[index].interval) - 1) +
+                      (num * widget.timer.activeIntervals)] = val;
+            }
+          };
+        }
+
         return EditorTile(
           textKey: "editor-$index",
           item: items[index],
           controller: !["Rest", "Get Ready", "Warmup", "Cooldown", "Break"]
                   .contains(items[index].action)
-              ? widget.controllers[(items[index].interval) - 1]
+              ? widget.controllers[((items[index].interval) - 1) +
+                  (workCount * widget.timer.activeIntervals)]
               : null,
           fontColor: Colors.white,
           fontWeight: index == 0 ? FontWeight.bold : FontWeight.normal,
@@ -55,29 +89,7 @@ class PreviewTabState extends State<PreviewTab> {
             }
             return null;
           },
-          onSaved: (val) {
-            if (val != null) {
-              print(items[index].interval);
-
-              TimerCreationNotifier timerCreationNotifier =
-                  Provider.of<TimerCreationNotifier>(context, listen: false);
-              timerCreationNotifier
-                  .timerDraft.activities[items[index].interval - 1] = val;
-              // setState(() {
-              //   if (timerCreationNotifier.timerDraft.activities.length >
-              //       index) {
-              //     timerCreationNotifier.timerDraft.activities[index] = val;
-              //   } else {
-              //     // Fill with empty strings if needed
-              //     while (timerCreationNotifier.timerDraft.activities.length <
-              //         index) {
-              //       timerCreationNotifier.timerDraft.activities.add('');
-              //     }
-              //     timerCreationNotifier.timerDraft.activities.add(val);
-              //   }
-              // });
-            }
-          },
+          onSaved: onSaved(workCount),
         );
         // return ListTile(
         //   title: Text(interval.name),
