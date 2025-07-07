@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:openhiit/pages/home/home.dart';
-import 'package:openhiit/providers/timer_creation_notifier.dart';
-import 'package:openhiit/providers/timer_provider.dart';
+import 'package:openhiit/old/pages/home/home.dart';
+// import 'package:openhiit/old/providers/timer_creation_notifier.dart';
+import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +23,7 @@ void main() async {
 
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  /// Monospaced font licensing.
-  ///
+  // Monospaced font licensing.
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
@@ -46,7 +45,7 @@ class WorkoutTimer extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => TimerProvider()),
-          ChangeNotifierProvider(create: (_) => TimerCreationNotifier())
+          // ChangeNotifierProvider(create: (_) => TimerCreationNotifier())
         ],
         child: MaterialApp(
           title: 'OpenHIIT',
