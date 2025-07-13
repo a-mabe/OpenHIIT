@@ -17,6 +17,14 @@ class TimerTimeSettingsRepository {
     );
   }
 
+  Future<List<TimerTimeSettings>> getAllTimeSettings() async {
+    final db = await _databaseManager.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(timeSettingsTableName);
+
+    return maps.map((map) => TimerTimeSettings.fromMap(map)).toList();
+  }
+
   Future<TimerTimeSettings?> getTimeSettingsByTimerId(String timerId) async {
     final db = await _databaseManager.database;
     final List<Map<String, dynamic>> maps = await db.query(

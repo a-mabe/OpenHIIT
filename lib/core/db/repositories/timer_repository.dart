@@ -1,10 +1,19 @@
 import 'package:openhiit/core/db/database.dart';
+import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
+import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
+import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
+import 'package:openhiit/old/models/timer/timer_time_settings.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:openhiit/core/db/tables.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class TimerRepository {
   final DatabaseManager _databaseManager = DatabaseManager();
+
+  TimerSoundSettingsRepository _timerSoundSettingsRepository =
+      TimerSoundSettingsRepository();
+  TimerTimeSettingsRepository _timerTimeSettingsRepository =
+      TimerTimeSettingsRepository();
 
   TimerRepository();
 
@@ -33,11 +42,24 @@ class TimerRepository {
 
   Future<List<TimerType>> getAllTimers() async {
     final db = await _databaseManager.database;
-    final List<Map<String, dynamic>> maps = await db.query(timerTableName);
+    final timerMaps = await db.query(timerTableName);
 
-    return List.generate(maps.length, (i) {
-      return TimerType.fromMap(maps[i]);
-    });
+    // Fetch all time and sound settings in advance for efficiency
+    final timeSettingsList =
+        await _timerTimeSettingsRepository.getAllTimeSettings();
+    final soundSettingsList =
+        await _timerSoundSettingsRepository.getAllSoundSettings();
+
+    // Map timerId to settings for quick lookup
+    final timeSettingsMap = {for (var s in timeSettingsList) s.timerId: s};
+    final soundSettingsMap = {for (var s in soundSettingsList) s.timerId: s};
+
+    return timerMaps.map((timerMap) {
+      final timer = TimerType.fromMap(timerMap);
+      timer.timeSettings = timeSettingsMap[timer.id]!;
+      timer.soundSettings = soundSettingsMap[timer.id]!;
+      return timer;
+    }).toList();
   }
 
   Future<void> updateTimer(TimerType timer) async {
@@ -57,5 +79,20 @@ class TimerRepository {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<void> updateTimers(List<TimerType> timers) async {
+    final db = await _databaseManager.database;
+    final batch = db.batch();
+    for (final timer in timers) {
+      batch.update(
+        timerTableName,
+        timer.toMap(),
+        where: 'id = ?',
+        whereArgs: [timer.id],
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    await batch.commit(noResult: true);
   }
 }

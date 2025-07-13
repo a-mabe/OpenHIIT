@@ -8,6 +8,15 @@ class IntervalRepository {
 
   IntervalRepository();
 
+  Future<void> insertInterval(IntervalType interval) async {
+    final db = await _databaseManager.database;
+    await db.insert(
+      intervalTableName,
+      interval.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+  }
+
   Future<void> insertIntervals(List<IntervalType> intervals) async {
     final db = await _databaseManager.database;
     await db.transaction((txn) async {

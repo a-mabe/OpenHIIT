@@ -38,8 +38,6 @@ class DatabaseManager {
   }
 
   Future<Database> initializeDatabase() async {
-    logger.i("initializing database");
-
     String path = join(await getDatabasesPath(), _databaseName);
     String dbPath =
         (Platform.isWindows || Platform.isLinux) ? inMemoryDatabasePath : path;

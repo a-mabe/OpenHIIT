@@ -3,15 +3,12 @@ import 'package:logger/logger.dart';
 import 'package:openhiit/core/db/repositories/deprecated_workout_repository.dart';
 import 'package:openhiit/core/db/repositories/interval_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_repository.dart';
+import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
+import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:openhiit/old/models/timer/workout_type.dart';
-
-var logger = Logger(
-  printer: JsonLogPrinter('DatabaseManager'),
-  level: Level.info,
-);
 
 class TimerProvider extends ChangeNotifier {
   // Deprecated - Included to migrate old data
@@ -23,6 +20,13 @@ class TimerProvider extends ChangeNotifier {
   final TimerRepository _timerRepository = TimerRepository();
 
   final IntervalRepository _intervalRepository = IntervalRepository();
+  final TimerTimeSettingsRepository _timerTimeSettingsRepository =
+      TimerTimeSettingsRepository();
+
+  var logger = Logger(
+    printer: JsonLogPrinter('TimerProvider'),
+    level: Level.info,
+  );
 
   Future<List<TimerType>> loadTimers() async {
     // Load workouts from the old repository
@@ -40,11 +44,31 @@ class TimerProvider extends ChangeNotifier {
       });
     }
 
+    // Run warmup migration
+    await warmupMigration(
+      _timers,
+      _intervalRepository,
+      _timerRepository,
+      _timerTimeSettingsRepository,
+    );
+
     return _timerRepository.getAllTimers().then((timers) {
       _timers = timers;
+      _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
       return _timers;
     }).whenComplete(() {
       notifyListeners();
     });
+  }
+
+  Future<void> updateTimerOrder(List<TimerType> timers) async {
+    _timers = timers;
+
+    for (int i = 0; i < _timers.length; i++) {
+      _timers[i].timerIndex = i;
+    }
+
+    await _timerRepository.updateTimers(_timers);
+    notifyListeners();
   }
 }

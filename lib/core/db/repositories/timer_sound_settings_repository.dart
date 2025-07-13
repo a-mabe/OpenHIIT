@@ -17,6 +17,14 @@ class TimerSoundSettingsRepository {
     );
   }
 
+  Future<List<TimerSoundSettings>> getAllSoundSettings() async {
+    final db = await _databaseManager.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(soundSettingsTableName);
+
+    return maps.map((map) => TimerSoundSettings.fromMap(map)).toList();
+  }
+
   Future<TimerSoundSettings?> getSoundSettingsByTimerId(String timerId) async {
     final db = await _databaseManager.database;
     final List<Map<String, dynamic>> maps = await db.query(
