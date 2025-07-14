@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/app_bar.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/bottom_nav_bar/bottom_nav_bar.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/reorderable_list.dart';
-import 'package:provider/provider.dart';
+import 'package:openhiit/features/list_timers/ui/landscape/list_timers_landscape.dart';
+import 'package:openhiit/features/list_timers/ui/portrait/list_timers_portrait.dart';
 
 class ListTimersPage extends StatefulWidget {
   const ListTimersPage({super.key});
@@ -13,36 +10,27 @@ class ListTimersPage extends StatefulWidget {
 }
 
 class _ListTimersPageState extends State<ListTimersPage> {
-  late TimerProvider timerProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    timerProvider = Provider.of<TimerProvider>(context, listen: false);
+  bool _isTablet(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    // A common breakpoint for tablets is 600dp
+    return size.shortestSide >= 600;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: ListTimersAppBar(),
-          body: FutureBuilder(
-            future: timerProvider.loadTimers(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Text('Error fetching timers'));
-              } else {
-                final timers = snapshot.data ?? [];
-                return ListTimersReorderableList(
-                  items: timers,
-                  onReorderCompleted: (reorderedItems) {},
-                );
-              }
-            },
-          ),
-          bottomNavigationBar: ListTimersBottomNavigationBar()),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isLandscape = constraints.maxWidth > constraints.maxHeight;
+        final isTablet = _isTablet(context);
+
+        if (isLandscape || isTablet) {
+          print('Landscape or Tablet Mode');
+          return const ListTimersLandscape();
+        } else {
+          print('Portrait Mode');
+          return const ListTimersPortrait();
+        }
+      },
     );
   }
 }

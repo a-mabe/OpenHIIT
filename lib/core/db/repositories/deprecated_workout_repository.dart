@@ -14,8 +14,18 @@ class WorkoutRepository {
 
   Future<List<Workout>> getAllWorkouts() async {
     final db = await _databaseManager.database;
-    final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
 
+    // Check if the workoutTable exists
+    final tableCheck = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+      [workoutTableName],
+    );
+    if (tableCheck.isEmpty) {
+      // Table does not exist, return empty list
+      return [];
+    }
+
+    final List<Map<String, dynamic>> maps = await db.query(workoutTableName);
     return maps.map((map) => Workout.fromMap(map)).toList();
   }
 

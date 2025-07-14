@@ -16,7 +16,8 @@ class _ListTimersAppBarState extends State<ListTimersAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 30,
+      // toolbarHeight: 30,
+      // actionsPadding: const EdgeInsets.all(0),
       actions: [
         IconButton(
           icon: const Icon(Icons.info_outline),

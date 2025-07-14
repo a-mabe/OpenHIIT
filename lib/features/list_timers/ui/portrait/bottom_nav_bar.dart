@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/bottom_nav_bar/nav_bar_icon_button.dart';
+import 'package:openhiit/features/list_timers/ui/widgets/nav_bar_icon_button.dart';
 
 class ListTimersBottomNavigationBar extends StatefulWidget {
   const ListTimersBottomNavigationBar({super.key});
@@ -28,22 +28,6 @@ class ListTimersBottomNavigationBarState
               iconSize: 22,
               label: 'New Timer',
               onPressed: () {}),
-          // Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     IconButton(
-          //       icon: const Icon(Icons.add),
-          //       tooltip: 'New Timer',
-          //       padding: EdgeInsets.zero,
-          //       constraints: const BoxConstraints(),
-          //       onPressed: () {
-          //         // TODO: Implement new timer action
-          //       },
-          //     ),
-          //     // const SizedBox(height: 2),
-          //     const Text('New Timer', style: TextStyle(fontSize: 12)),
-          //   ],
-          // ),
         ],
       ),
     );

@@ -35,13 +35,16 @@ class NavBarIconButtonState extends State<NavBarIconButton> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  widget.icon,
-                  size: widget.iconSize.toDouble(),
-                ),
+                Icon(widget.icon,
+                    size: widget.iconSize.toDouble(),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
                 SizedBox(height: 5),
                 Text(
                   widget.label ?? '',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

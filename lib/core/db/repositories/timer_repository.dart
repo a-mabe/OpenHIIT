@@ -1,8 +1,6 @@
 import 'package:openhiit/core/db/database.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
-import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
-import 'package:openhiit/old/models/timer/timer_time_settings.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:openhiit/core/db/tables.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -10,9 +8,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 class TimerRepository {
   final DatabaseManager _databaseManager = DatabaseManager();
 
-  TimerSoundSettingsRepository _timerSoundSettingsRepository =
+  final TimerSoundSettingsRepository _timerSoundSettingsRepository =
       TimerSoundSettingsRepository();
-  TimerTimeSettingsRepository _timerTimeSettingsRepository =
+  final TimerTimeSettingsRepository _timerTimeSettingsRepository =
       TimerTimeSettingsRepository();
 
   TimerRepository();

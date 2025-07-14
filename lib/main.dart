@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:openhiit/core/providers/interval_provider/interval_provider.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/features/list_timers/ui/list_timers_page.dart';
-import 'package:openhiit/old/pages/home/home.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
