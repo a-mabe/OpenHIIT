@@ -24,10 +24,8 @@ class _ListTimersPageState extends State<ListTimersPage> {
         final isTablet = _isTablet(context);
 
         if (isLandscape || isTablet) {
-          print('Landscape or Tablet Mode');
           return const ListTimersLandscape();
         } else {
-          print('Portrait Mode');
           return const ListTimersPortrait();
         }
       },

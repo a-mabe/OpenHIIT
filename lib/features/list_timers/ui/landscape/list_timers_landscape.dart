@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
-import 'package:openhiit/features/list_timers/ui/landscape/nav_rail.dart';
+import 'package:openhiit/features/list_timers/ui/landscape/widgets/nav_rail.dart';
 import 'package:openhiit/features/list_timers/ui/widgets/reorderable_list.dart';
 import 'package:provider/provider.dart';
 

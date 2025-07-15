@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/app_bar.dart';
-import 'package:openhiit/features/list_timers/ui/portrait/bottom_nav_bar.dart';
+import 'package:openhiit/features/list_timers/ui/portrait/widgets/fab_column.dart';
+import 'package:openhiit/features/list_timers/ui/portrait/widgets/app_bar.dart';
 import 'package:openhiit/features/list_timers/ui/widgets/reorderable_list.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,9 @@ class _ListTimersPortraitState extends State<ListTimersPortrait> {
     return SafeArea(
       child: Scaffold(
           appBar: ListTimersAppBar(),
+          floatingActionButton: Visibility(
+            child: FABColumn(),
+          ),
           body: FutureBuilder(
             future: timerProvider.loadTimers(),
             builder: (context, snapshot) {
@@ -60,8 +63,7 @@ class _ListTimersPortraitState extends State<ListTimersPortrait> {
                 );
               }
             },
-          ),
-          bottomNavigationBar: ListTimersBottomNavigationBar()),
+          )),
     );
   }
 }

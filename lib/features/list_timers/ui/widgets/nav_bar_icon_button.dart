@@ -4,6 +4,7 @@ class NavBarIconButton extends StatefulWidget {
   final IconData icon;
   final int iconSize;
   final String? label;
+  final double verticalPadding;
   final VoidCallback? onPressed;
   final bool isSelected;
 
@@ -12,6 +13,7 @@ class NavBarIconButton extends StatefulWidget {
     required this.icon,
     this.iconSize = 24,
     this.label,
+    this.verticalPadding = 4,
     this.onPressed,
     this.isSelected = false,
   });
@@ -24,31 +26,37 @@ class NavBarIconButtonState extends State<NavBarIconButton> {
   @override
   Widget build(BuildContext context) {
     return Material(
-        color: Colors.transparent, // Use a background color if needed
-        child: InkWell(
+      color: Colors.transparent, // Use a background color if needed
+      child: InkWell(
           onTap: () {
             // Handle tap
           },
           borderRadius: BorderRadius.circular(10), // Optional rounded corners
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(widget.icon,
-                    size: widget.iconSize.toDouble(),
-                    color: Theme.of(context).colorScheme.onSurfaceVariant),
-                SizedBox(height: 5),
-                Text(
-                  widget.label ?? '',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
+            padding: EdgeInsets.symmetric(
+              vertical: widget.verticalPadding,
+              horizontal: 4.0,
             ),
-          ),
-        ));
+            child: SizedBox(
+              width: 60,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(widget.icon,
+                      size: widget.iconSize.toDouble(),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  SizedBox(height: 5),
+                  Text(
+                    widget.label ?? '',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
   }
 }
