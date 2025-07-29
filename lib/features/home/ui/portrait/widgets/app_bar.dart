@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/features/list_timers/ui/constants.dart';
+import 'package:openhiit/features/home/ui/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListTimersAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -18,6 +18,7 @@ class _ListTimersAppBarState extends State<ListTimersAppBar> {
     return AppBar(
       actions: [
         IconButton(
+          key: const Key('about_button'),
           icon: const Icon(Icons.info_outline),
           onPressed: () {
             showDialog(

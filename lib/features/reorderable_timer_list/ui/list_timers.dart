@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/tile.dart';
+import 'package:openhiit/features/reorderable_timer_list/ui/widgets/tile.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:provider/provider.dart';
+
+/// Given a list of timers, this widget displays them and allows reordering.
 
 class ListTimersReorderableList extends StatefulWidget {
   final List<TimerType> items;
@@ -75,7 +77,7 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
       children: [
         for (final item in _items)
           ListTimersTile(
-            key: ValueKey(item.id),
+            key: ValueKey("${item.name}-${item.timerIndex}"),
             timer: item,
             // onTap: () => _onItemTap(item), // Uncomment if you want to handle taps
           ),

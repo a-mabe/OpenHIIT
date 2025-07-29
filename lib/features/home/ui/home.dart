@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/features/list_timers/ui/landscape/list_timers_landscape.dart';
-import 'package:openhiit/features/list_timers/ui/portrait/list_timers_portrait.dart';
+import 'package:openhiit/features/home/ui/landscape/home_landscape.dart';
+import 'package:openhiit/features/home/ui/portrait/home_portrait.dart';
 
 class ListTimersPage extends StatefulWidget {
   const ListTimersPage({super.key});

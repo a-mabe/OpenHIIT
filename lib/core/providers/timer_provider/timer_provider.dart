@@ -1,14 +1,19 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/core/db/repositories/deprecated_workout_repository.dart';
 import 'package:openhiit/core/db/repositories/interval_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_repository.dart';
+import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:openhiit/old/models/timer/workout_type.dart';
+import 'package:uuid/uuid.dart';
 
 class TimerProvider extends ChangeNotifier {
   // Deprecated - Included to migrate old data
@@ -22,6 +27,8 @@ class TimerProvider extends ChangeNotifier {
   final IntervalRepository _intervalRepository = IntervalRepository();
   final TimerTimeSettingsRepository _timerTimeSettingsRepository =
       TimerTimeSettingsRepository();
+  final TimerSoundSettingsRepository _timerSoundSettingsRepository =
+      TimerSoundSettingsRepository();
 
   var logger = Logger(
     printer: JsonLogPrinter('TimerProvider'),
@@ -70,5 +77,30 @@ class TimerProvider extends ChangeNotifier {
 
     await _timerRepository.updateTimers(_timers);
     notifyListeners();
+  }
+
+  Future<void> pushTimer(TimerType timer) async {
+    _timers.insert(0, timer);
+    await _timerRepository.insertTimer(timer);
+    await _timerTimeSettingsRepository.insertTimeSettings(timer.timeSettings);
+    await _timerSoundSettingsRepository
+        .insertSoundSettings(timer.soundSettings);
+    await updateTimerOrder(_timers);
+    notifyListeners();
+  }
+
+  Future<void> pushTimerCopy(TimerType timer) async {
+    timer.name = "${timer.name} Copy";
+    timer.id = Uuid().v8();
+    timer.timeSettings.id = Uuid().v8();
+    timer.soundSettings.id = Uuid().v8();
+    timer.timeSettings.timerId = timer.id;
+    timer.soundSettings.timerId = timer.id;
+    await pushTimer(timer);
+    notifyListeners();
+  }
+
+  bool timerExists(String id) {
+    return _timers.any((timer) => timer.id == id);
   }
 }

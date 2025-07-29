@@ -7,6 +7,7 @@ import 'package:openhiit/old/models/timer/workout_type.dart';
 /// It is recommended to use the new TimerType class instead.
 ///
 /// Migration from Workout to TimerType exists within the Timer Provider.
+@Deprecated("Use TimerRepository instead")
 class WorkoutRepository {
   final DatabaseManager _databaseManager = DatabaseManager();
 

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/features/list_timers/ui/constants.dart';
-import 'package:openhiit/features/list_timers/ui/widgets/nav_bar_icon_button.dart';
+import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
+import 'package:openhiit/features/home/ui/constants.dart';
+import 'package:openhiit/features/home/ui/widgets/nav_bar_icon_button.dart';
+import 'package:openhiit/features/import_export_timers/ui/export_bottom_sheet.dart';
+import 'package:openhiit/features/import_export_timers/utils/import_export_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListTimersNavRail extends StatefulWidget {
-  const ListTimersNavRail({super.key});
+  final TimerProvider timerProvider;
+  final Function? onImport;
+
+  const ListTimersNavRail(
+      {super.key, required this.timerProvider, this.onImport});
 
   @override
   ListTimersNavRailState createState() => ListTimersNavRailState();
@@ -18,7 +25,7 @@ class ListTimersNavRailState extends State<ListTimersNavRail> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 25),
+          SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: NavBarIconButton(
@@ -29,17 +36,40 @@ class ListTimersNavRailState extends State<ListTimersNavRail> {
               onPressed: () {},
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 12),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: NavBarIconButton(
-                  icon: Icons.share_outlined,
+                  icon: Icons.upload,
                   iconSize: 25,
-                  label: 'Share',
+                  label: 'Export',
                   verticalPadding: 8,
-                  onPressed: () {})),
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ExportBottomSheet(
+                            timerProvider: widget.timerProvider);
+                      },
+                    );
+                  })),
+          SizedBox(height: 12),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: NavBarIconButton(
+                  icon: Icons.download,
+                  iconSize: 25,
+                  label: 'Import',
+                  verticalPadding: 8,
+                  onPressed: () async {
+                    await ImportExportUtil.tryImport(widget.timerProvider);
+                    widget.onImport?.call();
+                  })),
           Spacer(),
           IconButton(
+            key: const Key('about_button'),
             icon: const Icon(Icons.info_outline),
             onPressed: () {
               showDialog(
@@ -69,7 +99,7 @@ class ListTimersNavRailState extends State<ListTimersNavRail> {
               );
             },
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
         ],
       ),
     );

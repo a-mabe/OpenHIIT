@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:logger/logger.dart';
+import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
 import 'package:openhiit/old/models/timer/timer_time_settings.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../utils/log/log.dart';
 
 class TimerType {
   String id;
@@ -18,6 +18,11 @@ class TimerType {
   int color;
   TimerTimeSettings timeSettings;
   TimerSoundSettings soundSettings;
+
+  Logger logger = Logger(
+    printer: JsonLogPrinter('TimerType'),
+    level: Level.debug,
+  );
 
   TimerType({
     required this.id,
@@ -153,9 +158,6 @@ class TimerType {
     final timeSettings = json['timeSettings'];
     final soundSettings = json['soundSettings'];
 
-    logger.d("time settings: $timeSettings");
-    logger.d("sound settings: $soundSettings");
-
     return TimerType(
       id: json['id'] ?? "",
       name: json['name'] ?? "",
@@ -163,7 +165,7 @@ class TimerType {
       totalTime: json['totalTime'] ?? 0,
       intervals: json['intervals'] ?? 0,
       activeIntervals: json['activeIntervals'] ?? 0,
-      activities: json['activities'].length > 0
+      activities: (json['activities'] != null && json['activities'] is List)
           ? List<String>.from(json['activities'])
           : [],
       showMinutes: json['showMinutes'] ?? 0,

@@ -3,15 +3,17 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
-
 class LocalFileUtil {
+  final logger = Logger(
+    printer: JsonLogPrinter('LocalFileUtil'),
+    level: Level.debug,
+  );
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -43,7 +45,6 @@ class LocalFileUtil {
 
       // Read the file
       final contents = await file.readAsString();
-
       return contents.toString();
     } catch (e) {
       // If encountering an error, return 0
@@ -97,7 +98,6 @@ class LocalFileUtil {
 
       return null;
     } catch (e) {
-      // If encountering an error, return 0
       return null;
     }
   }
