@@ -11,7 +11,6 @@ import 'package:openhiit/features/import_export_timers/ui/snackbars.dart';
 import 'package:openhiit/features/import_export_timers/utils/file_util.dart';
 import 'package:openhiit/old/models/timer/timer_type.dart';
 import 'package:openhiit/shared/globals.dart';
-import 'package:path/path.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ImportExportUtil {
@@ -33,7 +32,7 @@ class ImportExportUtil {
 
       if (importedTimers.isEmpty) {
         scaffoldMessengerKey.currentState
-            ?.showSnackBar(infoSnackbar('No timers to import.'));
+            ?.showSnackBar(infoSnackbar('Nothing imported.'));
         return false;
       } else {
         await ImportExportUtil.saveImportedTimers(
@@ -108,9 +107,8 @@ class ImportExportUtil {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       messenger?.showSnackBar(
         importedCount > 0
-            ? importSuccessSnackbar(
-                'Successfully imported $importedCount timers.')
-            : infoSnackbar('No timers to import.'),
+            ? successSnackbar('Successfully imported $importedCount timers.')
+            : infoSnackbar('Nothing imported.'),
       );
     });
     return true;

@@ -14,14 +14,14 @@ SnackBar errorSnackbar(String message) {
 
 SnackBar infoSnackbar(String message) {
   return SnackBar(
-    content: Text(message, style: const TextStyle(color: Colors.white)),
+    content: Text(message),
     behavior: SnackBarBehavior.floating,
     showCloseIcon: true,
     duration: const Duration(seconds: 3),
   );
 }
 
-SnackBar importSuccessSnackbar(String message) {
+SnackBar successSnackbar(String message) {
   return SnackBar(
     content: Text(message, style: const TextStyle(color: Colors.white)),
     backgroundColor: Colors.green,
