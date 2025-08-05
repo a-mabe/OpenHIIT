@@ -12,6 +12,7 @@
 <p align="center">
   <a href="https://www.buymeacoffee.com/amabe"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" width="200" /></a>
   <a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="140" /></a>
+  <a href="https://apt.izzysoft.de/packages/com.codepup.workout_timer"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButton.png" height="46" alt="Get it at IzzyOnDroid"></a>
   <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
 </p>
 
