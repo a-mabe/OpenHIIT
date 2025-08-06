@@ -14,25 +14,26 @@ void main() {
       await loadApp(tester);
       expect(find.text('No saved timers'), findsOneWidget);
       await tapCreateTimerButton(tester);
-      await pickTimerType(tester, true);
+      await pickTimerType(tester, false);
       await enterTimerName(tester, 'Test Workout');
       await pickColor(tester);
       await enterInterval(tester, 2);
-      await tapSubmit(tester);
-      await enterExercise(tester, 0, "Push-ups");
-      await enterExercise(tester, 1, "Squats");
-      await closeKeyboard(tester);
-      await tapSubmit(tester);
       await enterTime(tester, "work-seconds", "8");
       await enterTime(tester, "rest-seconds", "5");
       await enterAdvancedTime(tester, "7", "8", "8", "1", "5");
-      await tapSubmit(tester);
+      await closeKeyboard(tester);
+      await tapSoundTab(tester);
       await selectSound(tester, "work-sound", "None");
       await selectSound(tester, "rest-sound", "None");
       await selectSound(tester, "halfway-sound", "None");
       await selectSound(tester, "countdown-sound", "None");
       await selectSound(tester, "end-sound", "None");
-      await tapSubmit(tester);
+      await tapEditorTab(tester);
+      await enterEditorTileText(tester, "editor-3", "Push-ups");
+      await enterEditorTileText(tester, "editor-5", "Squats");
+      await enterEditorTileText(tester, "editor-7", "Push-ups");
+      await enterEditorTileText(tester, "editor-9", "Squats");
+      await tapSaveButton(tester);
       await openViewTimer(tester, 'Test Workout');
       await tapStartButton(tester);
       await waitForText(tester, "7");
@@ -73,7 +74,7 @@ void main() {
       expect(find.widgetWithText(TextFormField, 'Squats'), findsOneWidget);
       await tapSubmit(tester);
 
-      await tapAdvancedTile(tester);
+      // await tapAdvancedTile(tester);
 
       // Check times are pre-filled
       expect(find.widgetWithText(TextFormField, '8'),
@@ -99,7 +100,7 @@ void main() {
       await tapSubmit(tester);
       await enterTime(tester, "work-seconds", "10");
       await enterTime(tester, "rest-seconds", "6");
-      await enterAdvancedTime(tester, "8", "9", "10", "2", "6");
+      // await enterAdvancedTime(tester, "8", "9", "10", "2", "6");
       await tapSubmit(tester);
       await selectSound(tester, "work-sound", "Beep");
       await selectSound(tester, "rest-sound", "Beep");
@@ -124,7 +125,7 @@ void main() {
       expect(find.widgetWithText(TextFormField, 'Squats'), findsOneWidget);
       expect(find.widgetWithText(TextFormField, 'Planks'), findsOneWidget);
       await tapSubmit(tester);
-      await tapAdvancedTile(tester);
+      // await tapAdvancedTile(tester);
       expect(find.widgetWithText(TextFormField, '10'), findsWidgets);
       expect(find.widgetWithText(TextFormField, '6'), findsWidgets);
       expect(find.widgetWithText(TextFormField, '8'), findsOneWidget);
@@ -151,7 +152,7 @@ void main() {
       expect(find.widgetWithText(TextFormField, 'Squats'), findsOneWidget);
       expect(find.widgetWithText(TextFormField, 'Planks'), findsOneWidget);
       await tapSubmit(tester);
-      await tapAdvancedTile(tester);
+      // await tapAdvancedTile(tester);
       expect(find.widgetWithText(TextFormField, '10'), findsWidgets);
       expect(find.widgetWithText(TextFormField, '6'), findsWidgets);
       expect(find.widgetWithText(TextFormField, '8'), findsOneWidget);
@@ -169,8 +170,8 @@ void main() {
       await enterInterval(tester, 1);
       await tapSubmit(tester);
       await tapSubmit(tester);
-      await tapAdvancedTile(tester);
-      await enterAdvancedTime(tester, "8", "9", "10", "2", "0");
+      // await tapAdvancedTile(tester);
+      // await enterAdvancedTime(tester, "8", "9", "10", "2", "0");
       await tapSubmit(tester);
       await tapSubmit(tester);
 
@@ -204,8 +205,8 @@ void main() {
       await tapSubmit(tester);
       expect(find.widgetWithText(TextFormField, 'Push-ups'), findsOneWidget);
       await tapSubmit(tester);
-      await tapAdvancedTile(tester);
-      await enterAdvancedTime(tester, "8", "9", "10", "0", "");
+      // await tapAdvancedTile(tester);
+      // await enterAdvancedTime(tester, "8", "9", "10", "0", "");
       await tapSubmit(tester);
 
       // Check sounds are "Beep"

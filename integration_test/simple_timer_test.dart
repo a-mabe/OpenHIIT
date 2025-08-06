@@ -19,12 +19,26 @@ void main() {
       await enterTimerName(tester, 'Test Timer');
       await pickColor(tester);
       await enterInterval(tester, 2);
-      await tapSubmit(tester);
+      // await tester.pumpAndSettle(const Duration(seconds: 1000));
+      // await tapSubmit(tester);
       await enterTime(tester, "work-seconds", "6");
       await enterTime(tester, "rest-seconds", "4");
-      await tapSubmit(tester);
+      // await tapSubmit(tester);
+      // await tester.pumpAndSettle(const Duration(seconds: 1000));
+      await tapSoundTab(tester);
+      // await tester.pumpAndSettle(const Duration(seconds: 1000));
       await selectSound(tester, "work-sound", "Harsh beep sequence");
-      await tapSubmit(tester);
+      // await tapSubmit(tester);
+      await tapEditorTab(tester);
+      expect(find.textContaining('Work'), findsNWidgets(2));
+      await tapSaveButton(tester);
+      // Loop until 'Test Timer' is found
+      bool timerFound = false;
+      while (!timerFound) {
+        await tester.pump(const Duration(milliseconds: 100));
+        timerFound = find.text('Test Timer').evaluate().isNotEmpty;
+      }
+      // await tester.pumpAndSettle(const Duration(seconds: 1000));
       await openViewTimer(tester, 'Test Timer');
       await tapStartButton(tester);
       await waitForText(tester, "Get Ready");
