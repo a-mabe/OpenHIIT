@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
-import 'package:openhiit/old/models/timer/timer_time_settings.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/core/models/timer_sound_settings.dart';
+import 'package:openhiit/core/models/timer_time_settings.dart';
+import 'package:openhiit/core/models/timer_type.dart';
 
 class TimerCreationProvider extends ChangeNotifier {
   TimerType _timer = TimerType.empty();

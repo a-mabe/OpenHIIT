@@ -4,6 +4,8 @@ class NavBarIconButton extends StatefulWidget {
   final IconData icon;
   final int? iconSize;
   final String? label;
+  final double fontSize;
+  final double spacing;
   final double verticalPadding;
   final VoidCallback? onPressed;
   final bool isSelected;
@@ -13,6 +15,8 @@ class NavBarIconButton extends StatefulWidget {
     required this.icon,
     this.iconSize,
     this.label,
+    this.fontSize = 12,
+    this.spacing = 5.0,
     this.verticalPadding = 4,
     this.onPressed,
     this.isSelected = false,
@@ -44,11 +48,11 @@ class NavBarIconButtonState extends State<NavBarIconButton> {
                   Icon(widget.icon,
                       size: widget.iconSize?.toDouble(),
                       color: Theme.of(context).colorScheme.onSurfaceVariant),
-                  SizedBox(height: 5),
+                  SizedBox(height: widget.spacing),
                   Text(
                     widget.label ?? '',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: widget.fontSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),

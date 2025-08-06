@@ -9,7 +9,7 @@ import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/features/import_export_timers/ui/import_copy_dialog.dart';
 import 'package:openhiit/features/import_export_timers/ui/snackbars.dart';
 import 'package:openhiit/features/import_export_timers/utils/file_util.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/shared/globals.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -115,6 +115,7 @@ class ImportExportUtil {
   }
 
   static Future<bool> share(List<TimerType> timers) async {
+    logger.i("Sharing timers...");
     LocalFileUtil fileUtil = LocalFileUtil();
     ShareResult? result;
     BuildContext? context = navigatorKey.currentContext;

@@ -3,8 +3,9 @@ import 'package:logger/web.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/features/home/ui/landscape/widgets/nav_rail.dart';
-import 'package:openhiit/features/reorderable_timer_list/ui/list_timers.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/features/reorder_timers/ui/list_timers.dart';
+import 'package:openhiit/core/models/timer_type.dart';
+import 'package:openhiit/features/edit_timer/ui/edit_timer.dart';
 import 'package:provider/provider.dart';
 
 class ListTimersLandscape extends StatefulWidget {
@@ -76,6 +77,14 @@ class _ListTimersLandscapeState extends State<ListTimersLandscape> {
                 return ListTimersReorderableList(
                   items: timers,
                   onReorderCompleted: (reorderedItems) {},
+                  onTap: (timer) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewTimerPage(timer: timer),
+                      ),
+                    );
+                  },
                 );
               }
             },

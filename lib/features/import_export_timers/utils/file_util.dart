@@ -2,18 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:openhiit/core/logs/logs.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/core/models/timer_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class LocalFileUtil {
-  final logger = Logger(
-    printer: JsonLogPrinter('FileUtil'),
-    level: Level.debug,
-  );
-
   /// Returns the app's document directory path.
   Future<String> get _localPath async =>
       (await getApplicationDocumentsDirectory()).path;
@@ -45,25 +38,13 @@ class LocalFileUtil {
     final file = await writeFile(timers);
     if (!context.mounted) return null;
     final box = context.findRenderObject() as RenderBox?;
+    if (box is! RenderBox) return null;
     return await Share.shareXFiles(
       [XFile(file.path)],
       text: 'OpenHIIT Export',
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & (box.size),
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & (box.size),
     );
   }
-
-  // /// Shares multiple exported timer files (currently only one file).
-  // Future<ShareResult?> shareMultipleFiles(
-  //     List<TimerType> timers, BuildContext context) async {
-  //   final file = await _localFile(timers);
-  //   if (!context.mounted) return null;
-  //   final box = context.findRenderObject() as RenderBox?;
-  //   return await Share.shareXFiles(
-  //     [XFile(file.path)],
-  //     text: 'Export',
-  //     sharePositionOrigin: box!.localToGlobal(Offset.zero) & (box.size),
-  //   );
-  // }
 
   /// Saves the exported timers file to the device using FilePicker.
   Future<bool> saveFileToDevice(List<TimerType> timers) async {

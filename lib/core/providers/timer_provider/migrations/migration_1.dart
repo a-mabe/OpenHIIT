@@ -4,10 +4,10 @@ import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:openhiit/core/db/repositories/interval_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_repository.dart';
 import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
-import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
-import 'package:openhiit/old/models/timer/timer_time_settings.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
-import 'package:openhiit/old/models/timer/workout_type.dart';
+import 'package:openhiit/core/models/timer_sound_settings.dart';
+import 'package:openhiit/core/models/timer_time_settings.dart';
+import 'package:openhiit/core/models/timer_type.dart';
+import 'package:openhiit/core/models/workout_type.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> workoutsMigration(

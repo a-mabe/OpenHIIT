@@ -1,6 +1,6 @@
 import 'package:openhiit/core/db/database.dart';
-import 'package:openhiit/old/models/timer/timer_sound_settings.dart';
-import 'package:openhiit/old/utils/database/constants.dart';
+import 'package:openhiit/core/models/timer_sound_settings.dart';
+import 'package:openhiit/core/db/tables.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class TimerSoundSettingsRepository {

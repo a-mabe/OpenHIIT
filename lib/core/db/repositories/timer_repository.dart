@@ -1,7 +1,7 @@
 import 'package:openhiit/core/db/database.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/db/tables.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

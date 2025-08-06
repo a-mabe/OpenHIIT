@@ -1,6 +1,6 @@
 import 'package:openhiit/core/db/database.dart';
 import 'package:openhiit/core/db/tables.dart';
-import 'package:openhiit/old/models/timer/workout_type.dart';
+import 'package:openhiit/core/models/workout_type.dart';
 
 /// The Workout datatype is now deprecated.
 /// This class exists to maintain compatibility with existing data.

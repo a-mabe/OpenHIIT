@@ -34,7 +34,7 @@ class IntervalRepository {
     final db = await _databaseManager.database;
     final List<Map<String, dynamic>> maps = await db.query(
       intervalTableName,
-      where: 'timerId = ?',
+      where: 'workoutId = ?',
       whereArgs: [timerId],
     );
 
@@ -59,7 +59,7 @@ class IntervalRepository {
     final db = await _databaseManager.database;
     await db.delete(
       intervalTableName,
-      where: 'timerId = ?',
+      where: 'workoutId = ?',
       whereArgs: [timerId],
     );
   }

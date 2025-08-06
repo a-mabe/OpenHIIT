@@ -2,7 +2,7 @@ import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:openhiit/core/db/repositories/interval_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
-import 'package:openhiit/old/models/timer/timer_type.dart';
+import 'package:openhiit/core/models/timer_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> warmupMigration(

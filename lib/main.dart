@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:openhiit/core/providers/interval_provider/interval_provider.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/features/home/ui/home.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
@@ -45,8 +46,15 @@ class WorkoutTimer extends StatelessWidget {
     ));
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => TimerProvider()),
-          ChangeNotifierProvider(create: (_) => TimerCreationProvider())
+          ChangeNotifierProvider<IntervalProvider>(
+            create: (_) => IntervalProvider(),
+          ),
+          ChangeNotifierProxyProvider<IntervalProvider, TimerProvider>(
+            create: (_) => TimerProvider(),
+            update: (_, intervalProvider, timerProvider) =>
+                timerProvider!..setIntervalProvider(intervalProvider),
+          ),
+          ChangeNotifierProvider(create: (_) => TimerCreationProvider()),
         ],
         child: MaterialApp(
           title: 'OpenHIIT',
