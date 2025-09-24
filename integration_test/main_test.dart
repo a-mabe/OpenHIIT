@@ -29,5 +29,11 @@ void main() {
         binding: binding,
         tester: tester,
         screenShotName: '3_simple-timer_new-timer-name');
+
+    await enterTextByKey(tester, 'active-intervals', '3');
+    await takeScreenShot(
+        binding: binding,
+        tester: tester,
+        screenShotName: '4_simple-timer_active-intervals');
   });
 }
