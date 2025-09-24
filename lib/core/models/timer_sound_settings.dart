@@ -43,7 +43,7 @@ class TimerSoundSettings {
   }
 
   TimerSoundSettings copyWithTimerId(String newTimerId) {
-    String newId = Uuid().v1();
+    String newId = Uuid().v4();
 
     return TimerSoundSettings(
       id: newId,

@@ -16,7 +16,6 @@ import 'package:share_plus/share_plus.dart';
 class ImportExportUtil {
   static final Logger logger = Logger(
     printer: JsonLogPrinter('ImportExportUtil'),
-    level: Level.info,
   );
 
   static Future<bool> exportToDevice(List<TimerType> timers) async {
@@ -92,14 +91,14 @@ class ImportExportUtil {
       if (exists) {
         await showImportDialog(
           timer.name,
-          () {
+          () async {
             importedCount++;
-            timerProvider.pushTimerCopy(timer);
+            await timerProvider.pushTimerCopy(timer);
           },
         );
       } else {
         importedCount++;
-        timerProvider.pushTimer(timer);
+        await timerProvider.pushTimer(timer);
       }
     }
 

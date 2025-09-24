@@ -58,6 +58,7 @@ dependencies:
   openhiit_audioplayers: ^1.0.0
   tutorial_coach_mark: ^1.3.0
   shimmer_animation: ^2.2.2
+  unit_number_input: ^0.1.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

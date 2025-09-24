@@ -7,7 +7,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 Future<void> runMigrations(Database db, int oldVersion, int newVersion) async {
   final logger = Logger(
     printer: JsonLogPrinter('MigrationRunner'),
-    level: Level.info,
   );
 
   if (oldVersion != newVersion) {

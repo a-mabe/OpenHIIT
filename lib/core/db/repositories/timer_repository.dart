@@ -60,14 +60,15 @@ class TimerRepository {
     }).toList();
   }
 
-  Future<void> updateTimer(TimerType timer) async {
+  Future<int> updateTimer(TimerType timer) async {
     final db = await _databaseManager.database;
-    await db.update(
+    int rowsAffected = await db.update(
       timerTableName,
       timer.toMap(),
       where: 'id = ?',
       whereArgs: [timer.id],
     );
+    return rowsAffected;
   }
 
   Future<void> deleteTimer(String id) async {

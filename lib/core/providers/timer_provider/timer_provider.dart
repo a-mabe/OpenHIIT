@@ -7,11 +7,13 @@ import 'package:openhiit/core/db/repositories/timer_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
 import 'package:openhiit/core/logs/logs.dart';
+import 'package:openhiit/core/models/interval_display_model.dart';
 import 'package:openhiit/core/providers/interval_provider/interval_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/models/workout_type.dart';
+import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:uuid/uuid.dart';
 
 class TimerProvider extends ChangeNotifier {
@@ -34,7 +36,6 @@ class TimerProvider extends ChangeNotifier {
 
   var logger = Logger(
     printer: JsonLogPrinter('TimerProvider'),
-    level: Level.info,
   );
 
   void setIntervalProvider(IntervalProvider provider) {
@@ -108,13 +109,36 @@ class TimerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateTimer(TimerType timer) async {
+    int index = _timers.indexWhere((t) => t.id == timer.id);
+    if (index != -1) {
+      _timers[index] = timer;
+      int timerRowsUpdated = await _timerRepository.updateTimer(timer);
+      logger.d("Updated $timerRowsUpdated rows in timer table.");
+      int timeSettingsRowsUpdated = await _timerTimeSettingsRepository
+          .updateTimeSettings(timer.timeSettings);
+      logger.d(
+          "Updated $timeSettingsRowsUpdated rows in timer_time_settings table.");
+      int soundSettingsRowsUpdated = await _timerSoundSettingsRepository
+          .updateSoundSettings(timer.soundSettings);
+      logger.d(
+          "Updated $soundSettingsRowsUpdated rows in timer_sound_settings table.");
+      await _intervalProvider.deleteIntervals(timer.id);
+      await pushIntervalsFromTimer(timer);
+      logger.i("Timer with id ${timer.id} updated.");
+      notifyListeners();
+    } else {
+      logger.w("Timer with id ${timer.id} not found for update.");
+    }
+  }
+
   bool timerExists(String id) {
     return _timers.any((timer) => timer.id == id);
   }
 
   Future<void> pushIntervalsFromTimer(TimerType timer) async {
     Future<List<IntervalType>> intervalsFuture =
-        _intervalProvider.generateIntervalsFromTimer(timer);
+        generateIntervalsFromTimer(timer);
     intervalsFuture.then((intervals) async {
       if (intervals.isNotEmpty) {
         await _intervalRepository.insertIntervals(intervals);
@@ -124,5 +148,9 @@ class TimerProvider extends ChangeNotifier {
     }).catchError((error) {
       logger.e("Error generating intervals: $error");
     });
+  }
+
+  Future<List<IntervalType>> getIntervalsForTimer(String timerId) async {
+    return _intervalRepository.getIntervalsByTimerId(timerId);
   }
 }

@@ -18,7 +18,3 @@ Future<void> onImportPressed(BuildContext context, TimerProvider timerProvider,
   await ImportExportUtil.tryImport(timerProvider);
   onImport?.call();
 }
-
-void onNewTimerPressed(BuildContext context, TimerProvider timerProvider) {
-  print('New timer pressed');
-}

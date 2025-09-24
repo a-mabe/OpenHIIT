@@ -35,7 +35,6 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
 
   var logger = Logger(
     printer: JsonLogPrinter('ReorderableList'),
-    level: Level.info,
   );
 
   @override

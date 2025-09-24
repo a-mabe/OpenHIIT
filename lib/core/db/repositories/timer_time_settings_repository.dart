@@ -39,14 +39,15 @@ class TimerTimeSettingsRepository {
     return null;
   }
 
-  Future<void> updateTimeSettings(TimerTimeSettings timeSettings) async {
+  Future<int> updateTimeSettings(TimerTimeSettings timeSettings) async {
     final db = await _databaseManager.database;
-    await db.update(
+    int rowsAffected = await db.update(
       timeSettingsTableName,
       timeSettings.toMap(),
       where: 'timerId = ?',
       whereArgs: [timeSettings.timerId],
     );
+    return rowsAffected;
   }
 
   Future<void> deleteTimeSettings(String timerId) async {

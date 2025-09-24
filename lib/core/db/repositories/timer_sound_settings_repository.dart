@@ -39,14 +39,15 @@ class TimerSoundSettingsRepository {
     return null;
   }
 
-  Future<void> updateSoundSettings(TimerSoundSettings soundSettings) async {
+  Future<int> updateSoundSettings(TimerSoundSettings soundSettings) async {
     final db = await _databaseManager.database;
-    await db.update(
+    int rowsAffected = await db.update(
       soundSettingsTableName,
       soundSettings.toMap(),
       where: 'timerId = ?',
       whereArgs: [soundSettings.timerId],
     );
+    return rowsAffected;
   }
 
   Future<void> deleteSoundSettings(String timerId) async {

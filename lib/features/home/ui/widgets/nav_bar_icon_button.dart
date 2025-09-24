@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class NavBarIconButton extends StatefulWidget {
   final IconData icon;
   final int? iconSize;
+  final Color? iconColor;
   final String? label;
+  final String? keyLabel;
   final double fontSize;
   final double spacing;
   final double verticalPadding;
@@ -14,7 +16,9 @@ class NavBarIconButton extends StatefulWidget {
     super.key,
     required this.icon,
     this.iconSize,
+    this.iconColor,
     this.label,
+    this.keyLabel,
     this.fontSize = 12,
     this.spacing = 5.0,
     this.verticalPadding = 4,
@@ -32,7 +36,7 @@ class NavBarIconButtonState extends State<NavBarIconButton> {
     return Material(
       color: Colors.transparent, // Use a background color if needed
       child: InkWell(
-          key: Key(widget.label.toString()),
+          key: Key(widget.keyLabel.toString()),
           onTap: widget.onPressed,
           borderRadius: BorderRadius.circular(10), // Optional rounded corners
           child: Padding(
@@ -47,7 +51,8 @@ class NavBarIconButtonState extends State<NavBarIconButton> {
                 children: [
                   Icon(widget.icon,
                       size: widget.iconSize?.toDouble(),
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      color: widget.iconColor ??
+                          Theme.of(context).colorScheme.onSurfaceVariant),
                   SizedBox(height: widget.spacing),
                   Text(
                     widget.label ?? '',

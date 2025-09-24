@@ -64,11 +64,11 @@ jobs:
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            flutter build apk --target integration_test/simple_timer_test.dart --debug
+            flutter build apk --target integration_test/main_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=test_driver/integration_test.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --driver=test_driver/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
 
   Advanced:
     runs-on: ubuntu-latest
