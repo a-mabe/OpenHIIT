@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-takeScreenShot({binding, tester, String? screenShotName}) async {
+takeScreenShot({binding, tester, String? screenShotName, bool? settle}) async {
   if (kIsWeb) {
     await binding.takeScreenshot(screenShotName);
     return;
@@ -14,7 +14,11 @@ takeScreenShot({binding, tester, String? screenShotName}) async {
     } catch (e) {
       print('convert timed out or failed: $e — proceeding to takeScreenshot()');
     }
-    await tester.pumpAndSettle();
+    if (settle == true || settle == null) {
+      await tester.pumpAndSettle();
+    } else {
+      await tester.pump();
+    }
   }
   await binding.takeScreenshot(screenShotName);
 }

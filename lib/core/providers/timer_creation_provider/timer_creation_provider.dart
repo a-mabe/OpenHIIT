@@ -26,10 +26,17 @@ class TimerCreationProvider extends ChangeNotifier {
   }
 
   void clear() {
-    _timer = TimerType.empty();
-    _timer.id = Uuid().v4();
-    _timeSettings = TimerTimeSettings.empty();
-    _soundSettings = TimerSoundSettings.empty();
+    final timerId = Uuid().v4();
+    _timer = TimerType.empty()..id = timerId;
+    _timeSettings = TimerTimeSettings.empty()
+      ..id = Uuid().v4()
+      ..timerId = timerId;
+    _soundSettings = TimerSoundSettings.empty()
+      ..id = Uuid().v4()
+      ..timerId = timerId;
+    _timer
+      ..timeSettings = _timeSettings
+      ..soundSettings = _soundSettings;
     _isEdited = false;
     notifyListeners();
   }

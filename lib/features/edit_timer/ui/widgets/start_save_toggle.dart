@@ -45,6 +45,7 @@ class _StartSaveToggleState extends State<StartSaveToggle> {
     switch (_currentState) {
       case StartSaveState.save:
         return TextButton.icon(
+          key: const Key('save-button'),
           onPressed: widget.onPressed,
           style: TextButton.styleFrom(
             backgroundColor: Colors.blue,
@@ -55,6 +56,7 @@ class _StartSaveToggleState extends State<StartSaveToggle> {
         );
       case StartSaveState.start:
         return TextButton(
+          key: const Key('start-button'),
           onPressed: widget.onPressed,
           style: TextButton.styleFrom(
             backgroundColor: Colors.green,
@@ -68,6 +70,7 @@ class _StartSaveToggleState extends State<StartSaveToggle> {
         );
       case StartSaveState.saving:
         return TextButton.icon(
+          key: const Key('saving-button'),
           onPressed: null,
           style: TextButton.styleFrom(
             backgroundColor: Colors.grey,
