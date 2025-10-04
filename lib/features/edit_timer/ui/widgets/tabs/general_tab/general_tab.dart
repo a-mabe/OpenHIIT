@@ -135,7 +135,7 @@ class GeneralTab extends StatelessWidget {
             fit: BoxFit.contain,
             child: UnitNumberInput(
               controller: timeSettingsControllers['get-ready']!,
-              prefill: editing,
+              prefill: true,
               enableMinutesToggle: false,
               valueRequired: false,
               onChanged: (value) {

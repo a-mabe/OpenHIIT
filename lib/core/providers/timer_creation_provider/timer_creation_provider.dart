@@ -6,17 +6,13 @@ import 'package:uuid/uuid.dart';
 
 class TimerCreationProvider extends ChangeNotifier {
   TimerType _timer = TimerType.empty();
-  TimerTimeSettings _timeSettings = TimerTimeSettings.empty();
-  TimerSoundSettings _soundSettings = TimerSoundSettings.empty();
 
   TimerType get timer => _timer;
-  TimerTimeSettings get timeSettings => _timeSettings;
-  TimerSoundSettings get soundSettings => _soundSettings;
 
   bool _isEdited = false;
   bool get isEdited => _isEdited;
 
-  bool get breakEnabled => _timeSettings.restarts > 0;
+  bool get breakEnabled => _timer.timeSettings.restarts > 0;
 
   void markEdited() {
     if (!_isEdited) {
@@ -28,24 +24,16 @@ class TimerCreationProvider extends ChangeNotifier {
   void clear() {
     final timerId = Uuid().v4();
     _timer = TimerType.empty()..id = timerId;
-    _timeSettings = TimerTimeSettings.empty()
-      ..id = Uuid().v4()
-      ..timerId = timerId;
-    _soundSettings = TimerSoundSettings.empty()
-      ..id = Uuid().v4()
-      ..timerId = timerId;
-    _timer
-      ..timeSettings = _timeSettings
-      ..soundSettings = _soundSettings;
+    _timer.timeSettings.id = Uuid().v4();
+    _timer.timeSettings.timerId = timerId;
+    _timer.soundSettings.id = Uuid().v4();
+    _timer.soundSettings.timerId = timerId;
     _isEdited = false;
     notifyListeners();
   }
 
   void setTimer(TimerType timer, {bool notify = true}) {
     _timer = timer.copy(); // or TimerType.fromJson(timer.toJson());
-
-    _timeSettings = _timer.timeSettings;
-    _soundSettings = _timer.soundSettings;
 
     _isEdited = false;
 
@@ -79,7 +67,7 @@ class TimerCreationProvider extends ChangeNotifier {
     int? getReadyTime,
     int? restarts,
   }) {
-    _timeSettings = _timeSettings.copyWith({}, updates: {
+    _timer.timeSettings = _timer.timeSettings.copyWith({}, updates: {
       if (workTime != null) 'workTime': workTime,
       if (restTime != null) 'restTime': restTime,
       if (breakTime != null) 'breakTime': breakTime,
@@ -89,7 +77,7 @@ class TimerCreationProvider extends ChangeNotifier {
       if (restarts != null) 'restarts': restarts,
     });
     _timer = _timer.copyWith({
-      'timeSettings': _timeSettings,
+      'timeSettings': _timer.timeSettings,
     });
     _isEdited = true;
     notifyListeners();
@@ -102,7 +90,7 @@ class TimerCreationProvider extends ChangeNotifier {
     String? endSound,
     String? countdownSound,
   }) {
-    _soundSettings = _soundSettings.copyWith({}, updates: {
+    _timer.soundSettings = _timer.soundSettings.copyWith({}, updates: {
       if (workSound != null) 'workSound': workSound,
       if (restSound != null) 'restSound': restSound,
       if (halfwaySound != null) 'halfwaySound': halfwaySound,
@@ -110,7 +98,7 @@ class TimerCreationProvider extends ChangeNotifier {
       if (countdownSound != null) 'countdownSound': countdownSound,
     });
     _timer = _timer.copyWith({
-      'soundSettings': _soundSettings,
+      'soundSettings': _timer.soundSettings,
     });
     _isEdited = true;
     notifyListeners();
