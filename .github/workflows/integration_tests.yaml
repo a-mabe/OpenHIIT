@@ -64,6 +64,13 @@ jobs:
           ram-size: 4096
           script: |
             flutter build apk --target=integration_test/simple_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -94,6 +101,13 @@ jobs:
           ram-size: 4096
           script: |
             flutter build apk --target=integration_test/advanced_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -123,6 +137,13 @@ jobs:
           ram-size: 4096
           script: |
             flutter build apk --target=integration_test/restart_rounds_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -152,6 +173,13 @@ jobs:
           profile: pixel_6_pro
           script: |
             flutter build apk --target=integration_test/load_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -181,6 +209,13 @@ jobs:
           profile: pixel_6_pro
           script: |
             flutter build apk --target=integration_test/interval_adjust_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -210,6 +245,13 @@ jobs:
           profile: pixel_6_pro
           script: |
             flutter build apk --target=integration_test/edit_timer_test.dart --debug
+
+            echo "Waiting for package manager..."
+            until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
+              echo "Package manager not ready, waiting..."
+              sleep 5
+            done
+            
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
