@@ -81,7 +81,6 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save-no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           ram-size: 4096
-          cache-snapshots: true
           script: |
             flutter build apk --target=integration_test/simple_test.dart --debug
 
