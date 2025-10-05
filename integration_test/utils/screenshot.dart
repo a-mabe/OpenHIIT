@@ -10,7 +10,7 @@ takeScreenShot({binding, tester, String? screenShotName, bool? settle}) async {
     try {
       await binding
           .convertFlutterSurfaceToImage()
-          .timeout(Duration(seconds: 2));
+          .timeout(Duration(seconds: 10));
     } catch (e) {
       print('convert timed out or failed: $e — proceeding to takeScreenshot()');
     }

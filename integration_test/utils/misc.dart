@@ -66,7 +66,7 @@ Future<void> pumpUntilGone(
           binding: IntegrationTestWidgetsFlutterBinding.instance,
           tester: tester,
           screenShotName: screenShotName,
-          settle: true);
+          settle: settle);
       return;
     }
     await Future.delayed(Duration(milliseconds: 100));
