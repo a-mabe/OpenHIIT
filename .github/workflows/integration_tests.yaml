@@ -69,24 +69,25 @@ jobs:
       
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
-        env:
-          TEST_FILE: ${{ matrix.test_file }}
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            set -eu pipefail
+            TEST_FILE="${{ matrix.test_file }}"
             echo "Running test: $TEST_FILE"
-            TEST_FILE=$(echo "$TEST_FILE" | tr -d '\r' | xargs)
-            echo "Cleaned test file: [$TEST_FILE]"
-            flutter build apk --target="$TEST_FILE" --debug
+
+            CLEAN_TEST_FILE=$(echo "$TEST_FILE" | tr -d '\r' | xargs)
+            echo "Using cleaned path: [$CLEAN_TEST_FILE]"
+
+            flutter build apk --target="$CLEAN_TEST_FILE" --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
             flutter drive -d emulator-5554 \
               --driver=integration_test/driver.dart \
               --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
 
       - name: Upload screenshots
         if: always()
