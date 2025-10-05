@@ -69,12 +69,15 @@ jobs:
       
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          TEST_FILE: ${{ matrix.test_file }}
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            flutter build apk --target="${{ matrix.test_file }}" --debug
+            echo "Running test: $TEST_FILE"
+            flutter build apk --target="$TEST_FILE" --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
