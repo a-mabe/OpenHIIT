@@ -65,11 +65,7 @@ jobs:
           script: |
             flutter build apk --target=integration_test/simple_test.dart --debug
 
-            echo "Waiting for package manager..."
-            sh -c 'until adb -s emulator-5554 shell pm list packages >/dev/null 2>&1; do
-                echo "Package manager not ready, waiting..."
-                sleep 5
-              done'
+            bash scripts/wait_for_pm.sh
 
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
