@@ -81,6 +81,8 @@ jobs:
 
   advanced-test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -113,6 +115,8 @@ jobs:
 
   restart-rounds-test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -145,6 +149,8 @@ jobs:
 
   load-test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -177,6 +183,8 @@ jobs:
 
   interval-adjust-test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -209,6 +217,8 @@ jobs:
 
   edit-timer-test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
