@@ -76,8 +76,11 @@ jobs:
           arch: x86_64
           profile: pixel_6_pro
           script: |
+            set -euxo pipefail
             echo "Running test: $TEST_FILE"
-            flutter build apk --target=$TEST_FILE --debug
+            TEST_FILE=$(echo "$TEST_FILE" | tr -d '\r' | xargs)
+            echo "Cleaned test file: [$TEST_FILE]"
+            flutter build apk --target="$TEST_FILE" --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
