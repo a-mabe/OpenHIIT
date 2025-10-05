@@ -59,12 +59,15 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
+          disable-animations: true
+          emulator-options: "-no-window -gpu swiftshader_indirect"
+          ram-size: 4096
           script: |
             flutter build apk --target=integration_test/simple_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --no-pub --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
 
       - name: Upload screenshots
         if: always()
@@ -86,12 +89,15 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
+          disable-animations: true
+          emulator-options: "-no-window -gpu swiftshader_indirect"
+          ram-size: 4096
           script: |
             flutter build apk --target=integration_test/advanced_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --no-pub --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -112,12 +118,15 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
+          disable-animations: true
+          emulator-options: "-no-window -gpu swiftshader_indirect"
+          ram-size: 4096
           script: |
             flutter build apk --target=integration_test/restart_rounds_test.dart --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --no-pub --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -135,6 +144,9 @@ jobs:
       - name: Run load_test
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          disable-animations: true
+          emulator-options: "-no-window -gpu swiftshader_indirect"
+          ram-size: 4096
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
@@ -143,7 +155,7 @@ jobs:
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --no-pub --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -161,6 +173,9 @@ jobs:
       - name: Run interval_adjust_test
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          disable-animations: true
+          emulator-options: "-no-window -gpu swiftshader_indirect"
+          ram-size: 4096
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
@@ -169,7 +184,7 @@ jobs:
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-            flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            flutter drive -d emulator-5554 --no-pub --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4

@@ -76,9 +76,9 @@ void main() {
     // The timer should now be running. Do not settle, as the UI is constantly updating.
     // Get Ready -> Work 1 -> Rest 1 -> Work 2 -> Done
 
-    // Wait until "Get Ready" is shown.
+    // Wait until "Warmup" is shown.
     await pumpUntilFound(
-        tester, find.textContaining("Get Ready"), Duration(seconds: 15), false,
+        tester, find.textContaining("Warmup"), Duration(seconds: 15), false,
         screenShotName: '15_advanced-timer_run-new-timer');
     // Verify Warmup is shown
     expect(find.textContaining("Warmup"), findsOneWidget,
