@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-simple_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   advanced-test:
     runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-advanced_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   restart-rounds-test:
     runs-on: ubuntu-latest
@@ -123,7 +123,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-restart_rounds_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   load-test:
     runs-on: ubuntu-latest
@@ -149,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-load_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   interval-adjust-test:
     runs-on: ubuntu-latest
@@ -175,7 +175,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-interval_adjust_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   edit-timer-test:
     runs-on: ubuntu-latest
@@ -201,7 +201,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-edit_timer_test
-          path: integration_test/screenshots/
+          path: screenshots/
 
   report:
     runs-on: ubuntu-latest
@@ -334,7 +334,7 @@ jobs:
 #         uses: actions/upload-artifact@v4
 #         with:
 #           name: screenshots-${{ matrix.test_file }}
-#           path: integration_test/screenshots/
+#           path: screenshots/
 
 #   report:
 #     runs-on: ubuntu-latest
