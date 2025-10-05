@@ -76,7 +76,7 @@ jobs:
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            set -euxo pipefail
+            set -eu pipefail
             echo "Running test: $TEST_FILE"
             TEST_FILE=$(echo "$TEST_FILE" | tr -d '\r' | xargs)
             echo "Cleaned test file: [$TEST_FILE]"
