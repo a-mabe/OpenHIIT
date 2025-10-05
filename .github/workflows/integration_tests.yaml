@@ -188,15 +188,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           disable-animations: true
-          emulator-options: "-no-window -gpu swiftshader_indirect"
           ram-size: 4096
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
           script: |
             flutter build apk --target=integration_test/edit_timer_test.dart --debug
-            adb -s emulator-5554 wait-for-device
-            adb -s emulator-5554 shell getprop sys.boot_completed
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
