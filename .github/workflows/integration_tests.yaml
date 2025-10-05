@@ -30,12 +30,12 @@ jobs:
       fail-fast: false
       matrix:
         test_file:
-          - integration_test/simple_test.dart
-          - integration_test/advanced_test.dart
-          - integration_test/restart_rounds_test.dart
-          - integration_test/load_test.dart
-          - integration_test/interval_adjust_test.dart
-          - integration_test/edit_timer_test.dart
+          - simple_test.dart
+          - advanced_test.dart
+          - restart_rounds_test.dart
+          - load_test.dart
+          - interval_adjust_test.dart
+          - edit_timer_test.dart
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
@@ -69,25 +69,21 @@ jobs:
       
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          TEST_FILE: ${{ matrix.test_file }}
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
           script: |
-            TEST_FILE="${{ matrix.test_file }}"
             echo "Running test: $TEST_FILE"
-
-            CLEAN_TEST_FILE=$(echo "$TEST_FILE" | tr -d '\r' | xargs)
-            echo "Using cleaned path: [$CLEAN_TEST_FILE]"
-
-            flutter build apk --target="$CLEAN_TEST_FILE" --debug
+            flutter build apk --target=integration_test/$TEST_FILE --debug
             adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
             adb -s emulator-5554 root
             adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
             flutter drive -d emulator-5554 \
               --driver=integration_test/driver.dart \
               --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
-
 
       - name: Upload screenshots
         if: always()
