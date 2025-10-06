@@ -63,26 +63,11 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6_pro
+          disable-animations: false
+          ram-size: 4096
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
           script: echo "Generated AVD snapshot for caching."
-
-      # - name: Create and snapshot emulator
-      #   if: steps.avd-cache.outputs.cache-hit != 'true'
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     api-level: 35
-      #     arch: x86_64
-      #     profile: pixel_6_pro
-      #     disable-animations: true
-      #     emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-      #     script: |
-      #       echo "Booting emulator to create snapshot..."
-      #       adb wait-for-device
-      #       adb shell getprop sys.boot_completed
-      #       echo "Saving emulator snapshot"
-      #       adb emu avd snapshot save default_boot
 
   # 🧪 Step 3: Run all integration tests in parallel
   integration-tests:
