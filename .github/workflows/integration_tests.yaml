@@ -106,6 +106,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: built-apk
+          path: build/app/outputs/flutter-apk/
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -118,7 +119,7 @@ jobs:
           profile: pixel_6_pro
           disable-animations: true
           ram-size: 4096
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -snapshot default_boot
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim default_boot
           script: |
             echo "Running test: ${{ matrix.test_file }}"
             bash scripts/wait_for_pm.sh
