@@ -119,6 +119,7 @@ jobs:
           profile: pixel_6_pro
           disable-animations: true
           ram-size: 4096
+          force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             echo "Running test: ${{ matrix.test_file }}"
@@ -128,7 +129,7 @@ jobs:
             adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
             flutter drive -d emulator-5554 --no-pub \
               --driver=integration_test/driver.dart \
-              --target=integration_test/${{ matrix.test_file }} \
+              --target="integration_test/${{ matrix.test_file }}" \
               --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
 
       - name: Upload screenshots
