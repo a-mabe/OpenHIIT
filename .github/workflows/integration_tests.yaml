@@ -402,40 +402,6 @@ jobs:
           name: screenshots-edit_timer_test
           path: screenshots/
 
-  # 📊 Step 4: Combine all screenshots into an HTML report
-  report:
-    runs-on: ubuntu-latest
-    needs: [integration-tests]
-    if: always()
-    steps:
-      - name: Download all screenshots
-        uses: actions/download-artifact@v4
-        with:
-          path: screenshots/
-
-      - name: Generate HTML report
-        run: |
-          mkdir -p report
-          echo "<html><head><title>Integration Test Report</title></head><body>" >> report/report.html
-          echo "<h1>Integration Test Screenshots</h1>" >> report/report.html
-
-          for dir in screenshots/*; do
-            if [ -d "$dir" ]; then
-              echo "<h2>${dir##*/}</h2>" >> report/report.html
-              for img in $(find "$dir" -type f -iname "*.png"); do
-                echo "<div><img src=\"../$img\" width=\"300\"><p>$img</p></div>" >> report/report.html
-              done
-            fi
-          done
-
-          echo "</body></html>" >> report/report.html
-
-      - name: Upload combined report
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-test-report
-          path: report/report.html
-
 
 # name: Build and Run Integration Tests
 
