@@ -67,7 +67,10 @@ jobs:
           ram-size: 4096
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            adb wait-for-device
+            while [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; do sleep 1; done
+            adb emu avd snapshot save default_boot
 
   simple_test:
     name: Run simple_test.dart
