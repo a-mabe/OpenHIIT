@@ -47,11 +47,13 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Cache AVD snapshot
-        id: avd-cache
+      - name: AVD cache
         uses: actions/cache@v4
+        id: avd-cache
         with:
-          path: ~/.android/avd/test.avd
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
           key: avd-35-snapshot
 
       - name: create AVD and generate snapshot for caching
@@ -110,6 +112,14 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
 
       - name: Run ${{ matrix.test_file }}
         uses: reactivecircus/android-emulator-runner@v2
