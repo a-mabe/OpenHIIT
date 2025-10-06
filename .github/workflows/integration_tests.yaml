@@ -119,7 +119,7 @@ jobs:
           profile: pixel_6_pro
           disable-animations: true
           ram-size: 4096
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim default_boot
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             echo "Running test: ${{ matrix.test_file }}"
             bash scripts/wait_for_pm.sh
