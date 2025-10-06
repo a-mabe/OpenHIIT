@@ -69,20 +69,10 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: echo "Generated AVD snapshot for caching."
 
-  # 🧪 Step 3: Run all integration tests in parallel
-  integration-tests:
-    needs: [build-apk, prepare-emulator]
+  simple_test:
+    name: Run simple_test.dart
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        test_file:
-          - simple_test.dart
-          - advanced_test.dart
-          - restart_rounds_test.dart
-          - load_test.dart
-          - interval_adjust_test.dart
-          - edit_timer_test.dart
+    needs: [build-apk, prepare-emulator]
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -106,7 +96,7 @@ jobs:
             ~/.android/adb*
           key: avd-35-snapshot
 
-      - name: Run ${{ matrix.test_file }}
+      - name: Run simple_test.dart
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
@@ -117,21 +107,296 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            echo "Running test: ${{ matrix.test_file }}"
+            echo "Running test: simple_test.dart"
             bash scripts/wait_for_pm.sh
             adb install build/app/outputs/flutter-apk/app-debug.apk
             adb root
             adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
             flutter drive -d emulator-5554 --no-pub \
               --driver=integration_test/driver.dart \
-              --target="integration_test/${{ matrix.test_file }}" \
+              --target="integration_test/simple_test.dart" \
               --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
 
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-${{ matrix.test_file }}
+          name: screenshots-simple_test
+          path: screenshots/
+
+  advanced_test:
+    name: Run advanced_test.dart
+    runs-on: ubuntu-latest
+    needs: [build-apk, prepare-emulator]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: built-apk
+          path: build/app/outputs/flutter-apk/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
+
+      - name: Run advanced_test.dart
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6_pro
+          disable-animations: true
+          ram-size: 4096
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            echo "Running test: advanced_test.dart"
+            bash scripts/wait_for_pm.sh
+            adb install build/app/outputs/flutter-apk/app-debug.apk
+            adb root
+            adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            flutter drive -d emulator-5554 --no-pub \
+              --driver=integration_test/driver.dart \
+              --target="integration_test/advanced_test.dart" \
+              --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-advanced_test
+          path: screenshots/
+
+  restart_rounds_test:
+    name: Run restart_rounds_test.dart
+    runs-on: ubuntu-latest
+    needs: [build-apk, prepare-emulator]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: built-apk
+          path: build/app/outputs/flutter-apk/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
+
+      - name: Run restart_rounds_test.dart
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6_pro
+          disable-animations: true
+          ram-size: 4096
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            echo "Running test: restart_rounds_test.dart"
+            bash scripts/wait_for_pm.sh
+            adb install build/app/outputs/flutter-apk/app-debug.apk
+            adb root
+            adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            flutter drive -d emulator-5554 --no-pub \
+              --driver=integration_test/driver.dart \
+              --target="integration_test/restart_rounds_test.dart" \
+              --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-restart_rounds_test
+          path: screenshots/
+
+  load_test:
+    name: Run load_test.dart
+    runs-on: ubuntu-latest
+    needs: [build-apk, prepare-emulator]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: built-apk
+          path: build/app/outputs/flutter-apk/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
+
+      - name: Run load_test.dart
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6_pro
+          disable-animations: true
+          ram-size: 4096
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            echo "Running test: load_test.dart"
+            bash scripts/wait_for_pm.sh
+            adb install build/app/outputs/flutter-apk/app-debug.apk
+            adb root
+            adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            flutter drive -d emulator-5554 --no-pub \
+              --driver=integration_test/driver.dart \
+              --target="integration_test/load_test.dart" \
+              --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-load_test
+          path: screenshots/
+
+  interval_adjust_test:
+    name: Run interval_adjust_test.dart
+    runs-on: ubuntu-latest
+    needs: [build-apk, prepare-emulator]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: built-apk
+          path: build/app/outputs/flutter-apk/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
+
+      - name: Run interval_adjust_test.dart
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6_pro
+          disable-animations: true
+          ram-size: 4096
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            echo "Running test: interval_adjust_test.dart"
+            bash scripts/wait_for_pm.sh
+            adb install build/app/outputs/flutter-apk/app-debug.apk
+            adb root
+            adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            flutter drive -d emulator-5554 --no-pub \
+              --driver=integration_test/driver.dart \
+              --target="integration_test/interval_adjust_test.dart" \
+              --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-interval_adjust_test
+          path: screenshots/
+
+  edit_timer_test:
+    name: Run edit_timer_test.dart
+    runs-on: ubuntu-latest
+    needs: [build-apk, prepare-emulator]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: built-apk
+          path: build/app/outputs/flutter-apk/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-snapshot
+
+      - name: Run edit_timer_test.dart
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6_pro
+          disable-animations: true
+          ram-size: 4096
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            echo "Running test: edit_timer_test.dart"
+            bash scripts/wait_for_pm.sh
+            adb install build/app/outputs/flutter-apk/app-debug.apk
+            adb root
+            adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            flutter drive -d emulator-5554 --no-pub \
+              --driver=integration_test/driver.dart \
+              --target="integration_test/edit_timer_test.dart" \
+              --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-edit_timer_test
           path: screenshots/
 
   # 📊 Step 4: Combine all screenshots into an HTML report
