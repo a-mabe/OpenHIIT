@@ -53,6 +53,7 @@ jobs:
           script: echo "Generated AVD snapshot for caching."
 
   run-tests:
+    needs: prepare-emulator
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
