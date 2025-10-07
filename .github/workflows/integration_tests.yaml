@@ -18,29 +18,28 @@ on:
 
 jobs:
   # 🧱 Step 1: Build the APK once
-  build-apk:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
+  # build-apk:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
 
-      - name: Flutter Doctor
-        run: flutter doctor -v
+  #     - name: Flutter Doctor
+  #       run: flutter doctor -v
 
-      - name: Build Debug APK
-        run: flutter build apk --debug
+  #     - name: Build Debug APK
+  #       run: flutter build apk --debug
 
-      - name: Upload built APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+  #     - name: Upload built APK
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: built-apk
+  #         path: build/app/outputs/flutter-apk/app-debug.apk
 
   test:
     runs-on: ubuntu-latest
-    needs: build-apk
     strategy:
       fail-fast: false
       matrix:
@@ -75,13 +74,13 @@ jobs:
           cat <<EOF > scripts/test.sh
           #!/bin/bash
           echo "Running test: ${{ matrix.test_file }}"
+          flutter build apk --target integration_test/${{ matrix.test_file }} --debug
           bash scripts/wait_for_pm.sh
-          adb install build/app/outputs/flutter-apk/app-debug.apk
-          adb root
-          adb shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-          flutter drive -d emulator-5554 \
+          adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
+          adb -s emulator-5554 root
+          adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+          flutter drive -d emulator-5554 --no-pub \
             --driver=integration_test/driver.dart \
-            --target="integration_test/${{ matrix.test_file }}" \
             --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
           EOF
 
@@ -967,11 +966,11 @@ jobs:
 #   #         ram-size: 3072
 #   #         emulator-options: "-no-window -gpu swiftshader_indirect"
 #   #         script: |
-#   #           flutter build apk --target integration_test/advanced_test.dart --debug
-#   #           adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
-#   #           adb -s emulator-5554 root
-#   #           adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
-#   #           flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
+            # flutter build apk --target integration_test/advanced_test.dart --debug
+            # adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
+            # adb -s emulator-5554 root
+            # adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
+            # flutter drive -d emulator-5554 --driver=integration_test/driver.dart --use-application-binary=build/app/outputs/flutter-apk/app-debug.apk
 
 #   #     - name: Upload screenshots
 #   #       if: always()
