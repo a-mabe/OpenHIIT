@@ -57,60 +57,82 @@ void main() {
     await closeKeyboard(tester, false);
     // ---
 
+    // Tap the Edit tab.
+    await tapButtonByKey(
+        tester, 'edit-tab', '11_advanced-timer_edit-tab', binding, true);
+
+    // Enter activities for the two work intervals.
+    await enterTextByKey(
+        tester, 'activity-0', '', '12_advanced-timer_activity-blank', binding);
+    await enterTextByKey(tester, 'activity-0', 'Push-ups',
+        '13_advanced-timer_activity-1', binding);
+    await enterTextByKey(
+        tester, 'activity-1', '', '14_advanced-timer_activity-blank', binding);
+    await enterTextByKey(tester, 'activity-1', 'Sit-ups',
+        '15_advanced-timer_activity-2', binding);
     // Start button appears with animation, so don't settle.
     await tapButtonByKey(
-        tester, 'save-button', '11_advanced-timer_save-button', binding, false);
+        tester, 'save-button', '15_advanced-timer_save-button', binding, false);
 
     // Back to home screen. Make sure the new timer is shown.
-    await tapBackArrow(tester, '12_advanced-timer_back-arrow', binding);
+    await tapBackArrow(tester, '16_advanced-timer_back-arrow', binding);
 
     // Key for timer is ${item.name}-${item.timerIndex}.
     await tapButtonByKey(tester, 'My New Timer-0',
-        '13_advanced-timer_open-new-timer', binding, false);
+        '17_advanced-timer_open-new-timer', binding, false);
 
     // Start the timer.
     await tapButtonByKey(tester, 'start-button',
-        '14_advanced-timer_load-new-timer', binding, true);
+        '18_advanced-timer_load-new-timer', binding, true);
 
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating.
-    // Get Ready -> Work 1 -> Rest 1 -> Work 2 -> Done
+    // Get Ready -> Warmup -> Rest -> Work 1 -> Rest 2 -> Work 2 -> Break (restart)
 
     // Wait until "Warmup" is shown.
     await pumpUntilFound(
         tester, find.textContaining("Warmup"), Duration(seconds: 15), false,
-        screenShotName: '15_advanced-timer_run-new-timer');
+        screenShotName: '19_advanced-timer_run-new-timer');
     // Verify Warmup is shown
     expect(find.textContaining("Warmup"), findsOneWidget,
         reason: 'Warmup interval not found');
     // Wait until "Warmup" is gone and first work interval is shown.
     await pumpUntilGone(
         tester, find.textContaining("Warmup"), Duration(seconds: 15), false,
-        screenShotName: '16_advanced-timer_warmup-interval');
+        screenShotName: '20_advanced-timer_warmup-interval');
     // Wait until first work interval is shown..
     await pumpUntilFound(
         tester, find.textContaining("1 of 2"), Duration(seconds: 15), false,
-        screenShotName: '17_advanced-timer_work-interval-1-iteration-1');
+        screenShotName: '21_advanced-timer_work-interval-1-iteration-1');
+    // Verify that the first exercise 'Push-ups' is shown.
+    // There should be two because there is a restart.
+    expect(find.textContaining("Push-ups"), findsAtLeast(1),
+        reason: 'First exercise not found');
     // Wait until first rest interval is gone and second work interval is shown.
     await pumpUntilFound(
         tester, find.textContaining("2 of 2"), Duration(seconds: 15), false,
-        screenShotName: '18_advanced-timer_work-interval-2-iteration-1');
+        screenShotName: '22_advanced-timer_work-interval-2-iteration-1');
+    // Verify the second exercise 'Sit-ups' is shown.
+    // There should be two because there is a restart.
+    expect(find.textContaining("Sit-ups"), findsAtLeast(1),
+        reason: 'Second exercise not found');
     // Verify Break is shown in the widget tree
     expect(find.textContaining("Break"), findsOneWidget,
         reason: 'Break interval not found');
-    // Wait until all work intervals are done and cooldown is shown.
+    // Wait until all work intervals are done and cooldown is shown. Do this by waiting
+    // until the second "Sit-ups" is gone.
     await pumpUntilGone(
-        tester, find.textContaining("Work"), Duration(seconds: 120), false,
-        screenShotName: '19_advanced-cooldown-interval');
+        tester, find.textContaining("Sit-ups"), Duration(seconds: 120), false,
+        screenShotName: '23_advanced-cooldown-interval');
     // Verify Cooldown is shown in the widget tree
     expect(find.textContaining("Cooldown"), findsOneWidget,
         reason: 'Cooldown interval not found');
     // Make sure the Nice job! screen is shown.
     await pumpForDuration(tester, Duration(seconds: 30),
-        screenShotName: '20_advanced-timer_nice-job-screen', settle: false);
+        screenShotName: '24_advanced-timer_nice-job-screen', settle: false);
     // Exit the timer.
     await tapButtonByKey(
-        tester, 'timer-end-back', '21_advanced-timer_end-back', binding, false);
+        tester, 'timer-end-back', '25_advanced-timer_end-back', binding, false);
     // ---
   });
 }

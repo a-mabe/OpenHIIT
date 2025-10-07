@@ -55,23 +55,50 @@ void main() {
     expect(find.text('120'), findsWidgets,
         reason: 'Break time not updated to 120 after adding');
 
-    // Remove restart rounds.
+    // Remove break time to ensure it is not required when restarts are set.
     await enterTextByKey(
-        tester, 'restarts', '0', '15_restart_remove-rounds', binding);
+        tester, 'break', '0', '15_restart_remove-break', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'save-button', '16_restart_save-removed', binding, false);
-    await tapBackArrow(tester, '17_restart_back-home-after-remove', binding);
+        tester, 'save-button', '16_restart_save-no-break', binding, false);
+
+    // Start the timer.
+    await tapButtonByKey(tester, 'start-button',
+        '18_advanced-timer_load-new-timer', binding, true);
+
+    // ---
+    // The timer should now be running. Do not settle, as the UI is constantly updating
+    // There should be no break interval.
+
+    // Wait for the final work interval of the first iteration.
+    await pumpUntilFound(
+        tester, find.textContaining("2 of 2"), Duration(seconds: 30), false,
+        screenShotName: '19_advanced-timer_work-interval-2-iteration-1');
+
+    expect(find.textContaining("Break"), findsNothing,
+        reason: 'Break interval found when it should not be present');
+
+    // Exit the running timer.
+    await tapButtonByKey(tester, 'run-timer-appbar-back-button',
+        '20_restart_back-home-after-break-remove', binding, false);
+
+    // Remove restart rounds.
+    await enterTextByKey(
+        tester, 'restarts', '0', '21_restart_remove-rounds', binding);
+    await closeKeyboard(tester, false);
+    await tapButtonByKey(
+        tester, 'save-button', '22_restart_save-removed', binding, false);
+    await tapBackArrow(tester, '23_restart_back-home-after-remove', binding);
     // Reopen to verify removal.
     await tapButtonByKey(tester, 'Restart Tester-0',
-        '18_restart_reopen-after-remove', binding, false);
+        '24_restart_reopen-after-remove', binding, false);
     expect(find.text('0'), findsWidgets,
         reason: 'Restart count not reset to 0 after removal');
 
     await takeScreenShot(
       binding: binding,
       tester: tester,
-      screenShotName: '19_restart_rounds_final',
+      screenShotName: '25_restart_rounds_final',
       settle: false,
     );
   });

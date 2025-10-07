@@ -7,6 +7,7 @@ class IntervalListTile extends StatelessWidget {
   final bool editing;
   final TextEditingController nameController;
   final ValueChanged<String>? onNameChanged; // callback for text changes
+  final String? formFieldKey;
 
   IntervalListTile({
     super.key,
@@ -14,6 +15,7 @@ class IntervalListTile extends StatelessWidget {
     required this.backgroundColor,
     this.editing = false,
     this.onNameChanged,
+    this.formFieldKey,
     TextEditingController? nameController,
   }) : nameController = nameController ?? TextEditingController();
 
@@ -44,6 +46,8 @@ class IntervalListTile extends StatelessWidget {
             ),
             title: editing && isActive
                 ? TextFormField(
+                    key:
+                        Key(formFieldKey ?? 'interval-${interval.activeIndex}'),
                     controller: nameController,
                     onChanged: onNameChanged,
                     style: TextStyle(

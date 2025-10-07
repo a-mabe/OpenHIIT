@@ -243,17 +243,20 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             controller: _tabController,
             tabs: const [
               Tab(
+                  key: Key('general-tab'),
                   icon: Icon(
-                Icons.timer,
-              )),
+                    Icons.timer,
+                  )),
               Tab(
+                  key: Key('sound-tab'),
                   icon: Icon(
-                Icons.music_note,
-              )),
+                    Icons.music_note,
+                  )),
               Tab(
+                  key: Key('edit-tab'),
                   icon: Icon(
-                Icons.fitness_center,
-              )),
+                    Icons.fitness_center,
+                  )),
             ],
           ),
         ),

@@ -56,6 +56,7 @@ class EditorTab extends StatelessWidget {
 
               // Build the normal tile
               final tile = IntervalListTile(
+                formFieldKey: 'activity-${interval.activeIndex - 1}',
                 interval: interval,
                 backgroundColor: getIntervalColor(interval.name).withAlpha(200),
                 editing: true,
