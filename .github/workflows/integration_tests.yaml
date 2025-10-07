@@ -89,13 +89,11 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
         
-      - name: AVD cache
-        uses: actions/cache@v4
+      - name: Cache AVD
         id: avd-cache
+        uses: actions/cache@v4
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
+          path: ~/.android/avd
           key: avd-35
 
       - name: create AVD and generate snapshot for caching
