@@ -18,25 +18,25 @@ on:
 
 jobs:
   # 🧱 Step 1: Build the APK once
-  build-apk:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
+  # build-apk:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
 
-      - name: Flutter Doctor
-        run: flutter doctor -v
+  #     - name: Flutter Doctor
+  #       run: flutter doctor -v
 
-      - name: Build Debug APK
-        run: flutter build apk --debug
+  #     - name: Build Debug APK
+  #       run: flutter build apk --debug
 
-      - name: Upload built APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+  #     - name: Upload built APK
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: built-apk
+  #         path: build/app/outputs/flutter-apk/app-debug.apk
 
   test:
     runs-on: ubuntu-latest
@@ -56,6 +56,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Download built APK
         uses: actions/download-artifact@v4
