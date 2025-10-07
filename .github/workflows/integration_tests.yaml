@@ -63,12 +63,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Download built APK
-        uses: actions/download-artifact@v4
-        with:
-          name: built-apk
-          path: build/app/outputs/flutter-apk/
-
       - name: Test
         run: |
           cat <<EOF > scripts/test.sh
