@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
@@ -5,6 +6,7 @@ import 'package:openhiit/main.dart';
 import 'utils/enter_data.dart';
 import 'utils/misc.dart';
 import 'utils/screenshot.dart';
+import 'utils/scroll.dart';
 import 'utils/tap_buttons.dart';
 
 void main() {
@@ -65,11 +67,16 @@ void main() {
     await enterTextByKey(
         tester, 'activity-0', '', '12_advanced-timer_activity-blank', binding);
     await enterTextByKey(tester, 'activity-0', 'Push-ups',
-        '13_advanced-timer_activity-1', binding);
+        '13_advanced-timer_activity-0', binding);
+
+    await scrollUntilVisible(
+        tester, find.byType(Scrollable), find.byKey(Key('activity-1')),
+        settle: false);
+
     await enterTextByKey(
         tester, 'activity-1', '', '14_advanced-timer_activity-blank', binding);
     await enterTextByKey(tester, 'activity-1', 'Sit-ups',
-        '15_advanced-timer_activity-2', binding);
+        '15_advanced-timer_activity-1', binding);
     // Start button appears with animation, so don't settle.
     await tapButtonByKey(
         tester, 'save-button', '15_advanced-timer_save-button', binding, false);
