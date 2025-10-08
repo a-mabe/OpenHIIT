@@ -69,9 +69,7 @@ void main() {
     await enterTextByKey(tester, 'activity-0', 'Push-ups',
         '13_advanced-timer_activity-0', binding);
 
-    await scrollUntilVisible(
-        tester, find.byType(Scrollable), find.byKey(Key('activity-1')),
-        settle: false);
+    await closeKeyboard(tester, true);
 
     await enterTextByKey(
         tester, 'activity-1', '', '14_advanced-timer_activity-blank', binding);
