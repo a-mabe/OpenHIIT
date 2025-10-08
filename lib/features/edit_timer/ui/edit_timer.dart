@@ -182,6 +182,12 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     }
   }
 
+  ValueChanged<bool> get unitNumberInputState => (bool state) {
+        for (var controller in timeSettingsControllers.values) {
+          controller.toggleMode();
+        }
+      };
+
   ValueChanged<StartSaveState> get setButtonState => (StartSaveState state) {
         if (buttonState != state) {
           setState(() {
@@ -218,6 +224,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
               timeSettingsControllers: timeSettingsControllers,
               editing: widget.editing,
               onEdited: setButtonState,
+              onUnitToggle: unitNumberInputState,
             ),
             SoundTab(
               onEdited: setButtonState,

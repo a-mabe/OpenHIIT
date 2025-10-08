@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
@@ -12,6 +13,7 @@ class GeneralTab extends StatelessWidget {
   final TextEditingController activeIntervalsController;
   final Map<String, UnitNumberInputController> timeSettingsControllers;
   final ValueChanged<StartSaveState> onEdited;
+  final ValueChanged<bool> onUnitToggle;
 
   final bool editing;
 
@@ -21,6 +23,7 @@ class GeneralTab extends StatelessWidget {
       required this.activeIntervalsController,
       required this.timeSettingsControllers,
       required this.onEdited,
+      required this.onUnitToggle,
       this.editing = false});
 
   final logger = Logger(
@@ -57,6 +60,134 @@ class GeneralTab extends StatelessWidget {
               return null;
             },
           ),
+        ),
+        ListTile(
+          key: const Key("color-picker"),
+          title: const Text('Color'),
+          leading: const Icon(Icons.color_lens),
+          trailing: Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(provider.timer.color),
+            ),
+          ),
+          onTap: () async {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: MaterialColorPicker(
+                      onMainColorChange: (Color? value) {
+                        if (value != null) {
+                          Navigator.pop(context); // Close the dialog
+                          provider.setTimerColor(value.value);
+                          onEdited(StartSaveState.save);
+                          logger.d("Timer color changed to ${value.value}");
+                        }
+                      },
+                      allowShades: false,
+                      selectedColor: Color(
+                        provider.timer.color,
+                      ),
+                    ),
+                  );
+                });
+          },
+        ),
+        ListTile(
+          // leading: Icon(Icons.timer_10_select_rounded),
+          key: const Key("timer-display-toggle"),
+          title: const Text('Timer Display'),
+          subtitle: Text(provider.timer.showMinutes == 1
+              ? "Minutes View"
+              : "Seconds View"),
+          // widget.timer.showMinutes == 1 ? "Minutes View" : "Seconds View",
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: () async {
+            await showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Minutes View",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "1:42",
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(color: Colors.grey.shade800, thickness: 1),
+                      Container(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Seconds View",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "102s",
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      key: const Key("minutes-option"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        provider.setTimerShowMinutes(1);
+                        onEdited(StartSaveState.save);
+                        onUnitToggle(true);
+                        logger.d("Timer display changed to Minutes");
+                      },
+                      child: const Text('Minutes'),
+                    ),
+                    TextButton(
+                      key: const Key("seconds-option"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        provider.setTimerShowMinutes(0);
+                        onEdited(StartSaveState.save);
+                        onUnitToggle(false);
+                        logger.d("Timer display changed to Seconds");
+                      },
+                      child: const Text('Seconds'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
         ListTile(
           key: const Key("active-intervals"),

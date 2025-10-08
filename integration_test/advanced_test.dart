@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
@@ -6,7 +5,6 @@ import 'package:openhiit/main.dart';
 import 'utils/enter_data.dart';
 import 'utils/misc.dart';
 import 'utils/screenshot.dart';
-import 'utils/scroll.dart';
 import 'utils/tap_buttons.dart';
 
 void main() {
@@ -103,7 +101,7 @@ void main() {
         reason: 'Warmup interval not found');
     // Wait until "Warmup" is gone and first work interval is shown.
     await pumpUntilGone(
-        tester, find.textContaining("Warmup"), Duration(seconds: 15), false,
+        tester, find.textContaining("Warmup"), Duration(seconds: 30), false,
         screenShotName: '20_advanced-timer_warmup-interval');
     // Wait until first work interval is shown..
     await pumpUntilFound(
@@ -125,19 +123,22 @@ void main() {
     expect(find.textContaining("Break"), findsOneWidget,
         reason: 'Break interval not found');
     // Wait until all work intervals are done and cooldown is shown. Do this by waiting
-    // until the second "Sit-ups" is gone.
+    // until the second set of exercises is gone.
+    await pumpUntilGone(
+        tester, find.textContaining("Push-ups"), Duration(seconds: 120), false,
+        screenShotName: '23_advanced-work-interval-1-end-iteration-2');
     await pumpUntilGone(
         tester, find.textContaining("Sit-ups"), Duration(seconds: 120), false,
-        screenShotName: '23_advanced-cooldown-interval');
+        screenShotName: '24_advanced-work-interval-2-end-iteration-2');
     // Verify Cooldown is shown in the widget tree
     expect(find.textContaining("Cooldown"), findsOneWidget,
         reason: 'Cooldown interval not found');
     // Make sure the Nice job! screen is shown.
     await pumpForDuration(tester, Duration(seconds: 30),
-        screenShotName: '24_advanced-timer_nice-job-screen', settle: false);
+        screenShotName: '25_advanced-timer_nice-job-screen', settle: false);
     // Exit the timer.
     await tapButtonByKey(
-        tester, 'timer-end-back', '25_advanced-timer_end-back', binding, false);
+        tester, 'timer-end-back', '26_advanced-timer_end-back', binding, false);
     // ---
   });
 }

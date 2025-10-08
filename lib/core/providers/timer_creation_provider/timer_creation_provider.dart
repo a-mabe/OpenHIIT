@@ -50,6 +50,22 @@ class TimerCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTimerColor(int color) {
+    _timer = _timer.copyWith({
+      'color': color,
+    });
+    _isEdited = true;
+    notifyListeners();
+  }
+
+  void setTimerShowMinutes(int showMinutes) {
+    _timer = _timer.copyWith({
+      'showMinutes': showMinutes,
+    });
+    _isEdited = true;
+    notifyListeners();
+  }
+
   void setActiveIntervals(int intervals) {
     _timer = _timer.copyWith({
       'activeIntervals': intervals,
