@@ -66,6 +66,7 @@ jobs:
           - load_test.dart
           - interval_adjust_test.dart
           - edit_timer_test.dart
+          - rename_and_recolor_timer.dart
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:

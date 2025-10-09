@@ -4,16 +4,6 @@ import 'package:integration_test/integration_test.dart';
 
 import 'screenshot.dart';
 
-Future<void> closeKeyboard(WidgetTester tester, bool settle) async {
-  // Tap outside to close the keyboard
-  FocusManager.instance.primaryFocus?.unfocus();
-  if (settle) {
-    await tester.pumpAndSettle();
-  } else {
-    await tester.pump();
-  }
-}
-
 Future<void> pumpUntilFound(
     WidgetTester tester, Finder finder, Duration timeout, bool settle,
     {String? screenShotName}) async {

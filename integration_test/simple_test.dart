@@ -3,9 +3,10 @@ import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
 
 import 'utils/enter_data.dart';
-import 'utils/misc.dart';
+import 'utils/pump_and_settle.dart';
 import 'utils/screenshot.dart';
 import 'utils/tap_buttons.dart';
+import 'utils/other.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();

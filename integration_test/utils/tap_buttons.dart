@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'misc.dart';
+import 'pump_and_settle.dart';
 import 'screenshot.dart';
 
 /// Taps a widget identified by [ValueKey].

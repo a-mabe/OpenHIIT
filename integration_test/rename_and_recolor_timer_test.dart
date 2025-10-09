@@ -11,7 +11,7 @@ import 'utils/other.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('edit_existing_timer', (WidgetTester tester) async {
+  testWidgets('edit_name_and_color', (WidgetTester tester) async {
     await tester.pumpWidget(WorkoutTimer());
     await tester.pumpAndSettle();
 
@@ -35,30 +35,30 @@ void main() {
     await tapButtonByKey(
         tester, 'Editable Timer-0', '7_edit_open-timer', binding, false);
 
-    // Modify work and rest times.
-    await enterTextByKey(
-        tester, 'work-time', '8', '9_edit_modify-work-time', binding);
-    await enterTextByKey(
-        tester, 'rest-time', '2', '10_edit_modify-rest-time', binding);
-    await closeKeyboard(tester, false);
+    // Change the name.
+    await enterTextByKey(tester, 'timer-name', 'Renamed Timer',
+        '8_rename_rename-timer', binding);
+    // Change the color.
     await tapButtonByKey(
-        tester, 'save-button', '11_edit_save-modified', binding, false);
-
-    // Go back to the home screen and reopen timer to verify updates.
-    await tapBackArrow(tester, '12_edit_back-home-after-save', binding);
-    await tapButtonByKey(
-        tester, 'Editable Timer-0', '13_edit_reopen-timer', binding, false);
-
-    // Validate the updated values appear in UI.
-    expect(find.textContaining("8"), findsOneWidget,
-        reason: 'Updated work time not found');
-    expect(find.textContaining("2"), findsOneWidget,
-        reason: 'Updated rest time not found');
+        tester, 'color-picker', '9_rename_open-color-picker', binding, true);
+    await tapJustRightOfCenter(tester, true);
 
     await takeScreenShot(
       binding: binding,
       tester: tester,
-      screenShotName: '14_edit_timer_updated',
+      screenShotName: '10_rename_color-picked',
+      settle: false,
+    );
+
+    // Save the changes.
+    await closeKeyboard(tester, false);
+    await tapButtonByKey(
+        tester, 'save-button', '11_rename_save-changes', binding, false);
+
+    await takeScreenShot(
+      binding: binding,
+      tester: tester,
+      screenShotName: '12_edit_timer_updated',
       settle: false,
     );
   });
