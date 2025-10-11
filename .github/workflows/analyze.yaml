@@ -1,0 +1,32 @@
+name: Flutter Analyze
+
+on:
+  push:
+    paths:
+      - '**.dart'
+      - 'pubspec.yaml'
+      - '.github/workflows/analyze.yaml'
+  pull_request:
+    paths:
+      - '**.dart'
+      - 'pubspec.yaml'
+      - '.github/workflows/analyze.yaml'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run flutter analyze (fail on warnings)
+        run: flutter analyze --fatal-warnings

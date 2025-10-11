@@ -1,12 +1,9 @@
-import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/core/models/interval_display_model.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
-import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/start_save_toggle.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/editor_tab/widgets/interval_list_tile.dart';
-import 'package:openhiit/features/run_timer/widgets/functions/functions.dart';
 import 'package:provider/provider.dart';
 
 class EditorTab extends StatelessWidget {

@@ -7,7 +7,6 @@ import 'package:openhiit/core/db/repositories/timer_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
 import 'package:openhiit/core/logs/logs.dart';
-import 'package:openhiit/core/models/interval_display_model.dart';
 import 'package:openhiit/core/providers/interval_provider/interval_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';

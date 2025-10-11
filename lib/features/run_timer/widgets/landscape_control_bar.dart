@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/features/run_timer/widgets/volume_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

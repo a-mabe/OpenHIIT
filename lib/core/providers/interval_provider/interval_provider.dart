@@ -1,7 +1,6 @@
 import 'package:background_hiit_timer/models/interval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:openhiit/core/db/repositories/interval_repository.dart';
-import 'package:openhiit/core/models/timer_type.dart';
 
 class IntervalProvider extends ChangeNotifier {
   List<IntervalType> _intervals = [];
