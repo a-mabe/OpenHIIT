@@ -32,8 +32,8 @@ Future<void> tapJustBelowCenterAndSlightlyLeft(
   final screenSize = tester.binding.renderView.size;
   // Calculate a position a little below the center of the screen
   final center = Offset(screenSize.width / 2, screenSize.height / 2);
-  final tapPosition = Offset(center.dx - screenSize.width * 0.125,
-      center.dy + screenSize.height * 0.125);
+  final tapPosition = Offset(center.dx - screenSize.width * 0.05,
+      center.dy + screenSize.height * 0.05);
 
   await tester.tapAt(tapPosition);
   if (settle) {
