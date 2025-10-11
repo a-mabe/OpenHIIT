@@ -25,3 +25,18 @@ Future<void> tapJustRightOfCenter(WidgetTester tester, bool settle) async {
     await tester.pump();
   }
 }
+
+Future<void> tapJustBelowCenter(WidgetTester tester, bool settle) async {
+  // Get the screen size
+  final screenSize = tester.binding.renderView.size;
+  // Calculate a position a little below the center of the screen
+  final center = Offset(screenSize.width / 2, screenSize.height / 2);
+  final tapPosition = Offset(center.dx, center.dy + screenSize.height * 0.125);
+
+  await tester.tapAt(tapPosition);
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
+}

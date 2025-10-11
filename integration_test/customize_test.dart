@@ -41,7 +41,7 @@ void main() {
     // Change the color.
     await tapButtonByKey(
         tester, 'color-picker', '9_rename_open-color-picker', binding, true);
-    await tapJustRightOfCenter(tester, true);
+    await tapJustBelowCenter(tester, true);
 
     await takeScreenShot(
       binding: binding,
