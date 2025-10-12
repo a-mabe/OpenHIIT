@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
@@ -10,8 +12,9 @@ import 'utils/other.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  binding.setSurfaceSize(const Size(1080, 1920));
 
-  testWidgets('edit_name_and_color', (WidgetTester tester) async {
+  testWidgets('minutes_view_enabled', (WidgetTester tester) async {
     await tester.pumpWidget(WorkoutTimer());
     await tester.pumpAndSettle();
 
