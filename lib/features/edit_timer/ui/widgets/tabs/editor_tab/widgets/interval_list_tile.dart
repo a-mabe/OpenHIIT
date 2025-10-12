@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/core/models/interval_display_model.dart';
+import 'package:openhiit/core/utils/interval_display.dart';
 
 class IntervalListTile extends StatelessWidget {
   final IntervalDisplayModel interval;
@@ -81,7 +82,7 @@ class IntervalListTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
             trailing: Text(
-              '${interval.seconds}s',
+              intervalSecondsDisplay(interval.seconds, interval.showMinutes),
               style: TextStyle(
                   fontSize: textScaler.scale(24), color: Colors.white),
             ),

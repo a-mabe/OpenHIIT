@@ -137,6 +137,7 @@ Future<List<IntervalDisplayModel>> generateIntervalDisplaysForTimer(
       activeIndex: isActive ? activeIndex : 0,
       name: interval.name,
       seconds: interval.time,
+      showMinutes: timer.showMinutes == 1,
     );
   }).toList();
 }
