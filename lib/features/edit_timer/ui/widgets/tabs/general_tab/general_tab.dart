@@ -189,10 +189,11 @@ class GeneralTab extends StatelessWidget {
             );
           },
         ),
+        Divider(),
         ListTile(
           key: const Key("active-intervals"),
           title: const Text('Active Intervals'),
-          subtitle: Text('# of works intervals'),
+          subtitle: Text('# of work intervals'),
           leading: const Icon(Icons.flag),
           trailing: SizedBox(
             width: 80,
@@ -224,7 +225,6 @@ class GeneralTab extends StatelessWidget {
             ),
           ),
         ),
-        Divider(),
         ListTile(
           key: const Key("work-time"),
           title: const Text('Work'),
@@ -287,7 +287,7 @@ class GeneralTab extends StatelessWidget {
         ListTile(
           key: const Key("warm-up"),
           title: const Text('Warm-up'),
-          subtitle: Text('Required'),
+          subtitle: Text('Optional'),
           leading: const Icon(Icons.emoji_people),
           trailing: FittedBox(
             fit: BoxFit.contain,
@@ -307,7 +307,7 @@ class GeneralTab extends StatelessWidget {
         ListTile(
           key: const Key("cool-down"),
           title: const Text('Cool-down'),
-          subtitle: Text('Required'),
+          subtitle: Text('Optional'),
           leading: const Icon(Icons.ac_unit),
           trailing: FittedBox(
             fit: BoxFit.contain,
@@ -327,7 +327,7 @@ class GeneralTab extends StatelessWidget {
         ListTile(
           key: const Key("restarts"),
           title: const Text('Restarts'),
-          subtitle: Text('Required'),
+          subtitle: Text('Optional'),
           leading: const Icon(Icons.replay),
           trailing: FittedBox(
             fit: BoxFit.contain,
@@ -355,7 +355,7 @@ class GeneralTab extends StatelessWidget {
           key: const Key("break"),
           enabled: provider.breakEnabled,
           title: const Text('Break'),
-          subtitle: Text('Required'),
+          subtitle: Text('Optional, between restarts'),
           leading: const Icon(Icons.snooze),
           trailing: FittedBox(
             fit: BoxFit.contain,
