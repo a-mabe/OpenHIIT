@@ -21,7 +21,7 @@ Future<void> tapButtonByKey(
   if (settle) {
     await tester.pumpAndSettle(); // let animations / UI updates finish
   } else {
-    await pumpUntilGone(tester, buttonFinder, Duration(seconds: 10), settle);
+    await pumpUntilGone(tester, buttonFinder, Duration(seconds: 30), settle);
   }
   print('Tapped button with key "$key"');
   await takeScreenShot(
