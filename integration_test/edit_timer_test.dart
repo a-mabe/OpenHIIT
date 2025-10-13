@@ -21,18 +21,20 @@ void main() {
       await enterTextByKey(
           tester, 'timer-name', 'Editable Timer', '2_edit_timer-name', binding);
       await enterTextByKey(
-          tester, 'work-time', '5', '3_edit_work-time', binding);
+          tester, 'active-intervals', '5', '3_edit_active-intervals', binding);
       await enterTextByKey(
-          tester, 'rest-time', '3', '4_edit_rest-time', binding);
+          tester, 'work-time', '5', '4_edit_work-time', binding);
+      await enterTextByKey(
+          tester, 'rest-time', '3', '5_edit_rest-time', binding);
       await closeKeyboard(tester, false);
       await tapButtonByKey(
-          tester, 'save-button', '5_edit_save-button', binding, false);
-      await tapBackArrow(tester, '6_edit_back-home', binding);
+          tester, 'save-button', '6_edit_save-button', binding, false);
+      await tapBackArrow(tester, '7_edit_back-home', binding);
     }
 
     // Open the timer for editing.
     await tapButtonByKey(
-        tester, 'Editable Timer-0', '7_edit_open-timer', binding, false);
+        tester, 'Editable Timer-0', '8_edit_open-timer', binding, false);
 
     // Modify work and rest times.
     await enterTextByKey(

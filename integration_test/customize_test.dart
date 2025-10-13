@@ -17,47 +17,49 @@ void main() {
     // Ensure a timer exists or create one for editing.
     if (find.textContaining("No saved timers").evaluate().isNotEmpty) {
       await tapButtonByKey(
-          tester, 'new-timer', '1_edit_create-new', binding, true);
+          tester, 'new-timer', '1_customize_create-new', binding, true);
+      await enterTextByKey(tester, 'timer-name', 'Editable Timer',
+          '2_customize_timer-name', binding);
+      await enterTextByKey(tester, 'active-intervals', '5',
+          '3_customize_active-intervals', binding);
       await enterTextByKey(
-          tester, 'timer-name', 'Editable Timer', '2_edit_timer-name', binding);
+          tester, 'work-time', '5', '4_customize_work-time', binding);
       await enterTextByKey(
-          tester, 'work-time', '5', '3_edit_work-time', binding);
-      await enterTextByKey(
-          tester, 'rest-time', '3', '4_edit_rest-time', binding);
+          tester, 'rest-time', '3', '5_customize_rest-time', binding);
       await closeKeyboard(tester, false);
       await tapButtonByKey(
-          tester, 'save-button', '5_edit_save-button', binding, false);
-      await tapBackArrow(tester, '6_edit_back-home', binding);
+          tester, 'save-button', '6_customize_save-button', binding, false);
+      await tapBackArrow(tester, '7_customize_back-home', binding);
     }
 
     // Open the timer for editing.
     await tapButtonByKey(
-        tester, 'Editable Timer-0', '7_edit_open-timer', binding, false);
+        tester, 'Editable Timer-0', '8_customize_open-timer', binding, false);
 
     // Change the name.
     await enterTextByKey(tester, 'timer-name', 'Renamed Timer',
-        '8_rename_rename-timer', binding);
+        '9_customize_rename-timer', binding);
     // Change the color.
-    await tapButtonByKey(
-        tester, 'color-picker', '9_rename_open-color-picker', binding, true);
+    await tapButtonByKey(tester, 'color-picker',
+        '10_customize_open-color-picker', binding, true);
     await tapJustBelowCenterAndSlightlyLeft(tester, true);
 
     await takeScreenShot(
       binding: binding,
       tester: tester,
-      screenShotName: '10_rename_color-picked',
+      screenShotName: '11_customize_color-picked',
       settle: false,
     );
 
     // Save the changes.
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'save-button', '11_rename_save-changes', binding, false);
+        tester, 'save-button', '12_customize_save-changes', binding, false);
 
     await takeScreenShot(
       binding: binding,
       tester: tester,
-      screenShotName: '12_edit_timer_updated',
+      screenShotName: '13_customize_timer_updated',
       settle: false,
     );
   });
