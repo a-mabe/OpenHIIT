@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
+import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/start_save_toggle.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/editor_tab/editor_tab.dart';
@@ -71,7 +72,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     final ts = timer.timeSettings;
 
     nameController.text = timer.name;
-    activeIntervalsController.text = timer.activeIntervals.toString();
+    activeIntervalsController.text =
+        timer.activeIntervals == 0 ? '' : timer.activeIntervals.toString();
 
     timeSettingsControllers = {
       'work': UnitNumberInputController(
@@ -158,6 +160,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
 
     var intervals =
         await generateIntervalsFromTimer(timerCreationProvider.timer);
+
+    timerCreationProvider.setTotalTime(getTotalTime(intervals));
 
     if (buttonState == StartSaveState.start) {
       if (mounted) {

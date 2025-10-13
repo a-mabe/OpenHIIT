@@ -72,6 +72,14 @@ class TimerCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTotalTime(int totalTime) {
+    _timer = _timer.copyWith({
+      'totalTime': totalTime,
+    });
+    // This happens on save, so no need to mark as edited.
+    notifyListeners();
+  }
+
   void setTimerTimeSettingPart({
     int? workTime,
     int? restTime,

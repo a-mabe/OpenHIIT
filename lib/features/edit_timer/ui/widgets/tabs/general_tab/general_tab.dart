@@ -97,7 +97,7 @@ class GeneralTab extends StatelessWidget {
           },
         ),
         ListTile(
-          // leading: Icon(Icons.timer_10_select_rounded),
+          leading: Icon(Icons.timer_10_select_rounded),
           key: const Key("timer-display-toggle"),
           title: const Text('Timer Display'),
           subtitle: Text(provider.timer.showMinutes == 1
@@ -210,7 +210,11 @@ class GeneralTab extends StatelessWidget {
                 return null;
               },
               onChanged: (value) {
-                provider.setActiveIntervals(int.tryParse(value) ?? 1);
+                if (value.isEmpty) {
+                  provider.setActiveIntervals(0);
+                } else {
+                  provider.setActiveIntervals(int.tryParse(value) ?? 0);
+                }
                 onEdited(StartSaveState.save);
                 logger.d("Active intervals changed to $value");
               },

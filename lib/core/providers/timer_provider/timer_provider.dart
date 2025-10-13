@@ -12,6 +12,7 @@ import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.da
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/models/workout_type.dart';
+import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:uuid/uuid.dart';
 
