@@ -24,6 +24,7 @@ class EditTimer extends StatefulWidget {
 
 class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   late TabController _tabController;
+  late bool editing;
 
   final nameController = TextEditingController();
   final activeIntervalsController = TextEditingController();
@@ -49,6 +50,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    editing = widget.editing;
+
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
@@ -64,7 +67,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       }
     });
 
-    buttonState = widget.editing ? StartSaveState.start : StartSaveState.save;
+    buttonState = editing ? StartSaveState.start : StartSaveState.save;
 
     var timerCreationProvider = context.read<TimerCreationProvider>();
     final timer = timerCreationProvider.timer;
@@ -175,13 +178,14 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     } else {
       if (!formKey.currentState!.validate()) return;
 
-      if (widget.editing) {
+      if (editing) {
         await timerProvider.updateTimer(timerCreationProvider.timer);
       } else {
         await timerProvider.pushTimer(timerCreationProvider.timer);
+        editing = true;
       }
       logger.i(
-          "Timer ${widget.editing ? 'updated' : 'created'}: ${timerCreationProvider.timer.name}");
+          "Timer ${editing ? 'updated' : 'created'}: ${timerCreationProvider.timer.name}");
       setButtonState(StartSaveState.start);
     }
   }
@@ -226,7 +230,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
               nameController: nameController,
               activeIntervalsController: activeIntervalsController,
               timeSettingsControllers: timeSettingsControllers,
-              editing: widget.editing,
+              editing: editing,
               onEdited: setButtonState,
               onUnitToggle: unitNumberInputState,
             ),
