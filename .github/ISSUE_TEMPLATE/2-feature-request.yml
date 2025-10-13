@@ -55,7 +55,7 @@ body:
         - Android
         - iOS
     validations:
-      required: true
+      required: false
   - type: textarea
     id: sources
     attributes:
