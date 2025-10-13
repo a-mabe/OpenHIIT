@@ -203,8 +203,11 @@ class GeneralTab extends StatelessWidget {
               style: const TextStyle(fontSize: 30),
               textAlign: TextAlign.end,
               keyboardType: TextInputType.number,
+              // Must be > 0
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
+                if (value == null ||
+                    value.trim().isEmpty ||
+                    int.tryParse(value) == 0) {
                   return '';
                 }
                 return null;
