@@ -61,11 +61,11 @@ void main() {
           reason: 'Interval with "1:00" not found');
 
       // Save the timer.
-      await tapButtonByKey(
-          tester, 'save-button', '9_minutes-view_save-timer', binding, false);
+      await tapButtonByKey(tester, 'start-save-button',
+          '9_minutes-view_save-timer', binding, false);
 
       // Start the timer to verify display during countdown.
-      await tapButtonByKey(tester, 'start-button',
+      await tapButtonByKey(tester, 'start-save-button',
           '10_minutes-view_start-timer', binding, false);
 
       // Wait until "Get Ready" is shown.

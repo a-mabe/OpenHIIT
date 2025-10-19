@@ -27,8 +27,8 @@ void main() {
       await enterTextByKey(
           tester, 'rest-time', '3', '5_edit_rest-time', binding);
       await closeKeyboard(tester, false);
-      await tapButtonByKey(
-          tester, 'save-button', '6_edit_save-button', binding, false);
+      await tapButtonByKey(tester, 'start-save-button',
+          '6_edit_start-save-button', binding, false);
       await tapBackArrow(tester, '7_edit_back-home', binding);
     }
 
@@ -43,7 +43,7 @@ void main() {
         tester, 'rest-time', '2', '10_edit_modify-rest-time', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'save-button', '11_edit_save-modified', binding, false);
+        tester, 'start-save-button', '11_edit_save-modified', binding, false);
 
     // Go back to the home screen and reopen timer to verify updates.
     await tapBackArrow(tester, '12_edit_back-home-after-save', binding);

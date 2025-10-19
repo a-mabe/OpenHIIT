@@ -54,6 +54,7 @@ class StartSaveToggle extends StatelessWidget {
       width: isExpanded ? 140 : 56,
       height: 56,
       child: FloatingActionButton(
+        key: const Key('start-save-button'),
         onPressed: enabled ? onPressed : null,
         backgroundColor: color,
         foregroundColor: Colors.white,

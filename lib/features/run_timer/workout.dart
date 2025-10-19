@@ -123,9 +123,6 @@ class RunTimerState extends State<RunTimer> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.dark,
-    ));
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {

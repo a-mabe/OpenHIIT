@@ -6,9 +6,13 @@ import 'package:openhiit/features/import_export_timers/utils/import_export_util.
 void onExportPressed(BuildContext context, TimerProvider timerProvider) {
   showModalBottomSheet<void>(
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+    useSafeArea: true,
     context: context,
     builder: (BuildContext context) {
-      return ExportBottomSheet(timerProvider: timerProvider);
+      final bottomInset = MediaQuery.of(context).viewPadding.bottom;
+      return Padding(
+          padding: EdgeInsets.only(bottom: bottomInset),
+          child: ExportBottomSheet(timerProvider: timerProvider));
     },
   );
 }

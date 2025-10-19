@@ -31,6 +31,11 @@ void main() async {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [
+    SystemUiOverlay.top, // keep status bar
+    SystemUiOverlay.bottom, // keep nav bar
+  ]);
+
   runApp(const WorkoutTimer());
 }
 
@@ -39,11 +44,6 @@ class WorkoutTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.renderViews.first.automaticSystemUiAdjustment =
-        false;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Theme.of(context).brightness,
-    ));
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<IntervalProvider>(

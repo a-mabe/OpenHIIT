@@ -28,7 +28,7 @@ void main() {
         tester, 'rest-time', '3', '5_restart_rest-time', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'save-button', '7_restart_save-initial', binding, false);
+        tester, 'start-save-button', '7_restart_save-initial', binding, false);
     await tapBackArrow(tester, '8_restart_back-home', binding);
 
     // Open timer (immediately editable).
@@ -45,7 +45,7 @@ void main() {
         tester, 'break', '120', '11_restart_break-time', binding);
 
     await tapButtonByKey(
-        tester, 'save-button', '12_restart_save-added', binding, false);
+        tester, 'start-save-button', '12_restart_save-added', binding, false);
     await tapBackArrow(tester, '13_restart_back-home-after-add', binding);
     // Reopen to verify restarts updated.
     await tapButtonByKey(
@@ -59,11 +59,11 @@ void main() {
     await enterTextByKey(
         tester, 'break', '0', '15_restart_remove-break', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(
-        tester, 'save-button', '16_restart_save-no-break', binding, false);
+    await tapButtonByKey(tester, 'start-save-button',
+        '16_restart_save-no-break', binding, false);
 
     // Start the timer.
-    await tapButtonByKey(tester, 'start-button',
+    await tapButtonByKey(tester, 'start-save-button',
         '18_advanced-timer_load-new-timer', binding, true);
 
     // ---
@@ -87,7 +87,7 @@ void main() {
         tester, 'restarts', '0', '21_restart_remove-rounds', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'save-button', '22_restart_save-removed', binding, false);
+        tester, 'start-save-button', '22_restart_save-removed', binding, false);
     await tapBackArrow(tester, '23_restart_back-home-after-remove', binding);
     // Reopen to verify removal.
     await tapButtonByKey(tester, 'Restart Tester-0',

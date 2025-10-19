@@ -46,8 +46,8 @@ void main() {
     // ---
 
     // Start button appears with animation, so don't settle.
-    await tapButtonByKey(
-        tester, 'save-button', '7_simple-timer_save-button', binding, false);
+    await tapButtonByKey(tester, 'start-save-button',
+        '7_simple-timer_start-save-button', binding, false);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '8_simple-timer_back-arrow', binding);
@@ -64,8 +64,8 @@ void main() {
         '10_simple-timer_active-intervals', binding);
 
     // Save timer. Start button appears with animation, so don't settle.
-    await tapButtonByKey(
-        tester, 'save-button', '11_simple-timer_save-button', binding, false);
+    await tapButtonByKey(tester, 'start-save-button',
+        '11_simple-timer_start-save-button', binding, false);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '12_simple-timer_back-arrow', binding);
@@ -78,7 +78,7 @@ void main() {
         '13_simple-timer_open-new-timer', binding, false);
 
     // Start the timer.
-    await tapButtonByKey(tester, 'start-button',
+    await tapButtonByKey(tester, 'start-save-button',
         '14_simple-timer_load-new-timer', binding, true);
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating.
