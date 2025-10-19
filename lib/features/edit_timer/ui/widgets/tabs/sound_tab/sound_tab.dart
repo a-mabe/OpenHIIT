@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 
 class SoundTab extends StatefulWidget {
   final ValueChanged<StartSaveState> onEdited;
+  final ScrollController scrollController;
 
-  const SoundTab({super.key, required this.onEdited});
+  const SoundTab(
+      {super.key, required this.onEdited, required this.scrollController});
 
   @override
   State<SoundTab> createState() => _SoundTabState();
@@ -46,7 +48,7 @@ class _SoundTabState extends State<SoundTab> {
   }) {
     return DropdownButtonFormField<String>(
       key: Key(keyName),
-      initialValue: initialValue,
+      initialValue: initialValue == "" ? "none" : initialValue,
       decoration: InputDecoration(labelText: label),
       items: soundOptions.entries
           .map((entry) => DropdownMenuItem<String>(
@@ -69,6 +71,7 @@ class _SoundTabState extends State<SoundTab> {
     final provider = context.watch<TimerCreationProvider>();
 
     return ListView(
+      controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
       children: [
         _buildSoundDropdown(
@@ -110,6 +113,7 @@ class _SoundTabState extends State<SoundTab> {
           onChanged: (value) =>
               provider.setTimerSoundSettingPart(endSound: value),
         ),
+        SizedBox(height: 80),
       ],
     );
   }

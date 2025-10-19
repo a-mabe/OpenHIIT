@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
@@ -34,6 +35,9 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
 
   late StartSaveState buttonState;
 
+  final ScrollController _scrollController = ScrollController();
+  bool _isExpanded = true;
+
   bool controllersUpdated = false;
 
   final logger = Logger(
@@ -64,6 +68,16 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             controllersUpdated = false;
           });
         }
+      }
+    });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isExpanded) setState(() => _isExpanded = false);
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_isExpanded) setState(() => _isExpanded = true);
       }
     });
 
@@ -113,6 +127,15 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
+    nameController.dispose();
+    activeIntervalsController.dispose();
+    for (var controller in timeSettingsControllers.values) {
+      controller.dispose();
+    }
+    for (var controller in editorTabTextControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -233,14 +256,17 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
               editing: editing,
               onEdited: setButtonState,
               onUnitToggle: unitNumberInputState,
+              scrollController: _scrollController,
             ),
             SoundTab(
               onEdited: setButtonState,
+              scrollController: _scrollController,
             ),
             EditorTab(
               controllers: editorTabTextControllers,
               onEdited: setButtonState,
               controllersUpdated: controllersUpdated,
+              scrollController: _scrollController,
               setButtonState: setButtonState,
             ),
           ],
@@ -248,67 +274,63 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   }
 
   Widget _buildSubmitButton() {
-    return StartSaveToggle(state: buttonState, onPressed: _handleSubmit);
+    return StartSaveToggle(
+        state: buttonState, onPressed: _handleSubmit, isExpanded: _isExpanded);
   }
 
   Widget _buildPortraitLayout() {
     return Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(
-                  key: Key('general-tab'),
-                  icon: Icon(
-                    Icons.timer,
-                  )),
-              Tab(
-                  key: Key('sound-tab'),
-                  icon: Icon(
-                    Icons.music_note,
-                  )),
-              Tab(
-                  key: Key('edit-tab'),
-                  icon: Icon(
-                    Icons.fitness_center,
-                  )),
-            ],
-          ),
+      appBar: AppBar(
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+                key: Key('general-tab'),
+                icon: Icon(
+                  Icons.timer,
+                )),
+            Tab(
+                key: Key('sound-tab'),
+                icon: Icon(
+                  Icons.music_note,
+                )),
+            Tab(
+                key: Key('edit-tab'),
+                icon: Icon(
+                  Icons.fitness_center,
+                )),
+          ],
         ),
-        body: _buildTabView(),
-        bottomNavigationBar: BottomAppBar(
-            height: 70,
-            child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Align(
-                    alignment: Alignment.center,
-                    child:
-                        SizedBox(width: 120, child: _buildSubmitButton())))));
+      ),
+      floatingActionButton: _buildSubmitButton(),
+      body: _buildTabView(),
+    );
   }
 
   Widget _buildLandscapeLayout() {
     return Scaffold(
+      appBar: AppBar(),
       body: Row(
         children: [
           NavigationRail(
             selectedIndex: _tabController.index,
             onDestinationSelected: (i) =>
                 setState(() => _tabController.index = i),
+            minWidth: 100,
+            labelType: NavigationRailLabelType.all,
             destinations: const [
               NavigationRailDestination(
-                  icon: Icon(Icons.text_fields), label: Text('Tab 1')),
+                  icon: Icon(Icons.timer), label: Text('General Tab')),
               NavigationRailDestination(
-                  icon: Icon(Icons.list), label: Text('Tab 2')),
+                  icon: Icon(Icons.music_note), label: Text('Sound Tab')),
               NavigationRailDestination(
-                  icon: Icon(Icons.more), label: Text('Tab 3')),
+                  icon: Icon(Icons.fitness_center), label: Text('Edit Tab')),
             ],
           ),
           Expanded(child: _buildTabView()),
-          SizedBox(
-              width: 80,
-              child: _buildSubmitButton()), // optional vertical submit
         ],
       ),
+      floatingActionButton: _buildSubmitButton(),
     );
   }
 }

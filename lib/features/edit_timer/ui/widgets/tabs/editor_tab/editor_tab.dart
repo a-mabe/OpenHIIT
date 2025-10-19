@@ -11,6 +11,7 @@ class EditorTab extends StatelessWidget {
   final List<TextEditingController> controllers;
   final ValueChanged<StartSaveState> onEdited;
   final ValueChanged<StartSaveState> setButtonState;
+  final ScrollController scrollController;
 
   const EditorTab({
     super.key,
@@ -18,6 +19,7 @@ class EditorTab extends StatelessWidget {
     required this.controllers,
     required this.onEdited,
     required this.setButtonState,
+    required this.scrollController,
   });
 
   @override
@@ -34,10 +36,16 @@ class EditorTab extends StatelessWidget {
         List<Widget> children;
         if (snapshot.hasData) {
           final items = snapshot.data!;
+          final totalTiles = items.length + 1;
 
           return ListView.builder(
-            itemCount: items.length,
+            controller: scrollController,
+            itemCount: items.length + 1,
             itemBuilder: (context, index) {
+              if (index == totalTiles - 1) {
+                return SizedBox(height: 80);
+              }
+
               final interval = items[index];
 
               final isBreak = interval.name.toLowerCase() == "break";

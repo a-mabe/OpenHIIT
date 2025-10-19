@@ -3,87 +3,88 @@ import 'package:shimmer/shimmer.dart';
 
 enum StartSaveState { save, start, saving }
 
-class StartSaveToggle extends StatefulWidget {
+class StartSaveToggle extends StatelessWidget {
   final StartSaveState state;
   final VoidCallback onPressed;
+  final bool isExpanded;
 
   const StartSaveToggle({
     super.key,
     required this.state,
     required this.onPressed,
+    required this.isExpanded,
   });
 
   @override
-  State<StartSaveToggle> createState() => _StartSaveToggleState();
-}
-
-class _StartSaveToggleState extends State<StartSaveToggle> {
-  late StartSaveState _currentState;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentState = widget.state;
-  }
-
-  @override
-  void didUpdateWidget(covariant StartSaveToggle oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.state != widget.state) {
-      _currentState = widget.state;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _currentState = widget.state;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    switch (_currentState) {
-      case StartSaveState.save:
-        return TextButton.icon(
-          key: const Key('save-button'),
-          onPressed: widget.onPressed,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-          icon: const Icon(Icons.save),
-          label: const Text('Save'),
-        );
-      case StartSaveState.start:
-        return TextButton(
-          key: const Key('start-button'),
-          onPressed: widget.onPressed,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-          ),
-          child: Shimmer.fromColors(
+    // Determine visual attributes by state
+    final (color, icon, labelWidget, enabled) = switch (state) {
+      StartSaveState.save => (
+          Colors.blue,
+          const Icon(Icons.save),
+          const Text('Save'),
+          true,
+        ),
+      StartSaveState.start => (
+          Colors.green,
+          const Icon(Icons.play_arrow),
+          Shimmer.fromColors(
             baseColor: Colors.white,
             highlightColor: const Color.fromARGB(255, 155, 187, 162),
             child: const Text('Start'),
           ),
-        );
-      case StartSaveState.saving:
-        return TextButton.icon(
-          key: const Key('saving-button'),
-          onPressed: null,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.grey,
-            foregroundColor: Colors.white,
-          ),
-          icon: const SizedBox(
+          true,
+        ),
+      StartSaveState.saving => (
+          Colors.grey,
+          const SizedBox(
             width: 18,
             height: 18,
             child:
                 CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
           ),
-          label: const Text('Saving'),
-        );
-    }
+          const Text('Saving'),
+          false,
+        ),
+    };
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+      width: isExpanded ? 140 : 56,
+      height: 56,
+      child: FloatingActionButton(
+        onPressed: enabled ? onPressed : null,
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        shape: const StadiumBorder(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            ClipRect(
+              child: AnimatedAlign(
+                alignment: isExpanded ? Alignment.centerLeft : Alignment.center,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOutCubic,
+                widthFactor: isExpanded ? 1.0 : 0.0,
+                child: AnimatedOpacity(
+                  opacity: isExpanded ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: DefaultTextStyle(
+                      style: const TextStyle(color: Colors.white),
+                      child: labelWidget,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
