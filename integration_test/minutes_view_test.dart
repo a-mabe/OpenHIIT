@@ -53,7 +53,8 @@ void main() {
 
       // Tap on the Editor tab.
       await tapButtonByKey(
-          tester, 'edit-tab', '8_minutes-view_open-edit-tab', binding, true);
+          tester, 'edit-tab', '8_minutes-view_open-edit-tab', binding, true,
+          waitForDisappearance: false);
 
       // Expect to find at least one interval with 2:30 and one with 1:00 display.
       expect(find.text('2:30'), findsAtLeastNWidgets(1),
