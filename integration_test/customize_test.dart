@@ -41,8 +41,9 @@ void main() {
     await enterTextByKey(tester, 'timer-name', 'Renamed Timer',
         '9_customize_rename-timer', binding);
     // Change the color.
-    await tapButtonByKey(tester, 'color-picker',
-        '10_customize_open-color-picker', binding, true);
+    await tapButtonByKey(
+        tester, 'color-picker', '10_customize_open-color-picker', binding, true,
+        waitForDisappearance: false);
     await tapJustBelowCenterAndSlightlyLeft(tester, true);
 
     await takeScreenShot(

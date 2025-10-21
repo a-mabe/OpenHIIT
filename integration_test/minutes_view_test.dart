@@ -25,7 +25,8 @@ void main() {
       await enterTextByKey(tester, 'timer-name', 'Editable Timer',
           '2_minutes-view_timer-name', binding);
       await tapButtonByKey(tester, 'timer-display-toggle',
-          '3_minutes-view_timer-display-toggle', binding, true);
+          '3_minutes-view_timer-display-toggle', binding, true,
+          waitForDisappearance: false);
       await tapButtonByKey(tester, 'minutes-option',
           '4_minutes-view_minutes-option', binding, true);
       // Active intervals 2.

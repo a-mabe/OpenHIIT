@@ -60,7 +60,8 @@ void main() {
 
     // Tap the Edit tab.
     await tapButtonByKey(
-        tester, 'edit-tab', '11_advanced-timer_edit-tab', binding, true);
+        tester, 'edit-tab', '11_advanced-timer_edit-tab', binding, true,
+        waitForDisappearance: false);
 
     // Enter activities for the two work intervals.
     await enterTextByKey(
