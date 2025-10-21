@@ -28,7 +28,8 @@ void main() {
         tester, 'rest-time', '3', '5_intervals_rest-time', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(
-        tester, 'start-save-button', '6_intervals_save', binding, false);
+        tester, 'start-save-button', '6_intervals_save', binding, false,
+        waitForDisappearance: false);
     await tapBackArrow(tester, '7_intervals_back-home', binding);
 
     // Open and edit timer.
@@ -40,7 +41,8 @@ void main() {
         '10_intervals_increase-active', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(tester, 'start-save-button',
-        '11_intervals_save-increased', binding, false);
+        '11_intervals_save-increased', binding, false,
+        waitForDisappearance: false);
 
     // Verify increased interval count reflected.
     await tapBackArrow(tester, '12_intervals_back-home-after-save', binding);
@@ -54,7 +56,8 @@ void main() {
         '15_intervals_decrease-active', binding);
     await closeKeyboard(tester, false);
     await tapButtonByKey(tester, 'start-save-button',
-        '16_intervals_save-decreased', binding, false);
+        '16_intervals_save-decreased', binding, false,
+        waitForDisappearance: false);
     await tapBackArrow(
         tester, '17_intervals_back-home-after-decrease', binding);
 

@@ -66,7 +66,8 @@ void main() {
 
       // Start the timer to verify display during countdown.
       await tapButtonByKey(tester, 'start-save-button',
-          '10_minutes-view_start-timer', binding, false);
+          '10_minutes-view_start-timer', binding, false,
+          waitForDisappearance: false);
 
       // Wait until "Get Ready" is shown.
       await pumpUntilFound(tester, find.textContaining("Get Ready"),

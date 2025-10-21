@@ -6,6 +6,7 @@ import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_p
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
+import 'package:openhiit/features/edit_timer/ui/widgets/error_toast.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/start_save_toggle.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/editor_tab/editor_tab.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/general_tab/general_tab.dart';
@@ -181,36 +182,61 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   }
 
   void _handleSubmit() async {
-    var timerCreationProvider = context.read<TimerCreationProvider>();
-    var timerProvider = context.read<TimerProvider>();
+    final isSaving = buttonState == StartSaveState.save;
+    setButtonState(StartSaveState.saving);
 
-    var intervals =
-        await generateIntervalsFromTimer(timerCreationProvider.timer);
+    final timerCreation = context.read<TimerCreationProvider>();
+    final timerProvider = context.read<TimerProvider>();
 
-    timerCreationProvider.setTotalTime(getTotalTime(intervals));
+    final intervals = await generateIntervalsFromTimer(timerCreation.timer);
 
-    if (buttonState == StartSaveState.start) {
-      if (mounted) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return RunTimer(
-            timer: timerCreationProvider.timer,
-            intervals: intervals,
-          );
-        }));
-      }
-    } else {
-      if (!formKey.currentState!.validate()) return;
+    if (!mounted) return;
 
-      if (editing) {
-        await timerProvider.updateTimer(timerCreationProvider.timer);
-      } else {
-        await timerProvider.pushTimer(timerCreationProvider.timer);
-        editing = true;
-      }
-      logger.i(
-          "Timer ${editing ? 'updated' : 'created'}: ${timerCreationProvider.timer.name}");
-      setButtonState(StartSaveState.start);
+    if (intervals.isEmpty) {
+      logger.w('No intervals generated from timer.');
+      setButtonState(StartSaveState.save);
+      showErrorToast(
+        context,
+        'At least one interval must have a duration greater than 0.',
+      );
+      return;
     }
+
+    timerCreation.setTotalTime(getTotalTime(intervals));
+
+    if (!isSaving) {
+      logger.i("Starting timer: ${timerCreation.timer.name}");
+      setButtonState(StartSaveState.start);
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return RunTimer(
+          timer: timerCreation.timer,
+          intervals: intervals,
+        );
+      }));
+      return;
+    }
+
+    // Saving flow
+    if (!formKey.currentState!.validate()) {
+      setButtonState(StartSaveState.save);
+      return;
+    }
+
+    logger.i(
+      "Submitting timer: ${timerCreation.timer.name} (editing: $editing)",
+    );
+
+    if (editing) {
+      await timerProvider.updateTimer(timerCreation.timer);
+    } else {
+      await timerProvider.pushTimer(timerCreation.timer);
+      editing = true;
+    }
+
+    logger.i(
+      "Timer ${editing ? 'updated' : 'created'}: ${timerCreation.timer.name}",
+    );
+    setButtonState(StartSaveState.start);
   }
 
   ValueChanged<bool> get unitNumberInputState => (bool state) {

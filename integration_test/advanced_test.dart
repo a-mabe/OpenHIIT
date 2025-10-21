@@ -76,7 +76,8 @@ void main() {
         '15_advanced-timer_activity-1', binding);
     // Start button appears with animation, so don't settle.
     await tapButtonByKey(tester, 'start-save-button',
-        '15_advanced-timer_start-save-button', binding, false);
+        '15_advanced-timer_start-save-button', binding, false,
+        waitForDisappearance: false);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '16_advanced-timer_back-arrow', binding);
@@ -87,7 +88,8 @@ void main() {
 
     // Start the timer.
     await tapButtonByKey(tester, 'start-save-button',
-        '18_advanced-timer_load-new-timer', binding, true);
+        '18_advanced-timer_load-new-timer', binding, true,
+        waitForDisappearance: false);
 
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating.

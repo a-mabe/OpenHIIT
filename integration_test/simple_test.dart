@@ -47,7 +47,8 @@ void main() {
 
     // Start button appears with animation, so don't settle.
     await tapButtonByKey(tester, 'start-save-button',
-        '7_simple-timer_start-save-button', binding, false);
+        '7_simple-timer_start-save-button', binding, false,
+        waitForDisappearance: false);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '8_simple-timer_back-arrow', binding);
@@ -65,7 +66,8 @@ void main() {
 
     // Save timer. Start button appears with animation, so don't settle.
     await tapButtonByKey(tester, 'start-save-button',
-        '11_simple-timer_start-save-button', binding, false);
+        '11_simple-timer_start-save-button', binding, false,
+        waitForDisappearance: false);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '12_simple-timer_back-arrow', binding);

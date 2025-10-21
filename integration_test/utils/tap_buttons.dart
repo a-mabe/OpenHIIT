@@ -11,17 +11,22 @@ Future<void> tapButtonByKey(
     String key,
     String screenShotName,
     IntegrationTestWidgetsFlutterBinding binding,
-    bool settle) async {
+    bool settle,
+    {bool waitForDisappearance = true}) async {
   final buttonFinder = find.byKey(ValueKey(key));
   expect(buttonFinder, findsOneWidget,
       reason: 'Button with key "$key" not found');
 
   print('Tapping button with key "$key"');
   await tester.tap(buttonFinder);
-  if (settle) {
+  if (settle && !waitForDisappearance) {
     await tester.pumpAndSettle(); // let animations / UI updates finish
-  } else {
+  } else if (waitForDisappearance) {
     await pumpUntilGone(tester, buttonFinder, Duration(seconds: 30), settle);
+  } else {
+    for (int i = 0; i < 3; i++) {
+      await tester.pump();
+    }
   }
   print('Tapped button with key "$key"');
   await takeScreenShot(

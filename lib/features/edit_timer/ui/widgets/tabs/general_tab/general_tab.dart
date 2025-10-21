@@ -239,6 +239,7 @@ class GeneralTab extends StatelessWidget {
                   controller: timeSettingsControllers['work']!,
                   prefill: editing,
                   enableMinutesToggle: false,
+                  valueRequired: false,
                   onChanged: (value) {
                     provider.setTimerTimeSettingPart(workTime: value);
                     onEdited(StartSaveState.save);
@@ -258,6 +259,7 @@ class GeneralTab extends StatelessWidget {
                   controller: timeSettingsControllers['rest']!,
                   prefill: editing,
                   enableMinutesToggle: false,
+                  valueRequired: false,
                   onChanged: (value) {
                     provider.setTimerTimeSettingPart(restTime: value);
                     onEdited(StartSaveState.save);

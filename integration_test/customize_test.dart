@@ -28,7 +28,8 @@ void main() {
           tester, 'rest-time', '3', '5_customize_rest-time', binding);
       await closeKeyboard(tester, false);
       await tapButtonByKey(tester, 'start-save-button',
-          '6_customize_start-save-button', binding, false);
+          '6_customize_start-save-button', binding, false,
+          waitForDisappearance: false);
       await tapBackArrow(tester, '7_customize_back-home', binding);
     }
 
@@ -54,7 +55,8 @@ void main() {
     // Save the changes.
     await closeKeyboard(tester, false);
     await tapButtonByKey(tester, 'start-save-button',
-        '12_customize_save-changes', binding, false);
+        '12_customize_save-changes', binding, false,
+        waitForDisappearance: false);
 
     await takeScreenShot(
       binding: binding,
