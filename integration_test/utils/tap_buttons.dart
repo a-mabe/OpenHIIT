@@ -18,6 +18,9 @@ Future<void> tapButtonByKey(
       reason: 'Button with key "$key" not found');
 
   print('Tapping button with key "$key"');
+
+  await pumpUntilFound(tester, buttonFinder, Duration(seconds: 10), settle);
+
   await tester.tap(buttonFinder);
   if (settle && !waitForDisappearance) {
     await tester.pumpAndSettle(); // let animations / UI updates finish
