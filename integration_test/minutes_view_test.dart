@@ -64,12 +64,12 @@ void main() {
 
       // Save the timer.
       await tapButtonByKey(tester, 'start-save-button',
-          '9_minutes-view_save-timer', binding, false);
+          '9_minutes-view_save-timer', binding, false,
+          waitForDisappearance: false);
 
       // Start the timer to verify display during countdown.
       await tapButtonByKey(tester, 'start-save-button',
-          '10_minutes-view_start-timer', binding, false,
-          waitForDisappearance: false);
+          '10_minutes-view_start-timer', binding, true);
 
       // Wait until "Get Ready" is shown.
       await pumpUntilFound(tester, find.textContaining("Get Ready"),
