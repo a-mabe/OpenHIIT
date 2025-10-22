@@ -12,7 +12,7 @@ import 'utils/other.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  binding.setSurfaceSize(const Size(1080, 1920));
+  binding.setSurfaceSize(const Size(1170, 2532));
 
   testWidgets('minutes_view_enabled', (WidgetTester tester) async {
     await tester.pumpWidget(WorkoutTimer());
