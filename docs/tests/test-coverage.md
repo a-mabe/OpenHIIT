@@ -45,3 +45,4 @@ This document outlines current test coverage for core timer functionality, with 
 | `integration_test/interval_adjust_test.dart` | Tests that the active intervals fields can be set and edited. |
 | `integration_test/restart_rounds_test.dart` | Tests the restart and break time functionality. |
 | `integration_test/customize_test.dart` | Tests timer name and color input fields. Actual color change needs verified in QA. |
+| `integration_test/minutes_view_test.dart` | Tests timer can be set to minutes view. |
