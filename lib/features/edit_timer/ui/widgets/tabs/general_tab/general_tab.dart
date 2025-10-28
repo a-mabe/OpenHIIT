@@ -45,6 +45,7 @@ class GeneralTab extends StatelessWidget {
               child: TextFormField(
                 key: const Key("timer-name"),
                 controller: nameController,
+                textCapitalization: TextCapitalization.words,
                 style: const TextStyle(fontSize: 24),
                 decoration: InputDecoration(
                   hintText: "Add title",

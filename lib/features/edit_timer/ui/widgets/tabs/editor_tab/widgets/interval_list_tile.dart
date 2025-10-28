@@ -51,6 +51,7 @@ class IntervalListTile extends StatelessWidget {
                         Key(formFieldKey ?? 'interval-${interval.activeIndex}'),
                     controller: nameController,
                     onChanged: onNameChanged,
+                    textCapitalization: TextCapitalization.words,
                     style: TextStyle(
                         fontSize: (24 - (interval.name.length * 0.5))
                             .clamp(12, 24) // don’t shrink below 12, max 24
