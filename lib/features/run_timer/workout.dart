@@ -124,6 +124,7 @@ class RunTimerState extends State<RunTimer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return Countdown(
@@ -171,7 +172,10 @@ class RunTimerState extends State<RunTimer> {
                 children: [
                   Container(
                     color: backgroundColor(timerState.status),
-                    child: SafeArea(child: workoutView),
+                    child: AnnotatedRegion<SystemUiOverlayStyle>(
+                      value: SystemUiOverlayStyle.light,
+                      child: SafeArea(child: workoutView),
+                    ),
                   ),
                   TimerComplete(
                     controller: _controllerCenter,

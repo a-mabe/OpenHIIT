@@ -6,11 +6,12 @@ import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_p
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
-import 'package:openhiit/features/edit_timer/ui/widgets/error_toast.dart';
+import 'package:openhiit/features/edit_timer/ui/widgets/snackbars.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/start_save_toggle.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/editor_tab/editor_tab.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/general_tab/general_tab.dart';
 import 'package:openhiit/features/edit_timer/ui/widgets/tabs/sound_tab/sound_tab.dart';
+import 'package:openhiit/features/import_export_timers/utils/functions.dart';
 import 'package:openhiit/features/run_timer/workout.dart';
 import 'package:provider/provider.dart';
 import 'package:unit_number_input/unit_number_input.dart';
@@ -181,7 +182,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     });
   }
 
-  void _handleSubmit() async {
+  Future<void> _handleSubmit() async {
     final isSaving = buttonState == StartSaveState.save;
     setButtonState(StartSaveState.saving);
 
@@ -304,9 +305,105 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
         state: buttonState, onPressed: _handleSubmit, isExpanded: _isExpanded);
   }
 
+  Widget _buildKebabMenu() {
+    return PopupMenuButton<int>(
+      onSelected: (item) async {
+        if (item == 0) {
+          if (buttonState == StartSaveState.save) {
+            showInfoToast(context, 'Saving timer before copying...');
+            await _handleSubmit();
+          }
+
+          final timerCreation = context.read<TimerCreationProvider>();
+          final timerProvider = context.read<TimerProvider>();
+
+          await timerProvider.pushTimerCopy(timerCreation.timer);
+          if (!mounted) return;
+          Navigator.of(context).pop(); // go back after copying
+        } else if (item == 1) {
+          if (buttonState == StartSaveState.save) {
+            showInfoToast(context, 'Saving timer before exporting...',
+                margin: 100);
+            await _handleSubmit();
+          }
+
+          if (mounted) {
+            final timerCreation = context.read<TimerCreationProvider>();
+            onExportPressed(context, [timerCreation.timer]);
+          }
+        } else if (item == 2) {
+          final confirm = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Delete timer?'),
+              content: Text(
+                  'Are you sure you want to delete ${context.read<TimerCreationProvider>().timer.name}? This action cannot be undone.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+          );
+
+          if (confirm == true && mounted) {
+            final timerCreation = context.read<TimerCreationProvider>();
+            final timerProvider = context.read<TimerProvider>();
+
+            await timerProvider.deleteTimer(timerCreation.timer);
+
+            if (!mounted) return;
+            Navigator.of(context).pop(); // go back after deletion
+          }
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem<int>(
+          value: 0,
+          child: Row(
+            children: const [
+              Icon(Icons.content_copy),
+              SizedBox(width: 8),
+              Text('Copy'),
+            ],
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: Row(
+            children: const [
+              Icon(Icons.share),
+              SizedBox(width: 8),
+              Text('Export'),
+            ],
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: Row(
+            children: const [
+              Icon(Icons.delete),
+              SizedBox(width: 8),
+              Text('Delete'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildPortraitLayout() {
     return Scaffold(
       appBar: AppBar(
+        actions: [_buildKebabMenu()],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [

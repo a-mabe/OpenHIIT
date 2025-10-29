@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
+// Import the TimerType model — adjust the path to match your project.
+import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/features/import_export_timers/ui/snackbars.dart';
 import 'package:openhiit/features/import_export_timers/utils/import_export_util.dart';
 
 class ExportBottomSheet extends StatefulWidget {
-  final TimerProvider timerProvider;
+  final List<TimerType> timers;
 
-  const ExportBottomSheet({super.key, required this.timerProvider});
+  const ExportBottomSheet({super.key, required this.timers});
 
   @override
   State<ExportBottomSheet> createState() => _ExportBottomSheetState();
@@ -33,14 +34,14 @@ class _ExportBottomSheetState extends State<ExportBottomSheet> {
                       });
                       try {
                         bool result = await ImportExportUtil.exportToDevice(
-                          widget.timerProvider.timers,
+                          widget.timers,
                         );
                         if (context.mounted) {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             result
                                 ? successSnackbar(
-                                    'Timers exported successfully.')
+                                    'Timer(s) exported successfully.')
                                 : infoSnackbar('Nothing exported.'),
                           );
                         }
@@ -76,8 +77,8 @@ class _ExportBottomSheetState extends State<ExportBottomSheet> {
                   : () async {
                       setState(() => exporting = true);
                       try {
-                        final result = await ImportExportUtil.share(
-                            widget.timerProvider.timers);
+                        final result =
+                            await ImportExportUtil.share(widget.timers);
                         if (context.mounted) {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(

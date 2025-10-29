@@ -36,6 +36,16 @@ void main() async {
     SystemUiOverlay.bottom, // keep nav bar
   ]);
 
+  // Transparent status bar and nav bar, you control contrast via background
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // Android
+      statusBarBrightness: Brightness.light, // iOS
+    ),
+  );
+
   runApp(const WorkoutTimer());
 }
 

@@ -12,7 +12,6 @@ import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.da
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/models/workout_type.dart';
-import 'package:openhiit/core/providers/timer_provider/utils/functions.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -152,5 +151,17 @@ class TimerProvider extends ChangeNotifier {
 
   Future<List<IntervalType>> getIntervalsForTimer(String timerId) async {
     return _intervalRepository.getIntervalsByTimerId(timerId);
+  }
+
+  Future<void> deleteTimer(TimerType timer) async {
+    _timers.removeWhere((t) => t.id == timer.id);
+    await _timerRepository.deleteTimer(timer.id);
+    await _timerTimeSettingsRepository
+        .deleteTimeSettings(timer.timeSettings.id);
+    await _timerSoundSettingsRepository
+        .deleteSoundSettings(timer.soundSettings.id);
+    await _intervalProvider.deleteIntervals(timer.id);
+    await updateTimerOrder(_timers);
+    notifyListeners();
   }
 }

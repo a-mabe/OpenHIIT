@@ -8,7 +8,7 @@ import 'package:openhiit/features/edit_timer/ui/edit_timer.dart';
 import 'package:openhiit/features/home/ui/widgets/about_button.dart';
 import 'package:openhiit/features/home/ui/widgets/app_bar.dart';
 import 'package:openhiit/features/home/ui/widgets/nav_bar_icon_button.dart';
-import 'package:openhiit/features/home/utils/functions.dart';
+import 'package:openhiit/features/import_export_timers/utils/functions.dart';
 import 'package:openhiit/features/reorder_timers/ui/list_timers.dart';
 import 'package:openhiit/shared/ui/widgets/bottom_app_bar.dart';
 import 'package:provider/provider.dart';
@@ -64,118 +64,118 @@ class _ListTimersPageState extends State<ListTimersPage> {
   }
 
   Widget _buildHomePortrait() {
-    return SafeArea(
-      child: Scaffold(
-        appBar: ListTimersAppBar(),
-        body: FutureBuilder(
-          future: _loadTimersFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('Error fetching timers'));
-            } else {
-              final timers = snapshot.data ?? [];
-              if (timers.isEmpty) {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 16),
-                        child: Text('No saved timers',
-                            style: TextStyle(fontSize: 20)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 16),
-                        child: Text("Hit the + to get started!"),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return ListTimersReorderableList(
-                items: timers,
-                onReorderCompleted: (reorderedItems) {},
-                onTap: (timer) {
-                  logger.d("Tapped on timer: ${timer.name}");
-                  context.read<TimerCreationProvider>().setTimer(timer);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditTimer(editing: true),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: ListTimersAppBar(),
+      body: SafeArea(
+          child: FutureBuilder(
+        future: _loadTimersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error fetching timers'));
+          } else {
+            final timers = snapshot.data ?? [];
+            if (timers.isEmpty) {
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('No saved timers',
+                          style: TextStyle(fontSize: 20)),
                     ),
-                  ).then((_) {
-                    refreshTimers();
-                  });
-                },
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text("Hit the + to get started!"),
+                    ),
+                  ],
+                ),
               );
             }
-          },
-        ),
-        bottomNavigationBar: CustomBottomAppBar(
-          children: [
-            Spacer(),
-            NavBarIconButton(
-              icon: Icons.upload,
-              label: 'Export',
-              fontSize: 11,
-              spacing: 0,
-              verticalPadding: 0,
-              onPressed: () {
-                onExportPressed(context, timerProvider);
-              },
-            ),
-            Spacer(),
-            NavBarIconButton(
-                icon: Icons.download,
-                label: 'Import',
-                fontSize: 11,
-                spacing: 0,
-                verticalPadding: 0,
-                onPressed: () async {
-                  await onImportPressed(
-                    context,
-                    timerProvider,
-                    refreshTimers,
-                  );
-                }),
-            Spacer(),
-            NavBarIconButton(
-              icon: Icons.add_circle,
-              iconColor: Theme.of(context).colorScheme.primary,
-              label: 'New',
-              keyLabel: 'new-timer',
-              fontSize: 11,
-              spacing: 0,
-              verticalPadding: 4,
-              onPressed: () {
-                context.read<TimerCreationProvider>().clear();
+            return ListTimersReorderableList(
+              items: timers,
+              onReorderCompleted: (reorderedItems) {},
+              onTap: (timer) {
+                logger.d("Tapped on timer: ${timer.name}");
+                context.read<TimerCreationProvider>().setTimer(timer);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const EditTimer(editing: false),
+                    builder: (context) => EditTimer(editing: true),
                   ),
                 ).then((_) {
                   refreshTimers();
                 });
               },
-            ),
-            Spacer(),
-          ],
-        ),
+            );
+          }
+        },
+      )),
+      bottomNavigationBar: CustomBottomAppBar(
+        children: [
+          Spacer(),
+          NavBarIconButton(
+            icon: Icons.upload,
+            label: 'Export',
+            fontSize: 11,
+            spacing: 0,
+            verticalPadding: 0,
+            onPressed: () {
+              onExportPressed(context, timerProvider.timers);
+            },
+          ),
+          Spacer(),
+          NavBarIconButton(
+              icon: Icons.download,
+              label: 'Import',
+              fontSize: 11,
+              spacing: 0,
+              verticalPadding: 0,
+              onPressed: () async {
+                await onImportPressed(
+                  context,
+                  timerProvider,
+                  refreshTimers,
+                );
+              }),
+          Spacer(),
+          NavBarIconButton(
+            icon: Icons.add_circle,
+            iconColor: Theme.of(context).colorScheme.primary,
+            label: 'New',
+            keyLabel: 'new-timer',
+            fontSize: 11,
+            spacing: 0,
+            verticalPadding: 4,
+            onPressed: () {
+              context.read<TimerCreationProvider>().clear();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditTimer(editing: false),
+                ),
+              ).then((_) {
+                refreshTimers();
+              });
+            },
+          ),
+          Spacer(),
+        ],
       ),
     );
   }
 
   Widget _buildHomeLandscape() {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       body: Row(children: [
         _buildNavRail(),
         Expanded(
-          child: FutureBuilder(
+          child: SafeArea(
+              child: FutureBuilder(
             future: _loadTimersFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -222,10 +222,10 @@ class _ListTimersPageState extends State<ListTimersPage> {
                 );
               }
             },
-          ),
+          )),
         ),
       ]),
-    ));
+    );
   }
 
   Widget _buildNavRail() {
@@ -265,7 +265,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
                   label: 'Export',
                   verticalPadding: 8,
                   onPressed: () {
-                    onExportPressed(context, timerProvider);
+                    onExportPressed(context, timerProvider.timers);
                   })),
           SizedBox(height: 12),
           Padding(

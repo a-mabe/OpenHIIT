@@ -38,3 +38,42 @@ void showErrorToast(
     ),
   );
 }
+
+void showInfoToast(
+  BuildContext context,
+  String message, {
+  Duration duration = const Duration(seconds: 3),
+  int margin = 0,
+}) {
+  final messenger = ScaffoldMessenger.maybeOf(context);
+  if (messenger == null) return;
+
+  messenger.hideCurrentSnackBar();
+  messenger.showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin:
+          EdgeInsets.symmetric(horizontal: 16.0, vertical: margin.toDouble()),
+      duration: duration,
+      backgroundColor: Colors.blue.shade700,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      content: Row(
+        children: [
+          const Icon(Icons.info_outline, color: Colors.white),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white70,
+        onPressed: () => messenger.hideCurrentSnackBar(),
+      ),
+    ),
+  );
+}

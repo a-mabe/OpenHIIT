@@ -63,7 +63,8 @@ class PortraitWorkoutViewState extends State<PortraitWorkoutView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Container(
+        child: Stack(
       children: [
         Column(
           children: [
@@ -136,6 +137,6 @@ class PortraitWorkoutViewState extends State<PortraitWorkoutView> {
           ],
         )
       ],
-    );
+    ));
   }
 }

@@ -57,9 +57,6 @@ class LocalFileUtil {
       bytes: encoded,
     );
     if (outputFile == null) return false;
-    if (Platform.isIOS) {
-      await File(outputFile).writeAsBytes(encoded);
-    }
     return true;
   }
 

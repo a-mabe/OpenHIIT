@@ -19,6 +19,8 @@ class ImportExportUtil {
   );
 
   static Future<bool> exportToDevice(List<TimerType> timers) async {
+    logger.i("Exporting timers to device...");
+
     LocalFileUtil localFileUtil = LocalFileUtil();
     var fileContent = await localFileUtil.saveFileToDevice(timers);
     return fileContent;
