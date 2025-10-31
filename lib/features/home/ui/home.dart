@@ -66,6 +66,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
   Widget _buildHomePortrait() {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: ListTimersAppBar(),
       body: SafeArea(
           child: FutureBuilder(
@@ -115,57 +116,59 @@ class _ListTimersPageState extends State<ListTimersPage> {
           }
         },
       )),
-      bottomNavigationBar: CustomBottomAppBar(
-        children: [
-          Spacer(),
-          NavBarIconButton(
-            icon: Icons.upload,
-            label: 'Export',
-            fontSize: 11,
-            spacing: 0,
-            verticalPadding: 0,
-            onPressed: () {
-              onExportPressed(context, timerProvider.timers);
-            },
-          ),
-          Spacer(),
-          NavBarIconButton(
-              icon: Icons.download,
-              label: 'Import',
-              fontSize: 11,
-              spacing: 0,
-              verticalPadding: 0,
-              onPressed: () async {
-                await onImportPressed(
-                  context,
-                  timerProvider,
-                  refreshTimers,
-                );
-              }),
-          Spacer(),
-          NavBarIconButton(
-            icon: Icons.add_circle,
-            iconColor: Theme.of(context).colorScheme.primary,
-            label: 'New',
-            keyLabel: 'new-timer',
-            fontSize: 11,
-            spacing: 0,
-            verticalPadding: 4,
-            onPressed: () {
-              context.read<TimerCreationProvider>().clear();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditTimer(editing: false),
-                ),
-              ).then((_) {
-                refreshTimers();
-              });
-            },
-          ),
-          Spacer(),
-        ],
-      ),
+      bottomNavigationBar: SafeArea(
+          top: false,
+          child: CustomBottomAppBar(
+            children: [
+              Spacer(),
+              NavBarIconButton(
+                icon: Icons.upload,
+                label: 'Export',
+                fontSize: 11,
+                spacing: 0,
+                verticalPadding: 0,
+                onPressed: () {
+                  onExportPressed(context, timerProvider.timers);
+                },
+              ),
+              Spacer(),
+              NavBarIconButton(
+                  icon: Icons.download,
+                  label: 'Import',
+                  fontSize: 11,
+                  spacing: 0,
+                  verticalPadding: 0,
+                  onPressed: () async {
+                    await onImportPressed(
+                      context,
+                      timerProvider,
+                      refreshTimers,
+                    );
+                  }),
+              Spacer(),
+              NavBarIconButton(
+                icon: Icons.add_circle,
+                iconColor: Theme.of(context).colorScheme.primary,
+                label: 'New',
+                keyLabel: 'new-timer',
+                fontSize: 11,
+                spacing: 0,
+                verticalPadding: 4,
+                onPressed: () {
+                  context.read<TimerCreationProvider>().clear();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditTimer(editing: false),
+                    ),
+                  ).then((_) {
+                    refreshTimers();
+                  });
+                },
+              ),
+              Spacer(),
+            ],
+          )),
     );
   }
 

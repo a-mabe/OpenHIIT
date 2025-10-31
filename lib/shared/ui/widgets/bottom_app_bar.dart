@@ -21,7 +21,7 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
                 : Colors.white));
 
     return Material(
-        elevation: 4, // Adjust as needed
+        elevation: 0, // Adjust as needed
         color: defaultBottomAppBarColor,
         child: Container(
             decoration: BoxDecoration(
