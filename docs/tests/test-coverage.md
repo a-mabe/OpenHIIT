@@ -38,6 +38,11 @@ This document outlines current test coverage for core timer functionality, with 
 
 | File Name                    | Description                                        |
 |------------------------------|----------------------------------------------------|
-| `test/simple_timer_test.dart`   | Covers basic timer creation, i.e. minimum viable functionality |
-| `test/advanced_timer_test.dart`    | Focuses on all possible settings and editing existing timers |
-| `test/display_timer_test.dart`  | Focuses on the less funcitonal stuff, like UI and display related settings |
+| `integration_test/simple_test.dart`   | Covers basic timer creation, i.e. minimum viable functionality. |
+| `integration_test/advanced_test.dart`    | Runs a timer with all time settings changed. |
+| `integration_test/load_test.dart`  | Tests initial app load with no timers saved. |
+| `integration_test/edit_timer_test.dart` | Ensures a basic timer can be edited and those edits are saved. |
+| `integration_test/interval_adjust_test.dart` | Tests that the active intervals fields can be set and edited. |
+| `integration_test/restart_rounds_test.dart` | Tests the restart and break time functionality. |
+| `integration_test/customize_test.dart` | Tests timer name and color input fields. Actual color change needs verified in QA. |
+| `integration_test/minutes_view_test.dart` | Tests timer can be set to minutes view. |
