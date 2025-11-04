@@ -5,7 +5,7 @@
 ## Motivation and Context
 
 <!-- Please replace "<ISSUE_NUMBER>" with an associated issue number if applicable. -->
-Resolves <ISSUE_NUMBER>
+Resolves #<ISSUE_NUMBER>
 
 *Why is this change required? What problem does it solve?*
 
@@ -16,7 +16,7 @@ Resolves <ISSUE_NUMBER>
 ### Tested Platforms
 
 *List all platforms where you have tested this PR.
-If you haven’t tested on a platform (e.g., iOS), that’s fine-just note it so maintainers know it still needs testing.*
+If you haven’t tested on a platform (e.g., iOS), please note it so maintainers know it still needs testing.*
 
 ## Screenshots (optional)
 
@@ -24,11 +24,11 @@ If you haven’t tested on a platform (e.g., iOS), that’s fine-just note it so
 
 <!-- Please check all that apply. -->
 
-- [ ] Chore (a change that does not modify the application functionality)
+- [ ] Chore (changes that do not affect docs or app behavior)
 - [ ] Bug fix (non-breaking change which fixes an issue)  
 - [ ] New feature (non-breaking change which adds functionality)  
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)  
-- [ ] Documentation update
+- [ ] Documentation update (changes to docs or screenshots)
 
 ## Checklist
 
