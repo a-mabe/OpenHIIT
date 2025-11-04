@@ -16,7 +16,9 @@ Resolves #<ISSUE_NUMBER>
 ### Tested Platforms
 
 *List all platforms where you have tested this PR.
-If you haven’t tested on a platform (e.g., iOS), please note it so maintainers know it still needs testing.*
+If you haven’t tested on a platform that could be affected (e.g., iOS), please note it so maintainers know it still needs testing.*
+
+*Platform 1: iOS 16.3, Apple iPhone 12*
 
 ## Screenshots (optional)
 
