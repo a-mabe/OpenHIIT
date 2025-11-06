@@ -1,0 +1,19 @@
+changelog:
+  categories:
+    - title: What's New
+      labels:
+        - feature
+        - enhancement
+    - title: Bug Fixes
+      labels:
+        - bug
+    - title: Internal Improvements
+      labels:
+        - refine
+        - CI/CD
+        - test
+    - title: Chores and Documentation
+      labels:
+        - chore
+        - documentation
+        - refine
