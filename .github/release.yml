@@ -10,7 +10,7 @@ changelog:
     - title: Internal Improvements
       labels:
         - refine
-        - CI/CD
+        - ci/cd
         - test
     - title: Chores and Documentation
       labels:
