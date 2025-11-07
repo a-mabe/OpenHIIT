@@ -38,6 +38,7 @@ class GeneralTab extends StatelessWidget {
 
     return SingleChildScrollView(
         controller: scrollController,
+        physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
             Padding(
@@ -379,7 +380,7 @@ class GeneralTab extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 80),
+            SizedBox(height: 100),
           ],
         ));
   }

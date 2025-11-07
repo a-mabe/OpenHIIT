@@ -432,7 +432,10 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
 
   Widget _buildLandscapeLayout() {
     return Scaffold(
-      appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        toolbarHeight: 1.0,
+      ),
       body: Row(
         children: [
           NavigationRail(
