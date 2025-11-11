@@ -120,16 +120,20 @@ class _ListTimersPageState extends State<ListTimersPage> {
           top: false,
           child: CustomBottomAppBar(
             children: [
-              Spacer(),
-              NavBarIconButton(
-                icon: Icons.upload,
-                label: 'Export',
-                fontSize: 11,
-                spacing: 0,
-                verticalPadding: 0,
-                onPressed: () {
-                  onExportPressed(context, timerProvider.timers);
-                },
+              Visibility(
+                  visible: timerProvider.timers.isNotEmpty, child: Spacer()),
+              Visibility(
+                visible: timerProvider.timers.isNotEmpty,
+                child: NavBarIconButton(
+                  icon: Icons.upload,
+                  label: 'Export',
+                  fontSize: 11,
+                  spacing: 0,
+                  verticalPadding: 0,
+                  onPressed: () {
+                    onExportPressed(context, timerProvider.timers);
+                  },
+                ),
               ),
               Spacer(),
               NavBarIconButton(
@@ -273,17 +277,21 @@ class _ListTimersPageState extends State<ListTimersPage> {
                   },
                 ),
               ),
-              SizedBox(height: 12),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: NavBarIconButton(
-                      icon: Icons.upload,
-                      iconSize: 25,
-                      label: 'Export',
-                      verticalPadding: 8,
-                      onPressed: () {
-                        onExportPressed(context, timerProvider.timers);
-                      })),
+              Visibility(
+                  visible: timerProvider.timers.isNotEmpty,
+                  child: SizedBox(height: 12)),
+              Visibility(
+                  visible: timerProvider.timers.isNotEmpty,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: NavBarIconButton(
+                          icon: Icons.upload,
+                          iconSize: 25,
+                          label: 'Export',
+                          verticalPadding: 8,
+                          onPressed: () {
+                            onExportPressed(context, timerProvider.timers);
+                          }))),
               SizedBox(height: 12),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
