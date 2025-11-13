@@ -77,39 +77,6 @@ class TimerProvider extends ChangeNotifier {
     }
   }
 
-  // Future<List<TimerType>> loadTimers() async {
-  //   // Load workouts from the old repository
-  //   await _workoutRepository.getAllWorkouts().then((workouts) {});
-
-  //   if (_workouts.isNotEmpty) {
-  //     logger.i("Migrating old workouts to timers and intervals...");
-  //     await workoutsMigration(_workouts, _intervalRepository, _timerRepository);
-  //     logger.i("Migration completed successfully.");
-
-  //     _workoutRepository.deleteAllWorkouts().then((_) {
-  //       logger.i("Old workouts deleted after migration.");
-  //     }).catchError((error) {
-  //       logger.e("Error deleting old workouts: $error");
-  //     });
-  //   }
-
-  //   // Run warmup migration
-  //   await warmupMigration(
-  //     _timers,
-  //     _intervalRepository,
-  //     _timerRepository,
-  //     _timerTimeSettingsRepository,
-  //   );
-
-  //   return _timerRepository.getAllTimers().then((timers) {
-  //     _timers = timers;
-  //     _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
-  //     return _timers;
-  //   }).whenComplete(() {
-  //     notifyListeners();
-  //   });
-  // }
-
   Future<void> updateTimerOrder(List<TimerType> timers) async {
     _timers = timers;
 
