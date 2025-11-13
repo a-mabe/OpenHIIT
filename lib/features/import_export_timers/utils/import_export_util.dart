@@ -69,7 +69,6 @@ class ImportExportUtil {
       for (Map<String, dynamic> item in jsonList) {
         logger.d("Importing timer: ${item['name']}");
         TimerType timer = TimerType.fromJson(item);
-
         importedTimers.add(timer);
       }
       return importedTimers;
