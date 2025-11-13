@@ -11,13 +11,11 @@ import 'package:openhiit/core/providers/interval_provider/interval_provider.dart
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/core/models/timer_type.dart';
-import 'package:openhiit/core/models/workout_type.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:uuid/uuid.dart';
 
 class TimerProvider extends ChangeNotifier {
   // Deprecated - Included to migrate old data
-  final List<Workout> _workouts = [];
   final WorkoutRepository _workoutRepository = WorkoutRepository();
 
   List<TimerType> _timers = [];
