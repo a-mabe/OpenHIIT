@@ -141,10 +141,6 @@ class TimerProvider extends ChangeNotifier {
     timer.soundSettings.id = Uuid().v4();
     timer.timeSettings.timerId = timer.id;
     timer.soundSettings.timerId = timer.id;
-
-    logger.d("sound settings in pushTimerCopy: ${timer.soundSettings}");
-    logger.d("time settings in pushTimerCopy: ${timer.timeSettings}");
-
     await pushTimer(timer);
     notifyListeners();
   }
