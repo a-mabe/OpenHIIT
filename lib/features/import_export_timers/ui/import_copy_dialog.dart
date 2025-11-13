@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:openhiit/shared/globals.dart';
 
-Future<void> showImportDialog(String timerName, VoidCallback onConfirm) async {
+Future<void> showImportDialog(
+    String timerName, Future<void> Function() onConfirm) async {
   final navigator = navigatorKey.currentState;
   if (navigator == null || !navigator.mounted) {
     // Context is not available — the app may be rebuilding
@@ -23,9 +24,11 @@ Future<void> showImportDialog(String timerName, VoidCallback onConfirm) async {
               ),
               TextButton(
                 child: Text('Import Copy'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // dismiss dialog
-                  onConfirm(); // execute callback
+                onPressed: () async {
+                  await onConfirm(); // execute callback
+                  if (navigator.mounted) {
+                    navigator.pop(); // dismiss dialog
+                  }
                 },
               ),
             ],

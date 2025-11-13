@@ -42,37 +42,75 @@ class TimerProvider extends ChangeNotifier {
   }
 
   Future<List<TimerType>> loadTimers() async {
-    // Load workouts from the old repository
-    await _workoutRepository.getAllWorkouts().then((workouts) {});
+    try {
+      final workouts = await _workoutRepository.getAllWorkouts();
 
-    if (_workouts.isNotEmpty) {
-      logger.i("Migrating old workouts to timers and intervals...");
-      await workoutsMigration(_workouts, _intervalRepository, _timerRepository);
-      logger.i("Migration completed successfully.");
+      if (workouts.isNotEmpty) {
+        logger.i("Migrating old workouts to timers and intervals...");
+        await workoutsMigration(
+            workouts, _intervalRepository, _timerRepository);
+        logger.i("Migration completed successfully.");
 
-      _workoutRepository.deleteAllWorkouts().then((_) {
-        logger.i("Old workouts deleted after migration.");
-      }).catchError((error) {
-        logger.e("Error deleting old workouts: $error");
-      });
-    }
+        try {
+          await _workoutRepository.deleteAllWorkouts();
+          logger.i("Old workouts deleted after migration.");
+        } catch (error) {
+          logger.e("Error deleting old workouts: $error");
+        }
+      }
 
-    // Run warmup migration
-    await warmupMigration(
-      _timers,
-      _intervalRepository,
-      _timerRepository,
-      _timerTimeSettingsRepository,
-    );
+      // Run warmup migration
+      await warmupMigration(
+        _timers,
+        _intervalRepository,
+        _timerRepository,
+        _timerTimeSettingsRepository,
+      );
 
-    return _timerRepository.getAllTimers().then((timers) {
-      _timers = timers;
+      // Load timers
+      _timers = await _timerRepository.getAllTimers();
       _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
-      return _timers;
-    }).whenComplete(() {
       notifyListeners();
-    });
+
+      return _timers;
+    } catch (error, stackTrace) {
+      logger.e("Error loading timers: $error\n$stackTrace");
+      rethrow; // rethrow so FutureBuilder sees it and shows error UI
+    }
   }
+
+  // Future<List<TimerType>> loadTimers() async {
+  //   // Load workouts from the old repository
+  //   await _workoutRepository.getAllWorkouts().then((workouts) {});
+
+  //   if (_workouts.isNotEmpty) {
+  //     logger.i("Migrating old workouts to timers and intervals...");
+  //     await workoutsMigration(_workouts, _intervalRepository, _timerRepository);
+  //     logger.i("Migration completed successfully.");
+
+  //     _workoutRepository.deleteAllWorkouts().then((_) {
+  //       logger.i("Old workouts deleted after migration.");
+  //     }).catchError((error) {
+  //       logger.e("Error deleting old workouts: $error");
+  //     });
+  //   }
+
+  //   // Run warmup migration
+  //   await warmupMigration(
+  //     _timers,
+  //     _intervalRepository,
+  //     _timerRepository,
+  //     _timerTimeSettingsRepository,
+  //   );
+
+  //   return _timerRepository.getAllTimers().then((timers) {
+  //     _timers = timers;
+  //     _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
+  //     return _timers;
+  //   }).whenComplete(() {
+  //     notifyListeners();
+  //   });
+  // }
 
   Future<void> updateTimerOrder(List<TimerType> timers) async {
     _timers = timers;
@@ -98,13 +136,16 @@ class TimerProvider extends ChangeNotifier {
 
   Future<void> pushTimerCopy(TimerType timer) async {
     timer.name = "${timer.name} Copy";
-    timer.id = Uuid().v8();
-    timer.timeSettings.id = Uuid().v8();
-    timer.soundSettings.id = Uuid().v8();
+    timer.id = Uuid().v4();
+    timer.timeSettings.id = Uuid().v4();
+    timer.soundSettings.id = Uuid().v4();
     timer.timeSettings.timerId = timer.id;
     timer.soundSettings.timerId = timer.id;
+
+    logger.d("sound settings in pushTimerCopy: ${timer.soundSettings}");
+    logger.d("time settings in pushTimerCopy: ${timer.timeSettings}");
+
     await pushTimer(timer);
-    await pushIntervalsFromTimer(timer);
     notifyListeners();
   }
 
@@ -136,17 +177,16 @@ class TimerProvider extends ChangeNotifier {
   }
 
   Future<void> pushIntervalsFromTimer(TimerType timer) async {
-    Future<List<IntervalType>> intervalsFuture =
-        generateIntervalsFromTimer(timer);
-    intervalsFuture.then((intervals) async {
+    List<IntervalType> intervals = generateIntervalsFromTimer(timer);
+    try {
       if (intervals.isNotEmpty) {
         await _intervalRepository.insertIntervals(intervals);
         _intervalProvider.setIntervals(intervals);
         notifyListeners();
       }
-    }).catchError((error) {
+    } catch (error) {
       logger.e("Error generating intervals: $error");
-    });
+    }
   }
 
   Future<List<IntervalType>> getIntervalsForTimer(String timerId) async {

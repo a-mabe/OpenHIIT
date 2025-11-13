@@ -20,8 +20,7 @@ void onExportPressed(BuildContext context, List<TimerType> timers) {
   );
 }
 
-Future<void> onImportPressed(BuildContext context, TimerProvider timerProvider,
-    Function? onImport) async {
+Future<void> onImportPressed(
+    BuildContext context, TimerProvider timerProvider) async {
   await ImportExportUtil.tryImport(timerProvider);
-  onImport?.call();
 }

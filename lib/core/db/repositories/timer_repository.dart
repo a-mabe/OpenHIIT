@@ -1,3 +1,4 @@
+import 'package:background_hiit_timer/utils/log.dart';
 import 'package:openhiit/core/db/database.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';
@@ -65,12 +66,35 @@ class TimerRepository {
       final timeSettingsMap = {for (var s in timeSettingsList) s.timerId: s};
       final soundSettingsMap = {for (var s in soundSettingsList) s.timerId: s};
 
-      return timerMaps.map((timerMap) {
-        final timer = TimerType.fromMap(timerMap);
-        timer.timeSettings = timeSettingsMap[timer.id]!;
-        timer.soundSettings = soundSettingsMap[timer.id]!;
-        return timer;
-      }).toList();
+      // return timerMaps.map((timerMap) {
+      //   final timer = TimerType.fromMap(timerMap);
+      //   timer.timeSettings = timeSettingsMap[timer.id]!;
+      //   timer.soundSettings = soundSettingsMap[timer.id]!;
+      //   return timer;
+      // }).toList();
+
+      return timerMaps
+          .map((timerMap) {
+            final timer = TimerType.fromMap(timerMap);
+            final timeSettings = timeSettingsMap[timer.id];
+            final soundSettings = soundSettingsMap[timer.id];
+
+            if (timeSettings == null) {
+              logger.w(
+                  'Timer ${timer.name} (${timer.id}) missing TIME settings, skipping.');
+            }
+
+            if (soundSettings == null) {
+              logger.w(
+                  'Timer ${timer.name} (${timer.id}) missing SOUND settings, skipping.');
+            }
+
+            timer.timeSettings = timeSettings!;
+            timer.soundSettings = soundSettings!;
+            return timer;
+          })
+          .whereType<TimerType>()
+          .toList();
     });
   }
 

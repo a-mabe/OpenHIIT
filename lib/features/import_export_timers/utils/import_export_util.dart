@@ -70,6 +70,10 @@ class ImportExportUtil {
         logger.d("Importing timer: ${item['name']}");
         TimerType timer = TimerType.fromJson(item);
 
+        logger.d("timer settings in import: ${timer.timeSettings.toJson()}");
+        logger.d(
+            "timer sound settings in import: ${timer.soundSettings.toJson()}");
+
         importedTimers.add(timer);
       }
       return importedTimers;

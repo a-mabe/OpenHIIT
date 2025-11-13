@@ -75,6 +75,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            logger.e("Error fetching timers: ${snapshot.error}");
             return const Center(child: Text('Error fetching timers'));
           } else {
             final timers = snapshot.data ?? [];
@@ -139,11 +140,9 @@ class _ListTimersPageState extends State<ListTimersPage> {
                   spacing: 0,
                   verticalPadding: 0,
                   onPressed: () async {
-                    await onImportPressed(
-                      context,
-                      timerProvider,
-                      refreshTimers,
-                    );
+                    await onImportPressed(context, timerProvider).then((_) {
+                      refreshTimers();
+                    });
                   }),
               Spacer(),
               NavBarIconButton(
@@ -293,11 +292,9 @@ class _ListTimersPageState extends State<ListTimersPage> {
                       label: 'Import',
                       verticalPadding: 8,
                       onPressed: () async {
-                        await onImportPressed(
-                          context,
-                          timerProvider,
-                          refreshTimers,
-                        );
+                        await onImportPressed(context, timerProvider).then((_) {
+                          refreshTimers();
+                        });
                       })),
               Spacer(),
               AboutButton(),
