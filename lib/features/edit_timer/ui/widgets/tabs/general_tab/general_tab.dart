@@ -118,50 +118,46 @@ class GeneralTab extends StatelessWidget {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Minutes View",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          SizedBox(height: 5),
+                          Column(
+                            children: [
+                              Text(
+                                "Minutes View",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "1:42",
-                                  style: TextStyle(
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "1:42",
+                                style: TextStyle(
+                                  fontSize: 34,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           Divider(color: Colors.grey.shade800, thickness: 1),
-                          Container(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Seconds View",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          SizedBox(height: 5),
+                          Column(
+                            children: [
+                              Text(
+                                "Seconds View",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "102s",
-                                  style: TextStyle(
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "102s",
+                                style: TextStyle(
+                                  fontSize: 34,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
