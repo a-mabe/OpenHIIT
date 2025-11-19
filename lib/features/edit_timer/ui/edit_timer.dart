@@ -317,6 +317,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             await _handleSubmit();
           }
 
+          if (!mounted) return;
           final timerCreation = context.read<TimerCreationProvider>();
           final timerProvider = context.read<TimerProvider>();
 
@@ -445,7 +446,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.of(context).maybePop(); // or your custom action
+                Navigator.of(context).maybePop();
               },
             ),
             selectedIndex: _tabController.index,
