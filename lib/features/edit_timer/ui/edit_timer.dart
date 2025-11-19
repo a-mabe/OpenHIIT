@@ -442,6 +442,12 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       body: Row(
         children: [
           NavigationRail(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).maybePop(); // or your custom action
+              },
+            ),
             selectedIndex: _tabController.index,
             onDestinationSelected: (i) =>
                 setState(() => _tabController.index = i),
