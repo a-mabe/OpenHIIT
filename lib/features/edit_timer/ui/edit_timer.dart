@@ -305,8 +305,11 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
         state: buttonState, onPressed: _handleSubmit, isExpanded: _isExpanded);
   }
 
-  Widget _buildKebabMenu() {
+  Widget _buildKebabMenu({bool horizontal = false}) {
     return PopupMenuButton<int>(
+      icon: horizontal
+          ? const Icon(Icons.more_horiz)
+          : const Icon(Icons.more_vert),
       onSelected: (item) async {
         if (item == 0) {
           if (buttonState == StartSaveState.save) {
@@ -314,6 +317,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             await _handleSubmit();
           }
 
+          if (!mounted) return;
           final timerCreation = context.read<TimerCreationProvider>();
           final timerProvider = context.read<TimerProvider>();
 
@@ -439,6 +443,12 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       body: Row(
         children: [
           NavigationRail(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).maybePop();
+              },
+            ),
             selectedIndex: _tabController.index,
             onDestinationSelected: (i) =>
                 setState(() => _tabController.index = i),
@@ -452,6 +462,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
               NavigationRailDestination(
                   icon: Icon(Icons.fitness_center), label: Text('Edit Tab')),
             ],
+            trailing: _buildKebabMenu(horizontal: true),
           ),
           Expanded(child: _buildTabView()),
         ],
