@@ -76,12 +76,15 @@ class _ListTimersPageState extends State<ListTimersPage> {
             return Scaffold(
               extendBodyBehindAppBar: true,
               extendBody: true,
-              appBar: isLandscape && isTablet
+              appBar: isTablet && isLandscape
                   ? PreferredSize(
-                      preferredSize: const Size.fromHeight(40.0),
-                      child: AppBar(toolbarHeight: 1.0, elevation: 0),
+                      preferredSize: Size.fromHeight(40.0),
+                      child: AppBar(
+                        toolbarHeight: 1.0,
+                        elevation: 0,
+                      ),
                     )
-                  : ListTimersAppBar(),
+                  : (!isLandscape ? ListTimersAppBar() : null),
               body: isLandscape || isTablet
                   ? Row(
                       children: [
