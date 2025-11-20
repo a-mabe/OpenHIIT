@@ -31,17 +31,17 @@ class _ListTimersPageState extends State<ListTimersPage> {
   @override
   void initState() {
     super.initState();
+    timerProvider = Provider.of<TimerProvider>(context, listen: false);
     refreshTimers();
   }
 
   bool _isTablet(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // A common breakpoint for tablets is 600dp
+    // 600 is a common breakpoint for tablets.
     return size.shortestSide >= 600;
   }
 
   void refreshTimers() {
-    timerProvider = Provider.of<TimerProvider>(context, listen: false);
     setState(() {
       _loadTimersFuture = timerProvider.loadTimers();
     });
@@ -49,266 +49,224 @@ class _ListTimersPageState extends State<ListTimersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isLandscape = constraints.maxWidth > constraints.maxHeight;
-        final isTablet = _isTablet(context);
-
-        if (isLandscape || isTablet) {
-          return _buildHomeLandscape();
-        } else {
-          return _buildHomePortrait();
+    return FutureBuilder<List<TimerType>>(
+      future: _loadTimersFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
+
+        if (snapshot.hasError) {
+          logger.e("Error fetching timers: ${snapshot.error}");
+          return Scaffold(
+            body:
+                Center(child: Text('Error fetching timers: ${snapshot.error}')),
+          );
+        }
+
+        final timers = snapshot.data ?? [];
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isLandscape = constraints.maxWidth > constraints.maxHeight;
+            final isTablet = _isTablet(context);
+
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              extendBody: true,
+              appBar: isLandscape && isTablet
+                  ? PreferredSize(
+                      preferredSize: const Size.fromHeight(40.0),
+                      child: AppBar(toolbarHeight: 1.0, elevation: 0),
+                    )
+                  : ListTimersAppBar(),
+              body: isLandscape || isTablet
+                  ? Row(
+                      children: [
+                        _buildNavRail(timers),
+                        Expanded(
+                          child: SafeArea(
+                            left: false,
+                            child: _buildTimerList(timers),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SafeArea(
+                      child: _buildTimerList(timers),
+                    ),
+              bottomNavigationBar: !isLandscape
+                  ? SafeArea(
+                      top: false,
+                      child: _buildBottomNavBar(timers),
+                    )
+                  : null,
+            );
+          },
+        );
       },
     );
   }
 
-  Widget _buildHomePortrait() {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      appBar: ListTimersAppBar(),
-      body: SafeArea(
-          child: FutureBuilder(
-        future: _loadTimersFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            logger.e("Error fetching timers: ${snapshot.error}");
-            return const Center(child: Text('Error fetching timers'));
-          } else {
-            final timers = snapshot.data ?? [];
-            if (timers.isEmpty) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Text('No saved timers',
-                          style: TextStyle(fontSize: 20)),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Text("Hit the + to get started!"),
-                    ),
-                  ],
-                ),
-              );
-            }
-            return ListTimersReorderableList(
-              items: timers,
-              onReorderCompleted: (reorderedItems) {},
-              onTap: (timer) {
-                logger.d("Tapped on timer: ${timer.name}");
-                context.read<TimerCreationProvider>().setTimer(timer);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditTimer(editing: true),
-                  ),
-                ).then((_) {
-                  refreshTimers();
-                });
-              },
-            );
-          }
-        },
-      )),
-      bottomNavigationBar: SafeArea(
-          top: false,
-          child: CustomBottomAppBar(
-            children: [
-              Visibility(
-                  visible: timerProvider.timers.isNotEmpty, child: Spacer()),
-              Visibility(
-                visible: timerProvider.timers.isNotEmpty,
-                child: NavBarIconButton(
-                  icon: Icons.upload,
-                  label: 'Export',
-                  fontSize: 11,
-                  spacing: 0,
-                  verticalPadding: 0,
-                  onPressed: () {
-                    onExportPressed(context, timerProvider.timers);
-                  },
-                ),
-              ),
-              Spacer(),
-              NavBarIconButton(
-                  icon: Icons.download,
-                  label: 'Import',
-                  fontSize: 11,
-                  spacing: 0,
-                  verticalPadding: 0,
-                  onPressed: () async {
-                    await onImportPressed(context, timerProvider).then((_) {
-                      refreshTimers();
-                    });
-                  }),
-              Spacer(),
-              NavBarIconButton(
+  // -------------------
+  // Timer List
+  // -------------------
+  Widget _buildTimerList(List<TimerType> timers) {
+    if (timers.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('No saved timers', style: TextStyle(fontSize: 20)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text("Hit the + to get started!"),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListTimersReorderableList(
+      items: timers,
+      onReorderCompleted: (reorderedItems) {},
+      onTap: (timer) {
+        context.read<TimerCreationProvider>().setTimer(timer);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EditTimer(editing: true)),
+        ).then((_) => refreshTimers());
+      },
+    );
+  }
+
+  // -------------------
+  // Bottom Navigation Bar (Portrait)
+  // -------------------
+  Widget _buildBottomNavBar(List<TimerType> timers) {
+    return CustomBottomAppBar(
+      children: [
+        Visibility(visible: timers.isNotEmpty, child: const Spacer()),
+        Visibility(
+          visible: timers.isNotEmpty,
+          child: NavBarIconButton(
+            icon: Icons.upload,
+            label: 'Export',
+            fontSize: 11,
+            spacing: 0,
+            verticalPadding: 0,
+            onPressed: () {
+              onExportPressed(context, timers);
+            },
+          ),
+        ),
+        const Spacer(),
+        NavBarIconButton(
+          icon: Icons.download,
+          label: 'Import',
+          fontSize: 11,
+          spacing: 0,
+          verticalPadding: 0,
+          onPressed: () async {
+            await onImportPressed(context, timerProvider);
+            refreshTimers();
+          },
+        ),
+        const Spacer(),
+        NavBarIconButton(
+          icon: Icons.add_circle,
+          iconColor: Theme.of(context).colorScheme.primary,
+          label: 'New',
+          keyLabel: 'new-timer',
+          fontSize: 11,
+          spacing: 0,
+          verticalPadding: 4,
+          onPressed: () {
+            context.read<TimerCreationProvider>().clear();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const EditTimer(editing: false)),
+            ).then((_) => refreshTimers());
+          },
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+
+  // -------------------
+  // Nav Rail (Landscape / Tablet)
+  // -------------------
+  Widget _buildNavRail(List<TimerType> timers) {
+    return Material(
+      elevation: 12.0,
+      child: SafeArea(
+        right: false,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: NavBarIconButton(
                 icon: Icons.add_circle,
+                iconSize: 25,
                 iconColor: Theme.of(context).colorScheme.primary,
                 label: 'New',
-                keyLabel: 'new-timer',
-                fontSize: 11,
-                spacing: 0,
-                verticalPadding: 4,
+                verticalPadding: 8,
                 onPressed: () {
                   context.read<TimerCreationProvider>().clear();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EditTimer(editing: false),
-                    ),
-                  ).then((_) {
-                    refreshTimers();
-                  });
+                        builder: (context) => const EditTimer(editing: false)),
+                  ).then((_) => refreshTimers());
                 },
               ),
-              Spacer(),
-            ],
-          )),
-    );
-  }
-
-  Widget _buildHomeLandscape() {
-    return Scaffold(
-      appBar: _isTablet(context)
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(40.0),
-              child: AppBar(
-                toolbarHeight: 1.0,
-                elevation: 0,
-              ),
-            )
-          : null,
-      body: Row(children: [
-        _buildNavRail(),
-        Expanded(
-            child: SafeArea(
-          // Not needed because the nav rail is on the left side
-          left: false,
-          child: FutureBuilder(
-            future: _loadTimersFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                logger.e("Error fetching timers: ${snapshot.error}");
-                return const Center(child: Text('Error fetching timers'));
-              } else {
-                final timers = snapshot.data ?? [];
-                if (timers.isEmpty) {
-                  return const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text('No saved timers',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text("Hit the + to get started!"),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return ListTimersReorderableList(
-                  items: timers,
-                  onReorderCompleted: (reorderedItems) {},
-                  onTap: (timer) {
-                    logger.d("Tapped on timer: ${timer.name}");
-                    context.read<TimerCreationProvider>().setTimer(timer);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditTimer(editing: true),
-                      ),
-                    ).then((_) {
-                      refreshTimers();
-                    });
-                  },
-                );
-              }
-            },
-          ),
-        )),
-      ]),
-    );
-  }
-
-  Widget _buildNavRail() {
-    return Material(
-        elevation: 12.0,
-        child: SafeArea(
-          // Not needed because the timer list is on the right side
-          right: false,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 15),
-              Padding(
+            ),
+            Visibility(
+                visible: timers.isNotEmpty, child: const SizedBox(height: 12)),
+            Visibility(
+              visible: timers.isNotEmpty,
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: NavBarIconButton(
-                  icon: Icons.add_circle,
+                  icon: Icons.upload,
                   iconSize: 25,
-                  iconColor: Theme.of(context).colorScheme.primary,
-                  label: 'New',
+                  label: 'Export',
                   verticalPadding: 8,
                   onPressed: () {
-                    context.read<TimerCreationProvider>().clear();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditTimer(editing: false),
-                      ),
-                    ).then((_) {
-                      refreshTimers();
-                    });
+                    onExportPressed(context, timers);
                   },
                 ),
               ),
-              Visibility(
-                  visible: timerProvider.timers.isNotEmpty,
-                  child: SizedBox(height: 12)),
-              Visibility(
-                  visible: timerProvider.timers.isNotEmpty,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: NavBarIconButton(
-                          icon: Icons.upload,
-                          iconSize: 25,
-                          label: 'Export',
-                          verticalPadding: 8,
-                          onPressed: () {
-                            onExportPressed(context, timerProvider.timers);
-                          }))),
-              SizedBox(height: 12),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: NavBarIconButton(
-                      icon: Icons.download,
-                      iconSize: 25,
-                      label: 'Import',
-                      verticalPadding: 8,
-                      onPressed: () async {
-                        await onImportPressed(context, timerProvider).then((_) {
-                          refreshTimers();
-                        });
-                      })),
-              Spacer(),
-              AboutButton(),
-              SizedBox(height: 10),
-            ],
-          ),
-        ));
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: NavBarIconButton(
+                icon: Icons.download,
+                iconSize: 25,
+                label: 'Import',
+                verticalPadding: 8,
+                onPressed: () async {
+                  await onImportPressed(context, timerProvider);
+                  refreshTimers();
+                },
+              ),
+            ),
+            const Spacer(),
+            const AboutButton(),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
   }
 }
