@@ -33,7 +33,9 @@ List<TimerListTileModel> listItems(
         seconds: interval.time,
       ),
     );
-    if (interval.id.contains("break")) {
+
+    /// Restart when the last work interval is exceeded.
+    if (workIntervalIndex == timer.activeIntervals + 1) {
       workIntervalIndex = 1;
     }
   }
