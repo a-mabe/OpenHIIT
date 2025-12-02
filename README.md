@@ -50,10 +50,13 @@ Welcome to OpenHIIT, an open-source workout interval timer mobile application de
 🏋️ **Add Exercises** - Type in the exercises for your workout to display with the timer.
 
 <p align="center">
-   <img src="https://github.com/user-attachments/assets/6b8f941c-1da6-4849-a892-e5f2d5534e21" width="200">
-   <img src="https://github.com/user-attachments/assets/dd16a054-97b2-4848-ac3f-0788e6d8a9c9" width="200">
-   <img src="https://github.com/user-attachments/assets/fc5cb739-0be4-4f30-8b47-877b0edc541f" width="200">
-   <img src="https://github.com/user-attachments/assets/0a2f304f-b59f-45a4-bacb-a5307c184347" width="200">
+   <img src="https://github.com/user-attachments/assets/2d64f356-526b-419e-8b71-cc43bf8da65b" width="200">
+   &nbsp;&nbsp;&nbsp;
+   <img src="https://github.com/user-attachments/assets/8ada8439-deae-47ea-b76c-96c49cfdf914" width="200">
+   &nbsp;&nbsp;&nbsp;
+   <img src="https://github.com/user-attachments/assets/4b470c2f-96db-4e01-95c9-228cccb65316" width="200">
+   &nbsp;&nbsp;&nbsp;
+   <img src="https://github.com/user-attachments/assets/a74e76e5-4608-4303-a751-e156f1645335" width="200">
 </p>
 
 ## Installation
