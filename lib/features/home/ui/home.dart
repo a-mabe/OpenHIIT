@@ -10,6 +10,9 @@ import 'package:openhiit/features/home/ui/widgets/app_bar.dart';
 import 'package:openhiit/features/home/ui/widgets/nav_bar_icon_button.dart';
 import 'package:openhiit/features/import_export_timers/utils/functions.dart';
 import 'package:openhiit/features/reorder_timers/ui/list_timers.dart';
+import 'package:openhiit/features/whats_new/ui/whats_new_dialog.dart';
+import 'package:openhiit/features/whats_new/ui/whats_new_items.dart';
+import 'package:openhiit/features/whats_new/utils/whats_new_service.dart';
 import 'package:openhiit/shared/ui/widgets/bottom_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +35,8 @@ class _ListTimersPageState extends State<ListTimersPage> {
   void initState() {
     super.initState();
     timerProvider = Provider.of<TimerProvider>(context, listen: false);
-    refreshTimers();
+    _refreshTimers();
+    _handleWhatsNew();
   }
 
   bool _isTablet(BuildContext context) {
@@ -41,10 +45,42 @@ class _ListTimersPageState extends State<ListTimersPage> {
     return size.shortestSide >= 600;
   }
 
-  void refreshTimers() {
+  void _refreshTimers() {
     setState(() {
       _loadTimersFuture = timerProvider.loadTimers();
     });
+  }
+
+  Future<void> _handleWhatsNew() async {
+    const currentVersion = WhatsNewData.version;
+
+    final firstLaunch = await WhatsNewService.isFirstLaunch();
+
+    if (firstLaunch) {
+      // Do not show the popup for brand-new users
+      logger.i("First launch detected, skipping What's New dialog.");
+      return;
+    }
+
+    logger.i("Not first launch, checking if What's New should be shown.");
+
+    // At this point the user has launched before
+    if (await WhatsNewService.shouldShow(currentVersion)) {
+      final items = WhatsNewData.items;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (_) => WhatsNewDialog(
+            version: currentVersion,
+            items: items,
+          ),
+        );
+      });
+
+      logger.i("Showing What's New dialog for version $currentVersion.");
+      await WhatsNewService.markShown(currentVersion);
+    }
   }
 
   @override
@@ -143,7 +179,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => EditTimer(editing: true)),
-        ).then((_) => refreshTimers());
+        ).then((_) => _refreshTimers());
       },
     );
   }
@@ -177,7 +213,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
           verticalPadding: 0,
           onPressed: () async {
             await onImportPressed(context, timerProvider);
-            refreshTimers();
+            _refreshTimers();
           },
         ),
         const Spacer(),
@@ -195,7 +231,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => const EditTimer(editing: false)),
-            ).then((_) => refreshTimers());
+            ).then((_) => _refreshTimers());
           },
         ),
         const Spacer(),
@@ -229,7 +265,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const EditTimer(editing: false)),
-                  ).then((_) => refreshTimers());
+                  ).then((_) => _refreshTimers());
                 },
               ),
             ),
@@ -260,7 +296,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
                 verticalPadding: 8,
                 onPressed: () async {
                   await onImportPressed(context, timerProvider);
-                  refreshTimers();
+                  _refreshTimers();
                 },
               ),
             ),
