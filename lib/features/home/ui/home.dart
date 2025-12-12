@@ -59,6 +59,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
     if (firstLaunch) {
       // Do not show the popup for brand-new users
       logger.i("First launch detected, skipping What's New dialog.");
+      await WhatsNewService.markShown(currentVersion);
       return;
     }
 
