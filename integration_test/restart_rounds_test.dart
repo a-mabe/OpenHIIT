@@ -15,6 +15,9 @@ void main() {
     await tester.pumpWidget(WorkoutTimer());
     await tester.pumpAndSettle();
 
+    // Tap "Got it!" to dismiss the welcome screen.
+    await tapGotItButton(tester, binding);
+
     // Create a new timer for restart testing.
     await tapButtonByKey(
         tester, 'new-timer', '1_restart_new-timer', binding, true);

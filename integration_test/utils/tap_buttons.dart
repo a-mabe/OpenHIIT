@@ -50,3 +50,14 @@ Future<void> tapBackArrow(WidgetTester tester, String screenShotName,
   await takeScreenShot(
       binding: binding, tester: tester, screenShotName: screenShotName);
 }
+
+// If Got it button is present, tap it
+Future<void> tapGotItButton(
+    WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
+  final gotItButtonFinder = find.byKey(ValueKey('got_it_button'));
+  if (gotItButtonFinder.evaluate().isNotEmpty) {
+    await tapButtonByKey(
+        tester, 'got_it_button', 'got_it_button', binding, true,
+        waitForDisappearance: true);
+  }
+}

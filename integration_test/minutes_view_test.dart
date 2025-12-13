@@ -19,6 +19,9 @@ void main() {
     await tester.pumpWidget(WorkoutTimer());
     await tester.pumpAndSettle();
 
+    // Tap "Got it!" to dismiss the welcome screen.
+    await tapGotItButton(tester, binding);
+
     // Ensure a timer exists or create one for editing.
     if (find.textContaining("No saved timers").evaluate().isNotEmpty) {
       await tapButtonByKey(
