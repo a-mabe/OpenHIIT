@@ -14,6 +14,9 @@ void main() {
   testWidgets('simple_timer', (WidgetTester tester) async {
     await tester.pumpWidget(WorkoutTimer());
 
+    // Tap "Got it!" to dismiss the welcome screen.
+    await tapGotItButton(tester, binding);
+
     // App loaded.
     await takeScreenShot(
         binding: binding,
