@@ -14,15 +14,15 @@ void main() {
   testWidgets('advanced_timer', (WidgetTester tester) async {
     await tester.pumpWidget(WorkoutTimer());
 
-    // Tap "Got it!" to dismiss the welcome screen.
-    await tapGotItButton(tester, binding);
-
     // App loaded.
     await takeScreenShot(
         binding: binding,
         tester: tester,
         screenShotName: '1_advanced-timer_home',
         settle: true);
+
+    // Tap "Got it!" to dismiss the welcome screen.
+    await tapGotItButton(tester, binding);
 
     // Tap the "New" button in the bottom nav bar to create a new timer.
     await tapButtonByKey(
