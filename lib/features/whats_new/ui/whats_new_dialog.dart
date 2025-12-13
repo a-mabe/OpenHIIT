@@ -61,7 +61,10 @@ class WhatsNewDialog extends StatelessWidget {
             const SizedBox(height: 20),
             FilledButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Got it"),
+              child: const Text(
+                "Got it",
+                key: Key("got_it_button"),
+              ),
             ),
           ],
         ),
