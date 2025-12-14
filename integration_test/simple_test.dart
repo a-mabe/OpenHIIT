@@ -21,6 +21,9 @@ void main() {
         screenShotName: '1_simple-timer_home',
         settle: true);
 
+    // Tap "Got it!" to dismiss the welcome screen.
+    await tapGotItButton(tester, binding);
+
     // Tap the "New" button in the bottom nav bar to create a new timer.
     await tapButtonByKey(
         tester, 'new-timer', '2_simple-timer_new-timer', binding, true);
