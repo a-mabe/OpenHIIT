@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
@@ -25,26 +24,26 @@ class ListTimersPage extends StatefulWidget {
 
 class _ListTimersPageState extends State<ListTimersPage> {
   late Future<List<TimerType>> _loadTimersFuture;
-
-  final Logger logger = Logger(
-    printer: JsonLogPrinter('ListTimersPage'),
-  );
-
-  TimerProvider get _timerProvider => context.read<TimerProvider>();
+  late final TimerProvider _timerProvider;
 
   @override
   void initState() {
     super.initState();
+    _timerProvider = context.read<TimerProvider>();
     _refreshTimers();
     _handleWhatsNew();
   }
 
   void _refreshTimers() {
-    _loadTimersFuture = _timerProvider.loadTimers();
-    if (mounted) setState(() {});
+    Log.info("Refreshing timers...");
+    setState(() {
+      _loadTimersFuture = _timerProvider.loadTimers();
+    });
   }
 
   Future<void> _openTimerEditor({TimerType? timer}) async {
+    Log.info("Opening timer editor for ${timer?.name ?? 'new timer'}");
+
     final creationProvider = context.read<TimerCreationProvider>();
 
     if (timer == null) {
@@ -67,18 +66,16 @@ class _ListTimersPageState extends State<ListTimersPage> {
   Future<void> _handleWhatsNew() async {
     const currentVersion = WhatsNewData.version;
 
-    /// Uncomment the following lines once shared preferences for versioning are added.
-    ///
     final firstLaunch = await WhatsNewService.isFirstLaunch();
 
     if (firstLaunch) {
       // Do not show the popup for brand-new users
-      logger.i("First launch detected, skipping What's New dialog.");
+      Log.info("First launch detected, skipping What's New dialog.");
       await WhatsNewService.markShown(currentVersion);
       return;
     }
 
-    logger.i("Not first launch, checking if What's New should be shown.");
+    Log.info("Not first launch, checking if What's New should be shown.");
 
     // At this point the user has launched before
     if (await WhatsNewService.shouldShow(currentVersion)) {
@@ -95,7 +92,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
         );
       });
 
-      logger.i("Showing What's New dialog for version $currentVersion.");
+      Log.info("Showing What's New dialog for version $currentVersion.");
       await WhatsNewService.markShown(currentVersion);
     }
   }
@@ -106,13 +103,14 @@ class _ListTimersPageState extends State<ListTimersPage> {
       future: _loadTimersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          Log.info("Fetching timers...");
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
         if (snapshot.hasError) {
-          logger.e("Error fetching timers: ${snapshot.error}");
+          Log.error("Error fetching timers: ${snapshot.error}");
           return Scaffold(
             body:
                 Center(child: Text('Error fetching timers: ${snapshot.error}')),
@@ -123,9 +121,14 @@ class _ListTimersPageState extends State<ListTimersPage> {
 
         return LayoutBuilder(
           builder: (context, constraints) {
+            Log.info("Fetched ${timers.length} timers.");
+
             final isLandscape = constraints.maxWidth > constraints.maxHeight;
             final shortestSide = constraints.biggest.shortestSide;
             final isTablet = shortestSide >= 600;
+
+            Log.info(
+                "Building layout with parameters - isLandscape: $isLandscape, isTablet: $isTablet");
 
             return Scaffold(
               extendBodyBehindAppBar: true,
