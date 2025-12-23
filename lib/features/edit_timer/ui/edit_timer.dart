@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
@@ -41,10 +40,6 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   bool _isExpanded = true;
 
   bool controllersUpdated = false;
-
-  final logger = Logger(
-    printer: JsonLogPrinter('EditTimer'),
-  );
 
   bool _isTablet(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -194,7 +189,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     if (!mounted) return;
 
     if (intervals.isEmpty) {
-      logger.w('No intervals generated from timer.');
+      Log.warning('No intervals generated from timer.');
       setButtonState(StartSaveState.save);
       showErrorToast(
         context,
@@ -206,7 +201,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     timerCreation.setTotalTime(getTotalTime(intervals));
 
     if (!isSaving) {
-      logger.i("Starting timer: ${timerCreation.timer.name}");
+      Log.info("Starting timer: ${timerCreation.timer.name}");
       setButtonState(StartSaveState.start);
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return RunTimer(
@@ -223,7 +218,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       return;
     }
 
-    logger.i(
+    Log.info(
       "Submitting timer: ${timerCreation.timer.name} (editing: $editing)",
     );
 
@@ -234,7 +229,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       editing = true;
     }
 
-    logger.i(
+    Log.info(
       "Timer ${editing ? 'updated' : 'created'}: ${timerCreation.timer.name}",
     );
     setButtonState(StartSaveState.start);

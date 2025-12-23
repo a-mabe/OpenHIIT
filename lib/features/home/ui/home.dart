@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
@@ -24,54 +23,66 @@ class ListTimersPage extends StatefulWidget {
 }
 
 class _ListTimersPageState extends State<ListTimersPage> {
-  late TimerProvider timerProvider;
   late Future<List<TimerType>> _loadTimersFuture;
-
-  Logger logger = Logger(
-    printer: JsonLogPrinter('ListTimersPage'),
-  );
+  late final TimerProvider _timerProvider;
 
   @override
   void initState() {
     super.initState();
-    timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    _timerProvider = context.read<TimerProvider>();
     _refreshTimers();
     _handleWhatsNew();
   }
 
-  bool _isTablet(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    // 600 is a common breakpoint for tablets.
-    return size.shortestSide >= 600;
+  void _refreshTimers() {
+    Log.info("Refreshing timers...");
+    setState(() {
+      _loadTimersFuture = _timerProvider.loadTimers();
+    });
   }
 
-  void _refreshTimers() {
-    setState(() {
-      _loadTimersFuture = timerProvider.loadTimers();
-    });
+  Future<void> _openTimerEditor({TimerType? timer}) async {
+    Log.info("Opening timer editor for ${timer?.name ?? 'new timer'}");
+
+    final creationProvider = context.read<TimerCreationProvider>();
+
+    if (timer == null) {
+      creationProvider.clear();
+    } else {
+      creationProvider.setTimer(timer);
+    }
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EditTimer(editing: timer != null),
+      ),
+    );
+
+    if (!mounted) return;
+    _refreshTimers();
   }
 
   Future<void> _handleWhatsNew() async {
     const currentVersion = WhatsNewData.version;
 
-    /// Uncomment the following lines once shared preferences for versioning are added.
-    ///
-    // final firstLaunch = await WhatsNewService.isFirstLaunch();
+    final firstLaunch = await WhatsNewService.isFirstLaunch();
 
-    // if (firstLaunch) {
-    //   // Do not show the popup for brand-new users
-    //   logger.i("First launch detected, skipping What's New dialog.");
-    //   await WhatsNewService.markShown(currentVersion);
-    //   return;
-    // }
+    if (firstLaunch) {
+      // Do not show the popup for brand-new users
+      Log.info("First launch detected, skipping What's New dialog.");
+      await WhatsNewService.markShown(currentVersion);
+      return;
+    }
 
-    logger.i("Not first launch, checking if What's New should be shown.");
+    Log.info("Not first launch, checking if What's New should be shown.");
 
     // At this point the user has launched before
     if (await WhatsNewService.shouldShow(currentVersion)) {
       final items = WhatsNewData.items;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         showDialog(
           context: context,
           builder: (_) => WhatsNewDialog(
@@ -81,7 +92,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
         );
       });
 
-      logger.i("Showing What's New dialog for version $currentVersion.");
+      Log.info("Showing What's New dialog for version $currentVersion.");
       await WhatsNewService.markShown(currentVersion);
     }
   }
@@ -92,13 +103,14 @@ class _ListTimersPageState extends State<ListTimersPage> {
       future: _loadTimersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          Log.info("Fetching timers...");
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
         if (snapshot.hasError) {
-          logger.e("Error fetching timers: ${snapshot.error}");
+          Log.error("Error fetching timers: ${snapshot.error}");
           return Scaffold(
             body:
                 Center(child: Text('Error fetching timers: ${snapshot.error}')),
@@ -109,15 +121,21 @@ class _ListTimersPageState extends State<ListTimersPage> {
 
         return LayoutBuilder(
           builder: (context, constraints) {
+            Log.info("Fetched ${timers.length} timers.");
+
             final isLandscape = constraints.maxWidth > constraints.maxHeight;
-            final isTablet = _isTablet(context);
+            final shortestSide = constraints.biggest.shortestSide;
+            final isTablet = shortestSide >= 600;
+
+            Log.info(
+                "Building layout with parameters - isLandscape: $isLandscape, isTablet: $isTablet");
 
             return Scaffold(
               extendBodyBehindAppBar: true,
               extendBody: true,
               appBar: isTablet && isLandscape
                   ? PreferredSize(
-                      preferredSize: Size.fromHeight(40.0),
+                      preferredSize: const Size.fromHeight(40.0),
                       child: AppBar(
                         toolbarHeight: 1.0,
                         elevation: 0,
@@ -178,11 +196,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
       items: timers,
       onReorderCompleted: (reorderedItems) {},
       onTap: (timer) {
-        context.read<TimerCreationProvider>().setTimer(timer);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EditTimer(editing: true)),
-        ).then((_) => _refreshTimers());
+        _openTimerEditor(timer: timer);
       },
     );
   }
@@ -215,7 +229,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
           spacing: 0,
           verticalPadding: 0,
           onPressed: () async {
-            await onImportPressed(context, timerProvider);
+            await onImportPressed(context, _timerProvider);
             _refreshTimers();
           },
         ),
@@ -229,12 +243,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
           spacing: 0,
           verticalPadding: 4,
           onPressed: () {
-            context.read<TimerCreationProvider>().clear();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const EditTimer(editing: false)),
-            ).then((_) => _refreshTimers());
+            _openTimerEditor();
           },
         ),
         const Spacer(),
@@ -263,12 +272,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
                 label: 'New',
                 verticalPadding: 8,
                 onPressed: () {
-                  context.read<TimerCreationProvider>().clear();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EditTimer(editing: false)),
-                  ).then((_) => _refreshTimers());
+                  _openTimerEditor();
                 },
               ),
             ),
@@ -298,7 +302,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
                 label: 'Import',
                 verticalPadding: 8,
                 onPressed: () async {
-                  await onImportPressed(context, timerProvider);
+                  await onImportPressed(context, _timerProvider);
                   _refreshTimers();
                 },
               ),

@@ -1,4 +1,3 @@
-import 'package:background_hiit_timer/utils/log.dart';
 import 'package:openhiit/core/db/database.dart';
 import 'package:openhiit/core/db/repositories/timer_sound_settings_repository.dart';
 import 'package:openhiit/core/db/repositories/timer_time_settings_repository.dart';

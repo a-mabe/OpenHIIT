@@ -1,16 +1,11 @@
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/db/migrations/migration_index.dart';
 import 'package:openhiit/core/db/tables.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 Future<void> runMigrations(Database db, int oldVersion, int newVersion) async {
-  final logger = Logger(
-    printer: JsonLogPrinter('MigrationRunner'),
-  );
-
   if (oldVersion != newVersion) {
-    logger.i("Upgrading database from $oldVersion to $newVersion");
+    Log.info("Upgrading database from $oldVersion to $newVersion");
   }
 
   for (int i = oldVersion; i < newVersion; i++) {
