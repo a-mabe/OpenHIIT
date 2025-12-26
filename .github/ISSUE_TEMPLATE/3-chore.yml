@@ -1,0 +1,67 @@
+name: Chore
+description: Internal maintenance, cleanup, or general quality improvements
+title: "[Chore] "
+labels:
+  - chore
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: >
+        Briefly describe the internal task and what would improve if it were completed.
+      placeholder: >
+        Bump dependencies to latest versions to stay up-to-date and secure.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this worth doing?
+      options:
+        - label: Improves maintainability or readability
+        - label: Reduces technical debt
+        - label: Improves logging or diagnostics
+        - label: Improves consistency
+        - label: Removes unused or legacy code
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: >
+        What is in scope for this task? Keep this intentionally limited.
+      placeholder: |
+        - Updating the current dependencies in `package.json` to their latest versions.
+        - Running tests and verifying no regressions occur.
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of Scope
+      description: >
+        Explicitly list what is not included to prevent scope creep.
+      placeholder: |
+        - Refactoring existing code beyond what is necessary to complete the chore.
+        - Adding new features or functionality.
+
+  - type: checkboxes
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      options:
+        - label: Behavior remains unchanged
+        - label: No new user-facing features
+        - label: No breaking changes
+        - label: Code is clearer or more consistent
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional implementation notes, links, or follow-ups.
+      placeholder: Links to relevant files, TODOs, or related issues.
