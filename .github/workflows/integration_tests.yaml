@@ -20,7 +20,7 @@ jobs:
   prepare-emulator:
     runs-on: ubuntu-latest
     env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
     steps:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -69,7 +69,7 @@ jobs:
           - customize_test.dart
           - minutes_view_test.dart
     env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
     steps:
       - name: checkout
         uses: actions/checkout@v4
