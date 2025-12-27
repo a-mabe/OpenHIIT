@@ -17,44 +17,42 @@ on:
       - 'ios/**'
 
 jobs:
-  prepare-emulator:
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
-    steps:
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+  # prepare-emulator:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Setup Android SDK
+  #       uses: android-actions/setup-android@v3
 
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+  #     - name: Enable KVM
+  #       run: |
+  #         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+  #         sudo udevadm control --reload-rules
+  #         sudo udevadm trigger --name-match=kvm
 
-      - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v3
+  #     - name: Gradle cache
+  #       uses: gradle/actions/setup-gradle@v3
         
-      - name: Cache AVD
-        id: avd-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/avd
-          key: avd-36
+  #     - name: Cache AVD
+  #       id: avd-cache
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.android/avd
+  #         key: avd-36
 
-      - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 36
-          arch: x86_64
-          ram-size: "4096M"
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "Generated AVD snapshot for caching."
+  #     - name: create AVD and generate snapshot for caching
+  #       if: steps.avd-cache.outputs.cache-hit != 'true'
+  #       uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         api-level: 36
+  #         arch: x86_64
+  #         ram-size: "4096M"
+  #         force-avd-creation: false
+  #         emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+  #         disable-animations: false
+  #         script: echo "Generated AVD snapshot for caching."
 
   run-tests:
-    needs: prepare-emulator
+    # needs: prepare-emulator
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -68,8 +66,6 @@ jobs:
           - edit_timer_test.dart
           - customize_test.dart
           - minutes_view_test.dart
-    env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -107,12 +103,12 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
         
-      - name: Fetch Cache AVD
-        id: avd-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/avd
-          key: avd-36
+      # - name: Fetch Cache AVD
+      #   id: avd-cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.android/avd
+      #     key: avd-36
 
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
