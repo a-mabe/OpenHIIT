@@ -39,13 +39,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.android/avd
-          key: avd-35
+          key: avd-36
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 36
           arch: x86_64
           ram: 4096
           force-avd-creation: false
@@ -112,12 +112,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.android/avd
-          key: avd-35
+          key: avd-36
 
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 36
           arch: x86_64
           ram: 4096
           force-avd-creation: false
