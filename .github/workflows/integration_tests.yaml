@@ -49,9 +49,6 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Flutter pub get
-        run: flutter pub get
-
       - name: Build debug APK (once)
         run: flutter build apk --debug
 
@@ -94,6 +91,9 @@ jobs:
         with:
           name: app-debug-apk
           path: build/app/outputs/flutter-apk
+
+      - name: Flutter pub get
+        run: flutter pub get
 
       - name: Create test script
         run: |
