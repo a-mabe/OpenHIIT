@@ -52,13 +52,16 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Gradle cache size
-        run: |
-          du -sh ~/.gradle || true
+      - name: Cache Flutter pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
 
-      - name: Check available disk space
-        run: |
-          df -h .
 
       - name: Remove unnecessary files
         run: |
