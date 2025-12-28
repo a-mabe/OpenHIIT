@@ -31,6 +31,8 @@ jobs:
           - edit_timer_test.dart
           - customize_test.dart
           - minutes_view_test.dart
+    env:
+      ANDROID_AVD_HOME: /tmp/.android/avd
     steps:
       - name: checkout
         uses: actions/checkout@v4
