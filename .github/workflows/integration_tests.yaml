@@ -31,8 +31,6 @@ jobs:
           - edit_timer_test.dart
           - customize_test.dart
           - minutes_view_test.dart
-    env:
-      ANDROID_AVD_HOME: /tmp/.android/avd
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -58,15 +56,12 @@ jobs:
         run: |
           du -sh ~/.gradle || true
 
-      - name: Build Debug APK
-        run: |
-          flutter build apk --target integration_test/${{ matrix.test_file }} --debug
-
       - name: Create test script
         run: |
           cat <<EOF > scripts/test.sh
           #!/bin/bash
           echo "Running test: ${{ matrix.test_file }}"
+          flutter build apk --target integration_test/${{ matrix.test_file }} --debug
           bash scripts/wait_for_pm.sh
           adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
           adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
@@ -88,7 +83,6 @@ jobs:
         with:
           api-level: 36
           arch: x86_64
-          disk-size: 8192M
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
