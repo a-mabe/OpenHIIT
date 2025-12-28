@@ -42,11 +42,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Debug Gradle cache
-        run: |
-          ls -la ~/.gradle
-          du -sh ~/.gradle/caches || true
-
       - name: Cache Gradle
         uses: actions/cache@v4
         with:
@@ -57,10 +52,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Debug Gradle cache
+      - name: Gradle cache size
         run: |
-          ls -la ~/.gradle
-          du -sh ~/.gradle/caches || true
+          du -sh ~/.gradle || true
 
       - name: Build Debug APK
         run: |
