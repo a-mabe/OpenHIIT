@@ -42,18 +42,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Configure Gradle for CI
-        run: |
-          mkdir -p ~/.gradle
-          cat <<EOF > ~/.gradle/gradle.properties
-          org.gradle.daemon=true
-          org.gradle.parallel=true
-          org.gradle.caching=true
-          org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g
-          android.useAndroidX=true
-          EOF
-
-
       - name: Create test script
         run: |
           cat <<EOF > scripts/test.sh
@@ -81,7 +69,6 @@ jobs:
         with:
           api-level: 36
           arch: x86_64
-          ram-size: "8192M"
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
