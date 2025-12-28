@@ -17,45 +17,8 @@ on:
       - 'ios/**'
 
 jobs:
-  prepare-emulator:
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
-    steps:
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v3
-        
-      - name: Cache AVD
-        id: avd-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/avd
-          key: avd-35
-
-      - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 35
-          arch: x86_64
-          ram: 4096
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "Generated AVD snapshot for caching."
-
   run-tests:
-    needs: prepare-emulator
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -68,8 +31,6 @@ jobs:
           - edit_timer_test.dart
           - customize_test.dart
           - minutes_view_test.dart
-    env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 180
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -77,19 +38,40 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Remove unnecessary files
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/.ghcup # Remove Haskell toolchain
+          sudo rm -rf /opt/microsoft /opt/google # Remove browsers
+          sudo rm -rf /usr/local/share/powershell # Remove PowerShell
+          df -h .
+
+      - name: Build Debug APK
+        run: |
+          flutter build apk --target integration_test/${{ matrix.test_file }} --debug
 
       - name: Create test script
         run: |
           cat <<EOF > scripts/test.sh
           #!/bin/bash
           echo "Running test: ${{ matrix.test_file }}"
-          flutter build apk --target integration_test/${{ matrix.test_file }} --debug
           bash scripts/wait_for_pm.sh
           adb -s emulator-5554 install build/app/outputs/flutter-apk/app-debug.apk
-          adb -s emulator-5554 root
           adb -s emulator-5554 shell appops set com.codepup.workout_timer SCHEDULE_EXACT_ALARM allow
           flutter drive -d emulator-5554 --no-pub \
             --driver=integration_test/driver.dart \
@@ -104,22 +86,11 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v3
-        
-      - name: Fetch Cache AVD
-        id: avd-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/avd
-          key: avd-35
-
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 36
           arch: x86_64
-          ram: 4096
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -131,4 +102,3 @@ jobs:
         with:
           name: screenshots-${{ matrix.test_file }}
           path: screenshots/
-
