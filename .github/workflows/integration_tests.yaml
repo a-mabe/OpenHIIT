@@ -60,6 +60,12 @@ jobs:
         run: |
           df -h .
 
+      - name: Remove unnecessary files
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h .
+
       - name: Build Debug APK
         run: |
           flutter build apk --target integration_test/${{ matrix.test_file }} --debug
