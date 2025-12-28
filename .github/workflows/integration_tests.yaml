@@ -63,7 +63,9 @@ jobs:
       - name: Remove unnecessary files
         run: |
           sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /usr/local/.ghcup # Remove Haskell toolchain
+          sudo rm -rf /opt/microsoft /opt/google # Remove browsers
+          sudo rm -rf /usr/local/share/powershell # Remove PowerShell
           df -h .
 
       - name: Build Debug APK
