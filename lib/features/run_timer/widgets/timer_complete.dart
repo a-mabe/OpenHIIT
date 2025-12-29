@@ -88,7 +88,7 @@ class TimerCompleteState extends State<TimerComplete> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                'Completed the ${widget.timerName} timer!',
+                'Completed: ${widget.timerName}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
