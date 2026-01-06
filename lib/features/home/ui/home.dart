@@ -54,19 +54,6 @@ class _ListTimersPageState extends State<ListTimersPage> {
   Future<void> _handleWhatsNew() async {
     const currentVersion = WhatsNewData.version;
 
-    /// Uncomment the following lines once shared preferences for versioning are added.
-    ///
-    // final firstLaunch = await WhatsNewService.isFirstLaunch();
-
-    // if (firstLaunch) {
-    //   // Do not show the popup for brand-new users
-    //   logger.i("First launch detected, skipping What's New dialog.");
-    //   await WhatsNewService.markShown(currentVersion);
-    //   return;
-    // }
-
-    logger.i("Not first launch, checking if What's New should be shown.");
-
     // At this point the user has launched before
     if (await WhatsNewService.shouldShow(currentVersion)) {
       final items = WhatsNewData.items;
