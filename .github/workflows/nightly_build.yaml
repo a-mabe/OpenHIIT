@@ -76,9 +76,6 @@ jobs:
       contents: write
     steps:
 
-      - name: Select Xcode 16
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
-
       - name: Verify Xcode version
         run: xcodebuild -version
 
