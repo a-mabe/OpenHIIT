@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/features/reorder_timers/ui/widgets/tile.dart';
@@ -33,10 +32,6 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
   late List<TimerType> _items;
   TimerProvider? _timerProvider;
 
-  var logger = Logger(
-    printer: JsonLogPrinter('ReorderableList'),
-  );
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +40,7 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
   }
 
   void _onReorder(int oldIndex, int newIndex) {
-    logger.i("Reordering item from $oldIndex to $newIndex");
+    Log.info("Reordering item from $oldIndex to $newIndex");
 
     setState(() {
       if (newIndex > oldIndex) {

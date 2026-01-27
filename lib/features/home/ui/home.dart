@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
@@ -26,10 +25,6 @@ class ListTimersPage extends StatefulWidget {
 class _ListTimersPageState extends State<ListTimersPage> {
   late TimerProvider timerProvider;
   late Future<List<TimerType>> _loadTimersFuture;
-
-  Logger logger = Logger(
-    printer: JsonLogPrinter('ListTimersPage'),
-  );
 
   @override
   void initState() {
@@ -68,7 +63,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
         );
       });
 
-      logger.i("Showing What's New dialog for version $currentVersion.");
+      Log.info("Showing What's New dialog for version $currentVersion.");
       await WhatsNewService.markShown(currentVersion);
     }
   }
@@ -85,7 +80,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
         }
 
         if (snapshot.hasError) {
-          logger.e("Error fetching timers: ${snapshot.error}");
+          Log.error("Error fetching timers: ${snapshot.error}");
           return Scaffold(
             body:
                 Center(child: Text('Error fetching timers: ${snapshot.error}')),
