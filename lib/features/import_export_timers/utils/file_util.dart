@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -23,6 +24,7 @@ class LocalFileUtil {
   /// Writes the timers to a local file as JSON.
   Future<File> writeFile(List<TimerType> timers) async {
     final file = await _localFile(timers);
+    Log.debug('writing ${timers.length} timer(s) to file: ${file.path}');
     return file.writeAsString(jsonEncode(timers), flush: true);
   }
 
@@ -39,6 +41,7 @@ class LocalFileUtil {
     if (!context.mounted) return null;
     final box = context.findRenderObject() as RenderBox?;
     if (box is! RenderBox) return null;
+    Log.debug('sharing file with ${timers.length} timer(s)');
     return await Share.shareXFiles(
       [XFile(file.path)],
       text: 'OpenHIIT Export',
@@ -48,6 +51,7 @@ class LocalFileUtil {
 
   /// Saves the exported timers file to the device using FilePicker.
   Future<bool> saveFileToDevice(List<TimerType> timers) async {
+    Log.debug('saving file with ${timers.length} timer(s) to device');
     final fileTitle = _fileTitle(timers);
     final encoded = utf8.encode(jsonEncode(timers));
     final outputFile = await FilePicker.platform.saveFile(
@@ -62,6 +66,7 @@ class LocalFileUtil {
 
   /// Picks a file from the device and returns the selected PlatformFile, or null if cancelled.
   Future<PlatformFile?> pickFile() async {
+    Log.debug('picking file from device');
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json', 'txt'],

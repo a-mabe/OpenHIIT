@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/features/import_export_timers/ui/import_copy_dialog.dart';
@@ -14,12 +13,8 @@ import 'package:openhiit/shared/globals.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ImportExportUtil {
-  static final Logger logger = Logger(
-    printer: JsonLogPrinter('ImportExportUtil'),
-  );
-
   static Future<bool> exportToDevice(List<TimerType> timers) async {
-    logger.i("Exporting timers to device...");
+    Log.info("exporting timers to device...");
 
     LocalFileUtil localFileUtil = LocalFileUtil();
     var fileContent = await localFileUtil.saveFileToDevice(timers);
@@ -41,7 +36,7 @@ class ImportExportUtil {
       }
       return true;
     } catch (e) {
-      logger.e("Import failed: $e");
+      Log.error("Import failed: $e");
       scaffoldMessengerKey.currentState?.showSnackBar(
         errorSnackbar("Import failed: $e"),
       );
@@ -51,7 +46,7 @@ class ImportExportUtil {
 
   static Future<List<TimerType>> importFromFileToObject(
       TimerProvider timerProvider) async {
-    logger.i("Picking file for import...");
+    Log.debug("opening file picker for import");
 
     LocalFileUtil localFileUtil = LocalFileUtil();
     PlatformFile? file = await localFileUtil.pickFile();
@@ -67,7 +62,7 @@ class ImportExportUtil {
       List<TimerType> importedTimers = [];
 
       for (Map<String, dynamic> item in jsonList) {
-        logger.d("Importing timer: ${item['name']}");
+        Log.debug("importing timer: ${item['name']}");
         TimerType timer = TimerType.fromJson(item);
         importedTimers.add(timer);
       }
@@ -80,7 +75,7 @@ class ImportExportUtil {
     List<TimerType> importedTimers,
     TimerProvider timerProvider,
   ) async {
-    logger.i("Saving imported timers...");
+    Log.debug("saving ${importedTimers.length} imported timers");
 
     final messenger = scaffoldMessengerKey.currentState;
 
@@ -115,7 +110,7 @@ class ImportExportUtil {
   }
 
   static Future<bool> share(List<TimerType> timers) async {
-    logger.i("Sharing timers...");
+    Log.debug("opening share dialog to export ${timers.length} timers");
     LocalFileUtil fileUtil = LocalFileUtil();
     ShareResult? result;
     BuildContext? context = navigatorKey.currentContext;

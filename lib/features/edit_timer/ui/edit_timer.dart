@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:logger/logger.dart';
 import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
@@ -42,10 +41,6 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
 
   bool controllersUpdated = false;
 
-  final logger = Logger(
-    printer: JsonLogPrinter('EditTimer'),
-  );
-
   bool _isTablet(BuildContext context) {
     final size = MediaQuery.of(context).size;
     // A common breakpoint for tablets is 600dp
@@ -55,6 +50,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    Log.info("EditTimer screen initialized (editing: ${widget.editing})");
 
     editing = widget.editing;
 
@@ -63,6 +59,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     _tabController.addListener(() {
       // Only trigger when the user finishes changing tabs
       if (_tabController.indexIsChanging == false) {
+        Log.debug("tab changed to index ${_tabController.index}");
         if (_tabController.index == 2) {
           _onEditorTabAccessed();
         } else {
@@ -142,6 +139,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
   }
 
   void _onEditorTabAccessed() {
+    Log.info("editor tab accessed, updating text controllers");
+
     var timerCreationProvider = context.read<TimerCreationProvider>();
     final activities = timerCreationProvider.timer.activities;
 
@@ -194,7 +193,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     if (!mounted) return;
 
     if (intervals.isEmpty) {
-      logger.w('No intervals generated from timer.');
+      Log.warning('no intervals generated from timer.');
       setButtonState(StartSaveState.save);
       showErrorToast(
         context,
@@ -206,7 +205,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     timerCreation.setTotalTime(getTotalTime(intervals));
 
     if (!isSaving) {
-      logger.i("Starting timer: ${timerCreation.timer.name}");
+      Log.info("starting timer: ${timerCreation.timer.name}");
       setButtonState(StartSaveState.start);
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return RunTimer(
@@ -223,8 +222,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       return;
     }
 
-    logger.i(
-      "Submitting timer: ${timerCreation.timer.name} (editing: $editing)",
+    Log.info(
+      "submitting timer: ${timerCreation.timer.name} (editing: $editing)",
     );
 
     if (editing) {
@@ -234,8 +233,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
       editing = true;
     }
 
-    logger.i(
-      "Timer ${editing ? 'updated' : 'created'}: ${timerCreation.timer.name}",
+    Log.info(
+      "timer ${editing ? 'updated' : 'created'}: ${timerCreation.timer.name}",
     );
     setButtonState(StartSaveState.start);
   }
@@ -344,11 +343,17 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
                   'Are you sure you want to delete ${context.read<TimerCreationProvider>().timer.name}? This action cannot be undone.'),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(false),
+                  onPressed: () {
+                    Log.info("delete timer cancelled by user");
+                    Navigator.of(ctx).pop(false);
+                  },
                   child: const Text('Cancel'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(true),
+                  onPressed: () {
+                    Log.info("user confirmed timer deletion");
+                    Navigator.of(ctx).pop(true);
+                  },
                   child: const Text(
                     'Delete',
                     style: TextStyle(color: Colors.red),
