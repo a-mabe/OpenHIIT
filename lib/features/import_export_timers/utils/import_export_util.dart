@@ -14,7 +14,7 @@ import 'package:share_plus/share_plus.dart';
 
 class ImportExportUtil {
   static Future<bool> exportToDevice(List<TimerType> timers) async {
-    Log.info("Exporting timers to device...");
+    Log.info("exporting timers to device...");
 
     LocalFileUtil localFileUtil = LocalFileUtil();
     var fileContent = await localFileUtil.saveFileToDevice(timers);
@@ -46,7 +46,7 @@ class ImportExportUtil {
 
   static Future<List<TimerType>> importFromFileToObject(
       TimerProvider timerProvider) async {
-    Log.info("Picking file for import...");
+    Log.debug("opening file picker for import");
 
     LocalFileUtil localFileUtil = LocalFileUtil();
     PlatformFile? file = await localFileUtil.pickFile();
@@ -62,7 +62,7 @@ class ImportExportUtil {
       List<TimerType> importedTimers = [];
 
       for (Map<String, dynamic> item in jsonList) {
-        Log.debug("Importing timer: ${item['name']}");
+        Log.debug("importing timer: ${item['name']}");
         TimerType timer = TimerType.fromJson(item);
         importedTimers.add(timer);
       }
@@ -75,7 +75,7 @@ class ImportExportUtil {
     List<TimerType> importedTimers,
     TimerProvider timerProvider,
   ) async {
-    Log.info("Saving imported timers...");
+    Log.debug("saving ${importedTimers.length} imported timers");
 
     final messenger = scaffoldMessengerKey.currentState;
 
@@ -110,7 +110,7 @@ class ImportExportUtil {
   }
 
   static Future<bool> share(List<TimerType> timers) async {
-    Log.info("Sharing timers...");
+    Log.debug("opening share dialog to export ${timers.length} timers");
     LocalFileUtil fileUtil = LocalFileUtil();
     ShareResult? result;
     BuildContext? context = navigatorKey.currentContext;

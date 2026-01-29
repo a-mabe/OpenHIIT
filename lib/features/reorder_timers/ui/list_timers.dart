@@ -35,12 +35,14 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
   @override
   void initState() {
     super.initState();
+    Log.debug(
+        "initializing ListTimersReorderableList with ${widget.items.length} items");
     _items = List<TimerType>.from(widget.items);
     _timerProvider = Provider.of<TimerProvider>(context, listen: false);
   }
 
   void _onReorder(int oldIndex, int newIndex) {
-    Log.info("Reordering item from $oldIndex to $newIndex");
+    Log.debug("reordering item from $oldIndex to $newIndex");
 
     setState(() {
       if (newIndex > oldIndex) {

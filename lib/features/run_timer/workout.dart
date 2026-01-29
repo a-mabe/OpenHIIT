@@ -5,6 +5,7 @@ import 'package:background_hiit_timer/models/timer_state.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:openhiit/core/logs/logs.dart';
 import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/features/run_timer/widgets/functions/functions.dart';
 import 'package:openhiit/features/run_timer/widgets/landscape_timer_view.dart';
@@ -44,6 +45,7 @@ class RunTimerState extends State<RunTimer> {
   @override
   void initState() {
     super.initState();
+    Log.info("starting workout: ${widget.timer.name}");
     WakelockPlus.enable();
     loadPreferences();
     _controllerCenter =
@@ -88,6 +90,7 @@ class RunTimerState extends State<RunTimer> {
   }
 
   Future<void> toggleVolumeSlider() async {
+    Log.debug("toggling volume slider to ${!_changeVolume}");
     setState(() {
       _changeVolume = !_changeVolume;
     });
@@ -95,6 +98,7 @@ class RunTimerState extends State<RunTimer> {
   }
 
   Future<void> togglePause() async {
+    Log.debug("toggling pause state to ${!_paused}");
     setState(() {
       _paused = !_paused;
     });
