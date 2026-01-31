@@ -70,7 +70,7 @@ jobs:
           path: build/app/outputs/flutter-apk/app-debug.aab
 
   BuildiOS:
-    runs-on: macos-15
+    runs-on: macos-latest
     environment: build
     permissions:
       contents: write
@@ -78,6 +78,9 @@ jobs:
 
       - name: Verify Xcode version
         run: xcodebuild -version
+
+      - name: iOS SDK version
+        run: xcrun --sdk iphoneos --show-sdk-version
 
       - name: Checkout repository
         uses: actions/checkout@v3
