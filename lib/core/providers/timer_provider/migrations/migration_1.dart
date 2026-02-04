@@ -41,7 +41,6 @@ TimerType migrateToTimer(Workout workout, bool update) {
         warmupTime: workout.warmupTime,
         cooldownTime: workout.cooldownTime,
         getReadyTime: workout.getReadyTime,
-        restarts: workout.iterations,
       ),
       soundSettings: TimerSoundSettings(
         id: Uuid().v1(),
@@ -59,6 +58,7 @@ TimerType migrateToTimer(Workout workout, bool update) {
       color: workout.colorInt,
       intervals: totalIntervals,
       activeIntervals: workout.numExercises,
+      restarts: workout.iterations,
       activities: workout.exercises != ""
           ? List<String>.from(jsonDecode(workout.exercises))
           : [],

@@ -10,7 +10,7 @@ class TimerCreationProvider extends ChangeNotifier {
   bool _isEdited = false;
   bool get isEdited => _isEdited;
 
-  bool get breakEnabled => _timer.timeSettings.restarts > 0;
+  bool get breakEnabled => _timer.restarts > 0;
 
   void markEdited() {
     if (!_isEdited) {
@@ -72,6 +72,14 @@ class TimerCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setRestarts(int restarts) {
+    _timer = _timer.copyWith({
+      'restarts': restarts,
+    });
+    _isEdited = true;
+    notifyListeners();
+  }
+
   void setTotalTime(int totalTime) {
     _timer = _timer.copyWith({
       'totalTime': totalTime,
@@ -87,7 +95,6 @@ class TimerCreationProvider extends ChangeNotifier {
     int? warmupTime,
     int? cooldownTime,
     int? getReadyTime,
-    int? restarts,
   }) {
     _timer.timeSettings = _timer.timeSettings.copyWith({}, updates: {
       if (workTime != null) 'workTime': workTime,
@@ -96,7 +103,6 @@ class TimerCreationProvider extends ChangeNotifier {
       if (warmupTime != null) 'warmupTime': warmupTime,
       if (cooldownTime != null) 'cooldownTime': cooldownTime,
       if (getReadyTime != null) 'getReadyTime': getReadyTime,
-      if (restarts != null) 'restarts': restarts,
     });
     _timer = _timer.copyWith({
       'timeSettings': _timer.timeSettings,

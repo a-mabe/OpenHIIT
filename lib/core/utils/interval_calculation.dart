@@ -60,8 +60,8 @@ List<IntervalType> generateIntervalsFromTimer(TimerType timer,
     );
   }
 
-  int iterations = (timer.timeSettings.restarts > 0 && !singleIteration)
-      ? timer.timeSettings.restarts + 1
+  int iterations = (timer.restarts > 0 && !singleIteration)
+      ? timer.restarts + 1
       : 1;
 
   for (int iteration = 0; iteration < iterations; iteration++) {
@@ -88,7 +88,7 @@ List<IntervalType> generateIntervalsFromTimer(TimerType timer,
       }
     }
 
-    if (iteration < timer.timeSettings.restarts) {
+    if (iteration < timer.restarts) {
       addInterval(
         id: Uuid().v4(),
         name: timer.timeSettings.breakTime > 0 ? "Break" : "Rest",

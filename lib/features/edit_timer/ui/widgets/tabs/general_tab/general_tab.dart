@@ -10,6 +10,7 @@ import 'package:unit_number_input/unit_number_input.dart';
 class GeneralTab extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController activeIntervalsController;
+  final TextEditingController restartsController;
   final Map<String, UnitNumberInputController> timeSettingsControllers;
   final ValueChanged<StartSaveState> onEdited;
   final ValueChanged<bool> onUnitToggle;
@@ -21,6 +22,7 @@ class GeneralTab extends StatelessWidget {
       {super.key,
       required this.nameController,
       required this.activeIntervalsController,
+      required this.restartsController,
       required this.timeSettingsControllers,
       required this.onEdited,
       required this.onUnitToggle,
@@ -326,17 +328,23 @@ class GeneralTab extends StatelessWidget {
             ListTile(
               key: const Key("restarts"),
               title: const Text('Restarts'),
-              subtitle: Text('Optional'),
+              subtitle: Text('Optional, # of restarts'),
               leading: const Icon(Icons.replay),
-              trailing: FittedBox(
-                fit: BoxFit.contain,
-                child: UnitNumberInput(
-                  controller: timeSettingsControllers['restarts']!,
-                  prefill: editing,
-                  enableMinutesToggle: false,
-                  valueRequired: false,
+              trailing: SizedBox(
+                width: 80,
+                child: TextFormField(
+                  controller: restartsController,
+                  decoration: inputDecoration,
+                  maxLength: 3,
+                  style: const TextStyle(fontSize: 30),
+                  textAlign: TextAlign.end,
+                  keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    provider.setTimerTimeSettingPart(restarts: value);
+                    if (value.isEmpty) {
+                      provider.setRestarts(0);
+                    } else {
+                      provider.setRestarts(int.tryParse(value) ?? 0);
+                    }
                     onEdited(StartSaveState.save);
                     Log.debug("Restarts time changed to $value");
 

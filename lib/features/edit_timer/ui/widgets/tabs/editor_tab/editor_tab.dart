@@ -98,7 +98,7 @@ class EditorTab extends StatelessWidget {
                             const SizedBox(
                                 width: 8), // spacing between icon and text
                             Text(
-                              "Repeat for ${provider.timer.timeSettings.restarts}x",
+                              "Repeat for ${provider.timer.restarts}x",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

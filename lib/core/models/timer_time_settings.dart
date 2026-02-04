@@ -9,7 +9,6 @@ class TimerTimeSettings {
   int warmupTime;
   int cooldownTime;
   int getReadyTime;
-  int restarts;
 
   TimerTimeSettings(
       {required this.id,
@@ -19,8 +18,7 @@ class TimerTimeSettings {
       required this.breakTime,
       required this.warmupTime,
       required this.cooldownTime,
-      required this.getReadyTime,
-      required this.restarts});
+      required this.getReadyTime});
 
   TimerTimeSettings.empty()
       : id = "",
@@ -30,8 +28,7 @@ class TimerTimeSettings {
         breakTime = 0,
         warmupTime = 0,
         cooldownTime = 0,
-        getReadyTime = 10,
-        restarts = 0;
+        getReadyTime = 10;
 
   TimerTimeSettings copyWith(
     Map<String, int> map, {
@@ -46,7 +43,6 @@ class TimerTimeSettings {
       warmupTime: updates?['warmupTime'] ?? warmupTime,
       cooldownTime: updates?['cooldownTime'] ?? cooldownTime,
       getReadyTime: updates?['getReadyTime'] ?? getReadyTime,
-      restarts: updates?['restarts'] ?? restarts,
     );
   }
 
@@ -62,7 +58,6 @@ class TimerTimeSettings {
       warmupTime: warmupTime,
       cooldownTime: cooldownTime,
       getReadyTime: getReadyTime,
-      restarts: restarts,
     );
   }
 
@@ -76,7 +71,6 @@ class TimerTimeSettings {
       'warmupTime': warmupTime,
       'cooldownTime': cooldownTime,
       'getReadyTime': getReadyTime,
-      'restarts': restarts,
     };
   }
 
@@ -88,8 +82,7 @@ class TimerTimeSettings {
         breakTime = map['breakTime'] ?? 0,
         warmupTime = map['warmupTime'] ?? 0,
         cooldownTime = map['cooldownTime'] ?? 0,
-        getReadyTime = map['getReadyTime'] ?? 0,
-        restarts = map['restarts'] ?? 0;
+        getReadyTime = map['getReadyTime'] ?? 0;
 
   Map<String, dynamic> toJson() {
     return {
@@ -101,7 +94,6 @@ class TimerTimeSettings {
       'warmupTime': warmupTime,
       'cooldownTime': cooldownTime,
       'getReadyTime': getReadyTime,
-      'restarts': restarts,
     };
   }
 
@@ -115,12 +107,11 @@ class TimerTimeSettings {
       warmupTime: json['warmupTime'] ?? 0,
       cooldownTime: json['cooldownTime'] ?? 0,
       getReadyTime: json['getReadyTime'] ?? 0,
-      restarts: json['restarts'] ?? 0,
     );
   }
 
   @override
   String toString() {
-    return 'TimerTimeSettings{id: $id, timerId: $timerId, workTime: $workTime, restTime: $restTime, breakTime: $breakTime, warmupTime: $warmupTime, cooldownTime: $cooldownTime, getReadyTime: $getReadyTime, restarts: $restarts}';
+    return 'TimerTimeSettings{id: $id, timerId: $timerId, workTime: $workTime, restTime: $restTime, breakTime: $breakTime, warmupTime: $warmupTime, cooldownTime: $cooldownTime, getReadyTime: $getReadyTime}';
   }
 }

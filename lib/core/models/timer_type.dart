@@ -11,6 +11,7 @@ class TimerType {
   int totalTime;
   int intervals;
   int activeIntervals;
+  int restarts;
   List<String> activities;
   int showMinutes;
   int color;
@@ -26,6 +27,7 @@ class TimerType {
     this.totalTime = 0,
     this.intervals = 0,
     this.activeIntervals = 0,
+    this.restarts = 0,
     this.activities = const [],
     this.showMinutes = 0,
     this.color = 4280391411, // blue
@@ -40,6 +42,7 @@ class TimerType {
         totalTime = 0,
         intervals = 0,
         activeIntervals = 0,
+        restarts = 0,
         activities = [],
         showMinutes = 0,
         color = 4280391411; // blue
@@ -54,6 +57,7 @@ class TimerType {
       totalTime: totalTime,
       intervals: intervals,
       activeIntervals: activeIntervals,
+      restarts: restarts,
       activities: activities,
       showMinutes: showMinutes,
       color: color,
@@ -72,6 +76,7 @@ class TimerType {
       totalTime: totalTime,
       intervals: intervals,
       activeIntervals: activeIntervals,
+      restarts: restarts,
       activities: activities,
       showMinutes: showMinutes,
       color: color,
@@ -86,6 +91,7 @@ class TimerType {
       'totalTime': totalTime,
       'intervals': intervals,
       'activeIntervals': activeIntervals,
+      'restarts': restarts,
       'activities': jsonEncode(activities),
       'showMinutes': showMinutes,
       'color': color,
@@ -101,6 +107,7 @@ class TimerType {
         totalTime = map['totalTime'] ?? 0,
         intervals = map['intervals'] ?? 0,
         activeIntervals = map['activeIntervals'] ?? 0,
+        restarts = map['restarts'] ?? 0,
         activities = map['activities'] != null
             ? List<String>.from(jsonDecode(map['activities']))
             : [],
@@ -125,6 +132,7 @@ class TimerType {
       totalTime: updates['totalTime'] ?? totalTime,
       intervals: updates['intervals'] ?? intervals,
       activeIntervals: updates['activeIntervals'] ?? activeIntervals,
+      restarts: updates['restarts'] ?? restarts,
       activities: updates['activities'] ?? activities,
       showMinutes: updates['showMinutes'] ?? showMinutes,
       color: updates['color'] ?? color,
@@ -139,6 +147,7 @@ class TimerType {
       'totalTime': totalTime,
       'intervals': intervals,
       'activeIntervals': activeIntervals,
+      'restarts': restarts,
       'activities': activities,
       'showMinutes': showMinutes,
       'color': color,
@@ -158,6 +167,7 @@ class TimerType {
       totalTime: json['totalTime'] ?? 0,
       intervals: json['intervals'] ?? 0,
       activeIntervals: json['activeIntervals'] ?? 0,
+      restarts: json['restarts'] ?? 0,
       activities: (json['activities'] != null && json['activities'] is List)
           ? List<String>.from(json['activities'])
           : [],
@@ -176,6 +186,6 @@ class TimerType {
 
   @override
   String toString() {
-    return 'TimerType{id: $id, name: $name, totalTime: $totalTime, intervals: $intervals, showMinutes: $showMinutes, activeIntervals: $activeIntervals, activities: $activities, color: $color, timerIndex: $timerIndex}';
+    return 'TimerType{id: $id, name: $name, totalTime: $totalTime, intervals: $intervals, showMinutes: $showMinutes, activeIntervals: $activeIntervals, restarts: $restarts, activities: $activities, color: $color, timerIndex: $timerIndex}';
   }
 }

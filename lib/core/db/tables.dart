@@ -53,6 +53,7 @@ const createTimerTableQuery = '''
         totalTime INTEGER,
         intervals INTEGER,
         activeIntervals INTEGER,
+        restarts INTEGER,
         activities TEXT,
         showMinutes INTEGER,
         color INTEGER
@@ -68,8 +69,7 @@ const createTimeSettingsTableQuery = '''
         restTime INTEGER,
         breakTime INTEGER,
         warmupTime INTEGER,
-        cooldownTime INTEGER,
-        restarts INTEGER
+        cooldownTime INTEGER
       )
     ''';
 
