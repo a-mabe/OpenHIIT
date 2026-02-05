@@ -30,6 +30,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
 
   final nameController = TextEditingController();
   final activeIntervalsController = TextEditingController();
+  final restartsController = TextEditingController();
   Map<String, UnitNumberInputController> timeSettingsControllers = {};
   final List<TextEditingController> editorTabTextControllers = [];
   final formKey = GlobalKey<FormState>();
@@ -90,6 +91,8 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     nameController.text = timer.name;
     activeIntervalsController.text =
         timer.activeIntervals == 0 ? '' : timer.activeIntervals.toString();
+    restartsController.text =
+        ts.restarts == 0 ? '' : ts.restarts.toString();
 
     timeSettingsControllers = {
       'work': UnitNumberInputController(
@@ -112,10 +115,6 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
         initialSeconds: ts.cooldownTime,
         startInMinutesMode: showMinutes,
       ),
-      'restarts': UnitNumberInputController(
-        initialSeconds: ts.restarts,
-        startInMinutesMode: false,
-      ),
       'break': UnitNumberInputController(
         initialSeconds: ts.breakTime,
         startInMinutesMode: showMinutes,
@@ -129,6 +128,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     _scrollController.dispose();
     nameController.dispose();
     activeIntervalsController.dispose();
+    restartsController.dispose();
     for (var controller in timeSettingsControllers.values) {
       controller.dispose();
     }
@@ -278,6 +278,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
             GeneralTab(
               nameController: nameController,
               activeIntervalsController: activeIntervalsController,
+              restartsController: restartsController,
               timeSettingsControllers: timeSettingsControllers,
               editing: editing,
               onEdited: setButtonState,
