@@ -1,0 +1,166 @@
+name: Release Checklist
+description: Track the release process from beta to stable
+title: "[MAINTAINER] [RELEASE] X.Y.Z"
+labels: ["maintainer", "release"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Release Information
+        Fill in the version and timeline details below, then follow the checklist.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version are you releasing?
+      placeholder: "1.2.3"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: release-type
+    attributes:
+      label: Release Type
+      description: What type of release is this?
+      options:
+        - Patch (X.Y.Z where Z > 0)
+        - Minor (X.Y.0)
+        - Major (X.0.0)
+    validations:
+      required: true
+
+  - type: input
+    id: beta-date
+    attributes:
+      label: Estimated Beta Release Date
+      description: When do you plan to create the beta? (Date can be approximated)
+      placeholder: "2026-02-10"
+    validations:
+      required: false
+
+  - type: input
+    id: full-release-date
+    attributes:
+      label: Estimated Full Release Date
+      description: When do you plan to promote to stable?
+      placeholder: "2026-02-17 (Patch: 1-2 days after store acceptance | Minor/Major: 7-14 days from beta)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: release-notes
+    attributes:
+      label: Release Highlights
+      description: Brief summary of what's in this release
+      placeholder: |
+        - New feature X
+        - Fixed critical bug Y
+        - Performance improvements
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 1. Prepare Release Branch
+
+  - type: checkboxes
+    id: prepare-branch
+    attributes:
+      label: Preparation
+      options:
+        - label: Verify all CI tests pass on `main`
+        - label: Create release branch `release/X.Y.Z` from `main`
+        - label: Confirm `pubspec.yaml` version is updated to `X.Y.Z` on the release branch
+        - label: Open PR from `release/X.Y.Z` to `main` for final review
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 2. Create Beta Pre-Release
+
+  - type: checkboxes
+    id: beta-release
+    attributes:
+      label: Beta Release
+      options:
+        - label: Create tag `X.Y.Z-beta` (pre-release) from `release/X.Y.Z` branch
+        - label: Workflow runs to build artifacts and attach to the beta release. Workflow also creates the release
+        - label: Manually upload artifacts to Google Play Open Testing & TestFlight
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 3. Beta Testing Phase
+
+  - type: checkboxes
+    id: beta-testing
+    attributes:
+      label: Testing & Feedback
+      options:
+        - label: Collect feedback and crash reports via GitHub Issue and discussion
+        - label: If critical fixes needed - Commit fixes to `release/X.Y.Z` branch
+        - label: If critical fixes needed - Create `X.Y.Z-beta.2` release
+        - label: If critical fixes needed - Workflow updates the original discussion post with new beta version
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Beta Testing Timeline
+        
+        #### Patch Releases
+        - **Suggested Full Release Date:** 1-2 day(s) from app store acceptance
+        
+        #### Minor/Major Releases
+        - **Suggested Full Release Date:** 7-14 days from initial beta
+
+  - type: checkboxes
+    id: qa-timeline
+    attributes:
+      label: QA & Testing Period
+      options:
+        - label: QA testing after app store acceptance (24 hours - 7 days from submission date)
+        - label: "[Minor/Major only] Open testing period for user feedback"
+        - label: QA approval received
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 4. Promote to Stable Release
+
+  - type: checkboxes
+    id: stable-release
+    attributes:
+      label: Stable Promotion
+      options:
+        - label: Create tag `X.Y.Z` (stable) from `release/X.Y.Z` branch
+        - label: Workflow triggered by tag to promote the latest beta release to stable
+        - label: Merge `release/X.Y.Z` branch to `main` via PR
+        - label: Manually promote beta to production in Google Play & App Store Connect
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 5. Post-Release Tasks
+
+  - type: checkboxes
+    id: post-release
+    attributes:
+      label: Cleanup & Monitoring
+      options:
+        - label: Close the release GitHub Issue
+        - label: Archive the release discussion
+        - label: Monitor analytics, crash reports, and user feedback
+        - label: Delete `release/X.Y.Z` branch (optional)
+        - label: Plan next release and update roadmap
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any additional context, blockers, or observations
+      placeholder: "Known issues, special considerations, etc."
+    validations:
+      required: false
