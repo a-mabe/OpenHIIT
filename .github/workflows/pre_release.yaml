@@ -71,7 +71,7 @@ jobs:
           path: build/app/outputs/bundle/release/app-release.aab
 
   BuildiOSRelease:
-    runs-on: macos-15
+    runs-on: macos-26
     environment: production
     permissions:
       contents: write
@@ -79,6 +79,9 @@ jobs:
 
       - name: Verify Xcode version
         run: xcodebuild -version
+
+      - name: iOS SDK version
+        run: xcrun --sdk iphoneos --show-sdk-version
 
       - name: Checkout repository
         uses: actions/checkout@v3
