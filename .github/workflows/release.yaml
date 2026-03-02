@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create Final Release
-        uses: ncipollo/release-action@v1.13.0
+        uses: ncipollo/release-action@v1.18.0
         with:
           artifacts: "app-release.aab, app-release.apk, workout_timer.ipa"
           draft: true
