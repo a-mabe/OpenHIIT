@@ -2,15 +2,22 @@ name: Flutter Analyze
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**.dart'
       - 'pubspec.yaml'
       - '.github/workflows/analyze.yaml'
   pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - '**.dart'
       - 'pubspec.yaml'
       - '.github/workflows/analyze.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   analyze:
@@ -24,6 +31,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
