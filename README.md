@@ -16,7 +16,7 @@
   <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
 </p>
 
-**OpenHIIT** is a free, open-source interval timer app built with Flutter. Create unlimited workout timers with custom audio/visual cues — no ads, no paywalls, no subscriptions.
+**OpenHIIT** is a free, open-source interval timer app built with Flutter. Create unlimited workout timers with custom audio/visual cues. No ads, no paywalls, no subscriptions.
 
 ▶️ The background timer package is developed separately [here](https://github.com/a-mabe/background_timer).
 
@@ -45,10 +45,10 @@
 
 | | |
 |---|---|
-| ⏲️ **Customizable Timers** | Build interval timers tailored to any workout. |
+| ⏲️ **Customizable Timers** | Build interval timers. |
 | 🔊 **Visual & Audio Cues** | Stay on track with cues for every interval transition. |
-| 💾 **Save & Load** | Store unlimited timer configurations and reload them anytime. |
-| 📱 **Export & Import** | Share timer configs with friends or sync across devices. |
+| 💾 **Save & Load** | Store unlimited timer configurations. |
+| 📱 **Export & Import** | Export and share timer configs or import configs. |
 | 🖌️ **Color Coding** | Color-code your timers to keep your routines organized. |
 | 🏋️ **Exercise Labels** | Add exercise names that display on-screen while the timer runs. |
 
