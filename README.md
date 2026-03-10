@@ -16,38 +16,41 @@
   <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="140" /></a>
 </p>
 
-Welcome to OpenHIIT, an open-source workout interval timer mobile application developed using Flutter.
+**OpenHIIT** is a free, open-source interval timer app built with Flutter. Create unlimited workout timers with custom audio/visual cues — no ads, no paywalls, no subscriptions.
 
-▶️ The background timer package is being developed [here](https://github.com/a-mabe/background_timer).
+▶️ The background timer package is developed separately [here](https://github.com/a-mabe/background_timer).
 
 ## Table of Contents
+
 1. [Why OpenHIIT?](#why-openhiit)
 2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Support](#support)
-6. [Contributing](#contributing)
-7. [License](#license)
+3. [Roadmap](#roadmap)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Support](#support)
+7. [Contributing](#contributing)
+8. [License](#license)
+
+---
 
 ## Why OpenHIIT?
 
-- No restrictions on the number of configured timers and workouts.
-- No features behind paywalls.
-- No ads or subscriptions; open sourced under the [MIT license](#license).
+- **No limits** — create as many timers and workouts as you want.
+- **No paywalls** — every feature is free, forever.
+- **No ads or subscriptions** — open-sourced under the [MIT license](#license).
+
+---
 
 ## Features
 
-⏲️ **Customizable Timers** - Create and customize interval timers according to your workout requirements.
-
-🔊 **Visual and Audio Cues** - Get visual and audio cues to indicate the different intervals.
-
-💾 **Save and Load** - Save any number of timer configurations and load them for future use.
-
-📱 **Export and Import** - Export your timers and send them to a friend or another device to import.
-
-🖌️ **Color Code Timers** - Color code your timers to stay organized.
-
-🏋️ **Add Exercises** - Type in the exercises for your workout to display with the timer.
+| | |
+|---|---|
+| ⏲️ **Customizable Timers** | Build interval timers tailored to any workout. |
+| 🔊 **Visual & Audio Cues** | Stay on track with cues for every interval transition. |
+| 💾 **Save & Load** | Store unlimited timer configurations and reload them anytime. |
+| 📱 **Export & Import** | Share timer configs with friends or sync across devices. |
+| 🖌️ **Color Coding** | Color-code your timers to keep your routines organized. |
+| 🏋️ **Exercise Labels** | Add exercise names that display on-screen while the timer runs. |
 
 <p align="center">
    <img src="https://github.com/user-attachments/assets/2d64f356-526b-419e-8b71-cc43bf8da65b" width="170">
@@ -59,77 +62,75 @@ Welcome to OpenHIIT, an open-source workout interval timer mobile application de
    <img src="https://github.com/user-attachments/assets/a74e76e5-4608-4303-a751-e156f1645335" width="170">
 </p>
 
+---
+
+## Roadmap
+
+Check out the [OpenHIIT Roadmap](https://github.com/users/a-mabe/projects/3) to see planned features, work in progress, and ideas under consideration. Have a suggestion? Open an issue or start a discussion.
+
+---
+
 ## Installation
 
-### Download the app
+### Download the App
 
 <a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="180" /></a>
-
+&nbsp;&nbsp;
 <a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="180" /></a>
 
-### Install from source
+### Build from Source
 
-To install and test OpenHIIT, follow these steps:
+1. **Install Flutter** — follow the [official Flutter installation guide](https://flutter.dev/docs/get-started/install) to set up Flutter and the Dart SDK.
 
-1. Ensure you have Flutter and Dart SDK installed on your development environment. For more information, refer to the official Flutter documentation: [Flutter Installation](https://flutter.dev/docs/get-started/install)
-
-2. Clone the repository to your local machine using the following command:
-   ```
+2. **Clone the repository:**
+   ```bash
    git clone https://github.com/a-mabe/openhiit.git
-   ```
-
-3. Change your working directory to the cloned repository:
-   ```
    cd openhiit
    ```
 
-4. Fetch the dependencies by running the following command:
-   ```
+3. **Install dependencies:**
+   ```bash
    flutter pub get
    ```
 
-5. Connect your mobile device or start an emulator.
-
-6. Launch the application using the following command:
-   ```
+4. **Run the app** — connect a device or start an emulator, then:
+   ```bash
    flutter run
    ```
 
-The application will be installed on your device/emulator.
+---
 
 ## Usage
-Once OpenHIIT is installed and running on your device, follow these instructions to use the app:
 
-1. Launch the app and create a new interval timer.
+1. **Create a timer** — tap the "+" button to start a new interval timer.
+2. **Customize intervals** — set your work, rest, and transition durations.
+3. **Add exercises** — label each interval with the exercise name to display on screen.
+4. **Save your config** — save the timer for quick access in future sessions.
+5. **Start your workout** — follow the visual and audio cues through each interval.
+6. **Share or reuse** — export your timers to share with others or import them on a new device.
 
-2. Customize the exercise and rest intervals according to your workout routine.
-
-3. Save the timer configuration.
-
-4. Start the timer and follow the visual and audio cues for exercise and rest intervals.
-
-5. Customize or load different timer configurations as needed.
-
-6. Provide feedback and report any bugs or issues you encounter.
+---
 
 ## Support
 
-For support and troubleshooting, please visit [the support page](./support.md).
+Encountering an issue? Visit the [support page](./support.md) for troubleshooting guidance and known issues.
+
+---
 
 ## Contributing
-Contributions to OpenHIIT are welcome. If you'd like to contribute, please follow these guidelines:
+
+Contributions are welcome! Please open an issue before creating a PR. To begin working on an issue:
 
 1. Fork the repository on GitHub.
+2. Create a new branch with a descriptive name (e.g., `feature/rest-round-alerts`).
+3. Make your changes, following the project's coding style.
+4. Commit and push your changes to your fork.
+5. Open a pull request describing what you changed and why.
 
-2. Create a new branch with a descriptive name for your feature or bug fix.
+Please check the [Roadmap](#roadmap) and open issues before starting work to avoid duplication.
 
-3. Make your changes and ensure they follow the project's coding style and guidelines.
-
-4. Commit your changes and push them to your forked repository.
-
-5. Submit a pull request, detailing the changes you made and explaining their purpose.
+---
 
 ## License
-OpenHIIT is open-source software released under the [MIT License](https://opensource.org/licenses/MIT). You are free to modify and distribute the application under the terms of this license. See the `LICENSE` file for more information.
 
-Please note that this README file is subject to change as the application evolves. Refer to the latest version of this file in the repository for the most up-to-date information.
+OpenHIIT is released under the [MIT License](https://opensource.org/licenses/MIT). You're free to use, modify, and distribute this app under those terms. See the `LICENSE` file for full details.
