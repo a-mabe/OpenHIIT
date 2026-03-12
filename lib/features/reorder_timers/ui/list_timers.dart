@@ -68,6 +68,7 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
       _items.remove(item);
     });
 
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context)
         .showSnackBar(
           SnackBar(
