@@ -81,7 +81,8 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
               onPressed: () {
                 undone = true;
                 setState(() {
-                  _items.insert(item.timerIndex, item);
+                  final index = item.timerIndex.clamp(0, _items.length);
+                  _items.insert(index, item);
                   _timerProvider?.updateTimerOrder(_items);
                 });
               },
