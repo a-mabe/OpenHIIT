@@ -15,14 +15,14 @@ class ListTimersReorderableList extends StatefulWidget {
   final List<TimerType> items;
   final TimerTapCallback? onTap;
   final void Function(List<TimerType>)? onReorderCompleted;
-  final void Function(TimerType)? onDelete;
+  final void Function(TimerType)? onListEmpty;
 
   const ListTimersReorderableList({
     super.key,
     required this.items,
     this.onTap,
     this.onReorderCompleted,
-    this.onDelete,
+    this.onListEmpty,
   });
 
   @override
@@ -68,7 +68,7 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
       _items.remove(item);
     });
 
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
         .showSnackBar(
           SnackBar(
@@ -90,10 +90,14 @@ class _ListTimersReorderableListState extends State<ListTimersReorderableList> {
           ),
         )
         .closed
-        .then((_) {
+        .then((reason) async {
       if (!undone) {
-        _timerProvider?.deleteTimer(item);
-        widget.onDelete?.call(item);
+        await _timerProvider?.deleteTimer(item);
+        if (_items.isEmpty && reason != SnackBarClosedReason.hide) {
+          widget.onListEmpty?.call(item);
+        }
+
+        Log.debug("deleted timer '${item.name}'");
       }
     });
   }
