@@ -179,7 +179,7 @@ jobs:
           name: release-ipa
 
       - name: Create Draft Release
-        uses: ncipollo/release-action@v1.18.0
+        uses: ncipollo/release-action@v1.21.0
         with:
           artifacts: "app-release.aab, app-release.apk, workout_timer.ipa"
           draft: true
