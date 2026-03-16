@@ -41,7 +41,7 @@ dependencies:
   flutter_material_color_picker: ^1.2.0
   background_hiit_timer: ^1.2.3
   auto_size_text: ^3.0.0
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.2
   shimmer: ^3.0.0
   logger: ^2.0.2+1
   file_picker: ^10.3.10
