@@ -345,7 +345,11 @@ packages:
       sha256: db9df7a5898d894eeda4c78143f35c30a243558be439518972366880b80bf88e
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "8.0.2"
+=======
+    version: "6.3.2"
+>>>>>>> a0dba0f (deps: bump the flutter-dependencies group with 5 updates (#319))
   hooks:
     dependency: transitive
     description:
@@ -430,7 +434,11 @@ packages:
       sha256: "25aee487596a6257655a1e091ec2ae66bc30e7af663592cc3a27e6591e05035c"
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "2.7.0"
+=======
+    version: "2.6.2"
+>>>>>>> a0dba0f (deps: bump the flutter-dependencies group with 5 updates (#319))
   logging:
     dependency: transitive
     description:
@@ -699,10 +707,17 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
+<<<<<<< HEAD
       sha256: c3025c5534b01739267eb7d76959bbc25a6d10f6988e1c2a3036940133dd10bf
       url: "https://pub.dev"
     source: hosted
     version: "2.5.5"
+=======
+      sha256: "2939ae520c9024cb197fc20dee269cd8cdbf564c8b5746374ec6cacdc5169e64"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.4"
+>>>>>>> a0dba0f (deps: bump the flutter-dependencies group with 5 updates (#319))
   shared_preferences_android:
     dependency: transitive
     description:
