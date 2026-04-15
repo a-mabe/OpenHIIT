@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:openhiit/main.dart';
@@ -112,5 +113,49 @@ void main() {
     await tapButtonByKey(
         tester, 'timer-end-back', '20_simple-timer_end-back', binding, false);
     // ---
+
+    await tapBackArrow(tester, '21_simple-timer_back-arrow', binding);
+
+    // Verify the timer is shown.
+    expect(find.text('My New Timer'), findsOneWidget,
+        reason: 'Timer not found before delete');
+
+    await takeScreenShot(
+        binding: binding,
+        tester: tester,
+        screenShotName: '22_swipe-delete_before-swipe',
+        settle: true);
+
+    // Swipe the timer tile to the left to delete it.
+    await tester.drag(
+        find.byKey(ValueKey('My New Timer-0')), const Offset(-500, 0));
+    await tester.pumpAndSettle();
+
+    await takeScreenShot(
+        binding: binding,
+        tester: tester,
+        screenShotName: '23_swipe-delete_after-swipe',
+        settle: true);
+
+    // Verify the timer is no longer in the list.
+    expect(find.text('My New Timer'), findsNothing,
+        reason: 'Timer still visible after swipe delete');
+
+    // Verify the snackbar is shown.
+    expect(find.text('My New Timer deleted'), findsOneWidget,
+        reason: 'Delete snackbar not shown');
+
+    // Wait for snackbar to dismiss and empty state to appear.
+    await tester.pumpAndSettle(const Duration(seconds: 3));
+
+    await takeScreenShot(
+        binding: binding,
+        tester: tester,
+        screenShotName: '24_swipe-delete_empty-state',
+        settle: true);
+
+    // Verify the empty state is shown.
+    expect(find.text('No saved timers'), findsOneWidget,
+        reason: 'Empty state not shown after delete');
   });
 }

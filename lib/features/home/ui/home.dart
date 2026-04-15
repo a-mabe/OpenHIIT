@@ -174,6 +174,10 @@ class _ListTimersPageState extends State<ListTimersPage> {
     return ListTimersReorderableList(
       items: timers,
       onReorderCompleted: (reorderedItems) {},
+      onListEmpty: (timer) {
+        Log.info("deleted timer '${timer.name}'");
+        _refreshTimers();
+      },
       onTap: (timer) {
         Log.info("editing timer '${timer.name}'");
         context.read<TimerCreationProvider>().setTimer(timer);
