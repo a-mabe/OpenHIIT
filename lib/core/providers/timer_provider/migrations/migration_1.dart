@@ -55,6 +55,7 @@ TimerType migrateToTimer(Workout workout, bool update) {
         countdownSound: workout.countdownSound.contains("none")
             ? ""
             : workout.countdownSound,
+        breakSound: workout.restSound.contains("none") ? "" : workout.restSound,
       ),
       color: workout.colorInt,
       intervals: totalIntervals,

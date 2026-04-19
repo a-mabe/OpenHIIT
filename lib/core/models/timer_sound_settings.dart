@@ -8,6 +8,7 @@ class TimerSoundSettings {
   String halfwaySound;
   String endSound;
   String countdownSound;
+  String breakSound;
 
   TimerSoundSettings(
       {required this.id,
@@ -16,7 +17,8 @@ class TimerSoundSettings {
       required this.restSound,
       required this.halfwaySound,
       required this.endSound,
-      required this.countdownSound});
+      required this.countdownSound,
+      required this.breakSound});
 
   TimerSoundSettings.empty()
       : id = "",
@@ -25,7 +27,8 @@ class TimerSoundSettings {
         restSound = "short-rest-beep",
         halfwaySound = "short-halfway-beep",
         endSound = "long-bell",
-        countdownSound = "countdown-beep";
+        countdownSound = "countdown-beep",
+        breakSound = "short-break-beep";
 
   TimerSoundSettings copyWith(
     Map<String, String> map, {
@@ -39,6 +42,7 @@ class TimerSoundSettings {
       halfwaySound: updates?['halfwaySound'] ?? halfwaySound,
       endSound: updates?['endSound'] ?? endSound,
       countdownSound: updates?['countdownSound'] ?? countdownSound,
+      breakSound: updates?['breakSound'] ?? breakSound,
     );
   }
 
@@ -53,6 +57,7 @@ class TimerSoundSettings {
       halfwaySound: halfwaySound,
       endSound: endSound,
       countdownSound: countdownSound,
+      breakSound: breakSound,
     );
   }
 
@@ -65,6 +70,7 @@ class TimerSoundSettings {
       'halfwaySound': halfwaySound,
       'endSound': endSound,
       'countdownSound': countdownSound,
+      'breakSound': breakSound,
     };
   }
 
@@ -75,7 +81,8 @@ class TimerSoundSettings {
         restSound = map['restSound'] ?? "",
         halfwaySound = map['halfwaySound'] ?? "",
         endSound = map['endSound'] ?? "",
-        countdownSound = map['countdownSound'] ?? "";
+        countdownSound = map['countdownSound'] ?? "",
+        breakSound = map['breakSound'] ?? "";
 
   Map<String, dynamic> toJson() {
     return {
@@ -86,6 +93,7 @@ class TimerSoundSettings {
       'halfwaySound': halfwaySound,
       'endSound': endSound,
       'countdownSound': countdownSound,
+      'breakSound': breakSound,
     };
   }
 
@@ -98,11 +106,12 @@ class TimerSoundSettings {
       halfwaySound: json['halfwaySound'] ?? "",
       endSound: json['endSound'] ?? "",
       countdownSound: json['countdownSound'] ?? "",
+      breakSound: json['breakSound'] ?? "",
     );
   }
 
   @override
   String toString() {
-    return 'TimerSoundSettings{id: $id, timerId: $timerId, workSound: $workSound, restSound: $restSound, halfwaySound: $halfwaySound, endSound: $endSound, countdownSound: $countdownSound}';
+    return 'TimerSoundSettings{id: $id, timerId: $timerId, workSound: $workSound, restSound: $restSound, halfwaySound: $halfwaySound, endSound: $endSound, countdownSound: $countdownSound, breakSound: $breakSound}';
   }
 }

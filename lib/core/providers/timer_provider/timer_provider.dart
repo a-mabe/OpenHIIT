@@ -10,6 +10,7 @@ import 'package:openhiit/core/providers/interval_provider/interval_provider.dart
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_1.dart';
 import 'package:openhiit/core/providers/timer_provider/migrations/migration_2.dart';
 import 'package:openhiit/core/models/timer_type.dart';
+import 'package:openhiit/core/providers/timer_provider/migrations/migration_3.dart';
 import 'package:openhiit/core/utils/interval_calculation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -58,6 +59,14 @@ class TimerProvider extends ChangeNotifier {
         _intervalRepository,
         _timerRepository,
         _timerTimeSettingsRepository,
+      );
+
+      // Run break sound migration
+      await breakSoundMigration(
+        _timers,
+        _timerRepository,
+        _timerTimeSettingsRepository,
+        _timerSoundSettingsRepository,
       );
 
       // Load timers

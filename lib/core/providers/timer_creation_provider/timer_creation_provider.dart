@@ -111,6 +111,7 @@ class TimerCreationProvider extends ChangeNotifier {
     String? halfwaySound,
     String? endSound,
     String? countdownSound,
+    String? breakSound,
   }) {
     _timer.soundSettings = _timer.soundSettings.copyWith({}, updates: {
       if (workSound != null) 'workSound': workSound,

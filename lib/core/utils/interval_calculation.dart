@@ -95,7 +95,9 @@ List<IntervalType> generateIntervalsFromTimer(TimerType timer,
         time: timer.timeSettings.breakTime > 0
             ? timer.timeSettings.breakTime
             : timer.timeSettings.restTime,
-        startSound: timer.soundSettings.restSound,
+        startSound: timer.timeSettings.breakTime > 0
+            ? timer.soundSettings.breakSound
+            : timer.soundSettings.restSound,
         countdownSound: timer.soundSettings.countdownSound,
       );
     }

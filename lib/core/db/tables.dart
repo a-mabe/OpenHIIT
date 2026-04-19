@@ -81,6 +81,7 @@ const createSoundSettingsTableQuery = '''
         restSound TEXT,
         halfwaySound TEXT,
         endSound TEXT,
-        countdownSound TEXT
+        countdownSound TEXT,
+        breakSound TEXT
       )
     ''';

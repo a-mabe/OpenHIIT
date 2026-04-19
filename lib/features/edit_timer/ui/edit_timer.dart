@@ -91,8 +91,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     nameController.text = timer.name;
     activeIntervalsController.text =
         timer.activeIntervals == 0 ? '' : timer.activeIntervals.toString();
-    restartsController.text =
-        ts.restarts == 0 ? '' : ts.restarts.toString();
+    restartsController.text = ts.restarts == 0 ? '' : ts.restarts.toString();
 
     timeSettingsControllers = {
       'work': UnitNumberInputController(
@@ -188,7 +187,7 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     final timerCreation = context.read<TimerCreationProvider>();
     final timerProvider = context.read<TimerProvider>();
 
-    final intervals = await generateIntervalsFromTimer(timerCreation.timer);
+    final intervals = generateIntervalsFromTimer(timerCreation.timer);
 
     if (!mounted) return;
 
