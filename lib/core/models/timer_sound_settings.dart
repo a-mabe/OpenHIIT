@@ -28,7 +28,7 @@ class TimerSoundSettings {
         halfwaySound = "short-halfway-beep",
         endSound = "long-bell",
         countdownSound = "countdown-beep",
-        breakSound = "short-break-beep";
+        breakSound = "horn";
 
   TimerSoundSettings copyWith(
     Map<String, String> map, {

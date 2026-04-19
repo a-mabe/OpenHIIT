@@ -24,6 +24,7 @@ const createWorkoutTableQuery = '''
         halfwaySound TEXT,
         completeSound TEXT,
         countdownSound TEXT,
+        breakSound TEXT,
         colorInt INTEGER,
         workoutIndex INTEGER,
         showMinutes INTEGER
