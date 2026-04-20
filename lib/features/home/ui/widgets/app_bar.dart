@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:openhiit/features/home/ui/widgets/about_button.dart';
 import 'package:openhiit/features/settings/ui/settings.dart';
 
 class ListTimersAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -27,7 +26,6 @@ class _ListTimersAppBarState extends State<ListTimersAppBar> {
             );
           },
         ),
-        AboutButton(),
       ],
     );
   }

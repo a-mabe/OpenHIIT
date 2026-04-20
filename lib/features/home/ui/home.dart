@@ -4,11 +4,11 @@ import 'package:openhiit/core/models/timer_type.dart';
 import 'package:openhiit/core/providers/timer_creation_provider/timer_creation_provider.dart';
 import 'package:openhiit/core/providers/timer_provider/timer_provider.dart';
 import 'package:openhiit/features/edit_timer/ui/edit_timer.dart';
-import 'package:openhiit/features/home/ui/widgets/about_button.dart';
 import 'package:openhiit/features/home/ui/widgets/app_bar.dart';
 import 'package:openhiit/features/home/ui/widgets/nav_bar_icon_button.dart';
 import 'package:openhiit/features/import_export_timers/utils/functions.dart';
 import 'package:openhiit/features/reorder_timers/ui/list_timers.dart';
+import 'package:openhiit/features/settings/ui/settings.dart';
 import 'package:openhiit/features/whats_new/ui/whats_new_dialog.dart';
 import 'package:openhiit/features/whats_new/ui/whats_new_items.dart';
 import 'package:openhiit/features/whats_new/utils/whats_new_service.dart';
@@ -317,7 +317,22 @@ class _ListTimersPageState extends State<ListTimersPage> {
               ),
             ),
             const Spacer(),
-            const AboutButton(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: NavBarIconButton(
+                icon: Icons.settings,
+                iconSize: 25,
+                label: 'Settings',
+                verticalPadding: 8,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
             const SizedBox(height: 10),
           ],
         ),

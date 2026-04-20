@@ -5,6 +5,7 @@ import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -54,7 +55,7 @@ class SettingsPage extends StatelessWidget {
             title: const Text('Appearance'),
             tiles: [
               SettingsTile.navigation(
-                // leading: const Icon(Icons.brightness_6_outlined),
+                leading: const Icon(Icons.brightness_6_outlined),
                 title: const Text('Theme'),
                 value: Text(_themeModeLabel(
                   context.watch<ThemeProvider>().themeMode,
@@ -63,6 +64,7 @@ class SettingsPage extends StatelessWidget {
               ),
               CustomSettingsTile(
                 child: ListTile(
+                  leading: const Icon(Icons.palette_outlined),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 25),
                   title: const Text('Accent color'),
                   subtitle: const Text('Sets the app theme color'),
@@ -78,6 +80,18 @@ class SettingsPage extends StatelessWidget {
           SettingsSection(
             title: const Text('About'),
             tiles: [
+              SettingsTile(
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: const Text('Privacy Policy'),
+                trailing: const Icon(Icons.open_in_new),
+                onPressed: (context) async {
+                  final Uri url =
+                      Uri.parse('https://a-mabe.github.io/OpenHIIT/');
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+              ),
               CustomSettingsTile(
                 child: FutureBuilder<PackageInfo>(
                   future: PackageInfo.fromPlatform(),
@@ -86,7 +100,7 @@ class SettingsPage extends StatelessWidget {
                         ? '${snapshot.data!.version} (${snapshot.data!.buildNumber})'
                         : '—';
                     return SettingsTile(
-                      // leading: const Icon(Icons.info_outline),
+                      leading: const Icon(Icons.info_outline),
                       title: const Text('Version'),
                       value: Text(version),
                     );
