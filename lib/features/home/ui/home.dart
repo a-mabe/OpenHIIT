@@ -322,7 +322,6 @@ class _ListTimersPageState extends State<ListTimersPage> {
               child: NavBarIconButton(
                 icon: Icons.settings,
                 iconSize: 25,
-                label: 'Settings',
                 verticalPadding: 8,
                 onPressed: () {
                   Navigator.of(context).push(
@@ -333,7 +332,6 @@ class _ListTimersPageState extends State<ListTimersPage> {
                 },
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
