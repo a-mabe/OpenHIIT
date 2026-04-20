@@ -53,6 +53,8 @@ dependencies:
   provider: ^6.1.2
   openhiit_audioplayers: ^1.0.0
   unit_number_input: ^0.1.1
+  settings_ui: ^3.0.1
+  package_info_plus: ^9.0.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

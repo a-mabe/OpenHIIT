@@ -1,0 +1,132 @@
+// settings_page.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:settings_ui/settings_ui.dart';
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  void _showColorPicker(BuildContext context, Color currentColor) {
+    // Tracks the shade selected inside the dialog without rebuilding the page
+    Color pickedColor = currentColor;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Accent color'),
+        // contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        content: MaterialColorPicker(
+          allowShades: false,
+          selectedColor: currentColor,
+          onMainColorChange: (swatch) => pickedColor = swatch!,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              context.read<ThemeProvider>().setSeedColor(pickedColor);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Apply'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final seedColor = context.watch<ThemeProvider>().seedColor;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            title: const Text('Appearance'),
+            tiles: [
+              SettingsTile.navigation(
+                // leading: const Icon(Icons.brightness_6_outlined),
+                title: const Text('Theme'),
+                value: Text(_themeModeLabel(
+                  context.watch<ThemeProvider>().themeMode,
+                )),
+                onPressed: (context) => _showThemePicker(context),
+              ),
+              CustomSettingsTile(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 25),
+                  title: const Text('Accent color'),
+                  subtitle: const Text('Sets the app theme color'),
+                  trailing: CircleColor(
+                    color: seedColor,
+                    circleSize: 32,
+                  ),
+                  onTap: () => _showColorPicker(context, seedColor),
+                ),
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: const Text('About'),
+            tiles: [
+              CustomSettingsTile(
+                child: FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    final version = snapshot.hasData
+                        ? '${snapshot.data!.version} (${snapshot.data!.buildNumber})'
+                        : '—';
+                    return SettingsTile(
+                      // leading: const Icon(Icons.info_outline),
+                      title: const Text('Version'),
+                      value: Text(version),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _themeModeLabel(ThemeMode mode) => switch (mode) {
+        ThemeMode.light => 'Light',
+        ThemeMode.dark => 'Dark',
+        ThemeMode.system => 'System',
+      };
+
+  void _showThemePicker(BuildContext context) {
+    final current = context.read<ThemeProvider>().themeMode;
+
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Theme'),
+        children: ThemeMode.values.map((mode) {
+          return RadioListTile<ThemeMode>(
+            title: Text(_themeModeLabel(mode)),
+            value: mode,
+            groupValue: current,
+            onChanged: (value) {
+              if (value != null) {
+                context.read<ThemeProvider>().setThemeMode(value);
+              }
+              Navigator.of(context).pop();
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
