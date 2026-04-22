@@ -119,6 +119,7 @@ class TimerCreationProvider extends ChangeNotifier {
       if (halfwaySound != null) 'halfwaySound': halfwaySound,
       if (endSound != null) 'endSound': endSound,
       if (countdownSound != null) 'countdownSound': countdownSound,
+      if (breakSound != null) 'breakSound': breakSound,
     });
     _timer = _timer.copyWith({
       'soundSettings': _timer.soundSettings,
