@@ -18,6 +18,8 @@ Future<void> breakSoundMigration(
     Log.info("Running break sound migration...");
 
     for (var timer in timers) {
+      Log.debug("Migrating timer: ${timer.name} (${timer.id})");
+
       // Grab sound settings from the timer
       timer.soundSettings = (await timerSoundSettingsRepository
           .getSoundSettingsByTimerId(timer.id))!;
@@ -29,6 +31,13 @@ Future<void> breakSoundMigration(
         // Update the break sound to match the rest sound if not already set
         if (timer.soundSettings.breakSound.isEmpty) {
           timer.soundSettings.breakSound = timer.soundSettings.restSound;
+          await timerSoundSettingsRepository
+              .updateSoundSettings(timer.soundSettings);
+        }
+      } else {
+        // If break time is 0, set it to the default horn sound
+        if (timer.soundSettings.breakSound.isEmpty) {
+          timer.soundSettings.breakSound = "horn";
           await timerSoundSettingsRepository
               .updateSoundSettings(timer.soundSettings);
         }
