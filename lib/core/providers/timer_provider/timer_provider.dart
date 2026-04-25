@@ -53,6 +53,10 @@ class TimerProvider extends ChangeNotifier {
         }
       }
 
+      // Load timers
+      _timers = await _timerRepository.getAllTimers();
+      _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
+
       // Run warmup migration
       await warmupMigration(
         _timers,
@@ -69,9 +73,6 @@ class TimerProvider extends ChangeNotifier {
         _timerSoundSettingsRepository,
       );
 
-      // Load timers
-      _timers = await _timerRepository.getAllTimers();
-      _timers.sort((a, b) => a.timerIndex.compareTo(b.timerIndex));
       notifyListeners();
 
       return _timers;

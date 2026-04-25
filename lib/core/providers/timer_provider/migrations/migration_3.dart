@@ -11,11 +11,13 @@ Future<void> breakSoundMigration(
     TimerTimeSettingsRepository timerTimeSettingsRepository,
     TimerSoundSettingsRepository timerSoundSettingsRepository) async {
   final prefs = await SharedPreferences.getInstance();
-  bool hasRunWarmupMigration =
+  bool hasRunBreakSoundMigration =
       prefs.getBool('hasRunBreakSoundMigration') ?? false;
 
-  if (!hasRunWarmupMigration) {
+  if (!hasRunBreakSoundMigration) {
     Log.info("Running break sound migration...");
+
+    Log.debug("Found ${timers.length} timers to migrate");
 
     for (var timer in timers) {
       Log.debug("Migrating timer: ${timer.name} (${timer.id})");

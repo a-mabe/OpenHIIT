@@ -6,7 +6,7 @@ import 'package:openhiit/core/db/tables.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-int databaseVersion = 7; // Current database version
+int databaseVersion = 8; // Current database version
 
 class DatabaseManager {
   static const String _databaseName = "core1.db";

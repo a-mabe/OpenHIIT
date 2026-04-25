@@ -8,7 +8,7 @@ Future<void> runMigrations(Database db, int oldVersion, int newVersion) async {
     Log.info("upgrading database from $oldVersion to $newVersion");
   }
 
-  for (int i = oldVersion; i < newVersion; i++) {
+  for (int i = oldVersion + 1; i <= newVersion; i++) {
     final migration = migrations[i];
     if (migration != null) {
       await migration(db);
