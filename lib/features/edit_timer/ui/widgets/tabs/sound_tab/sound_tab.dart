@@ -114,7 +114,8 @@ class _SoundTabState extends State<SoundTab> {
               provider.setTimerSoundSettingPart(endSound: value),
         ),
         const SizedBox(height: 16),
-        if (provider.timer.timeSettings.breakTime > 0) ...[
+        if (provider.timer.timeSettings.breakTime > 0 &&
+            provider.timer.timeSettings.restarts > 0) ...[
           _buildSoundDropdown(
             keyName: "break-sound",
             label: "Break Sound",
