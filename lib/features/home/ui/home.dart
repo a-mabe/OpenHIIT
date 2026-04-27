@@ -111,7 +111,7 @@ class _ListTimersPageState extends State<ListTimersPage> {
             return Scaffold(
               extendBodyBehindAppBar: true,
               extendBody: true,
-              appBar: isTablet && isLandscape
+              appBar: isTablet
                   ? PreferredSize(
                       preferredSize: Size.fromHeight(40.0),
                       child: AppBar(
