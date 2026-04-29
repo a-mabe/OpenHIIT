@@ -51,17 +51,17 @@ jobs:
           echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
 
-      - name: Build Android Release APK
-        run: flutter build apk --release
+      - name: Build Android Release APKs (split per ABI)
+        run: flutter build apk --release --split-per-abi
 
       - name: Build Android Release AppBundle
         run: flutter build appbundle
 
-      - name: Upload APK Artifact
+      - name: Upload APK Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: build/app/outputs/apk/release/app-release-*.apk
 
       - name: Upload Android AppBundle Artifact
         uses: actions/upload-artifact@v7
@@ -167,6 +167,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: release-apk
+          path: apks/
 
       - name: Download Android AAB Artifact
         uses: actions/download-artifact@v8
@@ -181,7 +182,7 @@ jobs:
       - name: Create Draft Release
         uses: ncipollo/release-action@v1.21.0
         with:
-          artifacts: "app-release.aab, app-release.apk, workout_timer.ipa"
+          artifacts: "apks/app-release-armeabi-v7a.apk, apks/app-release-arm64-v8a.apk, apks/app-release-x86_64.apk, app-release.aab, workout_timer.ipa"
           draft: true
           tag: ${{ github.ref_name }}
           generateReleaseNotes: true

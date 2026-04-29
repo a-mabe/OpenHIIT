@@ -32,17 +32,17 @@ jobs:
 
       - run: flutter pub get
 
-      - name: Build Android Debug APK
-        run: flutter build apk --debug
+      - name: Build Android Debug APKs (split per ABI)
+        run: flutter build apk --debug --split-per-abi
 
       - name: Build Android Debug AppBundle
         run: flutter build appbundle --debug
 
-      - name: Upload APK Artifact
+      - name: Upload APK Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-debug-*.apk
 
       - name: Upload Android AppBundle Artifact
         uses: actions/upload-artifact@v7
