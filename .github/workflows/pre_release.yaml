@@ -183,6 +183,7 @@ jobs:
         uses: ncipollo/release-action@v1.21.0
         with:
           artifacts: "apks/app-armeabi-v7a-release.apk, apks/app-arm64-v8a-release.apk, apks/app-x86_64-release.apk, app-release.aab, workout_timer.ipa"
+          draft: true
           tag: ${{ github.ref_name }}
           generateReleaseNotes: true
           skipIfReleaseExists: true
