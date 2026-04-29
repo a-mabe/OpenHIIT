@@ -35,9 +35,6 @@ jobs:
       - name: Build Android Debug APKs (split per ABI)
         run: flutter build apk --debug --split-per-abi
 
-      - name: List APK outputs
-        run: find build/app/outputs/flutter-apk -name "*.apk"
-
       - name: Build Android Debug AppBundle
         run: flutter build appbundle --debug
 
