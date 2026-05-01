@@ -37,11 +37,11 @@ dependencies:
   uuid: ^4.5.3
   confetti: ^0.8.0
   sqflite_common_ffi: ^2.4.0+2
-  wakelock_plus: ^1.5.1
+  wakelock_plus: ^1.5.2
   flutter_material_color_picker: ^1.2.0
   background_hiit_timer: ^1.2.3
   auto_size_text: ^3.0.0
-  google_fonts: ^8.0.2
+  google_fonts: ^8.1.0
   shimmer: ^3.0.0
   logger: ^2.7.0
   file_picker: ^10.3.10
