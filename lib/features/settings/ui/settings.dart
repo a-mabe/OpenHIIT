@@ -104,19 +104,16 @@ class SettingsPage extends StatelessWidget {
                   }
                 },
               ),
-              CustomSettingsTile(
-                child: FutureBuilder<PackageInfo>(
+              SettingsTile(
+                leading: const Icon(Icons.info_outline),
+                title: const Text('Version'),
+                trailing: FutureBuilder<PackageInfo>(
                   future: PackageInfo.fromPlatform(),
-                  builder: (context, snapshot) {
-                    final version = snapshot.hasData
+                  builder: (context, snapshot) => Text(
+                    snapshot.hasData
                         ? '${snapshot.data!.version} (${snapshot.data!.buildNumber})'
-                        : '—';
-                    return SettingsTile(
-                      leading: const Icon(Icons.info_outline),
-                      title: const Text('Version'),
-                      value: Text(version),
-                    );
-                  },
+                        : '—',
+                  ),
                 ),
               ),
             ],
