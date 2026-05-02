@@ -54,12 +54,22 @@ class SettingsPage extends StatelessWidget {
           SettingsSection(
             title: const Text('Appearance'),
             tiles: [
-              SettingsTile.navigation(
+              SettingsTile(
                 leading: const Icon(Icons.brightness_6_outlined),
                 title: const Text('Theme'),
-                value: Text(_themeModeLabel(
-                  context.watch<ThemeProvider>().themeMode,
-                )),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _themeModeLabel(context.watch<ThemeProvider>().themeMode),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
                 onPressed: (context) => _showThemePicker(context),
               ),
               CustomSettingsTile(
