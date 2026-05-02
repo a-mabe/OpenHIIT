@@ -11,32 +11,34 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   void _showColorPicker(BuildContext context, Color currentColor) {
-    // Tracks the shade selected inside the dialog without rebuilding the page
     Color pickedColor = currentColor;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Accent color'),
-        // contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        content: MaterialColorPicker(
-          allowShades: false,
-          selectedColor: currentColor,
-          onMainColorChange: (swatch) => pickedColor = swatch!,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              context.read<ThemeProvider>().setSeedColor(pickedColor);
-              Navigator.of(context).pop();
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Accent color'),
+          content: MaterialColorPicker(
+            allowShades: false,
+            selectedColor: pickedColor,
+            onMainColorChange: (swatch) {
+              setState(() => pickedColor = swatch!);
             },
-            child: const Text('Apply'),
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () {
+                context.read<ThemeProvider>().setSeedColor(pickedColor);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Apply'),
+            ),
+          ],
+        ),
       ),
     );
   }
