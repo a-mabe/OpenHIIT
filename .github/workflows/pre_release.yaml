@@ -39,7 +39,7 @@ jobs:
 
       - name: Download Android keystore
         id: android_keystore
-        uses: timheuer/base64-to-file@v1.2
+        uses: timheuer/base64-to-file@v2.0
         with:
           fileName: upload-keystore.jks
           encodedString: ${{ secrets.KEYSTORE_FILE_BASE64 }}
