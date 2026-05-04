@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:openhiit/features/whats_new/models/whats_new_item.dart';
 
 class WhatsNewData {
-  static const version = "1.6.0";
+  static const version = "1.7.0";
 
   static final List<WhatsNewItem> items = [
     WhatsNewItem(
-      title: "UI Improvements",
-      description:
-          "The home screen and timer creation UI have been revamped for better usability.",
-      icon: Icons.edit,
+      title: "Swipe to Delete",
+      description: "Remove timers by swiping left.",
+      icon: Icons.swipe_left,
     ),
     WhatsNewItem(
-      title: "Timer and Workout Combined",
-      description:
-          "Timers and workouts are now unified into a single timer entity for simplicity.",
-      icon: Icons.timer,
+      title: "Break Sound",
+      description: "Customize the sound to signify a break.",
+      icon: Icons.music_note,
+    ),
+    WhatsNewItem(
+      title: "Settings Page",
+      description: "Customize the app's appearance and view app information.",
+      icon: Icons.settings,
     ),
   ];
 }
