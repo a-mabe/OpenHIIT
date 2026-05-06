@@ -12,12 +12,12 @@ class WhatsNewData {
     ),
     WhatsNewItem(
       title: "Break Sound",
-      description: "Customize the sound to signify a break.",
+      description: "Set a custom break sound.",
       icon: Icons.music_note,
     ),
     WhatsNewItem(
       title: "Settings Page",
-      description: "Customize the app's appearance and view app information.",
+      description: "Adjust app preferences and appearance.",
       icon: Icons.settings,
     ),
   ];
