@@ -16,19 +16,24 @@ List<TimerListTileModel> listItems(
     TimerType timer, List<IntervalType> intervals) {
   List<TimerListTileModel> listItems = [];
 
-  int workIntervalIndex = ["Rest", "Get Ready", "Warmup", "Cooldown", "Break"]
-          .contains(intervals.first.name)
-      ? 0
-      : 1;
+  final excludedIntervalNames = {
+    "rest",
+    "get ready",
+    "warmup",
+    "cooldown",
+    "break",
+  };
+
+  int workIntervalIndex = 1;
   for (var interval in intervals) {
+    final isNonWork =
+        excludedIntervalNames.contains(interval.name.toLowerCase());
+
     listItems.add(
       TimerListTileModel(
         action: interval.name,
         showMinutes: timer.showMinutes,
-        interval: ["Rest", "Get ready", "Warmup", "Cooldown", "Break"]
-                .contains(interval.name)
-            ? 0
-            : workIntervalIndex++,
+        interval: isNonWork ? 0 : workIntervalIndex++,
         total: timer.activeIntervals,
         seconds: interval.time,
       ),
