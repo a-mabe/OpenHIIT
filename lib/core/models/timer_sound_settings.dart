@@ -82,7 +82,8 @@ class TimerSoundSettings {
         halfwaySound = map['halfwaySound'] ?? "",
         endSound = map['endSound'] ?? "",
         countdownSound = map['countdownSound'] ?? "",
-        breakSound = map['breakSound'] ?? "";
+        breakSound = _resolveBreakSound(map.containsKey('breakSound'),
+            map['breakSound'], map['restSound'] ?? "");
 
   Map<String, dynamic> toJson() {
     return {
@@ -106,8 +107,23 @@ class TimerSoundSettings {
       halfwaySound: json['halfwaySound'] ?? "",
       endSound: json['endSound'] ?? "",
       countdownSound: json['countdownSound'] ?? "",
-      breakSound: json['breakSound'] ?? "",
+      breakSound: _resolveBreakSound(json.containsKey('breakSound'),
+          json['breakSound'], json['restSound'] ?? ""),
     );
+  }
+
+  static String _resolveBreakSound(
+      bool breakSoundPresent, dynamic rawBreakSound, String restSound) {
+    if (!breakSoundPresent) {
+      return restSound.isNotEmpty ? restSound : '';
+    }
+
+    final String breakSoundValue =
+        rawBreakSound is String ? rawBreakSound.trim() : "";
+    if (breakSoundValue.isEmpty || breakSoundValue.toLowerCase() == 'none') {
+      return "";
+    }
+    return breakSoundValue;
   }
 
   @override
