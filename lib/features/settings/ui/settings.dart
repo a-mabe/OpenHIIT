@@ -136,19 +136,26 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (context) => SimpleDialog(
         title: const Text('Theme'),
-        children: ThemeMode.values.map((mode) {
-          return RadioListTile<ThemeMode>(
-            title: Text(_themeModeLabel(mode)),
-            value: mode,
+        children: [
+          RadioGroup<ThemeMode>(
             groupValue: current,
-            onChanged: (value) {
+            onChanged: (ThemeMode? value) {
               if (value != null) {
                 context.read<ThemeProvider>().setThemeMode(value);
+                Navigator.of(context).pop();
               }
-              Navigator.of(context).pop();
             },
-          );
-        }).toList(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: ThemeMode.values.map((mode) {
+                return RadioListTile<ThemeMode>(
+                  title: Text(_themeModeLabel(mode)),
+                  value: mode,
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
