@@ -18,7 +18,7 @@ class GeneralTab extends StatelessWidget {
 
   final bool editing;
 
-  GeneralTab(
+  const GeneralTab(
       {super.key,
       required this.nameController,
       required this.activeIntervalsController,
@@ -84,10 +84,10 @@ class GeneralTab extends StatelessWidget {
                           onMainColorChange: (Color? value) {
                             if (value != null) {
                               Navigator.pop(context); // Close the dialog
-                              provider.setTimerColor(value.value);
+                              provider.setTimerColor(value.toARGB32());
                               onEdited(StartSaveState.save);
                               Log.debug(
-                                  "Timer color changed to ${value.value}");
+                                  "Timer color changed to ${value.toARGB32()}");
                             }
                           },
                           allowShades: false,
@@ -343,7 +343,8 @@ class GeneralTab extends StatelessWidget {
                     if (value.isEmpty) {
                       provider.setTimerTimeSettingPart(restarts: 0);
                     } else {
-                      provider.setTimerTimeSettingPart(restarts: int.tryParse(value) ?? 0);
+                      provider.setTimerTimeSettingPart(
+                          restarts: int.tryParse(value) ?? 0);
                     }
                     onEdited(StartSaveState.save);
                     Log.debug("Restarts time changed to $value");
