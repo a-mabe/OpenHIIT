@@ -74,9 +74,9 @@ Check out the [OpenHIIT Roadmap](https://github.com/users/a-mabe/projects/3) to 
 
 ### Download the App
 
-<a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./assets/Google_Play_Badge.svg" width="180" /></a>
+<a href="https://play.google.com/store/apps/details?id=com.codepup.workout_timer"><img src="./docs/images/Google_Play_Badge.svg" width="180" /></a>
 &nbsp;&nbsp;
-<a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="180" /></a>
+<a href="https://apps.apple.com/us/app/openhiit/id6459617819"><img src="./docs/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" width="180" /></a>
 
 ### Build from Source
 
