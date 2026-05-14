@@ -44,7 +44,7 @@ class ThemeProvider extends ChangeNotifier {
     _seedColor = color;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_colorKey, color.value);
+    await prefs.setInt(_colorKey, color.toARGB32());
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
