@@ -1,10 +1,4 @@
 # OpenHIIT
-⚠️⚠️⚠️
-> ⏸️ **Maintenance Pause until August 1, 2026**
-> 
-> This repository is currently in a maintenance pause. I will be taking a break to recharge.
-> 
-> The project is not abandoned. Please continue to raise issues as needed in the meantime. I will resume regular maintenance in August.
 
 ![Integration Tests](https://github.com/a-mabe/openhiit/actions/workflows/integration_tests.yaml/badge.svg)
 ![Nightly Build](https://github.com/a-mabe/openhiit/actions/workflows/nightly_build.yaml/badge.svg)
