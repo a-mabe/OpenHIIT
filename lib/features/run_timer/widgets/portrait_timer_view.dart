@@ -20,6 +20,7 @@ class PortraitWorkoutView extends StatefulWidget {
   final GlobalKey<AnimatedListState> listKey;
   final TimerListModelAnimated<TimerListTileModel> intervalTiles;
   final int showMinutes;
+  final String totalLabel;
 
   const PortraitWorkoutView({
     super.key,
@@ -33,6 +34,7 @@ class PortraitWorkoutView extends StatefulWidget {
     required this.listKey,
     required this.intervalTiles,
     required this.showMinutes,
+    this.totalLabel = "",
   });
 
   @override
@@ -71,9 +73,13 @@ class PortraitWorkoutViewState extends State<PortraitWorkoutView> {
             Expanded(
                 flex: 8,
                 child: RunTimerAppBar(
-                  text: widget.intervalTiles.length > 0
+                  intervalLabel: widget.intervalTiles.length > 0
                       ? widget.intervalTiles[0].intervalString()
                       : "",
+                  setLabel: widget.intervalTiles.length > 0
+                      ? widget.intervalTiles[0].setString()
+                      : "",
+                  totalLabel: widget.totalLabel,
                 )),
             Expanded(
               flex: 35,

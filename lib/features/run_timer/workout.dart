@@ -148,6 +148,13 @@ class RunTimerState extends State<RunTimer> {
                 removedTiles.removeAt(removedTiles.length - 1);
               }
 
+              final totalLabel = timerState.status == 'End'
+                  ? ""
+                  : totalTimeString(
+                      widget.intervals,
+                      timerState.currentInterval,
+                      timerState.currentMicroSeconds);
+
               Widget workoutView = orientation == Orientation.landscape
                   ? LandscapeWorkoutView(
                       timerState: timerState,
@@ -159,7 +166,8 @@ class RunTimerState extends State<RunTimer> {
                       toggleVolumeSlider: toggleVolumeSlider,
                       listKey: _listKey,
                       intervalTiles: intervalTiles,
-                      showMinutes: widget.timer.showMinutes)
+                      showMinutes: widget.timer.showMinutes,
+                      totalLabel: totalLabel)
                   : PortraitWorkoutView(
                       timerState: timerState,
                       controller: _controller,
@@ -170,7 +178,8 @@ class RunTimerState extends State<RunTimer> {
                       toggleVolumeSlider: toggleVolumeSlider,
                       listKey: _listKey,
                       intervalTiles: intervalTiles,
-                      showMinutes: widget.timer.showMinutes);
+                      showMinutes: widget.timer.showMinutes,
+                      totalLabel: totalLabel);
 
               return Stack(
                 children: [

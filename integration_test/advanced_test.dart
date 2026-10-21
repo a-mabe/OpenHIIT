@@ -58,9 +58,9 @@ void main() {
     // Cooldown time 6.
     await enterTextByKey(
         tester, 'cool-down', '6', '8_advanced-timer_cooldown-time', binding);
-    // Restarts 2.
+    // Sets 3 (2 restarts).
     await enterTextByKey(
-        tester, 'restarts', '2', '9_advanced-timer_restarts', binding);
+        tester, 'restarts', '3', '9_advanced-timer_restarts', binding);
     // Break time 7.
     await enterTextByKey(
         tester, 'break', '7', '10_advanced-timer_break-time', binding);
@@ -133,9 +133,9 @@ void main() {
     // There should be two because there is a restart.
     expect(find.textContaining("Sit-ups"), findsAtLeast(1),
         reason: 'Second exercise not found');
-    // Verify Break is shown in the widget tree
-    expect(find.textContaining("Break"), findsOneWidget,
-        reason: 'Break interval not found');
+    // Verify Rest between sets is shown in the widget tree
+    expect(find.textContaining("Rest between sets"), findsOneWidget,
+        reason: 'Rest-between-sets interval not found');
     // Wait until all work intervals are done and cooldown is shown. Do this by waiting
     // until the second and third sets of exercises is gone.
     await pumpUntilGone(

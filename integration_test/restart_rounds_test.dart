@@ -46,9 +46,9 @@ void main() {
     await tapButtonByKey(
         tester, 'Restart Tester-0', '9_restart_open', binding, false);
 
-    // Add restart rounds.
+    // Add restart rounds (3 sets = 2 restarts).
     await enterTextByKey(
-        tester, 'restarts', '2', '10_restart_add-rounds', binding);
+        tester, 'restarts', '3', '10_restart_add-rounds', binding);
     await closeKeyboard(tester, false);
 
     // Verify the break TextFormField is active (enabled for input).
@@ -62,8 +62,8 @@ void main() {
     // Reopen to verify restarts updated.
     await tapButtonByKey(
         tester, 'Restart Tester-0', '14_restart_reopen', binding, false);
-    expect(find.text('2'), findsWidgets,
-        reason: 'Restart count not updated to 2 after adding');
+    expect(find.text('3'), findsWidgets,
+        reason: 'Set count not updated to 3 after adding');
     expect(find.text('120'), findsWidgets,
         reason: 'Break time not updated to 120 after adding');
 
@@ -88,8 +88,9 @@ void main() {
         tester, find.textContaining("2 of 2"), Duration(seconds: 30), false,
         screenShotName: '19_advanced-timer_work-interval-2-iteration-1');
 
-    expect(find.textContaining("Break"), findsNothing,
-        reason: 'Break interval found when it should not be present');
+    expect(find.textContaining("Rest between sets"), findsNothing,
+        reason:
+            'Rest-between-sets interval found when it should not be present');
 
     // Exit the running timer.
     await tapButtonByKey(tester, 'run-timer-appbar-back-button',

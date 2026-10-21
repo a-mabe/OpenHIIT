@@ -91,7 +91,9 @@ class _EditTimerState extends State<EditTimer> with TickerProviderStateMixin {
     nameController.text = timer.name;
     activeIntervalsController.text =
         timer.activeIntervals == 0 ? '' : timer.activeIntervals.toString();
-    restartsController.text = ts.restarts == 0 ? '' : ts.restarts.toString();
+    // The field shows total sets; restarts is stored as sets - 1.
+    restartsController.text =
+        ts.restarts == 0 ? '' : (ts.restarts + 1).toString();
 
     timeSettingsControllers = {
       'work': UnitNumberInputController(

@@ -327,8 +327,8 @@ class GeneralTab extends StatelessWidget {
             ),
             ListTile(
               key: const Key("restarts"),
-              title: const Text('Restarts'),
-              subtitle: Text('Optional, # of restarts'),
+              title: const Text('Sets'),
+              subtitle: const Text('Optional, total sets to run'),
               leading: const Icon(Icons.replay),
               trailing: SizedBox(
                 width: 80,
@@ -340,20 +340,19 @@ class GeneralTab extends StatelessWidget {
                   textAlign: TextAlign.end,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    if (value.isEmpty) {
-                      provider.setTimerTimeSettingPart(restarts: 0);
-                    } else {
-                      provider.setTimerTimeSettingPart(
-                          restarts: int.tryParse(value) ?? 0);
-                    }
+                    // The field takes total sets; restarts is sets - 1.
+                    final sets = value.isEmpty ? 0 : int.tryParse(value) ?? 0;
+                    final restarts = sets > 1 ? sets - 1 : 0;
+                    provider.setTimerTimeSettingPart(restarts: restarts);
                     onEdited(StartSaveState.save);
-                    Log.debug("Restarts time changed to $value");
+                    Log.debug("Sets changed to $sets ($restarts restarts)");
 
-                    // If restarts = 0, force breakTime = 0
-                    if (value == 0) {
+                    // A single set has no rest between sets.
+                    if (restarts == 0) {
                       provider.setTimerTimeSettingPart(breakTime: 0);
                       timeSettingsControllers['break']?.setTotalSeconds(0);
-                      Log.debug("Break time forced to 0 because restarts = 0");
+                      Log.debug(
+                          "Rest between sets forced to 0 because sets <= 1");
                     }
                   },
                 ),
@@ -362,8 +361,8 @@ class GeneralTab extends StatelessWidget {
             ListTile(
               key: const Key("break"),
               enabled: provider.breakEnabled,
-              title: const Text('Break'),
-              subtitle: Text('Optional, between restarts'),
+              title: const Text('Rest between sets'),
+              subtitle: Text('Optional, between sets'),
               leading: const Icon(Icons.snooze),
               trailing: FittedBox(
                 fit: BoxFit.contain,
@@ -376,7 +375,7 @@ class GeneralTab extends StatelessWidget {
                   onChanged: (value) {
                     provider.setTimerTimeSettingPart(breakTime: value);
                     onEdited(StartSaveState.save);
-                    Log.debug("Break time changed to $value");
+                    Log.debug("Rest between sets time changed to $value");
                   },
                 ),
               ),

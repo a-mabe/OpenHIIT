@@ -58,55 +58,60 @@ class LandscapeControlBarState extends State<LandscapeControlBar> {
       child: Center(
           child: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: Icon(
-                  key: const Key('volume'),
-                  size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
-                  widget.changeVolume ? Icons.close : Icons.volume_up,
-                  color: Colors.white,
-                ),
-                onPressed: widget.onAdjustVolume,
-              ),
-              IconButton(
-                key: const Key('skip_previous'),
-                tooltip: 'Skip Previous',
-                icon: Icon(Icons.skip_previous,
-                    size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
-                    color: Colors.white),
-                onPressed: widget.onSkipPrevious,
-              ),
-              IconButton(
-                key: const Key('play_pause'),
-                tooltip: 'Pause',
-                icon: Icon(
-                  size: MediaQuery.of(context).size.width > 600 ? 60 : 45,
-                  widget.paused ? Icons.play_arrow : Icons.pause,
-                  color: Colors.white,
-                ),
-                onPressed: widget.onTogglePlayPause,
-              ),
-              IconButton(
-                key: const Key('skip_next'),
-                tooltip: 'Skip Next',
-                icon: Icon(Icons.skip_next,
-                    size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
-                    color: Colors.white),
-                onPressed: widget.onSkipNext,
-              ),
-              IconButton(
-                key: const Key('restart'),
-                tooltip: 'Restart',
-                icon: Icon(Icons.restart_alt,
+          // Icon sizes follow the screen width, but this bar only gets part
+          // of it in landscape, so scale the row down to fit.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    key: const Key('volume'),
                     size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
-                    color: Colors.white),
-                onPressed: () {
-                  widget.onRestart();
-                },
-              ),
-            ],
+                    widget.changeVolume ? Icons.close : Icons.volume_up,
+                    color: Colors.white,
+                  ),
+                  onPressed: widget.onAdjustVolume,
+                ),
+                IconButton(
+                  key: const Key('skip_previous'),
+                  tooltip: 'Skip Previous',
+                  icon: Icon(Icons.skip_previous,
+                      size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
+                      color: Colors.white),
+                  onPressed: widget.onSkipPrevious,
+                ),
+                IconButton(
+                  key: const Key('play_pause'),
+                  tooltip: 'Pause',
+                  icon: Icon(
+                    size: MediaQuery.of(context).size.width > 600 ? 60 : 45,
+                    widget.paused ? Icons.play_arrow : Icons.pause,
+                    color: Colors.white,
+                  ),
+                  onPressed: widget.onTogglePlayPause,
+                ),
+                IconButton(
+                  key: const Key('skip_next'),
+                  tooltip: 'Skip Next',
+                  icon: Icon(Icons.skip_next,
+                      size: MediaQuery.of(context).size.width > 600 ? 45 : 30,
+                      color: Colors.white),
+                  onPressed: widget.onSkipNext,
+                ),
+                IconButton(
+                  key: const Key('restart'),
+                  tooltip: 'Restart',
+                  icon: Icon(Icons.restart_alt,
+                      size: MediaQuery.of(context).size.width > 600 ? 50 : 35,
+                      color: Colors.white),
+                  onPressed: () {
+                    widget.onRestart();
+                  },
+                ),
+              ],
+            ),
           ),
           if (widget.changeVolume)
             VolumeBar(

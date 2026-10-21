@@ -19,6 +19,7 @@ class LandscapeWorkoutView extends StatefulWidget {
   final GlobalKey<AnimatedListState> listKey;
   final TimerListModelAnimated<TimerListTileModel> intervalTiles;
   final int showMinutes;
+  final String totalLabel;
 
   const LandscapeWorkoutView({
     super.key,
@@ -32,6 +33,7 @@ class LandscapeWorkoutView extends StatefulWidget {
     required this.listKey,
     required this.intervalTiles,
     required this.showMinutes,
+    this.totalLabel = "",
   });
 
   @override
@@ -72,9 +74,13 @@ class LandscapeWorkoutViewState extends State<LandscapeWorkoutView> {
                 Expanded(
                     flex: 20,
                     child: RunTimerAppBar(
-                      text: widget.intervalTiles.length > 0
+                      intervalLabel: widget.intervalTiles.length > 0
                           ? widget.intervalTiles[0].intervalString()
                           : "",
+                      setLabel: widget.intervalTiles.length > 0
+                          ? widget.intervalTiles[0].setString()
+                          : "",
+                      totalLabel: widget.totalLabel,
                     )),
                 Expanded(
                     flex: 60,
