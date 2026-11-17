@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
-import 'package:openhiit/main.dart';
-import 'package:provider/provider.dart';
 
+import 'utils/app.dart';
 import 'utils/enter_data.dart';
+import 'utils/pump_and_settle.dart';
 import 'utils/screenshot.dart';
 import 'utils/tap_buttons.dart';
 import 'utils/other.dart';
@@ -12,15 +12,13 @@ import 'utils/other.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  Finder activeIntervalsShowing(String value) => find.descendant(
+      of: find.byKey(const ValueKey('active-intervals')),
+      matching: find.text(value));
+
   testWidgets('adjust_intervals_in_existing_timer',
       (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ChangeNotifierProvider<ThemeProvider>(
-        create: (_) => ThemeProvider(),
-        child: const WorkoutTimer(),
-      ),
-    );
-    await tester.pumpAndSettle();
+    await launchApp(tester);
 
     // Tap "Got it!" to dismiss the welcome screen.
     await tapGotItButton(tester, binding);
@@ -37,9 +35,7 @@ void main() {
     await enterTextByKey(
         tester, 'rest-time', '3', '5_intervals_rest-time', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(
-        tester, 'start-save-button', '6_intervals_save', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '6_intervals_save', binding);
     await tapBackArrow(tester, '7_intervals_back-home', binding);
 
     // Open and edit timer.
@@ -50,31 +46,29 @@ void main() {
     await enterTextByKey(tester, 'active-intervals', '4',
         '10_intervals_increase-active', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(tester, 'start-save-button',
-        '11_intervals_save-increased', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '11_intervals_save-increased', binding);
 
     // Verify increased interval count reflected.
     await tapBackArrow(tester, '12_intervals_back-home-after-save', binding);
     await tapButtonByKey(
         tester, 'Interval Adjuster-0', '13_intervals_reopen', binding, false);
-    expect(find.textContaining("4"), findsNWidgets(2),
+    await waitFor(tester, activeIntervalsShowing('4'));
+    expect(activeIntervalsShowing('4'), findsOneWidget,
         reason: 'Increased interval count not reflected');
 
     // Decrease active intervals.
     await enterTextByKey(tester, 'active-intervals', '2',
         '15_intervals_decrease-active', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(tester, 'start-save-button',
-        '16_intervals_save-decreased', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '16_intervals_save-decreased', binding);
     await tapBackArrow(
         tester, '17_intervals_back-home-after-decrease', binding);
 
     // Reopen and verify decrease.
     await tapButtonByKey(tester, 'Interval Adjuster-0',
         '18_intervals_reopen-after-decrease', binding, false);
-    expect(find.textContaining("2"), findsOneWidget,
+    await waitFor(tester, activeIntervalsShowing('2'));
+    expect(activeIntervalsShowing('2'), findsOneWidget,
         reason: 'Decreased interval count not reflected');
 
     await takeScreenShot(
