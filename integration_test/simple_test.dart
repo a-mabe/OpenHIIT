@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
-import 'package:openhiit/main.dart';
-import 'package:provider/provider.dart';
 
+import 'utils/app.dart';
 import 'utils/enter_data.dart';
 import 'utils/pump_and_settle.dart';
 import 'utils/screenshot.dart';
@@ -15,12 +13,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('simple_timer', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ChangeNotifierProvider<ThemeProvider>(
-        create: (_) => ThemeProvider(),
-        child: const WorkoutTimer(),
-      ),
-    );
+    await launchApp(tester);
 
     // App loaded.
     await takeScreenShot(
@@ -56,10 +49,7 @@ void main() {
     await closeKeyboard(tester, false);
     // ---
 
-    // Start button appears with animation, so don't settle.
-    await tapButtonByKey(tester, 'start-save-button',
-        '7_simple-timer_start-save-button', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '7_simple-timer_start-save-button', binding);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '8_simple-timer_back-arrow', binding);
@@ -74,11 +64,9 @@ void main() {
     // Active intervals decrease to 2.
     await enterTextByKey(tester, 'active-intervals', '2',
         '10_simple-timer_active-intervals', binding);
+    await closeKeyboard(tester, false);
 
-    // Save timer. Start button appears with animation, so don't settle.
-    await tapButtonByKey(tester, 'start-save-button',
-        '11_simple-timer_start-save-button', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '11_simple-timer_start-save-button', binding);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '12_simple-timer_back-arrow', binding);
@@ -91,8 +79,7 @@ void main() {
         '13_simple-timer_open-new-timer', binding, false);
 
     // Start the timer.
-    await tapButtonByKey(tester, 'start-save-button',
-        '14_simple-timer_load-new-timer', binding, true);
+    await tapStartButton(tester, '14_simple-timer_load-new-timer', binding);
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating.
     // Get Ready -> Work 1 -> Rest 1 -> Work 2 -> Done
@@ -113,9 +100,10 @@ void main() {
     await pumpUntilFound(
         tester, find.textContaining("2 of 2"), Duration(seconds: 15), false,
         screenShotName: '18_simple-timer_work-interval-2');
-    // Make sure the Nice job! screen is shown.
-    await pumpForDuration(tester, Duration(seconds: 10),
-        screenShotName: '19_simple-timer_running-interval-2', settle: false);
+    // Wait for the "Nice job!" screen.
+    await pumpUntilFound(tester, find.byKey(const ValueKey('timer-end-back')),
+        Duration(seconds: 30), false,
+        screenShotName: '19_simple-timer_running-interval-2');
     // Exit the timer.
     await tapButtonByKey(
         tester, 'timer-end-back', '20_simple-timer_end-back', binding, false);
@@ -134,35 +122,26 @@ void main() {
         settle: true);
 
     // Swipe the timer tile to the left to delete it.
-    await tester.drag(
-        find.byKey(ValueKey('My New Timer-0')), const Offset(-500, 0));
-    await tester.pumpAndSettle();
+    final tile = find.byKey(const ValueKey('My New Timer-0'));
+    await waitForTappable(tester, tile);
+    await tester.drag(tile, const Offset(-500, 0));
 
+    // Wait for the dismiss animation and the "deleted" snackbar. The
+    // snackbar only shows for 2s, so check it before the screenshot.
+    await waitForGone(tester, find.text('My New Timer'),
+        timeout: Duration(seconds: 10));
+    await waitFor(tester, find.text('My New Timer deleted'),
+        timeout: Duration(seconds: 2));
     await takeScreenShot(
         binding: binding,
         tester: tester,
         screenShotName: '23_swipe-delete_after-swipe',
-        settle: true);
+        settle: false);
 
-    // Verify the timer is no longer in the list.
-    expect(find.text('My New Timer'), findsNothing,
-        reason: 'Timer still visible after swipe delete');
-
-    // Verify the snackbar is shown.
-    expect(find.text('My New Timer deleted'), findsOneWidget,
-        reason: 'Delete snackbar not shown');
-
-    // Wait for snackbar to dismiss and empty state to appear.
-    await tester.pumpAndSettle(const Duration(seconds: 3));
-
-    await takeScreenShot(
-        binding: binding,
-        tester: tester,
-        screenShotName: '24_swipe-delete_empty-state',
-        settle: true);
-
-    // Verify the empty state is shown.
-    expect(find.text('No saved timers'), findsOneWidget,
-        reason: 'Empty state not shown after delete');
+    // The empty state only appears after the snackbar closes and the
+    // timer has been deleted from the database.
+    await pumpUntilFound(
+        tester, find.text('No saved timers'), Duration(seconds: 15), true,
+        screenShotName: '24_swipe-delete_empty-state');
   });
 }

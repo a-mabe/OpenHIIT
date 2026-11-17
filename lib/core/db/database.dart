@@ -9,7 +9,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 int databaseVersion = 8; // Current database version
 
 class DatabaseManager {
-  static const String _databaseName = "core1.db";
+  static const String databaseName = "core1.db";
   static final DatabaseManager _instance = DatabaseManager._internal();
 
   DatabaseManager._internal() {
@@ -38,7 +38,7 @@ class DatabaseManager {
   }
 
   Future<Database> initializeDatabase() async {
-    String path = join(await getDatabasesPath(), _databaseName);
+    String path = join(await getDatabasesPath(), databaseName);
     String dbPath =
         (Platform.isWindows || Platform.isLinux) ? inMemoryDatabasePath : path;
 

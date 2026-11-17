@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
-import 'package:openhiit/main.dart';
-import 'package:provider/provider.dart';
 
+import 'utils/app.dart';
 import 'utils/enter_data.dart';
 import 'utils/pump_and_settle.dart';
 import 'utils/screenshot.dart';
@@ -14,13 +12,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('add_and_remove_restart_rounds', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ChangeNotifierProvider<ThemeProvider>(
-        create: (_) => ThemeProvider(),
-        child: const WorkoutTimer(),
-      ),
-    );
-    await tester.pumpAndSettle();
+    await launchApp(tester);
 
     // Tap "Got it!" to dismiss the welcome screen.
     await tapGotItButton(tester, binding);
@@ -37,9 +29,7 @@ void main() {
     await enterTextByKey(
         tester, 'rest-time', '3', '5_restart_rest-time', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(
-        tester, 'start-save-button', '7_restart_save-initial', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '7_restart_save-initial', binding);
     await tapBackArrow(tester, '8_restart_back-home', binding);
 
     // Open timer (immediately editable).
@@ -54,14 +44,14 @@ void main() {
     // Verify the break TextFormField is active (enabled for input).
     await enterTextByKey(
         tester, 'break', '120', '11_restart_break-time', binding);
+    await closeKeyboard(tester, false);
 
-    await tapButtonByKey(
-        tester, 'start-save-button', '12_restart_save-added', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '12_restart_save-added', binding);
     await tapBackArrow(tester, '13_restart_back-home-after-add', binding);
     // Reopen to verify restarts updated.
     await tapButtonByKey(
         tester, 'Restart Tester-0', '14_restart_reopen', binding, false);
+    await waitFor(tester, find.text('120'));
     expect(find.text('2'), findsWidgets,
         reason: 'Restart count not updated to 2 after adding');
     expect(find.text('120'), findsWidgets,
@@ -71,13 +61,10 @@ void main() {
     await enterTextByKey(
         tester, 'break', '0', '15_restart_remove-break', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(
-        tester, 'start-save-button', '16_restart_save-no-break', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '16_restart_save-no-break', binding);
 
     // Start the timer.
-    await tapButtonByKey(tester, 'start-save-button',
-        '18_advanced-timer_load-new-timer', binding, true);
+    await tapStartButton(tester, '18_advanced-timer_load-new-timer', binding);
 
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating
@@ -99,9 +86,7 @@ void main() {
     await enterTextByKey(
         tester, 'restarts', '0', '21_restart_remove-rounds', binding);
     await closeKeyboard(tester, false);
-    await tapButtonByKey(
-        tester, 'start-save-button', '22_restart_save-removed', binding, false,
-        waitForDisappearance: false);
+    await tapSaveButton(tester, '22_restart_save-removed', binding);
     await tapBackArrow(tester, '23_restart_back-home-after-remove', binding);
     // Reopen to verify removal.
     await tapButtonByKey(tester, 'Restart Tester-0',

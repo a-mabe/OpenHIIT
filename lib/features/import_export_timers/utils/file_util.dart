@@ -54,7 +54,7 @@ class LocalFileUtil {
     Log.debug('saving file with ${timers.length} timer(s) to device');
     final fileTitle = _fileTitle(timers);
     final encoded = utf8.encode(jsonEncode(timers));
-    final outputFile = await FilePicker.platform.saveFile(
+    final outputFile = await FilePicker.saveFile(
       fileName: fileTitle,
       allowedExtensions: ["json", "txt"],
       type: FileType.custom,
@@ -67,13 +67,10 @@ class LocalFileUtil {
   /// Picks a file from the device and returns the selected PlatformFile, or null if cancelled.
   Future<PlatformFile?> pickFile() async {
     Log.debug('picking file from device');
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['json', 'txt'],
-      withData: false,
-    );
-    if (result != null && result.files.isNotEmpty) {
-      return result.files.first;
+    final result = await FilePicker.pickFiles(
+        type: FileType.custom, allowedExtensions: ['json', 'txt']);
+    if (result != null && result.isNotEmpty) {
+      return result.first;
     }
     return null;
   }

@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:openhiit/core/providers/theme_provider/theme_provider.dart';
-import 'package:openhiit/main.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
+import 'utils/app.dart';
 import 'utils/enter_data.dart';
 import 'utils/pump_and_settle.dart';
 import 'utils/screenshot.dart';
@@ -14,12 +13,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('advanced_timer', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ChangeNotifierProvider<ThemeProvider>(
-        create: (_) => ThemeProvider(),
-        child: const WorkoutTimer(),
-      ),
-    );
+    await launchApp(tester);
 
     // App loaded.
     await takeScreenShot(
@@ -85,10 +79,8 @@ void main() {
         tester, 'activity-1', '', '14_advanced-timer_activity-blank', binding);
     await enterTextByKey(tester, 'activity-1', 'Sit-ups',
         '15_advanced-timer_activity-1', binding);
-    // Start button appears with animation, so don't settle.
-    await tapButtonByKey(tester, 'start-save-button',
-        '15_advanced-timer_start-save-button', binding, false,
-        waitForDisappearance: false);
+    await closeKeyboard(tester, false);
+    await tapSaveButton(tester, '15_advanced-timer_start-save-button', binding);
 
     // Back to home screen. Make sure the new timer is shown.
     await tapBackArrow(tester, '16_advanced-timer_back-arrow', binding);
@@ -98,9 +90,7 @@ void main() {
         '17_advanced-timer_open-new-timer', binding, false);
 
     // Start the timer.
-    await tapButtonByKey(tester, 'start-save-button',
-        '18_advanced-timer_load-new-timer', binding, true,
-        waitForDisappearance: false);
+    await tapStartButton(tester, '18_advanced-timer_load-new-timer', binding);
 
     // ---
     // The timer should now be running. Do not settle, as the UI is constantly updating.
@@ -151,11 +141,14 @@ void main() {
         tester, find.textContaining("Sit-ups"), Duration(seconds: 120), false,
         screenShotName: '26_advanced-work-interval-2-end-iteration-3');
     // Verify Cooldown is shown in the widget tree
+    await waitFor(tester, find.textContaining("Cooldown"),
+        timeout: Duration(seconds: 15));
     expect(find.textContaining("Cooldown"), findsOneWidget,
         reason: 'Cooldown interval not found');
-    // Make sure the Nice job! screen is shown.
-    await pumpForDuration(tester, Duration(seconds: 30),
-        screenShotName: '27_advanced-timer_nice-job-screen', settle: false);
+    // Wait for the "Nice job!" screen.
+    await pumpUntilFound(tester, find.byKey(const ValueKey('timer-end-back')),
+        Duration(seconds: 60), false,
+        screenShotName: '27_advanced-timer_nice-job-screen');
     // Exit the timer.
     await tapButtonByKey(
         tester, 'timer-end-back', '28_advanced-timer_end-back', binding, false);
